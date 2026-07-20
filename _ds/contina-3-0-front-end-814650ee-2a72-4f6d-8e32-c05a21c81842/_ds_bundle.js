@@ -1388,10 +1388,14 @@ const CONTINIA_LINKS = {
   }],
   social: [{
     label: "LinkedIn",
+    svg: "assets/social/linkedin.svg",
+    size: 17,
     icon: "fa-brands fa-linkedin-in",
     href: "https://www.linkedin.com/company/continia-software"
   }, {
     label: "YouTube",
+    svg: "assets/social/youtube.svg",
+    size: 18,
     icon: "fa-brands fa-youtube",
     href: "https://www.youtube.com/@ContiniaSoftware"
   }]
@@ -1463,8 +1467,12 @@ function SiteFooter({
     key: s.label,
     href: s.href,
     "aria-label": s.label
-  }, /*#__PURE__*/React.createElement("i", {
-    className: s.icon
+  }, /*#__PURE__*/React.createElement("img", {
+    src: s.svg,
+    alt: "",
+    width: s.size || 18,
+    height: s.size || 18,
+    style: { display: "block" }
   }))))), cols.map(([h, items]) => /*#__PURE__*/React.createElement("nav", {
     key: h,
     className: "cnt-sitefooter__col",
