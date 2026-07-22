@@ -24,6 +24,14 @@
     @keyframes ucFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
     @keyframes ucPhotoIn { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+    html, body { overflow-x: hidden; max-width: 100%; }
+    /* ---------- Mobile makeover (<=820px) ---------- */
+    @media (max-width: 820px) {
+      /* Hero: drop decorative floating cards, let the photo sit clean */
+      .uc-float { display: none !important; }
+      .uc-hero-media { min-height: 300px !important; }
+      .uc-hero-img { inset: 0 !important; }
+    }
   </style>
 </helmet>
 
@@ -43,15 +51,15 @@
         </div>
         <div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; color: #5a6a92; text-transform: uppercase;">Trusted by <span style="color: var(--c-tech-blue, #052975); font-weight: 700;">21,000+</span> customers worldwide</div>
       </div>
-      <div style="position: relative; min-height: 460px;">
-        <div style="position: absolute; inset: 10px 0 26px 36px; border-radius: 15px; overflow: hidden; background: var(--c-tech-blue, #052975); border: 3px solid var(--c-tech-blue, #052975); box-shadow: 0 30px 70px rgba(2,12,40,0.14), 0 10px 26px rgba(2,12,40,0.08);">
+      <div class="uc-hero-media" style="position: relative; min-height: 460px;">
+        <div class="uc-hero-img" style="position: absolute; inset: 10px 0 26px 36px; border-radius: 15px; overflow: hidden; background: var(--c-tech-blue, #052975); border: 3px solid var(--c-tech-blue, #052975); box-shadow: 0 30px 70px rgba(2,12,40,0.14), 0 10px 26px rgba(2,12,40,0.08);">
           <img src="assets/images/collaboration.jpg" alt="Continia partners collaborating at a whiteboard" style="display: block; width: 100%; height: 100%; object-fit: cover; object-position: 62% 30%; animation: ucPhotoIn 1.3s cubic-bezier(0.16,1,0.3,1) both;">
         </div>
-        <div style="position: absolute; top: 82px; right: -110px; min-width: 232px; box-sizing: border-box; background: var(--c-tech-blue, #052975); border-radius: var(--radius-lg, 16px); padding: 20px 26px; box-shadow: 0 22px 48px rgba(2,12,40,0.12), 0 6px 16px rgba(2,12,40,0.07); animation: ucRise 0.65s cubic-bezier(0.16,1,0.3,1) 0.35s both, ucFloat 8s ease-in-out 2.1s infinite;">
+        <div class="uc-float" style="position: absolute; top: 82px; right: -110px; min-width: 232px; box-sizing: border-box; background: var(--c-tech-blue, #052975); border-radius: var(--radius-lg, 16px); padding: 20px 26px; box-shadow: 0 22px 48px rgba(2,12,40,0.12), 0 6px 16px rgba(2,12,40,0.07); animation: ucRise 0.65s cubic-bezier(0.16,1,0.3,1) 0.35s both, ucFloat 8s ease-in-out 2.1s infinite;">
           <div style="font-size: 38px; font-weight: 700; line-height: 1; color: var(--c-innovation-blue, #8FF8FF); font-variant-numeric: tabular-nums; text-shadow: 0 0 18px rgba(143,248,255,0.5);">{{ stat90Label }}</div>
           <div style="font-size: 13.5px; line-height: 1.35; color: rgba(255,255,255,0.85); margin-top: 7px;">fewer manual tasks</div>
         </div>
-        <div style="position: absolute; top: 44px; left: -24px; width: 300px; box-sizing: border-box; background: #ffffff; border: 1px solid #dde3ee; border-radius: var(--radius-lg, 16px); padding: 22px 24px; box-shadow: 0 22px 48px rgba(2,12,40,0.12), 0 6px 16px rgba(2,12,40,0.07); animation: ucRise 0.65s cubic-bezier(0.16,1,0.3,1) 0.15s both, ucFloat 7s ease-in-out 1.6s infinite;">
+        <div class="uc-float" style="position: absolute; top: 44px; left: -24px; width: 300px; box-sizing: border-box; background: #ffffff; border: 1px solid #dde3ee; border-radius: var(--radius-lg, 16px); padding: 22px 24px; box-shadow: 0 22px 48px rgba(2,12,40,0.12), 0 6px 16px rgba(2,12,40,0.07); animation: ucRise 0.65s cubic-bezier(0.16,1,0.3,1) 0.15s both, ucFloat 7s ease-in-out 1.6s infinite;">
           <div style="font-size: 11.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #5a6a92; margin-bottom: 14px;">Overview · This month</div>
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
             <div style="font-size: 15px; color: #4a5878;">Invoices posted</div>
@@ -63,7 +71,7 @@
             <div style="font-size: 17px; font-weight: 700; color: var(--c-tech-blue, #052975); font-variant-numeric: tabular-nums;">12</div>
           </div>
         </div>
-        <div style="position: absolute; bottom: 0; right: 26px; display: flex; align-items: center; gap: 16px; min-width: 268px; box-sizing: border-box; background: #ffffff; border: 1px solid #dde3ee; border-radius: var(--radius-lg, 16px); padding: 18px 22px; box-shadow: 0 22px 48px rgba(2,12,40,0.12), 0 6px 16px rgba(2,12,40,0.07); animation: ucRise 0.65s cubic-bezier(0.16,1,0.3,1) 0.55s both, ucFloat 6.5s ease-in-out 2.6s infinite;">
+        <div class="uc-float" style="position: absolute; bottom: 0; right: 26px; display: flex; align-items: center; gap: 16px; min-width: 268px; box-sizing: border-box; background: #ffffff; border: 1px solid #dde3ee; border-radius: var(--radius-lg, 16px); padding: 18px 22px; box-shadow: 0 22px 48px rgba(2,12,40,0.12), 0 6px 16px rgba(2,12,40,0.07); animation: ucRise 0.65s cubic-bezier(0.16,1,0.3,1) 0.55s both, ucFloat 6.5s ease-in-out 2.6s infinite;">
           <div style="display: flex; align-items: center; gap: 16px; opacity: {{ chipOpacity }}; transition: opacity 300ms var(--ease-standard, ease-out);">
             <div style="width: 46px; height: 46px; flex: none; border-radius: 50%; background: var(--c-light-blue, #DEF5FF); display: flex; align-items: center; justify-content: center;">
               <i class="fa-light {{ chipIcon }}" style="font-size: 18px; color: var(--c-tech-blue, #052975);"></i>
