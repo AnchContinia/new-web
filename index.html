@@ -96,9 +96,9 @@
 
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
     .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
-    .sol-car__stage { position: relative; height: clamp(474px,55vw,524px); perspective: 1700px; }
+    .sol-car__stage { position: relative; height: clamp(392px,46vw,438px); perspective: 1700px; }
     .sol-car__track { position: absolute; inset: 0; transform-style: preserve-3d; }
-    .sol-car__card { box-sizing: border-box; min-height: 446px; padding: 40px; border-radius: 22px; color: #fff;
+    .sol-car__card { box-sizing: border-box; min-height: 356px; padding: 34px 36px; border-radius: 22px; color: #fff;
       display: flex; flex-direction: column;
       background: linear-gradient(0deg, rgba(5,41,117,0.14), rgba(5,41,117,0.14)), rgba(95, 158, 141, 0.32);
       border: 2px solid rgba(196,251,255,0.85);
@@ -107,9 +107,9 @@
     .sol-car__title { margin-top: 20px; font-size: 26px; font-weight: 700; color: #fff; }
     .sol-car__desc { margin: 14px 0 0; font-size: 16.5px; line-height: 1.62; color: rgba(255,255,255,0.85); }
     .sol-car__card .sol-g__icon { width: 56px; height: 56px; font-size: 26px; border-radius: 15px; }
-    .sol-car__more { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; font-weight: 600; color: #8ff8ff; cursor: pointer; transition: gap 200ms; }
-    .sol-car__more i { font-size: 13px; }
-    .sol-car__more:hover { gap: 13px; }
+    .sol-car__more { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; color: #8ff8ff; cursor: pointer; transition: gap 200ms; }
+    .sol-car__more i { font-size: 16px; }
+    .sol-car__more:hover { gap: 15px; }
     .sol-car__pills { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
     .sol-car__pill { font-size: 12px; font-weight: 600; color: #ffffff; background: transparent; border: 1.5px solid #8ff8ff; border-radius: 999px; padding: 5px 12px; }
     .sol-car__nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 30; width: 52px; height: 52px;
@@ -402,35 +402,35 @@
             <div class="sol-g__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div>
             <div class="sol-car__title">Document Capture</div>
             <p class="sol-car__desc">Automate your entire Accounts Payable — invoices imported, recognized, approved and posted automatically, without leaving Business Central.</p>
-            <div class="sol-car__more"><i class="fa-light fa-arrow-right"></i>See more</div>
+            <div class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></div>
             <div class="sol-car__pills"><span class="sol-car__pill">OCR</span><span class="sol-car__pill">Approval</span><span class="sol-car__pill">Auto-posting</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle1 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
             <div class="sol-car__title">Expense Management</div>
             <p class="sol-car__desc">Snap a photo of the receipt — approval, coding and reimbursement happen automatically, on web and mobile.</p>
-            <div class="sol-car__more"><i class="fa-light fa-arrow-right"></i>See more</div>
+            <div class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></div>
             <div class="sol-car__pills"><span class="sol-car__pill">Mobile</span><span class="sol-car__pill">Coding</span><span class="sol-car__pill">Reimburse</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle2 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
             <div class="sol-car__title">Continia Banking</div>
             <p class="sol-car__desc">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
-            <div class="sol-car__more"><i class="fa-light fa-arrow-right"></i>See more</div>
+            <div class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></div>
             <div class="sol-car__pills"><span class="sol-car__pill">Payments</span><span class="sol-car__pill">Reconcile</span><span class="sol-car__pill">Approve</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle3 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
             <div class="sol-car__title">Continia Finance</div>
             <p class="sol-car__desc">Smart modules that ease the burden of core accounting — general ledger, fixed assets, open entries and treasury.</p>
-            <div class="sol-car__more"><i class="fa-light fa-arrow-right"></i>See more</div>
+            <div class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></div>
             <div class="sol-car__pills"><span class="sol-car__pill">Ledger</span><span class="sol-car__pill">Assets</span><span class="sol-car__pill">Treasury</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle4 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
             <div class="sol-car__title">Document Output</div>
             <p class="sol-car__desc">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print — every time.</p>
-            <div class="sol-car__more"><i class="fa-light fa-arrow-right"></i>See more</div>
+            <div class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></div>
             <div class="sol-car__pills"><span class="sol-car__pill">Email</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Print</span></div>
           </div>
         </div>
