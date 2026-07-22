@@ -199,7 +199,7 @@
 <!-- ===== NEW: glassmorphism + video background ===== -->
 <sc-if value="{{ solNew }}" hint-placeholder-val="{{ true }}">
 <div class="sol-new">
-  <video class="sol-vid" autoplay muted loop playsinline aria-hidden="true">
+  <video class="sol-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
     <source src="assets/video/solutions-bg.webm" type="video/webm">
     <source src="assets/video/solutions-bg.mp4" type="video/mp4">
   </video>
@@ -469,6 +469,7 @@ class Component extends DCLogic {
     this._applyMotion();
     this._setupReveals();
     this._setupStats();
+    this._playSolVideo();
     this._onScroll = () => {
       const h = document.getElementById("cnt-header");
       if (h) h.style.boxShadow = window.scrollY > 10 ? "0 8px 24px rgba(5,41,117,0.10)" : "none";
@@ -476,10 +477,29 @@ class Component extends DCLogic {
     window.addEventListener("scroll", this._onScroll, { passive: true });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.motion !== this.props.motion || prevProps.flowSpeed !== this.props.flowSpeed) {
       this._applyMotion();
     }
+    // Re-arm autoplay when the glass version (with the video) is shown again
+    if (prevState && prevState.solNew !== this.state.solNew && this.state.solNew) {
+      this._playSolVideo();
+    }
+  }
+
+  // Muted autoplay is allowed in every modern browser; the <source> order
+  // (webm → mp4) lets each browser pick the format it supports — Chrome/Firefox
+  // take the smaller webm, Safari falls back to the h.264 mp4. We still set the
+  // muted property and call play() explicitly so autoplay never gets blocked.
+  _playSolVideo() {
+    requestAnimationFrame(() => {
+      const v = document.querySelector(".sol-vid");
+      if (!v) return;
+      v.muted = true;
+      v.setAttribute("muted", "");
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {});
+    });
   }
 
   componentWillUnmount() {
