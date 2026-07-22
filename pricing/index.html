@@ -72,7 +72,7 @@
     .pr3__line .amt { font-size:16px; font-weight:700; color:#052975; }
     .pr3__sub { padding:3px 0 16px 0; font-size:12.5px; color:#8193b9; opacity:0; animation:pr3in .5s cubic-bezier(0.16,1,0.3,1) forwards; }
     @keyframes pr3in { from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:none;} }
-    .pr3__total { display:flex; align-items:baseline; justify-content:space-between; margin-top:8px; padding-top:18px; border-top:2px solid #052975; font-size:16px; font-weight:600; color:#3a4a6b; }
+    .pr3__total { display:flex; align-items:baseline; justify-content:space-between; margin-top:8px; padding-top:18px; border-top:2px solid #052975; font-size:16px; font-weight:600; color:#3a4a6b; opacity:0; animation:pr3in .5s cubic-bezier(0.16,1,0.3,1) .5s both; }
     .pr3__total b { font-size:36px; font-weight:700; color:#052975; letter-spacing:-0.02em; animation:recGlow 1s ease-out 1.85s both; }
     .pr3__note { margin-top:14px; font-size:12.5px; line-height:1.45; color:#6b7894; }
     .pr3__barcode { height:40px; margin-top:18px; background:repeating-linear-gradient(90deg,#0a1838 0 2px,transparent 2px 4px,#0a1838 4px 5px,transparent 5px 9px,#0a1838 9px 12px,transparent 12px 14px); opacity:0.82; }
@@ -117,7 +117,7 @@
         <div class="pr3__sub" style="animation-delay:.1s">500 documents · OCR + approval</div>
         <div class="pr3__line" style="animation-delay:.25s"><span class="nm">Expense Management</span><span class="dots"></span><span class="amt">€{{ recEM }}</span></div>
         <div class="pr3__sub" style="animation-delay:.3s">200 expenses · mobile capture</div>
-        <div class="pr3__total" style="animation:pr3in .5s cubic-bezier(0.16,1,0.3,1) .5s both">Subtotal <b>€{{ recTotal }}</b></div>
+        <div class="pr3__total">Subtotal <b>€{{ recTotal }}</b></div>
         <div class="pr3__note">Example month, excl. VAT — you only pay for what you use.</div>
         <div class="pr3__barcode"></div>
       </div>
@@ -509,6 +509,9 @@ class Component extends DCLogic {
     this.setState({ disp: this._target });
     this._animateReceipt();
     this._playHeroVideo();
+    if ((this.props.motion ?? true)) {
+      this._recLoop = setInterval(() => this._replayReceipt(), 10000);
+    }
     this._onScroll = () => {
       const h = document.getElementById("cnt-header");
       if (h) h.style.boxShadow = window.scrollY > 10 ? "0 8px 24px rgba(5,41,117,0.10)" : "none";
@@ -536,8 +539,25 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this._raf) cancelAnimationFrame(this._raf);
     if (this._recRaf) cancelAnimationFrame(this._recRaf);
+    if (this._recLoop) clearInterval(this._recLoop);
     if (this._io) this._io.disconnect();
     if (this._onScroll) window.removeEventListener("scroll", this._onScroll);
+  }
+
+  // Replay the receipt intro (used on a 10s loop): restart the CSS entrance
+  // animations, then reset the amounts to 0 and re-run the tally count-up.
+  _replayReceipt() {
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    // Toggling animationName (not the shorthand) restarts each animation while
+    // keeping the per-line inline animation-delay stagger intact.
+    ".pr3__col,.pr3__line,.pr3__sub,.pr3__total,.pr3__total b,.pr3__scan"
+      .split(",").forEach((sel) => document.querySelectorAll(sel).forEach((el) => {
+        el.style.animationName = "none";
+        void el.offsetWidth; // force reflow so the restart takes
+        el.style.animationName = "";
+      }));
+    this.setState({ rec: { dc: 0, em: 0, total: 0 } }, () => this._animateReceipt());
   }
 
   // Muted autoplay for the hero sky video; <source> order (webm → mp4) lets each
