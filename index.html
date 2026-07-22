@@ -95,19 +95,19 @@
     .sol-toggle:hover { border-color: #052975; transform: translateY(-2px); }
 
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
-    .sol-car { position: relative; margin-top: clamp(8px,1.5vw,20px); }
-    .sol-car__stage { position: relative; height: clamp(430px,54vw,500px); perspective: 1700px; }
+    .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
+    .sol-car__stage { position: relative; height: clamp(408px,50vw,462px); perspective: 1700px; }
     .sol-car__track { position: absolute; inset: 0; transform-style: preserve-3d; }
     .sol-car__card { box-sizing: border-box; min-height: 400px; padding: 38px; border-radius: 22px; color: #fff;
       display: flex; flex-direction: column;
-      background: linear-gradient(0deg, rgba(5,41,117,0.14), rgba(5,41,117,0.14)), rgba(143,248,255,0.12);
+      background: linear-gradient(0deg, rgba(5,41,117,0.14), rgba(5,41,117,0.14)), rgba(95, 158, 141, 0.32);
       border: 2px solid rgba(196,251,255,0.85);
       -webkit-backdrop-filter: blur(8px) saturate(135%); backdrop-filter: blur(8px) saturate(135%);
       box-shadow: 0 40px 90px rgba(3,15,48,0.48); }
     .sol-car__title { margin-top: 20px; font-size: 26px; font-weight: 700; color: #fff; }
     .sol-car__desc { margin: 14px 0 0; font-size: 16.5px; line-height: 1.62; color: rgba(255,255,255,0.85); }
     .sol-car__pills { margin-top: auto; display: flex; flex-wrap: wrap; gap: 9px; padding-top: 40px; }
-    .sol-car__pill { font-size: 12px; font-weight: 600; color: #0a1838; background: #8ff8ff; border-radius: 999px; padding: 5px 12px; }
+    .sol-car__pill { font-size: 12px; font-weight: 600; color: #ffffff; background: transparent; border: 1.5px solid #8ff8ff; border-radius: 999px; padding: 5px 12px; }
     .sol-car__nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 30; width: 52px; height: 52px;
       border-radius: 999px; background: #ffffff; border: none; color: #052975; font-size: 18px; cursor: pointer;
       display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(3,15,48,0.35);
@@ -388,7 +388,7 @@
     <div style="text-align:center;margin:0 auto">
       <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
       <h2 style="margin:14px 0 0;font-size:clamp(28px,3vw,44px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff;white-space:nowrap">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
-      <p style="max-width:600px;margin:14px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
+      <p style="max-width:660px;margin:14px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team<br>keeps the interface they already know.</p>
     </div>
     <div class="sol-car">
       <button onClick="{{ carPrev }}" class="sol-car__nav sol-car__nav--prev" aria-label="Previous solution"><i class="fa-light fa-arrow-left"></i></button>
