@@ -93,7 +93,33 @@
       padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
       font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms; }
     .sol-toggle:hover { border-color: #052975; transform: translateY(-2px); }
-    @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } }
+
+    /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
+    .sol-car { position: relative; margin-top: clamp(36px,5vw,56px); }
+    .sol-car__stage { position: relative; height: clamp(380px,52vw,460px); perspective: 1600px; }
+    .sol-car__track { position: absolute; inset: 0; transform-style: preserve-3d; }
+    .sol-car__card { box-sizing: border-box; min-height: 340px; padding: 30px; border-radius: 20px; color: #fff;
+      display: flex; flex-direction: column;
+      background: linear-gradient(0deg, rgba(5,41,117,0.14), rgba(5,41,117,0.14)), rgba(143,248,255,0.12);
+      border: 2px solid rgba(196,251,255,0.85);
+      -webkit-backdrop-filter: blur(8px) saturate(135%); backdrop-filter: blur(8px) saturate(135%);
+      box-shadow: 0 34px 80px rgba(3,15,48,0.45); }
+    .sol-car__title { margin-top: 16px; font-size: 22px; font-weight: 700; color: #fff; }
+    .sol-car__desc { margin: 12px 0 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.82); }
+    .sol-car__pills { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; padding-top: 22px; }
+    .sol-car__pill { font-size: 12px; font-weight: 600; color: #0a1838; background: #8ff8ff; border-radius: 999px; padding: 5px 12px; }
+    .sol-car__nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 30; width: 52px; height: 52px;
+      border-radius: 999px; background: #ffffff; border: none; color: #052975; font-size: 18px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(3,15,48,0.35);
+      transition: transform 200ms, background 200ms; }
+    .sol-car__nav:hover { transform: translateY(-50%) scale(1.09); background: #def5ff; }
+    .sol-car__nav--prev { left: clamp(2px,3vw,32px); }
+    .sol-car__nav--next { right: clamp(2px,3vw,32px); }
+    .sol-car__dots { display: flex; justify-content: center; gap: 10px; margin-top: 28px; }
+    .sol-car__dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 999px; cursor: pointer;
+      background: rgba(255,255,255,0.35); transition: background 200ms, transform 200ms; }
+    .sol-car__dot.on { background: #8ff8ff; transform: scale(1.25); }
+    @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } .sol-car__card { transition: none !important; } }
   </style>
 </helmet>
 
@@ -350,9 +376,70 @@
 </div>
 </sc-if>
 
+<!-- ===== CAROUSEL: 3D coverflow of the five solutions ===== -->
+<sc-if value="{{ solCarousel }}" hint-placeholder-val="{{ false }}">
+<div class="sol-new">
+  <video class="sol-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="assets/video/solutions-bg.webm" type="video/webm">
+    <source src="assets/video/solutions-bg.mp4" type="video/mp4">
+  </video>
+  <div class="sol-vid-ovl" aria-hidden="true"></div>
+  <div class="sol-new__inner">
+    <div style="text-align:center;max-width:640px;margin:0 auto">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your Business Central.</h2>
+      <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
+    </div>
+    <div class="sol-car">
+      <button onClick="{{ carPrev }}" class="sol-car__nav sol-car__nav--prev" aria-label="Previous solution"><i class="fa-light fa-arrow-left"></i></button>
+      <div class="sol-car__stage">
+        <div class="sol-car__track">
+          <div class="sol-car__card" style="{{ carStyle0 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div>
+            <div class="sol-car__title">Document Capture</div>
+            <p class="sol-car__desc">Automate your entire Accounts Payable — invoices imported, recognized, approved and posted automatically, without leaving Business Central.</p>
+            <div class="sol-car__pills"><span class="sol-car__pill">OCR</span><span class="sol-car__pill">Approval</span><span class="sol-car__pill">Auto-posting</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle1 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
+            <div class="sol-car__title">Expense Management</div>
+            <p class="sol-car__desc">Snap a photo of the receipt — approval, coding and reimbursement happen automatically, on web and mobile.</p>
+            <div class="sol-car__pills"><span class="sol-car__pill">Mobile</span><span class="sol-car__pill">Coding</span><span class="sol-car__pill">Reimburse</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle2 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
+            <div class="sol-car__title">Continia Banking</div>
+            <p class="sol-car__desc">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
+            <div class="sol-car__pills"><span class="sol-car__pill">Payments</span><span class="sol-car__pill">Reconcile</span><span class="sol-car__pill">Approve</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle3 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
+            <div class="sol-car__title">Continia Finance</div>
+            <p class="sol-car__desc">Smart modules that ease the burden of core accounting — general ledger, fixed assets, open entries and treasury.</p>
+            <div class="sol-car__pills"><span class="sol-car__pill">Ledger</span><span class="sol-car__pill">Assets</span><span class="sol-car__pill">Treasury</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle4 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
+            <div class="sol-car__title">Document Output</div>
+            <p class="sol-car__desc">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print — every time.</p>
+            <div class="sol-car__pills"><span class="sol-car__pill">Email</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Print</span></div>
+          </div>
+        </div>
+      </div>
+      <button onClick="{{ carNext }}" class="sol-car__nav sol-car__nav--next" aria-label="Next solution"><i class="fa-light fa-arrow-right"></i></button>
+      <div class="sol-car__dots">
+        <sc-for list="{{ carDots }}" as="d" hint-placeholder-count="5">
+          <button class="{{ d.cls }}" onClick="{{ d.pick }}" aria-label="Go to solution"></button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
 </section>
 
-<!-- Solutions old/new toggle -->
+<!-- Solutions view toggle (New / Classic / Carousel) -->
 <button onClick="{{ toggleSol }}" class="sol-toggle" title="Switch Our Solutions design"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i>{{ solToggleLabel }}</button>
 
 <!-- ============ HOW IT WORKS ============ -->
@@ -457,7 +544,7 @@ const EM_PHASES = [
 ];
 
 class Component extends DCLogic {
-  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solNew: true };
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 1, carIndex: 0 };
   _statsStarted = false;
 
   get motion() { return this.props.motion ?? true; }
@@ -472,14 +559,18 @@ class Component extends DCLogic {
       if (h) h.style.boxShadow = window.scrollY > 10 ? "0 8px 24px rgba(5,41,117,0.10)" : "none";
     };
     window.addEventListener("scroll", this._onScroll, { passive: true });
+    // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
+    this._onResize = () => this.setState({});
+    window.addEventListener("resize", this._onResize, { passive: true });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.motion !== this.props.motion || prevProps.flowSpeed !== this.props.flowSpeed) {
       this._applyMotion();
     }
-    // Re-arm autoplay when the glass version (with the video) is shown again
-    if (prevState && prevState.solNew !== this.state.solNew && this.state.solNew) {
+    // Re-arm autoplay whenever a video-backed view (New = 1, Carousel = 3) is shown again
+    if (prevState && prevState.solView !== this.state.solView &&
+        (this.state.solView === 1 || this.state.solView === 3)) {
       this._playSolVideo();
     }
   }
@@ -502,6 +593,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     clearInterval(this._flow);
     window.removeEventListener("scroll", this._onScroll);
+    if (this._onResize) window.removeEventListener("resize", this._onResize);
     if (this._io) this._io.disconnect();
     if (this._statIo) this._statIo.disconnect();
   }
@@ -617,6 +709,29 @@ class Component extends DCLogic {
 
     const icon = (cls) => React.createElement("i", { className: cls });
 
+    // ----- Our Solutions view toggle (1 = New glass, 2 = Classic, 3 = Carousel) -----
+    const CV = this.state.solView, CI = this.state.carIndex, CN = 5;
+    const vw = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1200;
+    const spread = Math.min(210, vw * 0.22);
+    const cardW = Math.min(330, Math.max(240, vw * 0.82));
+    // 3D coverflow transform for card `idx` relative to the active index
+    const carStyleFor = (idx) => {
+      let off = ((idx - CI) % CN + CN) % CN;
+      if (off > CN / 2) off -= CN;
+      const a = Math.abs(off);
+      const x = off * spread, z = -a * 170, ry = off * -34, sc = 1 - a * 0.14;
+      const op = a >= 3 ? 0 : 1 - a * 0.32, zi = 10 - a;
+      return "position:absolute; top:50%; left:50%; width:" + cardW + "px; margin-left:" + (-cardW / 2) +
+        "px; transform: translateY(-50%) translateX(" + x + "px) translateZ(" + z + "px) rotateY(" + ry +
+        "deg) scale(" + sc + "); opacity:" + op + "; z-index:" + zi +
+        "; transition: transform 620ms cubic-bezier(0.22,1,0.36,1), opacity 620ms; pointer-events:" +
+        (off === 0 ? "auto" : "none") + ";";
+    };
+    const carDots = [0, 1, 2, 3, 4].map((i) => ({
+      cls: i === CI ? "sol-car__dot on" : "sol-car__dot",
+      pick: () => this.setState({ carIndex: i }),
+    }));
+
     return {
       flowRows, flowSteps, postedCount, sideNav, bentoDcRows,
       emProgress: em.p, emStatus: em.s,
@@ -626,10 +741,16 @@ class Component extends DCLogic {
       statPartners: fmt(stats.partners) + "+",
       year: new Date().getFullYear(),
       arrowBtn: { iconRight: icon("fa-light fa-arrow-right") },
-      solNew: this.state.solNew,
-      solOld: !this.state.solNew,
-      toggleSol: () => this.setState((s) => ({ solNew: !s.solNew })),
-      solToggleLabel: this.state.solNew ? "Our solutions · New" : "Our solutions · Classic",
+      solNew: CV === 1,
+      solOld: CV === 2,
+      solCarousel: CV === 3,
+      toggleSol: () => this.setState((s) => ({ solView: (s.solView % 3) + 1 })),
+      solToggleLabel: "Our solutions · " + ({ 1: "New", 2: "Classic", 3: "Carousel" }[CV]),
+      carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
+      carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
+      carStyle0: carStyleFor(0), carStyle1: carStyleFor(1), carStyle2: carStyleFor(2),
+      carStyle3: carStyleFor(3), carStyle4: carStyleFor(4),
+      carDots,
     };
   }
 }
