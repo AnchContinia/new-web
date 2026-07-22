@@ -1292,7 +1292,7 @@ const CONTINIA_LINKS = {
   }, {
     label: "Use cases",
     href: "../use-cases/",
-    menu: true
+    menu: false
   }, {
     label: "Pricing",
     href: "./"
@@ -1529,6 +1529,10 @@ const CSS = `
   .cnt-siteheader__nav, .cnt-siteheader__find { display: none; }
   .cnt-siteheader__burger { display: block; }
   .cnt-siteheader__mobile { display: flex; flex-direction: column; gap: 2px; padding: 8px var(--layout-page-pad, 28px) 18px; border-top: 1px solid var(--color-border); }
+}
+@media (max-width: 640px) {
+  .cnt-siteheader__inner { padding: 11px 16px; gap: 10px; }
+  .cnt-siteheader__logo svg { height: 26px; }
 }
 `;
 let _i = false;

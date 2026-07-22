@@ -17,6 +17,7 @@
   <script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
   <style>
     html { scroll-behavior: smooth; }
+    html, body { overflow-x: hidden; max-width: 100%; }
     body { margin: 0; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; color: #0a1838; background: #ffffff; -webkit-font-smoothing: antialiased; }
     a { color: #052975; }
     a:hover { color: #0a317f; }
@@ -34,6 +35,42 @@
       .cnt-partner-link { display: none !important; }
       .cnt-bento-wide { grid-column: auto !important; }
     }
+    /* ---------- Mobile (<=640px) ---------- */
+    @media (max-width: 640px) {
+      /* Tighter section gutters + vertical rhythm */
+      .hero-wrap { padding: 56px 20px 0 !important; }
+      #impacts > div, #solutions > div, #how > div { padding: 60px 20px !important; }
+      #cta > div { padding: 72px 20px !important; }
+
+      /* Hero type scales down and wraps naturally */
+      .hero-h1 { font-size: clamp(24px, 6.6vw, 32px) !important; letter-spacing: -0.02em !important; margin-top: 16px !important; }
+      .hero-h1 br { display: none; }
+      .hero-sub { font-size: 15.5px !important; margin-top: 18px !important; }
+
+      /* Hero CTAs stack full-width for big tap targets */
+      .hero-cta { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; margin-top: 28px !important; }
+      .hero-cta .cnt-btn { width: 100% !important; box-sizing: border-box !important; justify-content: center !important; }
+
+      /* Proof points stack, left-aligned */
+      .hero-proof { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; text-align: left; margin-top: 26px !important; }
+
+      /* BC mockup: compact + scrolls inside its own card, never the page */
+      .hero-mock { margin-top: 40px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; }
+      .mock-body { padding: 12px !important; }
+      .mock-steps { gap: 5px !important; }
+      .mock-steps > div { font-size: 9.5px !important; min-width: 0 !important; padding: 7px 3px !important; }
+      .mock-steps > div i { display: none; }
+
+      /* Impact: kill the 340px min-width that forced horizontal scroll */
+      #cnt-statband [style*="min-width:340px"] { min-width: 0 !important; font-size: 52px !important; }
+      #cnt-statband > div { padding: 26px 0 !important; gap: 4px 0 !important; }
+
+      /* Trust marquee gutters */
+      section[data-screen-label="Trusted by"] > div { padding: 22px 20px !important; gap: 20px !important; }
+
+      /* Cards a touch tighter */
+      .cnt-bento > div, .cnt-3col > div { padding: 24px !important; }
+    }
   </style>
 </helmet>
 
@@ -44,20 +81,20 @@
 <section id="top" data-screen-label="Hero" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#def5ff 130%)">
   <div aria-hidden="true" style="position:absolute;right:-160px;top:-220px;width:560px;height:560px;background:rgba(143,248,255,0.22);border-bottom-left-radius:100%;pointer-events:none"></div>
   <div aria-hidden="true" style="position:absolute;left:-200px;bottom:-260px;width:620px;height:620px;background:rgba(5,41,117,0.05);border-top-right-radius:100%;pointer-events:none"></div>
-  <div style="position:relative;max-width:1240px;margin:0 auto;padding:84px 32px 0;text-align:center">
+  <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:84px 32px 0;text-align:center">
     <div style="display:inline-flex;align-items:center;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#052975">It's about time</div>
-    <h1 style="margin:22px auto 0;max-width:980px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can automate it.</h1>
-    <p style="margin:24px auto 0;max-width:600px;font-size:18px;line-height:1.65;color:#3a4a6b">Continia eliminates up to 90% of manual finance tasks — document capture, expenses, payments and outgoing documents, 100% built inside Microsoft Dynamics 365 Business Central.</p>
-    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:34px">
+    <h1 class="hero-h1" style="margin:22px auto 0;max-width:980px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can automate it.</h1>
+    <p class="hero-sub" style="margin:24px auto 0;max-width:600px;font-size:18px;line-height:1.65;color:#3a4a6b">Continia eliminates up to 90% of manual finance tasks — document capture, expenses, payments and outgoing documents, 100% built inside Microsoft Dynamics 365 Business Central.</p>
+    <div class="hero-cta" style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:34px">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" href="#cta" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="#how" hint-size="170px,48px">See how it works</x-import>
     </div>
-    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:34px;margin-top:30px;font-size:13.5px;color:#6b7894">
+    <div class="hero-proof" style="display:flex;justify-content:center;flex-wrap:wrap;gap:34px;margin-top:30px;font-size:13.5px;color:#6b7894">
       <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> 30+ years of experience</span>
       <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> 21,000+ customers</span>
       <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> Quick setup from AppSource</span>
     </div>
-    <div data-reveal="true" style="max-width:960px;margin:56px auto -2px">
+    <div class="hero-mock" data-reveal="true" style="max-width:960px;margin:56px auto -2px">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" hint-size="100%,440px">
         <div style="display:flex;background:#ffffff;text-align:left">
           <div class="cnt-nav" style="flex:none;width:200px;border-right:1px solid #eef1f6;padding:14px 10px;display:flex;flex-direction:column;gap:2px">
@@ -66,8 +103,8 @@
               <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;font-size:12.5px;font-weight:600;background:{{ n.bg }};color:{{ n.fg }};white-space:nowrap"><i class="{{ n.icon }}" style="font-size:14px;width:18px;text-align:center"></i>{{ n.name }}</div>
             </sc-for>
           </div>
-          <div style="flex:1;min-width:0;padding:16px 18px 12px">
-            <div style="display:flex;gap:8px;margin-bottom:12px">
+          <div class="mock-body" style="flex:1;min-width:0;padding:16px 18px 12px">
+            <div class="mock-steps" style="display:flex;gap:8px;margin-bottom:12px">
               <sc-for list="{{ flowSteps }}" as="step" hint-placeholder-count="4">
                 <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 4px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ step.bg }};color:{{ step.fg }};transition:background 400ms,color 400ms;white-space:nowrap"><i class="{{ step.icon }}"></i><span>{{ step.name }}</span></div>
               </sc-for>
