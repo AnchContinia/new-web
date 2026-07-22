@@ -1421,7 +1421,7 @@ const CSS = `
 .cnt-sitefooter__social a { width: 36px; height: 36px; border-radius: var(--radius-pill); border: 1px solid rgba(255,255,255,0.3); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; transition: background var(--dur-base) var(--ease-standard); }
 .cnt-sitefooter__social a:hover { background: rgba(255,255,255,0.12); }
 .cnt-sitefooter__col { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
-.cnt-sitefooter__col h4 { font-size: 12px; letter-spacing: var(--ls-overline); text-transform: uppercase; color: var(--c-innovation-blue); margin: 0 0 8px; font-weight: var(--fw-semibold); }
+.cnt-sitefooter__col h4 { font-size: 12px; letter-spacing: var(--ls-overline); text-transform: uppercase; color: var(--c-innovation-blue); margin: 0 0 8px; font-weight: 700; }
 .cnt-sitefooter__col a { color: rgba(255,255,255,0.78); font-size: 14px; transition: color 200ms var(--ease-standard); }
 .cnt-sitefooter__col a:hover { color: var(--c-innovation-blue); }
 .cnt-sitefooter__bottom { border-top: 1px solid rgba(255,255,255,0.15); }
@@ -1461,7 +1461,7 @@ function SiteFooter({
   }, /*#__PURE__*/React.createElement(__ds_scope.Logo, {
     color: "white",
     height: 28
-  })), /*#__PURE__*/React.createElement("p", null, "Scalable add-on solutions for Microsoft Dynamics 365 Business Central", /*#__PURE__*/React.createElement("br", null), "\u2014 100% built inside."), /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("p", null, "Scalable add-on solutions for Microsoft Dynamics 365 Business Central", " \u2014 100% built inside."), /*#__PURE__*/React.createElement("div", {
     className: "cnt-sitefooter__social"
   }, links.social.map(s => /*#__PURE__*/React.createElement("a", {
     key: s.label,
@@ -1636,7 +1636,7 @@ function Footer() {
   }, /*#__PURE__*/React.createElement(Logo, {
     color: "white",
     height: 30
-  }), /*#__PURE__*/React.createElement("p", null, "Scalable add-on solutions for Microsoft Dynamics 365 Business Central", /*#__PURE__*/React.createElement("br", null), "\u2014 100% built inside."), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("p", null, "Scalable add-on solutions for Microsoft Dynamics 365 Business Central", " \u2014 100% built inside."), /*#__PURE__*/React.createElement("div", {
     className: "site-footer__social"
   }, ["linkedin-in", "youtube"].map(s => /*#__PURE__*/React.createElement("a", {
     key: s,
