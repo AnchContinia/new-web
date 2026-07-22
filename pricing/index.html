@@ -128,7 +128,7 @@
 
 <!-- ============ IMPACT ROW ============ -->
 <sc-if value="{{ showTrustBar }}" hint-placeholder-val="{{ true }}">
-<section id="impacts" data-screen-label="Trust bar" style="max-width: 1360px; margin: 0 auto; padding: 56px 28px 72px;">
+<section id="impacts" data-screen-label="Trust bar" style="max-width: 1360px; margin: 0 auto; padding: 90px 28px 44px;">
   <div style="display: flex; justify-content: center; align-items: stretch; gap: 0; flex-wrap: wrap;">
     <sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
       <div style="flex: 1 1 200px; text-align: center; padding: 10px 28px; border-left: 1px solid #dde3ee; display: flex; flex-direction: column; gap: 6px;">
@@ -142,7 +142,7 @@
 </sc-if>
 
 <!-- ============ TWO LICENSE PROGRAMS ============ -->
-<section id="programs" data-screen-label="License programs" style="max-width: 1360px; margin: 0 auto; padding: 40px 28px 84px;">
+<section id="programs" data-screen-label="License programs" style="max-width: 1360px; margin: 0 auto; padding: 46px 28px 84px;">
   <div data-reveal style="max-width: 720px; margin: 0 auto 48px; text-align: center;">
     <span class="eyebrow">Licensing</span>
     <h2 style="font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; margin: 12px 0 0;">Two ways to license. One promise.</h2>
@@ -550,8 +550,10 @@ class Component extends DCLogic {
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
     // Toggling animationName (not the shorthand) restarts each animation while
-    // keeping the per-line inline animation-delay stagger intact.
-    ".pr3__col,.pr3__line,.pr3__sub,.pr3__total,.pr3__total b,.pr3__scan"
+    // keeping the per-line inline animation-delay stagger intact. NB: we do NOT
+    // restart .pr3__col (the card rise-in) so the receipt itself stays put — only
+    // its contents re-animate, so the loop doesn't visibly jump.
+    ".pr3__line,.pr3__sub,.pr3__total,.pr3__total b,.pr3__scan"
       .split(",").forEach((sel) => document.querySelectorAll(sel).forEach((el) => {
         el.style.animationName = "none";
         void el.offsetWidth; // force reflow so the restart takes
