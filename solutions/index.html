@@ -19,8 +19,8 @@
     html { scroll-behavior: smooth; }
     html, body { overflow-x: hidden; max-width: 100%; }
     body { margin: 0; font-family: var(--font-sans, "Alliance No.2", "Helvetica Neue", Arial, sans-serif); color: #0a1838; background: #ffffff; -webkit-font-smoothing: antialiased; }
-    a { color: #052975; }
-    a:hover { color: #0a317f; }
+    a:not(.cnt-btn) { color: #052975; }
+    a:not(.cnt-btn):hover { color: #0a317f; }
     @keyframes cntMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     summary { list-style: none; }
     summary::-webkit-details-marker { display: none; }

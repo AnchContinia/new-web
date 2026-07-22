@@ -19,8 +19,8 @@
     html { scroll-behavior: smooth; }
     html, body { overflow-x: hidden; max-width: 100%; }
     body { margin: 0; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; color: #0a1838; background: #ffffff; -webkit-font-smoothing: antialiased; }
-    a { color: #052975; }
-    a:hover { color: #0a317f; }
+    a:not(.cnt-btn) { color: #052975; }
+    a:not(.cnt-btn):hover { color: #0a317f; }
     @keyframes cnt-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     #blog image-slot { display: block; width: 100%; height: 100%; }
     .cnt-btn.cnt-btn--innovation { --_bg: #8ff8ff; --_fg: #052975; }
@@ -81,7 +81,7 @@
 <section id="top" data-screen-label="Hero" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#def5ff 130%)">
   <div aria-hidden="true" style="position:absolute;right:-160px;top:-220px;width:560px;height:560px;background:rgba(143,248,255,0.22);border-bottom-left-radius:100%;pointer-events:none"></div>
   <div aria-hidden="true" style="position:absolute;left:-200px;bottom:-260px;width:620px;height:620px;background:rgba(5,41,117,0.05);border-top-right-radius:100%;pointer-events:none"></div>
-  <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:84px 32px 0;text-align:center">
+  <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:40px 32px 0;text-align:center">
     <div style="display:inline-flex;align-items:center;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#052975">It's about time</div>
     <h1 class="hero-h1" style="margin:22px auto 0;max-width:980px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can automate it.</h1>
     <p class="hero-sub" style="margin:24px auto 0;max-width:600px;font-size:18px;line-height:1.65;color:#3a4a6b">Continia eliminates up to 90% of manual finance tasks — document capture, expenses, payments and outgoing documents, 100% built inside Microsoft Dynamics 365 Business Central.</p>
@@ -94,16 +94,15 @@
       <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> 21,000+ customers</span>
       <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> Quick setup from AppSource</span>
     </div>
-    <div class="hero-mock" data-reveal="true" style="max-width:960px;margin:56px auto -2px">
+    <div class="hero-mock" data-reveal="true" style="max-width:960px;margin:52px auto -26px">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" hint-size="100%,440px">
         <div style="display:flex;background:#ffffff;text-align:left">
-          <div class="cnt-nav" style="flex:none;width:200px;border-right:1px solid #eef1f6;padding:14px 10px;display:flex;flex-direction:column;gap:2px">
-            <div style="font-size:10.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#aab4c8;padding:6px 10px">Continia</div>
+          <div class="cnt-nav" style="flex:none;width:200px;border-right:1px solid #eef1f6;padding:16px 10px;display:flex;flex-direction:column;gap:2px">
             <sc-for list="{{ sideNav }}" as="n" hint-placeholder-count="5">
               <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;font-size:12.5px;font-weight:600;background:{{ n.bg }};color:{{ n.fg }};white-space:nowrap"><i class="{{ n.icon }}" style="font-size:14px;width:18px;text-align:center"></i>{{ n.name }}</div>
             </sc-for>
           </div>
-          <div class="mock-body" style="flex:1;min-width:0;padding:16px 18px 12px">
+          <div class="mock-body" style="flex:1;min-width:0;padding:16px 18px 24px">
             <div class="mock-steps" style="display:flex;gap:8px;margin-bottom:12px">
               <sc-for list="{{ flowSteps }}" as="step" hint-placeholder-count="4">
                 <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 4px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ step.bg }};color:{{ step.fg }};transition:background 400ms,color 400ms;white-space:nowrap"><i class="{{ step.icon }}"></i><span>{{ step.name }}</span></div>
@@ -131,7 +130,7 @@
 <!-- ============ TRUST MARQUEE ============ -->
 <section data-screen-label="Trusted by" style="background:#052975">
   <div style="max-width:1240px;margin:0 auto;padding:30px 32px;display:flex;align-items:center;gap:36px">
-    <span style="flex:none;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);white-space:nowrap">Trusted by 21,000+ companies:</span>
+    <span style="flex:none;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);white-space:nowrap">Trusted by <span style="color:#8ff8ff;font-weight:700">21,000+</span> companies:</span>
     <div style="flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)">
       <div id="cnt-marquee" style="display:flex;gap:64px;width:max-content;animation:cnt-marquee 38s linear infinite">
         <sc-for list="{{ trustLoop }}" as="brand" hint-placeholder-count="10">
