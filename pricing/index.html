@@ -41,13 +41,95 @@
     @keyframes fade { from { opacity: 0; } }
     i.fa-document-capture-solution-dc-icon { transform: scale(1.18); transform-origin: center; }
     #cnt-header a[aria-label="Continia home"] svg { overflow: visible; display: block; }
+
+    /* ============ HERO: live usage meter ============ */
+    .pm-hero { position: relative; overflow: hidden; padding: clamp(52px,7vw,96px) 28px clamp(60px,7vw,88px);
+      background: radial-gradient(1100px 460px at 80% -12%, rgba(143,248,255,0.20), transparent 62%), linear-gradient(180deg,#ffffff 0%,#f6f8fb 100%); }
+    .pm-hero::before { content:""; position:absolute; inset:0; pointer-events:none;
+      background-image: repeating-linear-gradient(180deg, transparent 0 39px, rgba(5,41,117,0.05) 39px 40px);
+      -webkit-mask-image: linear-gradient(180deg,#000 0 52%, transparent 90%);
+      mask-image: linear-gradient(180deg,#000 0 52%, transparent 90%); }
+    .pm-hero__inner { position:relative; max-width: 760px; margin:0 auto; display:flex; flex-direction:column; align-items:center; text-align:center; }
+    .pm-eyebrow { font-size:12px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#052975; }
+    .pm-meter { margin-top:24px; width:min(440px,100%); box-sizing:border-box; text-align:left;
+      background: linear-gradient(158deg,#083a8f 0%,#052975 46%,#041e58 100%); color:#fff; border-radius:22px;
+      padding:22px 26px 24px; box-shadow:0 28px 64px rgba(5,41,117,0.30), 0 8px 20px rgba(5,41,117,0.16);
+      animation: pmRise .7s cubic-bezier(0.16,1,0.3,1) both; }
+    @keyframes pmRise { from{ opacity:0; transform:translateY(26px);} to{ opacity:1; transform:none;} }
+    .pm-meter__head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .pm-live { display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.74); }
+    .pm-live__dot { width:8px; height:8px; border-radius:999px; background:#8ff8ff; box-shadow:0 0 0 0 rgba(143,248,255,0.6); animation: pmPulse 1.9s ease-out infinite; }
+    @keyframes pmPulse { 0%{ box-shadow:0 0 0 0 rgba(143,248,255,0.55);} 70%{ box-shadow:0 0 0 10px rgba(143,248,255,0);} 100%{ box-shadow:0 0 0 0 rgba(143,248,255,0);} }
+    .pm-meter__unit { font-size:11.5px; font-weight:600; color:rgba(255,255,255,0.55); }
+    .pm-meter__read { display:flex; align-items:flex-end; gap:5px; margin-top:15px; }
+    .pm-meter__cur { font-size:32px; font-weight:700; line-height:1; color:rgba(255,255,255,0.85); padding-bottom:8px; }
+    .pm-meter__cell { display:inline-flex; align-items:center; justify-content:center; min-width:42px; height:62px;
+      border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(143,248,255,0.28);
+      font-size:46px; font-weight:700; line-height:1; color:#8ff8ff; font-variant-numeric:tabular-nums;
+      text-shadow:0 0 22px rgba(143,248,255,0.45); }
+    .pm-meter__comma { align-self:flex-end; padding-bottom:8px; font-size:38px; font-weight:700; color:#8ff8ff; }
+    .pm-meter__bar { margin-top:18px; height:7px; border-radius:999px; background:rgba(255,255,255,0.12); overflow:hidden; }
+    .pm-meter__bar span { display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#8ff8ff,#c6fbff);
+      width:72%; animation: pmFill 2.4s cubic-bezier(0.16,1,0.3,1) both, pmBreathe 5s ease-in-out 2.6s infinite; }
+    @keyframes pmFill { from{ width:0; } to{ width:72%; } }
+    @keyframes pmBreathe { 0%,100%{ width:72%; } 50%{ width:79%; } }
+    .pm-meter__foot { margin-top:13px; font-size:12.5px; line-height:1.45; color:rgba(255,255,255,0.62); }
+    .pm-title { margin:32px 0 0; font-size:clamp(2.4rem, 1.35rem + 3.4vw, 4rem); font-weight:700; letter-spacing:-0.03em; line-height:1.02; color:#052975; }
+    .pm-sub { margin:18px 0 0; max-width:54ch; font-size:1.125rem; line-height:1.55; color:#3a4a6b; }
+    .pm-cta { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:28px; }
+    .pm-proof { display:flex; gap:24px; flex-wrap:wrap; justify-content:center; margin-top:26px; font-size:14px; color:#3a4a6b; }
+    .pm-proof span { display:inline-flex; align-items:center; gap:8px; }
+    .pm-herotoggle { position:fixed; bottom:20px; left:20px; z-index:60; display:inline-flex; align-items:center; gap:9px;
+      padding:11px 18px; border-radius:999px; background:#ffffff; border:1.5px solid #dde3ee; box-shadow:0 8px 24px rgba(5,41,117,0.14);
+      font-family:var(--font-sans); font-size:13px; font-weight:600; color:#052975; cursor:pointer; transition:transform 200ms, border-color 200ms; }
+    .pm-herotoggle:hover { border-color:#052975; transform:translateY(-2px); }
+    @media (prefers-reduced-motion: reduce) {
+      .pm-meter, .pm-live__dot, .pm-meter__bar span { animation: none !important; }
+      .pm-meter__bar span { width:72%; }
+    }
   </style>
 </helmet>
 
 <!-- ============ HEADER ============ -->
 <x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Pricing" hint-size="100%,66px"></x-import>
 
-<!-- ============ HERO ============ -->
+<!-- ============ HERO (live usage meter — new) ============ -->
+<sc-if value="{{ heroMeter }}" hint-placeholder-val="{{ true }}">
+<section id="top" data-screen-label="Hero (live meter)" class="pm-hero">
+  <div class="pm-hero__inner">
+    <span class="pm-eyebrow">Usage-based pricing</span>
+    <div class="pm-meter">
+      <div class="pm-meter__head">
+        <span class="pm-live"><span class="pm-live__dot"></span>Metered live</span>
+        <span class="pm-meter__unit">per month · estimate</span>
+      </div>
+      <div class="pm-meter__read">
+        <span class="pm-meter__cur">€</span>
+        <sc-for list="{{ meterCells }}" as="c" hint-placeholder-count="3">
+          <sc-if value="{{ c.comma }}" hint-placeholder-val="{{ false }}"><span class="pm-meter__comma">,</span></sc-if>
+          <sc-if value="{{ c.digit }}" hint-placeholder-val="{{ true }}"><span class="pm-meter__cell">{{ c.ch }}</span></sc-if>
+        </sc-for>
+      </div>
+      <div class="pm-meter__bar"><span></span></div>
+      <div class="pm-meter__foot">A sample month — you're billed for this, and nothing you don't use.</div>
+    </div>
+    <h1 class="pm-title">Only pay for<br>what you use.</h1>
+    <p class="pm-sub">Continia is licensed by usage. Start with a free 30-day trial — every module included — then pay for exactly what you run. Your Continia Partner confirms the final price.</p>
+    <div class="pm-cta">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" on-click="{{ goEstimator }}" hint-size="auto,48px">Estimate your price</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" on-click="{{ goSheets }}" hint-size="auto,48px">Download price sheets</x-import>
+    </div>
+    <div class="pm-proof">
+      <span><i class="fa-light fa-circle-check" style="color:#5f9e8d; font-size:17px;"></i>30-day free trial — all modules</span>
+      <span><i class="fa-light fa-circle-check" style="color:#5f9e8d; font-size:17px;"></i>Invoiced monthly by usage</span>
+      <span><i class="fa-light fa-circle-check" style="color:#5f9e8d; font-size:17px;"></i>1,500+ local partners</span>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ HERO (classic) ============ -->
+<sc-if value="{{ heroClassic }}" hint-placeholder-val="{{ false }}">
 <section id="top" data-screen-label="Hero" style="background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 78%); padding: 72px 28px 64px; text-align: center;">
   <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 0;">
     <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.15em; color: #052975; text-transform: uppercase;">Pricing · It's about time</span>
@@ -65,6 +147,10 @@
     </div>
   </div>
 </section>
+</sc-if>
+
+<!-- Hero toggle -->
+<button onClick="{{ toggleHero }}" class="pm-herotoggle" title="Switch pricing header"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i>{{ heroToggleLabel }}</button>
 
 <!-- ============ IMPACT ROW ============ -->
 <sc-if value="{{ showTrustBar }}" hint-placeholder-val="{{ true }}">
@@ -400,6 +486,8 @@ class Component extends DCLogic {
       { q: "When do prices change?", a: "Price sheets are published for each calendar year — the 2026 sheets on this page are valid from January 1, 2026. Your partner will always confirm current prices before you commit." },
     ];
     this.state = {
+      heroMode: "meter",
+      meterN: 0,
       currency: "EUR",
       program: "online",
       sel: { dc: true, em: true, fi: false, ba: false, pm: false, do: false, cm: false, cdn: false, op: false },
@@ -444,6 +532,21 @@ class Component extends DCLogic {
   componentDidMount() {
     this._target = this.totalEUR();
     this.setState({ disp: this._target });
+    // Hero meter count-up (once, on mount)
+    const heroMotion = this.props.motion ?? true;
+    const meterTarget = 449;
+    if (heroMotion && "requestAnimationFrame" in window) {
+      const start = performance.now(), dur = 1500;
+      const roll = (now) => {
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        this.setState({ meterN: Math.round(meterTarget * eased) });
+        if (t < 1) this._meterRaf = requestAnimationFrame(roll);
+      };
+      this._meterRaf = requestAnimationFrame(roll);
+    } else {
+      this.setState({ meterN: meterTarget });
+    }
     this._onScroll = () => {
       const h = document.getElementById("cnt-header");
       if (h) h.style.boxShadow = window.scrollY > 10 ? "0 8px 24px rgba(5,41,117,0.10)" : "none";
@@ -470,6 +573,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._meterRaf) cancelAnimationFrame(this._meterRaf);
     if (this._io) this._io.disconnect();
     if (this._onScroll) window.removeEventListener("scroll", this._onScroll);
   }
@@ -602,7 +706,16 @@ class Component extends DCLogic {
       { value: "90%", label: "fewer manual tasks — up to" },
     ];
 
+    const meterCells = new Intl.NumberFormat("en").format(st.meterN).split("").map((ch) => ({
+      ch, comma: ch === ",", digit: ch !== ",",
+    }));
+
     return {
+      heroMeter: st.heroMode === "meter",
+      heroClassic: st.heroMode === "classic",
+      heroToggleLabel: st.heroMode === "meter" ? "View classic header" : "View live meter",
+      toggleHero: () => this.setState((s) => ({ heroMode: s.heroMode === "meter" ? "classic" : "meter" })),
+      meterCells,
       year: new Date().getFullYear(),
       stats, currencies, programs, chips, sliders, lines, faqs, tabs, modules, tabName, sheets,
       currency: st.currency,
