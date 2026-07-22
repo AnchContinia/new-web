@@ -70,7 +70,33 @@
 
       /* Cards a touch tighter */
       .cnt-bento > div, .cnt-3col > div { padding: 24px !important; }
+      .sol-new__inner { padding: 60px 20px !important; }
     }
+
+    /* ---------- Solutions: glassmorphism + video bg (new) ---------- */
+    .sol-new { position: relative; overflow: hidden; background: #041e58; }
+    .sol-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .sol-vid-ovl { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(1000px 460px at 82% -8%, rgba(143,248,255,0.20), transparent 60%),
+        linear-gradient(180deg, rgba(4,30,88,0.80) 0%, rgba(5,41,117,0.60) 48%, rgba(4,24,72,0.86) 100%); }
+    .sol-new__inner { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; padding: 104px 32px; }
+    .sol-g { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 24px; padding: 32px;
+      -webkit-backdrop-filter: blur(18px) saturate(150%); backdrop-filter: blur(18px) saturate(150%);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.14);
+      transition: transform 250ms, box-shadow 250ms, border-color 250ms; }
+    .sol-g:hover { transform: translateY(-4px); border-color: rgba(143,248,255,0.42);
+      box-shadow: 0 28px 64px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.2); }
+    .sol-g__icon { flex: none; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; background: rgba(143,248,255,0.16); color: #8ff8ff; border: 1px solid rgba(143,248,255,0.28); }
+    .sol-g__title { font-size: 19px; font-weight: 700; color: #ffffff; }
+    .sol-g__sub { font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,0.74); }
+    .sol-g__panel { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; }
+    .sol-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+      padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms; }
+    .sol-toggle:hover { border-color: #052975; transform: translateY(-2px); }
+    @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } }
   </style>
 </helmet>
 
@@ -168,7 +194,91 @@
 </section>
 
 <!-- ============ SOLUTIONS BENTO ============ -->
-<section id="solutions" data-screen-label="Solutions" style="background:#f6f8fb">
+<section id="solutions" data-screen-label="Solutions" style="position:relative;overflow:hidden">
+
+<!-- ===== NEW: glassmorphism + video background ===== -->
+<sc-if value="{{ solNew }}" hint-placeholder-val="{{ true }}">
+<div class="sol-new">
+  <video class="sol-vid" autoplay muted loop playsinline aria-hidden="true">
+    <source src="assets/video/solutions-bg.webm" type="video/webm">
+    <source src="assets/video/solutions-bg.mp4" type="video/mp4">
+  </video>
+  <div class="sol-vid-ovl" aria-hidden="true"></div>
+  <div class="sol-new__inner">
+    <div data-reveal="true" style="text-align:center;max-width:640px;margin:0 auto">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your Business Central.</h2>
+      <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
+    </div>
+    <div data-reveal="true" class="cnt-bento" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px">
+
+      <div class="cnt-bento-wide sol-g" style="grid-column:span 2">
+        <div style="display:flex;align-items:center;gap:14px"><div class="sol-g__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div><div><div class="sol-g__title">Document Capture</div><div class="sol-g__sub">Automate your entire Accounts Payable</div></div></div>
+        <div class="sol-g__panel" style="margin-top:20px;padding:8px 12px">
+          <sc-for list="{{ bentoDcRows }}" as="r" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid rgba(255,255,255,0.10)">
+              <i class="{{ r.icon }}" style="color:#8ff8ff;font-size:15px;width:18px;text-align:center"></i>
+              <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px;color:#ffffff">{{ r.a }}</div><div style="font-size:11.5px;color:rgba(255,255,255,0.6)">{{ r.b }}</div></div>
+              <div style="font-size:12.5px;font-weight:600;color:#ffffff">{{ r.c }}</div>
+              <div style="min-width:92px;text-align:center;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:700;background:{{ r.chipBg }};color:{{ r.chipFg }};transition:background 400ms,color 400ms">{{ r.chip }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <p class="sol-g__sub" style="margin:18px 0 0">Invoices are imported, recognized, approved and posted automatically — from start to finish, without leaving Business Central.</p>
+      </div>
+
+      <div class="sol-g" style="position:relative;overflow:hidden">
+        <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
+        <div class="sol-g__title" style="margin-top:16px">Expense Management</div>
+        <p class="sol-g__sub" style="margin:10px 0 0">Snap a photo of the receipt — approval, coding and reimbursement happen automatically.</p>
+        <div class="sol-g__panel" style="margin-top:20px;padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.72)"><span>Client dinner &middot; Anna M.</span><span style="font-weight:700;color:#8ff8ff">€ 148.20</span></div>
+          <div style="margin-top:10px;height:6px;border-radius:999px;background:rgba(255,255,255,0.15);overflow:hidden"><div style="width:{{ emProgress }};height:100%;border-radius:999px;background:#8ff8ff;transition:width 900ms cubic-bezier(0.16,1,0.3,1)"></div></div>
+          <div style="margin-top:8px;font-size:11.5px;font-weight:700;color:#8ff8ff">{{ emStatus }}</div>
+        </div>
+      </div>
+
+      <div class="sol-g">
+        <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
+        <div class="sol-g__title" style="margin-top:16px">Continia Banking</div>
+        <p class="sol-g__sub" style="margin:10px 0 0">Direct bank communication, payment approval and automatic reconciliation.</p>
+        <div class="sol-g__panel" style="margin-top:20px;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:rgba(255,255,255,0.78)">Bank reconciliation</span><span style="padding:3px 9px;border-radius:999px;background:rgba(111,227,176,0.18);color:#6fe3b0;font-size:10.5px;font-weight:700">214 matched</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:rgba(255,255,255,0.78)">Payment batch 2041</span><span style="padding:3px 9px;border-radius:999px;background:rgba(111,227,176,0.18);color:#6fe3b0;font-size:10.5px;font-weight:700">Sent</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:rgba(255,255,255,0.78)">Approval &middot; 2 approvers</span><span style="padding:3px 9px;border-radius:999px;background:rgba(240,198,116,0.18);color:#f0c674;font-size:10.5px;font-weight:700">Pending</span></div>
+        </div>
+      </div>
+
+      <div class="sol-g">
+        <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
+        <div class="sol-g__title" style="margin-top:16px">Continia Finance</div>
+        <p class="sol-g__sub" style="margin:10px 0 0">Smart modules that ease the burden of core accounting tasks.</p>
+        <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-general-ledger" style="color:#8ff8ff"></i> General ledger</div>
+          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-extended-fixed-assets" style="color:#8ff8ff"></i> Fixed assets</div>
+          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-l-open-entries" style="color:#8ff8ff"></i> Open entries</div>
+          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-treasury" style="color:#8ff8ff"></i> Treasury</div>
+        </div>
+      </div>
+
+      <div class="sol-g" style="position:relative;overflow:hidden">
+        <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
+        <div class="sol-g__title" style="margin-top:16px">Document Output</div>
+        <p class="sol-g__sub" style="margin:10px 0 0">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print.</p>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
+          <div class="sol-g__panel" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:12.5px;color:#ffffff"><i class="fa-light fa-envelope" style="color:#8ff8ff"></i> Invoice 204518 <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#6fe3b0">SENT</span></div>
+          <div class="sol-g__panel" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:12.5px;color:#ffffff"><i class="fa-light fa-file-check" style="color:#8ff8ff"></i> e-Invoice (PEPPOL) <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#6fe3b0">DELIVERED</span></div>
+          <div class="sol-g__panel" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:12.5px;color:#ffffff"><i class="fa-light fa-print" style="color:#8ff8ff"></i> Reminder 30011 <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#f0c674">QUEUED</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ===== OLD: original light version ===== -->
+<sc-if value="{{ solOld }}" hint-placeholder-val="{{ false }}">
+<div style="background:#f6f8fb">
   <div style="max-width:1240px;margin:0 auto;padding:104px 32px">
     <div data-reveal="true" style="text-align:center;max-width:640px;margin:0 auto">
       <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#052975">Our solutions</span>
@@ -240,7 +350,13 @@
       </div>
     </div>
   </div>
+</div>
+</sc-if>
+
 </section>
+
+<!-- Solutions old/new toggle -->
+<button onClick="{{ toggleSol }}" class="sol-toggle" title="Switch Our Solutions design"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i>{{ solToggleLabel }}</button>
 
 <!-- ============ HOW IT WORKS ============ -->
 <section id="how" data-screen-label="How it works" style="background:#ffffff">
@@ -344,7 +460,7 @@ const EM_PHASES = [
 ];
 
 class Component extends DCLogic {
-  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 } };
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solNew: true };
   _statsStarted = false;
 
   get motion() { return this.props.motion ?? true; }
@@ -493,6 +609,10 @@ class Component extends DCLogic {
       statPartners: fmt(stats.partners) + "+",
       year: new Date().getFullYear(),
       arrowBtn: { iconRight: icon("fa-light fa-arrow-right") },
+      solNew: this.state.solNew,
+      solOld: !this.state.solNew,
+      toggleSol: () => this.setState((s) => ({ solNew: !s.solNew })),
+      solToggleLabel: this.state.solNew ? "Our solutions · New" : "Our solutions · Classic",
     };
   }
 }
