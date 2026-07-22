@@ -43,14 +43,26 @@
     #cnt-header a[aria-label="Continia home"] svg { overflow: visible; display: block; }
 
     /* ============ HERO: itemized receipt (50/50) ============ */
-    .pr3 { position:relative; overflow:hidden; background:linear-gradient(180deg,#e9f0fa 0%,#f6f8fb 100%); padding:clamp(76px,10vw,132px) 28px; }
-    .pr3__grid { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1.12fr 0.88fr; gap:clamp(34px,5vw,68px); align-items:center; }
-    .pr3__eyebrow { display:inline-block; font-size:13px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#052975; }
-    .pr3 h1 { margin:20px 0 0; font-size:clamp(40px,4.6vw,68px); font-weight:700; letter-spacing:-0.025em; line-height:1.04; color:#052975; }
-    .pr3 p { margin:24px 0 0; max-width:36rem; font-size:1.1875rem; line-height:1.65; color:#3a4a6b; }
+    .pr3 { position:relative; overflow:hidden; background:#041e58; padding:clamp(76px,10vw,132px) 28px; }
+    .pr3__vid { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+    .pr3__ovl { position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:
+        radial-gradient(1100px 520px at 90% 118%, rgba(143,248,255,0.16), transparent 55%),
+        linear-gradient(90deg, rgba(4,24,72,0.80) 0%, rgba(5,41,117,0.54) 46%, rgba(4,24,72,0.34) 100%); }
+    .pr3__grid { position:relative; z-index:2; max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1.12fr 0.88fr; gap:clamp(34px,5vw,68px); align-items:center; }
+    .pr3__eyebrow { display:inline-block; font-size:13px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#8ff8ff; }
+    .pr3 h1 { margin:20px 0 0; font-size:clamp(40px,4.6vw,68px); font-weight:700; letter-spacing:-0.025em; line-height:1.04; color:#ffffff; }
+    .pr3 p { margin:24px 0 0; max-width:36rem; font-size:1.1875rem; line-height:1.65; color:rgba(255,255,255,0.86); }
     .pr3__cta { display:flex; gap:14px; flex-wrap:wrap; margin-top:32px; }
-    .pr3__col { display:flex; flex-direction:column; align-items:center; justify-self:end; width:100%; }
-    .pr3__receipt { width:min(480px,100%); box-sizing:border-box; background:#fff; border-radius:16px 16px 0 0; padding:30px 34px 14px; box-shadow:0 30px 70px rgba(5,41,117,0.22); font-variant-numeric:tabular-nums; }
+    .pr3__col { display:flex; flex-direction:column; align-items:center; justify-self:end; width:100%; animation:recRise .8s cubic-bezier(0.16,1,0.3,1) both; }
+    .pr3__receipt { position:relative; overflow:hidden; width:min(480px,100%); box-sizing:border-box; background:#fff; border-radius:16px 16px 0 0; padding:30px 34px 14px; box-shadow:0 34px 80px rgba(3,15,48,0.45); font-variant-numeric:tabular-nums; }
+    .pr3__scan { position:absolute; left:10px; right:10px; top:14px; height:2px; border-radius:2px; pointer-events:none; z-index:3;
+      background:linear-gradient(90deg, transparent, rgba(143,248,255,0.95) 20%, rgba(143,248,255,0.95) 80%, transparent);
+      box-shadow:0 0 16px 2px rgba(143,248,255,0.55); opacity:0;
+      animation:recScan 5s cubic-bezier(0.65,0,0.35,1) 1.5s infinite; }
+    @keyframes recScan { 0%{ transform:translateY(0); opacity:0; } 6%{ opacity:1; } 42%{ transform:translateY(430px); opacity:1; } 50%{ transform:translateY(430px); opacity:0; } 100%{ transform:translateY(430px); opacity:0; } }
+    @keyframes recRise { from{ opacity:0; transform:translateY(30px); } to{ opacity:1; transform:none; } }
+    @keyframes recGlow { 0%{ text-shadow:none; } 35%{ text-shadow:0 0 22px rgba(143,248,255,0.95); } 100%{ text-shadow:none; } }
     .pr3__zig { width:min(480px,100%); height:15px; background:linear-gradient(-45deg,transparent 50%,#fff 50%) 0 0/15px 15px repeat-x, linear-gradient(45deg,transparent 50%,#fff 50%) 0 0/15px 15px repeat-x; filter:drop-shadow(0 18px 18px rgba(5,41,117,0.12)); }
     .pr3__rhead { display:flex; align-items:center; justify-content:space-between; font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:#8193b9; padding-bottom:18px; border-bottom:1px dashed #cdd7e8; }
     .pr3__rhead b { color:#052975; letter-spacing:0.02em; }
@@ -61,7 +73,7 @@
     .pr3__sub { padding:3px 0 16px 0; font-size:12.5px; color:#8193b9; opacity:0; animation:pr3in .5s cubic-bezier(0.16,1,0.3,1) forwards; }
     @keyframes pr3in { from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:none;} }
     .pr3__total { display:flex; align-items:baseline; justify-content:space-between; margin-top:8px; padding-top:18px; border-top:2px solid #052975; font-size:16px; font-weight:600; color:#3a4a6b; }
-    .pr3__total b { font-size:36px; font-weight:700; color:#052975; letter-spacing:-0.02em; }
+    .pr3__total b { font-size:36px; font-weight:700; color:#052975; letter-spacing:-0.02em; animation:recGlow 1s ease-out 1.85s both; }
     .pr3__note { margin-top:14px; font-size:12.5px; line-height:1.45; color:#6b7894; }
     .pr3__barcode { height:40px; margin-top:18px; background:repeating-linear-gradient(90deg,#0a1838 0 2px,transparent 2px 4px,#0a1838 4px 5px,transparent 5px 9px,#0a1838 9px 12px,transparent 12px 14px); opacity:0.82; }
 
@@ -71,7 +83,8 @@
       .pr3__col { justify-self:center; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .pr3__line, .pr3__sub { animation:none !important; opacity:1; }
+      .pr3__line, .pr3__sub, .pr3__col, .pr3__total b { animation:none !important; opacity:1; }
+      .pr3__scan { display:none; }
     }
   </style>
 </helmet>
@@ -81,24 +94,30 @@
 
 <!-- ============ HERO: itemized receipt (50/50) ============ -->
 <section id="top" data-screen-label="Hero (receipt)" class="pr3">
+  <video class="pr3__vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="../assets/video/solutions-bg.webm" type="video/webm">
+    <source src="../assets/video/solutions-bg.mp4" type="video/mp4">
+  </video>
+  <div class="pr3__ovl" aria-hidden="true"></div>
   <div class="pr3__grid">
     <div>
       <span class="pr3__eyebrow">Usage-based pricing</span>
       <h1>Your bill, itemized<br>to the cent.</h1>
       <p>No seats you don't fill, no tiers you don't reach. Every line is a module you actually run — start with a free 30-day trial and pay only for real usage.</p>
       <div class="pr3__cta">
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" on-click="{{ goEstimator }}" hint-size="auto,48px">Estimate your price</x-import>
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" on-click="{{ goSheets }}" hint-size="auto,48px">Download price sheets</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" on-click="{{ goEstimator }}" hint-size="auto,48px">Estimate your price</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" on-click="{{ goSheets }}" hint-size="auto,48px">Download price sheets</x-import>
       </div>
     </div>
     <div class="pr3__col">
       <div class="pr3__receipt">
+        <div class="pr3__scan" aria-hidden="true"></div>
         <div class="pr3__rhead"><b>Continia</b><span>Monthly statement</span></div>
-        <div class="pr3__line" style="animation-delay:.05s"><span class="nm">Document Capture</span><span class="dots"></span><span class="amt">€219</span></div>
+        <div class="pr3__line" style="animation-delay:.05s"><span class="nm">Document Capture</span><span class="dots"></span><span class="amt">€{{ recDC }}</span></div>
         <div class="pr3__sub" style="animation-delay:.1s">500 documents · OCR + approval</div>
-        <div class="pr3__line" style="animation-delay:.25s"><span class="nm">Expense Management</span><span class="dots"></span><span class="amt">€230</span></div>
+        <div class="pr3__line" style="animation-delay:.25s"><span class="nm">Expense Management</span><span class="dots"></span><span class="amt">€{{ recEM }}</span></div>
         <div class="pr3__sub" style="animation-delay:.3s">200 expenses · mobile capture</div>
-        <div class="pr3__total" style="animation:pr3in .5s cubic-bezier(0.16,1,0.3,1) .5s both">Subtotal <b>€449</b></div>
+        <div class="pr3__total" style="animation:pr3in .5s cubic-bezier(0.16,1,0.3,1) .5s both">Subtotal <b>€{{ recTotal }}</b></div>
         <div class="pr3__note">Example month, excl. VAT — you only pay for what you use.</div>
         <div class="pr3__barcode"></div>
       </div>
@@ -450,9 +469,11 @@ class Component extends DCLogic {
       tab: "dc",
       modalOpen: false,
       disp: 0,
+      rec: { dc: 0, em: 0, total: 0 },
     };
     this._target = 0;
     this._raf = null;
+    this._recRaf = null;
   }
 
   tiered(units, rate) {
@@ -486,6 +507,8 @@ class Component extends DCLogic {
   componentDidMount() {
     this._target = this.totalEUR();
     this.setState({ disp: this._target });
+    this._animateReceipt();
+    this._playHeroVideo();
     this._onScroll = () => {
       const h = document.getElementById("cnt-header");
       if (h) h.style.boxShadow = window.scrollY > 10 ? "0 8px 24px rgba(5,41,117,0.10)" : "none";
@@ -512,8 +535,42 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._recRaf) cancelAnimationFrame(this._recRaf);
     if (this._io) this._io.disconnect();
     if (this._onScroll) window.removeEventListener("scroll", this._onScroll);
+  }
+
+  // Muted autoplay for the hero sky video; <source> order (webm → mp4) lets each
+  // browser pick the format it supports (Chrome/Firefox: webm, Safari: mp4).
+  _playHeroVideo() {
+    requestAnimationFrame(() => {
+      const v = document.querySelector(".pr3__vid");
+      if (!v) return;
+      v.muted = true; v.setAttribute("muted", "");
+      const p = v.play(); if (p && p.catch) p.catch(() => {});
+    });
+  }
+
+  // Tally the receipt on load: each line's amount, then the subtotal, count up.
+  _animateReceipt() {
+    const targets = { dc: 219, em: 230, total: 449 };
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!(this.props.motion ?? true) || reduce || !("requestAnimationFrame" in window)) {
+      this.setState({ rec: targets }); return;
+    }
+    const t0 = performance.now(), dur = 1500, delay = 380;
+    const ease = (x) => 1 - Math.pow(1 - x, 3);
+    const seg = (p, a, b) => (p <= a ? 0 : p >= b ? 1 : ease((p - a) / (b - a)));
+    const step = (now) => {
+      const p = Math.min(1, Math.max(0, (now - t0 - delay) / dur));
+      this.setState({ rec: {
+        dc: Math.round(targets.dc * seg(p, 0.00, 0.45)),
+        em: Math.round(targets.em * seg(p, 0.22, 0.70)),
+        total: Math.round(targets.total * seg(p, 0.52, 1.00)),
+      } });
+      if (p < 1) this._recRaf = requestAnimationFrame(step);
+    };
+    this._recRaf = requestAnimationFrame(step);
   }
 
   retarget() {
@@ -646,6 +703,7 @@ class Component extends DCLogic {
 
     return {
       year: new Date().getFullYear(),
+      recDC: st.rec.dc, recEM: st.rec.em, recTotal: st.rec.total,
       stats, currencies, programs, chips, sliders, lines, faqs, tabs, modules, tabName, sheets,
       currency: st.currency,
       onpremUrl,
