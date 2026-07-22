@@ -96,9 +96,9 @@
 
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
     .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
-    .sol-car__stage { position: relative; height: clamp(408px,50vw,462px); perspective: 1700px; }
+    .sol-car__stage { position: relative; height: clamp(474px,55vw,524px); perspective: 1700px; }
     .sol-car__track { position: absolute; inset: 0; transform-style: preserve-3d; }
-    .sol-car__card { box-sizing: border-box; min-height: 400px; padding: 38px; border-radius: 22px; color: #fff;
+    .sol-car__card { box-sizing: border-box; min-height: 446px; padding: 40px; border-radius: 22px; color: #fff;
       display: flex; flex-direction: column;
       background: linear-gradient(0deg, rgba(5,41,117,0.14), rgba(5,41,117,0.14)), rgba(95, 158, 141, 0.32);
       border: 2px solid rgba(196,251,255,0.85);
@@ -387,7 +387,7 @@
   <div class="sol-new__inner">
     <div style="text-align:center;margin:0 auto">
       <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
-      <h2 style="margin:14px 0 0;font-size:clamp(28px,3vw,44px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff;white-space:nowrap">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,48px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for<br>your <span style="color:#8ff8ff">Business Central.</span></h2>
       <p style="max-width:660px;margin:14px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team<br>keeps the interface they already know.</p>
     </div>
     <div class="sol-car">
@@ -544,7 +544,7 @@ const EM_PHASES = [
 ];
 
 class Component extends DCLogic {
-  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 1, carIndex: 0 };
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0 };
   _statsStarted = false;
 
   get motion() { return this.props.motion ?? true; }
