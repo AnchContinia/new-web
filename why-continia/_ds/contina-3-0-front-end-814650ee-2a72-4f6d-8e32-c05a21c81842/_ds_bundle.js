@@ -858,7 +858,7 @@ const CSS = `
 .cnt-btn--white { --_bg: #ffffff; --_fg: var(--c-tech-blue); }
 .cnt-btn--white:hover { --_bg: var(--c-light-blue); }
 .cnt-btn--ghost-dark { --_bg: transparent; --_fg: #fff; --_bd: rgba(255,255,255,0.55); }
-.cnt-btn--ghost-dark:hover { --_bg: rgba(255,255,255,0.12); --_bd: #fff; }
+.cnt-btn--ghost-dark:hover { --_bg: rgba(255,255,255,0.12); --_bd: #fff; --_fg: var(--c-innovation-blue); }
 
 .cnt-btn--block { display: flex; width: 100%; }
 .cnt-btn .cnt-btn__icon { display: inline-flex; font-size: 1.15em; line-height: 0; }
@@ -924,7 +924,7 @@ const CSS = `
 .cnt-card__icon {
   width: 48px; height: 48px; border-radius: var(--radius-md);
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 24px; color: #fff; background: var(--grad-brand);
+  font-size: 24px; color: #fff; background: var(--c-tech-blue);
   margin-bottom: var(--space-4);
 }
 .cnt-card--brand .cnt-card__icon { background: rgba(255,255,255,0.12); color: var(--c-innovation-blue); }
