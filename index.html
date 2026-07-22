@@ -95,8 +95,8 @@
     .sol-toggle:hover { border-color: #052975; transform: translateY(-2px); }
 
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
-    .sol-car { position: relative; margin-top: clamp(44px,5vw,68px); }
-    .sol-car__stage { position: relative; height: clamp(440px,56vw,540px); perspective: 1700px; }
+    .sol-car { position: relative; margin-top: clamp(8px,1.5vw,20px); }
+    .sol-car__stage { position: relative; height: clamp(430px,54vw,500px); perspective: 1700px; }
     .sol-car__track { position: absolute; inset: 0; transform-style: preserve-3d; }
     .sol-car__card { box-sizing: border-box; min-height: 400px; padding: 38px; border-radius: 22px; color: #fff;
       display: flex; flex-direction: column;
@@ -106,7 +106,7 @@
       box-shadow: 0 40px 90px rgba(3,15,48,0.48); }
     .sol-car__title { margin-top: 20px; font-size: 26px; font-weight: 700; color: #fff; }
     .sol-car__desc { margin: 14px 0 0; font-size: 16.5px; line-height: 1.62; color: rgba(255,255,255,0.85); }
-    .sol-car__pills { margin-top: auto; display: flex; flex-wrap: wrap; gap: 9px; padding-top: 26px; }
+    .sol-car__pills { margin-top: auto; display: flex; flex-wrap: wrap; gap: 9px; padding-top: 40px; }
     .sol-car__pill { font-size: 12px; font-weight: 600; color: #0a1838; background: #8ff8ff; border-radius: 999px; padding: 5px 12px; }
     .sol-car__nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 30; width: 52px; height: 52px;
       border-radius: 999px; background: #ffffff; border: none; color: #052975; font-size: 18px; cursor: pointer;
@@ -115,7 +115,7 @@
     .sol-car__nav:hover { transform: translateY(-50%) scale(1.09); background: #def5ff; }
     .sol-car__nav--prev { left: clamp(2px,3vw,32px); }
     .sol-car__nav--next { right: clamp(2px,3vw,32px); }
-    .sol-car__dots { display: flex; justify-content: center; gap: 10px; margin-top: 28px; }
+    .sol-car__dots { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
     .sol-car__dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 999px; cursor: pointer;
       background: rgba(255,255,255,0.35); transition: background 200ms, transform 200ms; }
     .sol-car__dot.on { background: #8ff8ff; transform: scale(1.25); }
@@ -385,10 +385,10 @@
   </video>
   <div class="sol-vid-ovl" aria-hidden="true"></div>
   <div class="sol-new__inner">
-    <div style="text-align:center;max-width:640px;margin:0 auto">
+    <div style="text-align:center;margin:0 auto">
       <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
-      <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
-      <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
+      <h2 style="margin:14px 0 0;font-size:clamp(28px,3vw,44px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff;white-space:nowrap">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
+      <p style="max-width:600px;margin:14px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
     </div>
     <div class="sol-car">
       <button onClick="{{ carPrev }}" class="sol-car__nav sol-car__nav--prev" aria-label="Previous solution"><i class="fa-light fa-arrow-left"></i></button>
