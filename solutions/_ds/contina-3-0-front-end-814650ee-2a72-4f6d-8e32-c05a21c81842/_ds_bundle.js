@@ -1303,7 +1303,7 @@ const CONTINIA_LINKS = {
   // opticalScale: per-icon optical-size correction for fa-kit icons (see readme "Iconography")
   solutions: [{
     label: "Document Capture",
-    href: BASE + "/solutions/document-capture/",
+    href: "document-capture/",
     icon: "fa-kit fa-document-capture-solution-dc-icon",
     opticalScale: 1.18
   }, {
@@ -1519,6 +1519,16 @@ const CSS = `
 .cnt-siteheader__link:hover { color: var(--c-tech-blue); }
 .cnt-siteheader__link i { font-size: 11px; opacity: 0.55; }
 .cnt-siteheader__link--active { color: var(--c-tech-blue); box-shadow: inset 0 -2px 0 var(--c-innovation-blue); padding-bottom: 3px; }
+.cnt-siteheader__navitem { position: relative; display: inline-flex; }
+.cnt-siteheader__dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px); margin-top: 10px; min-width: 266px; background: #fff; border: 1px solid var(--color-border); border-radius: 14px; box-shadow: 0 20px 50px rgba(5,41,117,0.18); padding: 8px; display: grid; gap: 2px; opacity: 0; visibility: hidden; transition: opacity 180ms var(--ease-standard), transform 180ms var(--ease-standard); z-index: 60; }
+.cnt-siteheader__dropdown::before { content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+.cnt-siteheader__navitem:hover .cnt-siteheader__dropdown, .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropdown { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+.cnt-siteheader__link i { transition: transform 180ms var(--ease-standard); }
+.cnt-siteheader__navitem:hover .cnt-siteheader__link i { transform: rotate(180deg); }
+.cnt-siteheader__dropitem { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; white-space: nowrap; transition: background 150ms, color 150ms; }
+.cnt-siteheader__dropitem:hover { background: var(--c-light-blue); color: var(--c-tech-blue); }
+.cnt-siteheader__dropitem i { width: 22px; text-align: center; color: var(--c-tech-blue); font-size: 17px; }
+@media (max-width: 980px) { .cnt-siteheader__dropdown { display: none; } .cnt-siteheader__navitem { display: block; } }
 .cnt-siteheader__actions { display: flex; align-items: center; gap: 14px; flex: none; justify-self: end; }
 .cnt-siteheader__find { font-size: 14px; }
 .cnt-siteheader__find i { font-size: 13px; opacity: 1; }
@@ -1568,14 +1578,18 @@ function SiteHeader({
   }, [sticky]);
   const findPartner = links.company.find(c => c.label === "Find a partner");
   const ctaLink = ctaHref ?? (onCta ? undefined : links.trial);
-  const navLink = (l, extra = "") => /*#__PURE__*/React.createElement("a", {
-    key: l.label,
-    className: ["cnt-siteheader__link", l.label === activeItem ? "cnt-siteheader__link--active" : "", extra].filter(Boolean).join(" "),
-    href: l.href,
-    "aria-current": l.label === activeItem ? "page" : undefined
-  }, l.label, l.menu && /*#__PURE__*/React.createElement("i", {
-    className: "fa-light fa-chevron-down"
-  }));
+  const navLink = (l, extra = "") => {
+    const _a = /*#__PURE__*/React.createElement("a", {
+      key: l.label,
+      className: ["cnt-siteheader__link", l.label === activeItem ? "cnt-siteheader__link--active" : "", extra].filter(Boolean).join(" "),
+      href: l.href,
+      "aria-current": l.label === activeItem ? "page" : undefined
+    }, l.label, l.menu && /*#__PURE__*/React.createElement("i", {
+      className: "fa-light fa-chevron-down"
+    }));
+    if (!(l.menu && links.solutions && links.solutions.length)) return _a;
+    return /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__navitem", key: l.label }, _a, /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__dropdown", role: "menu" }, links.solutions.map(s => /*#__PURE__*/React.createElement("a", { key: s.label, className: "cnt-siteheader__dropitem", href: s.href, role: "menuitem" }, s.icon && /*#__PURE__*/React.createElement("i", { className: s.icon }), /*#__PURE__*/React.createElement("span", null, s.label)))));
+  };
   return /*#__PURE__*/React.createElement("header", _extends({
     className: ["cnt-siteheader", sticky ? "" : "cnt-siteheader--static", scrolled ? "cnt-siteheader--scrolled" : "", className].filter(Boolean).join(" ")
   }, props), /*#__PURE__*/React.createElement("div", {

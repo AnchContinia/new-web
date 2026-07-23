@@ -1282,28 +1282,28 @@ try { (() => {
 // Also exported from the bundle as CONTINIA_LINKS.
 const BASE = "https://www.continia.com";
 const CONTINIA_LINKS = {
-  home: "../",
+  home: "../../",
   // "Get a free trial" CTAs go to Microsoft AppSource (SiteHeader's default CTA href)
   trial: "https://appsource.microsoft.com/en-us/marketplace/apps?search=continia",
   nav: [{
     label: "Solutions",
-    href: "../solutions/",
+    href: "../",
     menu: true
   }, {
     label: "Use cases",
-    href: "../use-cases/",
+    href: "../../use-cases/",
     menu: false
   }, {
     label: "Pricing",
-    href: "../pricing/"
+    href: "../../pricing/"
   }, {
     label: "Why Continia?",
-    href: "./"
+    href: "../../why-continia/"
   }],
   // opticalScale: per-icon optical-size correction for fa-kit icons (see readme "Iconography")
   solutions: [{
     label: "Document Capture",
-    href: "../solutions/document-capture/",
+    href: "./",
     icon: "fa-kit fa-document-capture-solution-dc-icon",
     opticalScale: 1.18
   }, {
