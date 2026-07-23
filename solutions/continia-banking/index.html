@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Continia Banking — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
+  a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
+  a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
+  ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
+  .dc-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px) clamp(80px,9vw,116px); }
+  .dc-hero::before { content: ""; position: absolute; right: -12%; top: -30%; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(143,248,255,0.22), transparent 62%); pointer-events: none; }
+  .dc-hero__grid { position: relative; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
+  .dc-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-innovation-blue); }
+  .dc-eyebrow i { font-size: 15px; }
+  .dc-hero h1 { margin: 20px 0 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
+  .dc-hero h1 .hl { color: var(--c-innovation-blue); }
+  .dc-hero p { margin: 22px 0 0; max-width: 40rem; font-size: 1.1875rem; line-height: 1.6; color: rgba(255,255,255,0.84); }
+  .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .dc-hero__proof { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 30px; font-size: 14.5px; color: rgba(255,255,255,0.8); }
+  .dc-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
+  .dc-hero__proof i { color: var(--c-innovation-blue); font-size: 16px; }
+  .dc-mock { position: relative; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
+  .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
+  .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8193b9; }
+  .dc-mock__flow { display: flex; gap: 6px; margin: 16px 0 4px; }
+  .dc-mock__step { flex: 1; text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 7px 4px; border-radius: 8px; background: #052975; color: #8ff8ff; }
+  .dc-mock__rows { margin-top: 14px; display: flex; flex-direction: column; gap: 2px; }
+  .dc-row { display: flex; align-items: center; gap: 12px; padding: 11px 6px; border-top: 1px solid #eef1f6; opacity: 0; animation: dcIn .5s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .dc-row i { color: #052975; font-size: 15px; width: 18px; text-align: center; }
+  .dc-row .nm { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: #0a1838; }
+  .dc-row .amt { font-size: 13px; font-weight: 700; color: #052975; }
+  .dc-row .chip { min-width: 84px; text-align: center; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: #cfe2dd; color: #2f6455; }
+  .dc-row .chip.warn { background: #fff2d6; color: #8a6516; }
+  @keyframes dcIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6b7894; }
+  .dc-mock__foot i { color: #5f9e8d; }
+  .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
+  .dc-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
+  .dc-head .eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
+  .dc-head h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
+  .dc-head p { margin: 16px 0 0; font-size: 1.125rem; line-height: 1.6; color: var(--color-text-muted); }
+  .dc-stats { background: var(--c-light-blue); }
+  .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(48px,6vw,72px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; text-align: center; }
+  .dc-stat b { display: block; font-size: clamp(34px,3vw,50px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); line-height: 1; }
+  .dc-stat span { display: block; margin-top: 10px; font-size: 14.5px; color: var(--color-text-muted); }
+  .dc-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .dc-feat { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; padding: 30px; transition: transform 250ms, box-shadow 250ms, border-color 250ms; }
+  .dc-feat:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); border-color: #cdd9ef; }
+  .dc-feat__icon { width: 54px; height: 54px; border-radius: 14px; background: var(--c-light-blue); color: var(--c-tech-blue); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .dc-feat h3 { margin: 20px 0 0; font-size: 20px; font-weight: 700; color: var(--c-tech-blue); letter-spacing: -0.01em; }
+  .dc-feat p { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--color-text-muted); }
+  .dc-how { background: var(--c-tech-blue); color: #fff; }
+  .dc-how .dc-head h2 { color: #fff; }
+  .dc-how .dc-head .eye { color: var(--c-innovation-blue); }
+  .dc-how .dc-head p { color: rgba(255,255,255,0.78); }
+  .dc-steps { position: relative; display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; max-width: 1080px; margin: 0 auto; }
+  .dc-steps::before { content: ""; position: absolute; top: 27px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, rgba(143,248,255,0.15), rgba(143,248,255,0.55), rgba(143,248,255,0.15)); }
+  .dc-step { position: relative; text-align: center; }
+  .dc-step__num { position: relative; width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; background: #041e58; border: 2px solid rgba(143,248,255,0.45); color: var(--c-innovation-blue); display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1; }
+  .dc-step h4 { margin: 18px 0 0; font-size: 16px; font-weight: 700; color: #fff; }
+  .dc-step p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,0.72); }
+  .dc-inside__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px,5vw,64px); align-items: center; }
+  .dc-inside h2 { font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); margin: 12px 0 0; }
+  .dc-inside__list { margin: 24px 0 0; display: flex; flex-direction: column; gap: 14px; }
+  .dc-inside__list span { display: flex; align-items: center; gap: 12px; font-size: 16px; color: var(--color-text); }
+  .dc-inside__list i { color: #5f9e8d; font-size: 18px; }
+  .dc-inside__card { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; box-shadow: 0 24px 56px rgba(5,41,117,0.12); padding: 24px; }
+  .dc-inside__app { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; }
+  .dc-inside__app.active { background: var(--c-light-blue); color: var(--c-tech-blue); }
+  .dc-inside__app.dim { color: var(--c-slate-500); }
+  .dc-inside__app i { font-size: 17px; width: 20px; text-align: center; }
+  .dc-cta { position: relative; overflow: hidden; background: linear-gradient(135deg,#041e58 0%,#052975 45%,#1d5aa8 90%,#8ff8ff 165%); color: #fff; text-align: center; }
+  .dc-cta__inner { max-width: 760px; margin: 0 auto; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px); }
+  .dc-cta h2 { margin: 0; font-size: clamp(34px,3.6vw,52px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; }
+  .dc-cta p { margin: 20px auto 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.82); }
+  .dc-cta__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+  @media (max-width: 900px) {
+    .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
+    .dc-mock { justify-self: center; }
+    .dc-features { grid-template-columns: 1fr 1fr; }
+    .dc-stats__grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
+    .dc-steps { grid-template-columns: 1fr 1fr 1fr; gap: 28px 16px; }
+    .dc-steps::before { display: none; }
+  }
+  @media (max-width: 560px) { .dc-features { grid-template-columns: 1fr; } .dc-steps { grid-template-columns: 1fr 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .dc-mock, .dc-row { animation: none !important; opacity: 1 !important; } }
+</style>
+</helmet>
+<div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Solutions" hint-size="100%,66px"></x-import>
+
+<section class="dc-hero" data-screen-label="Hero">
+  <div class="dc-hero__grid">
+    <div>
+      <span class="dc-eyebrow"><i class="fa-kit fa-banking-solution-cb-icon"></i> Continia Banking</span>
+      <h1>Connect your bank <span class="hl">directly</span> to Business Central.</h1>
+      <p>Direct bank communication, payment approval and automatic reconciliation — as one of the first Microsoft-approved Connectivity Apps, built right inside Business Central.</p>
+      <div class="dc-hero__cta">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" href="#how" hint-size="auto,48px">See how it works</x-import>
+      </div>
+      <div class="dc-hero__proof"><span><i class="fa-light fa-circle-check"></i>Direct bank connection</span><span><i class="fa-light fa-circle-check"></i>Automatic reconciliation</span><span><i class="fa-light fa-circle-check"></i>Microsoft Connectivity App</span></div>
+    </div>
+    <div class="dc-mock" aria-hidden="true">
+      <div class="dc-mock__bar"><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__title">Bank</span></div>
+      <div class="dc-mock__flow"><div class="dc-mock__step">Connected</div><div class="dc-mock__step">Imported</div><div class="dc-mock__step">Matched</div><div class="dc-mock__step">Reconciled</div></div>
+      <div class="dc-mock__rows"><div class="dc-row" style="animation-delay:0.15s"><i class="fa-light fa-code-compare"></i><span class="nm">Bank reconciliation</span><span class="amt"></span><span class="chip">214 matched</span></div><div class="dc-row" style="animation-delay:0.35s"><i class="fa-light fa-building-columns"></i><span class="nm">Payment batch 2041</span><span class="amt"></span><span class="chip">Sent</span></div><div class="dc-row" style="animation-delay:0.55s"><i class="fa-light fa-user-check"></i><span class="nm">Approval · 2 approvers</span><span class="amt"></span><span class="chip warn">Pending</span></div></div>
+      <div class="dc-mock__foot"><i class="fa-light fa-circle-check"></i>Statements in, payments out — reconciled automatically</div>
+    </div>
+  </div>
+</section>
+
+<section class="dc-stats" data-screen-label="Impact">
+  <div class="dc-stats__grid"><div class="dc-stat"><b>Direct</b><span>bank connection</span></div><div class="dc-stat"><b>Auto</b><span>reconciliation</span></div><div class="dc-stat"><b>1 of first</b><span>Connectivity Apps</span></div><div class="dc-stat"><b>100%</b><span>built inside BC</span></div></div>
+</section>
+
+<section class="dc-sec" id="features" data-screen-label="Features">
+  <div class="dc-head">
+    <span class="eye">What's inside</span>
+    <h2>Your bank and Business Central, in sync</h2>
+    <p>A secure, direct line between your bank and your ledger — no files to move by hand.</p>
+  </div>
+  <div class="dc-features"><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-tower-broadcast"></i></div><h3>Direct Bank Connection</h3><p>A secure line between Business Central and your bank.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-code-compare"></i></div><h3>Automatic Reconciliation</h3><p>Match statements to entries with no manual work.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-user-check"></i></div><h3>Payment Approval</h3><p>Approve outgoing payments before they leave.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-file-import"></i></div><h3>Statement Import</h3><p>Pull in bank statements automatically, on schedule.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-building-columns"></i></div><h3>Multi-bank</h3><p>One experience across all your banks.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-shield-halved"></i></div><h3>Trusted & Secure</h3><p>A Microsoft-approved Connectivity App, built for compliance.</p></div></div>
+</section>
+
+<section class="dc-how" id="how" data-screen-label="How it works">
+  <div class="dc-sec">
+    <div class="dc-head">
+      <span class="eye">How it works</span>
+      <h2>Five steps. No files by hand.</h2>
+      <p>Once connected, your bank and Business Central keep themselves in sync.</p>
+    </div>
+    <div class="dc-steps"><div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-tower-broadcast"></i></div><h4>1 &middot; Connect</h4><p>Link your bank securely to Business Central.</p></div><div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-file-import"></i></div><h4>2 &middot; Import</h4><p>Statements arrive automatically.</p></div><div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-code-compare"></i></div><h4>3 &middot; Match</h4><p>Entries reconciled with smart matching.</p></div><div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-user-check"></i></div><h4>4 &middot; Approve</h4><p>Release payments after approval.</p></div><div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-circle-check"></i></div><h4>5 &middot; Reconcile</h4><p>Books stay accurate, always.</p></div></div>
+  </div>
+</section>
+
+<section class="dc-sec" data-screen-label="Built inside">
+  <div class="dc-inside__grid">
+    <div>
+      <span class="eye" style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--c-tech-blue);">100% built inside</span>
+      <h2>No new system.<br>No integration project.</h2>
+      <div class="dc-inside__list">
+        <span><i class="fa-light fa-circle-check"></i>Install straight from Microsoft AppSource</span>
+        <span><i class="fa-light fa-circle-check"></i>Same interface, same data, same login</span>
+        <span><i class="fa-light fa-circle-check"></i>Updates follow your Business Central release</span>
+        <span><i class="fa-light fa-circle-check"></i>Delivered and supported by 1,500+ local partners</span>
+      </div>
+      <div style="margin-top:30px;">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+      </div>
+    </div>
+    <div class="dc-inside__card">
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8193b9;margin-bottom:14px;">Your Continia solutions</div>
+      <div style="display:flex;flex-direction:column;gap:6px;"><div class="dc-inside__app active"><i class="fa-kit fa-banking-solution-cb-icon"></i>Continia Banking</div><div class="dc-inside__app dim"><i class="fa-kit fa-document-capture-solution-dc-icon"></i>Document Capture</div><div class="dc-inside__app dim"><i class="fa-kit fa-expense-management-solution-em-icon"></i>Expense Management</div><div class="dc-inside__app dim"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i>Continia Finance</div><div class="dc-inside__app dim"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i>Document Output</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="dc-cta" id="cta" data-screen-label="Final CTA">
+  <div class="dc-cta__inner">
+    <h2>It's about time your bank talked to Business Central.</h2>
+    <p>Start a free 30-day trial with every module included — then pay only for what you actually use. Your Continia Partner confirms the final price.</p>
+    <div class="dc-cta__btns">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" href="../../pricing/" hint-size="auto,48px">See pricing</x-import>
+    </div>
+  </div>
+</section>
+
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</div>
+</x-dc>
+</body>
+</html>

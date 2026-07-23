@@ -1308,29 +1308,29 @@ const CONTINIA_LINKS = {
     opticalScale: 1.18
   }, {
     label: "Expense Management",
-    href: BASE + "/solutions/expense-management/",
+    href: "../solutions/expense-management/",
     icon: "fa-kit fa-expense-management-solution-em-icon"
   }, {
     label: "Document Output",
-    href: BASE + "/solutions/document-output/",
+    href: "../solutions/document-output/",
     icon: "fa-kit fa-document-output-solution-do-icon-file-export"
   }, {
     label: "Payment Management",
-    href: BASE + "/solutions/payment-management/"
+    href: "../solutions/payment-management/"
   }, {
     label: "Continia Banking",
-    href: BASE + "/solutions/continia-banking/",
+    href: "../solutions/continia-banking/",
     icon: "fa-kit fa-banking-solution-cb-icon"
   }, {
     label: "Continia Finance",
-    href: BASE + "/solutions/continia-finance/",
+    href: "../solutions/continia-finance/",
     icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon"
   }, {
     label: "Collection Management",
-    href: BASE + "/solutions/collection-management/"
+    href: "../solutions/collection-management/"
   }, {
     label: "OPplus",
-    href: BASE + "/solutions/opplus/"
+    href: "../solutions/opplus/"
   }],
   company: [{
     label: "Contact",
