@@ -44,7 +44,7 @@
 
       /* Hero type scales down and wraps naturally */
       .hero-h1 { font-size: clamp(24px, 6.6vw, 32px) !important; letter-spacing: -0.02em !important; margin-top: 16px !important; }
-      .hero-h1 br { display: none; }
+      /* keep the <br> so it reads as two clean lines (hiding it collapsed "time.But") */
       .hero-sub { font-size: 15.5px !important; margin-top: 18px !important; }
 
       /* Hero CTAs stack full-width for big tap targets */
@@ -71,6 +71,18 @@
       /* Cards a touch tighter */
       .cnt-bento > div, .cnt-3col > div { padding: 24px !important; }
       .sol-new__inner { padding: 60px 20px !important; }
+
+      /* How it works: allow the desktop one-line headline to wrap on mobile */
+      #how h2 { white-space: normal !important; }
+
+      /* Solutions carousel: move nav arrows into a bottom control bar so they
+         don't cover the card. Arrows flank the dots: [<]  • • • • •  [>] */
+      .sol-car { padding-bottom: 62px; }
+      .sol-car__nav { top: auto !important; bottom: 8px; transform: none !important; width: 44px; height: 44px; }
+      .sol-car__nav:hover { transform: scale(1.06) !important; background: #def5ff; }
+      .sol-car__nav--prev { left: 18px; right: auto; }
+      .sol-car__nav--next { right: 18px; left: auto; }
+      .sol-car__dots { position: absolute; bottom: 24px; left: 0; right: 0; margin-top: 0; }
     }
 
     /* ---------- Solutions: glassmorphism + video bg (new) ---------- */
