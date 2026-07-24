@@ -1316,7 +1316,8 @@ const CONTINIA_LINKS = {
     icon: "fa-kit fa-document-output-solution-do-icon-file-export"
   }, {
     label: "Payment Management",
-    href: "../solutions/payment-management/"
+    href: "../solutions/payment-management/",
+    icon: "fa-light fa-money-bill-transfer"
   }, {
     label: "Continia Banking",
     href: "../solutions/continia-banking/",
@@ -1327,10 +1328,12 @@ const CONTINIA_LINKS = {
     icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon"
   }, {
     label: "Collection Management",
-    href: "../solutions/collection-management/"
+    href: "../solutions/collection-management/",
+    icon: "fa-light fa-hand-holding-dollar"
   }, {
     label: "OPplus",
-    href: "../solutions/opplus/"
+    href: "../solutions/opplus/",
+    icon: "fa-light fa-layer-group"
   }],
   company: [{
     label: "Contact",
