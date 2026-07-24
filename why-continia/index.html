@@ -25,8 +25,10 @@
   @media (prefers-reduced-motion: reduce) { [data-marquee], [data-herocard] { animation: none !important; } }
   @keyframes cont-herocard { 0% { opacity: 0; transform: translateY(70px); } 8% { opacity: 1; transform: translateY(0); } 70% { opacity: 1; transform: translateY(0); } 78% { opacity: 0; transform: translateY(-70px); } 100% { opacity: 0; transform: translateY(-70px); } }
   @media (max-width: 980px) { .cnt-nav-footer, .cnt-built-grid { grid-template-columns: 1fr !important; } }
-  /* Frosted-glass hero cards so they stay legible over the sky video */
-  [data-herocard] { background: rgba(255,255,255,0.10) !important; border-color: rgba(255,255,255,0.22) !important; backdrop-filter: blur(14px) saturate(120%); -webkit-backdrop-filter: blur(14px) saturate(120%); box-shadow: 0 18px 50px rgba(3,15,48,0.30); }
+  /* Hero cards styled like the index "Our solutions" glass cards (cyan stroke + tint),
+     with backdrop blur so they stay legible over the sky video */
+  [data-herocard] { background: linear-gradient(0deg, rgba(5,41,117,0.10), rgba(5,41,117,0.10)), rgba(143,248,255,0.10) !important; border: 2px solid rgba(196,251,255,0.85) !important; backdrop-filter: blur(14px) saturate(120%); -webkit-backdrop-filter: blur(14px) saturate(120%); box-shadow: 0 18px 50px rgba(3,15,48,0.30); transition: border-color 250ms, transform 250ms; }
+  [data-herocard]:hover { border-color: rgba(214,251,255,1) !important; }
 </style>
 </helmet>
 <div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
