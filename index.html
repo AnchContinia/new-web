@@ -135,6 +135,24 @@
     .sol-car__dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 999px; cursor: pointer;
       background: rgba(255,255,255,0.35); transition: background 200ms, transform 200ms; }
     .sol-car__dot.on { background: #8ff8ff; transform: scale(1.25); }
+
+    /* ---------- Solutions v4: 16:9 "window" (same carousel, framed as a rounded window) ---------- */
+    .sol-win-sec { background: #ffffff; padding: clamp(52px,6vw,88px) 20px; }
+    .sol-win { position: relative; width: min(1420px, 96vw); margin: 0 auto; aspect-ratio: 16 / 9;
+      border-radius: 28px; border: 2px solid #8ff8ff; overflow: hidden; background: #041e58;
+      box-shadow: 0 40px 100px rgba(3,15,48,0.34); }
+    .sol-win .sol-vid-ovl { border-radius: inherit; }
+    .sol-win__inner { position: relative; z-index: 2; height: 100%; box-sizing: border-box;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(22px,2.6vw,44px) clamp(18px,3.4vw,56px); }
+    .sol-win__inner .sol-car { margin-top: clamp(6px,1.4vw,20px); }
+    .sol-win__inner .sol-car__stage { height: clamp(360px,34vw,430px); }
+    @media (max-width: 900px) {
+      .sol-win { aspect-ratio: auto; width: 92vw; }
+      .sol-win__inner { padding: 40px 16px 26px; }
+      .sol-win__inner .sol-car__stage { height: clamp(422px,120vw,470px); }
+    }
+
     @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } .sol-car__card { transition: none !important; } }
   </style>
 </helmet>
@@ -458,6 +476,73 @@
 </div>
 </sc-if>
 
+<!-- ===== WINDOW: same coverflow, framed as a 16:9 rounded window ===== -->
+<sc-if value="{{ solWindow }}" hint-placeholder-val="{{ false }}">
+<div class="sol-win-sec">
+  <div class="sol-win">
+    <video class="sol-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="assets/video/solutions-bg.webm" type="video/webm">
+      <source src="assets/video/solutions-bg.mp4" type="video/mp4">
+    </video>
+    <div class="sol-vid-ovl" aria-hidden="true"></div>
+    <div class="sol-win__inner">
+      <div style="text-align:center;margin:0 auto">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
+        <h2 style="margin:12px 0 0;font-size:clamp(26px,2.6vw,40px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
+      </div>
+      <div class="sol-car">
+        <button onClick="{{ carPrev }}" class="sol-car__nav sol-car__nav--prev" aria-label="Previous solution"><i class="fa-light fa-arrow-left"></i></button>
+        <div class="sol-car__stage">
+          <div class="sol-car__track">
+            <div class="sol-car__card" style="{{ carStyle0 }}">
+              <div class="sol-g__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div>
+              <div class="sol-car__title">Document Capture</div>
+              <p class="sol-car__desc">Automate your entire Accounts Payable — invoices imported, recognized, approved and posted automatically, without leaving Business Central.</p>
+              <a href="solutions/document-capture/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+              <div class="sol-car__pills"><span class="sol-car__pill">OCR</span><span class="sol-car__pill">Approval</span><span class="sol-car__pill">Auto-posting</span></div>
+            </div>
+            <div class="sol-car__card" style="{{ carStyle1 }}">
+              <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
+              <div class="sol-car__title">Expense Management</div>
+              <p class="sol-car__desc">Snap a photo of the receipt — approval, coding and reimbursement happen automatically, on web and mobile.</p>
+              <a href="solutions/expense-management/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+              <div class="sol-car__pills"><span class="sol-car__pill">Mobile</span><span class="sol-car__pill">Coding</span><span class="sol-car__pill">Reimburse</span></div>
+            </div>
+            <div class="sol-car__card" style="{{ carStyle2 }}">
+              <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
+              <div class="sol-car__title">Continia Banking</div>
+              <p class="sol-car__desc">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
+              <a href="solutions/continia-banking/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+              <div class="sol-car__pills"><span class="sol-car__pill">Payments</span><span class="sol-car__pill">Reconcile</span><span class="sol-car__pill">Approve</span></div>
+            </div>
+            <div class="sol-car__card" style="{{ carStyle3 }}">
+              <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
+              <div class="sol-car__title">Continia Finance</div>
+              <p class="sol-car__desc">Smart modules that ease the burden of core accounting — general ledger, fixed assets, open entries and treasury.</p>
+              <a href="solutions/continia-finance/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+              <div class="sol-car__pills"><span class="sol-car__pill">Ledger</span><span class="sol-car__pill">Assets</span><span class="sol-car__pill">Treasury</span></div>
+            </div>
+            <div class="sol-car__card" style="{{ carStyle4 }}">
+              <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
+              <div class="sol-car__title">Document Output</div>
+              <p class="sol-car__desc">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print — every time.</p>
+              <a href="solutions/document-output/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+              <div class="sol-car__pills"><span class="sol-car__pill">Email</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Print</span></div>
+            </div>
+          </div>
+        </div>
+        <button onClick="{{ carNext }}" class="sol-car__nav sol-car__nav--next" aria-label="Next solution"><i class="fa-light fa-arrow-right"></i></button>
+        <div class="sol-car__dots">
+          <sc-for list="{{ carDots }}" as="d" hint-placeholder-count="5">
+            <button class="{{ d.cls }}" onClick="{{ d.pick }}" aria-label="Go to solution"></button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
 </section>
 
 <!-- Solutions view toggle (New / Classic / Carousel) -->
@@ -589,9 +674,9 @@ class Component extends DCLogic {
     if (prevProps.motion !== this.props.motion || prevProps.flowSpeed !== this.props.flowSpeed) {
       this._applyMotion();
     }
-    // Re-arm autoplay whenever a video-backed view (New = 1, Carousel = 3) is shown again
+    // Re-arm autoplay whenever a video-backed view (New = 1, Carousel = 3, Window = 4) is shown again
     if (prevState && prevState.solView !== this.state.solView &&
-        (this.state.solView === 1 || this.state.solView === 3)) {
+        (this.state.solView === 1 || this.state.solView === 3 || this.state.solView === 4)) {
       this._playSolVideo();
     }
   }
@@ -765,8 +850,9 @@ class Component extends DCLogic {
       solNew: CV === 1,
       solOld: CV === 2,
       solCarousel: CV === 3,
-      toggleSol: () => this.setState((s) => ({ solView: (s.solView % 3) + 1 })),
-      solToggleLabel: "Our solutions · " + ({ 1: "New", 2: "Classic", 3: "Carousel" }[CV]),
+      solWindow: CV === 4,
+      toggleSol: () => this.setState((s) => ({ solView: (s.solView % 4) + 1 })),
+      solToggleLabel: "Our solutions · " + ({ 1: "New", 2: "Classic", 3: "Carousel", 4: "Window" }[CV]),
       carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
       carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
       carStyle0: carStyleFor(0), carStyle1: carStyleFor(1), carStyle2: carStyleFor(2),
