@@ -139,7 +139,7 @@
     /* ---------- Solutions v4: 16:9 "window" (same carousel, framed as a rounded window) ---------- */
     .sol-win-sec { background: #ffffff; padding: clamp(52px,6vw,92px) 14px; }
     .sol-win { position: relative; width: min(1560px, 98vw); margin: 0 auto; aspect-ratio: 16 / 9;
-      border-radius: 15px; border: 3px solid #052975; overflow: hidden; background: #041e58;
+      border-radius: 15px; border: 3px solid var(--c-performance-purple, #983eae); overflow: hidden; background: #041e58;
       box-shadow: 0 40px 100px rgba(3,15,48,0.34); }
     .sol-win .sol-vid-ovl { border-radius: inherit; }
     .sol-win__inner { position: relative; z-index: 2; height: 100%; box-sizing: border-box;
@@ -488,7 +488,7 @@
     <div class="sol-win__inner">
       <div style="text-align:center;margin:0 auto">
         <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
-        <h2 style="margin:12px 0 0;font-size:clamp(26px,2.6vw,40px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
+        <h2 style="margin:12px 0 0;font-size:clamp(26px,2.6vw,40px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:var(--c-performance-purple, #983eae)">Business Central.</span></h2>
       </div>
       <div class="sol-car">
         <button onClick="{{ carPrev }}" class="sol-car__nav sol-car__nav--prev" aria-label="Previous solution"><i class="fa-light fa-arrow-left"></i></button>
