@@ -1531,7 +1531,7 @@ const CSS = `
 .cnt-siteheader__dropitem { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; white-space: nowrap; transition: background 150ms, color 150ms; }
 .cnt-siteheader__dropitem:hover { background: var(--c-light-blue); color: var(--c-tech-blue); }
 .cnt-siteheader__dropitem i { width: 22px; text-align: center; color: var(--c-tech-blue); font-size: 17px; }
-@media (max-width: 980px) { .cnt-siteheader__dropdown { display: none; } .cnt-siteheader__navitem { display: block; } }
+@media (max-width: 980px) { .cnt-siteheader__navitem { display: block; } .cnt-siteheader__mobile .cnt-siteheader__dropdown { position: static; transform: none; opacity: 1; visibility: visible; display: grid; min-width: 0; margin: 2px 0 10px; padding: 4px 0 4px 15px; background: transparent; border: none; border-left: 2px solid var(--color-border); border-radius: 0; box-shadow: none; } .cnt-siteheader__mobile .cnt-siteheader__dropdown::before { display: none; } .cnt-siteheader__mobile .cnt-siteheader__dropitem { white-space: normal; } .cnt-siteheader__mobile .cnt-siteheader__navitem .cnt-siteheader__link i { transform: rotate(180deg); } }
 .cnt-siteheader__actions { display: flex; align-items: center; gap: 14px; flex: none; justify-self: end; }
 .cnt-siteheader__find { font-size: 14px; }
 .cnt-siteheader__find i { font-size: 13px; opacity: 1; }
