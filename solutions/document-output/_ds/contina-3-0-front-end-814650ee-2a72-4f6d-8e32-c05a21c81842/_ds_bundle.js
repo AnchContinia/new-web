@@ -1621,6 +1621,7 @@ function SiteHeader({
     className: "fa-light fa-location-dot"
   }), " Find a partner"), /*#__PURE__*/React.createElement(__ds_scope.Button, {
     size: "sm",
+    variant: "purple",
     onClick: onCta,
     href: ctaLink
   }, ctaLabel), /*#__PURE__*/React.createElement("button", {
