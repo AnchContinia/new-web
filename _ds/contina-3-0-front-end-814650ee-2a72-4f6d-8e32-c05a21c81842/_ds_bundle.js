@@ -1531,7 +1531,7 @@ const CSS = `
 .cnt-siteheader__dropitem { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; white-space: nowrap; transition: background 150ms, color 150ms; }
 .cnt-siteheader__dropitem:hover { background: var(--c-light-blue); color: var(--c-tech-blue); }
 .cnt-siteheader__dropitem i { width: 22px; text-align: center; color: var(--c-tech-blue); font-size: 17px; }
-@media (max-width: 980px) { .cnt-siteheader__navitem { display: block; } .cnt-siteheader__mobile .cnt-siteheader__dropdown { position: static; transform: none; opacity: 1; visibility: visible; display: grid; min-width: 0; margin: 2px 0 10px; padding: 4px 0 4px 15px; background: transparent; border: none; border-left: 2px solid var(--color-border); border-radius: 0; box-shadow: none; } .cnt-siteheader__mobile .cnt-siteheader__dropdown::before { display: none; } .cnt-siteheader__mobile .cnt-siteheader__dropitem { white-space: normal; } .cnt-siteheader__mobile .cnt-siteheader__navitem .cnt-siteheader__link i { transform: rotate(180deg); } }
+@media (max-width: 980px) { .cnt-siteheader__navitem { display: block; } .cnt-siteheader__mobile .cnt-siteheader__dropdown { position: static; transform: none; opacity: 1; visibility: visible; display: grid; min-width: 0; margin: 2px 0 10px; padding: 4px 0 4px 15px; background: transparent; border: none; border-left: 2px solid var(--color-border); border-radius: 0; box-shadow: none; } .cnt-siteheader__mobile .cnt-siteheader__dropdown::before { display: none; } .cnt-siteheader__mobile .cnt-siteheader__dropitem { white-space: normal; } .cnt-siteheader__macc { display: block; } .cnt-siteheader__macc-btn { width: 100%; background: none; border: 0; cursor: pointer; font: inherit; justify-content: flex-start; gap: 0; } .cnt-siteheader__macc-btn i { margin-left: auto; opacity: 0.6; transition: transform 200ms var(--ease-standard); } .cnt-siteheader__macc.open .cnt-siteheader__macc-btn i { transform: rotate(180deg); } }
 .cnt-siteheader__actions { display: flex; align-items: center; gap: 14px; flex: none; justify-self: end; }
 .cnt-siteheader__find { font-size: 14px; }
 .cnt-siteheader__find i { font-size: 13px; opacity: 1; }
@@ -1569,6 +1569,7 @@ function SiteHeader({
 }) {
   useStyle();
   const [open, setOpen] = React.useState(false);
+  const [submenuOpen, setSubmenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
     if (!sticky) return;
@@ -1592,6 +1593,11 @@ function SiteHeader({
     }));
     if (!(l.menu && links.solutions && links.solutions.length)) return _a;
     return /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__navitem", key: l.label }, _a, /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__dropdown", role: "menu" }, links.solutions.map(s => /*#__PURE__*/React.createElement("a", { key: s.label, className: "cnt-siteheader__dropitem", href: s.href, role: "menuitem" }, s.icon && /*#__PURE__*/React.createElement("i", { className: s.icon }), /*#__PURE__*/React.createElement("span", null, s.label)))));
+  };
+  const dropItems = () => links.solutions.map(s => /*#__PURE__*/React.createElement("a", { key: s.label, className: "cnt-siteheader__dropitem", href: s.href, role: "menuitem" }, s.icon && /*#__PURE__*/React.createElement("i", { className: s.icon }), /*#__PURE__*/React.createElement("span", null, s.label)));
+  const mobileNavItem = (l) => {
+    if (!(l.menu && links.solutions && links.solutions.length)) return /*#__PURE__*/React.createElement("a", { key: l.label, className: ["cnt-siteheader__link", l.label === activeItem ? "cnt-siteheader__link--active" : ""].filter(Boolean).join(" "), href: l.href, "aria-current": l.label === activeItem ? "page" : undefined }, l.label);
+    return /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__macc" + (submenuOpen ? " open" : ""), key: l.label }, /*#__PURE__*/React.createElement("button", { type: "button", className: "cnt-siteheader__link cnt-siteheader__macc-btn", "aria-expanded": submenuOpen, onClick: () => setSubmenuOpen(v => !v) }, l.label, /*#__PURE__*/React.createElement("i", { className: "fa-light fa-chevron-down" })), submenuOpen && /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__dropdown", role: "menu" }, dropItems()));
   };
   return /*#__PURE__*/React.createElement("header", _extends({
     className: ["cnt-siteheader", sticky ? "" : "cnt-siteheader--static", scrolled ? "cnt-siteheader--scrolled" : "", className].filter(Boolean).join(" ")
@@ -1620,12 +1626,12 @@ function SiteHeader({
   }, ctaLabel), /*#__PURE__*/React.createElement("button", {
     className: "cnt-siteheader__burger",
     "aria-label": "Menu",
-    onClick: () => setOpen(o => !o)
+    onClick: () => { setSubmenuOpen(false); setOpen(o => !o); }
   }, /*#__PURE__*/React.createElement("i", {
     className: "fa-light fa-" + (open ? "xmark" : "bars")
   })))), open && /*#__PURE__*/React.createElement("div", {
     className: "cnt-siteheader__mobile"
-  }, links.nav.map(l => navLink(l)), findPartner && /*#__PURE__*/React.createElement("a", {
+  }, links.nav.map(l => mobileNavItem(l)), findPartner && /*#__PURE__*/React.createElement("a", {
     className: "cnt-siteheader__link",
     href: findPartner.href
   }, "Find a partner")));
