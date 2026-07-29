@@ -101,6 +101,67 @@
     .sol-g__title { font-size: 19px; font-weight: 700; color: #ffffff; }
     .sol-g__sub { font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,0.74); }
     .sol-g__panel { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; }
+
+    /* ---------- Impact: 50/50 split with overlapping swapping photos ---------- */
+    .imp-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px,4.6vw,76px); align-items: center; }
+    .imp-left h2 { margin: 0; font-size: clamp(32px,3.2vw,46px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; color: #052975; }
+    .imp-left > p { margin: 20px 0 0; font-size: 17px; line-height: 1.65; color: #0a1838; max-width: 34rem; }
+    .imp-stats { margin-top: clamp(26px,3vw,40px); }
+    .imp-stat { display: grid; grid-template-columns: minmax(116px,32%) 1fr; gap: 6px 26px; align-items: center; padding: 22px 0; border-top: 1px solid #dde3ee; }
+    .imp-stat:last-child { border-bottom: 1px solid #dde3ee; }
+    .imp-stat__num { font-size: clamp(44px,4.6vw,66px); font-weight: 700; line-height: 0.92; letter-spacing: -0.03em; color: #052975; font-variant-numeric: tabular-nums; }
+    .imp-stat__txt b { display: block; font-size: 16px; font-weight: 700; color: #0a1838; }
+    .imp-stat__txt span { display: block; margin-top: 5px; font-size: 14px; line-height: 1.55; color: #0a1838; }
+
+    .imp-media { position: relative; width: 100%; max-width: 520px; margin: 0 auto; aspect-ratio: 1 / 1; animation: impIn 0.9s cubic-bezier(0.16,1,0.3,1) both; }
+    .imp-sq { position: absolute; top: 0; left: 0; width: 62%; aspect-ratio: 1 / 1; border-radius: 16px; overflow: hidden; border: 2px solid var(--c-innovation-blue,#8ff8ff); box-shadow: 0 30px 64px rgba(3,15,48,0.30), 0 8px 20px rgba(3,15,48,0.14); will-change: transform, opacity; }
+    .imp-sq img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .imp-sq--a { animation: impSwapA 20s ease-in-out infinite; }
+    .imp-sq--b { animation: impSwapB 20s ease-in-out infinite; }
+    @keyframes impIn { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+    @keyframes impSwapA {
+      0%   { transform: translate(0,0);       opacity: 0; z-index: 1; }
+      6%   { transform: translate(0,0);       opacity: 1; z-index: 1; }
+      44%  { transform: translate(0,0);       opacity: 1; z-index: 1; }
+      49%  { transform: translate(0,0);       opacity: 0; z-index: 1; }
+      50%  { transform: translate(61%,61%);   opacity: 0; z-index: 2; }
+      56%  { transform: translate(61%,61%);   opacity: 1; z-index: 2; }
+      94%  { transform: translate(61%,61%);   opacity: 1; z-index: 2; }
+      99%  { transform: translate(61%,61%);   opacity: 0; z-index: 2; }
+      100% { transform: translate(0,0);       opacity: 0; z-index: 1; }
+    }
+    @keyframes impSwapB {
+      0%   { transform: translate(61%,61%);   opacity: 0; z-index: 2; }
+      6%   { transform: translate(61%,61%);   opacity: 1; z-index: 2; }
+      44%  { transform: translate(61%,61%);   opacity: 1; z-index: 2; }
+      49%  { transform: translate(61%,61%);   opacity: 0; z-index: 2; }
+      50%  { transform: translate(0,0);       opacity: 0; z-index: 1; }
+      56%  { transform: translate(0,0);       opacity: 1; z-index: 1; }
+      94%  { transform: translate(0,0);       opacity: 1; z-index: 1; }
+      99%  { transform: translate(0,0);       opacity: 0; z-index: 1; }
+      100% { transform: translate(61%,61%);   opacity: 0; z-index: 2; }
+    }
+    @media (max-width: 860px) {
+      .imp-split { grid-template-columns: 1fr; gap: 44px; }
+      .imp-media { max-width: 420px; margin-top: 8px; }
+    }
+    @media (max-width: 560px) {
+      .imp-stat { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; }
+      .imp-stat__num { font-size: 52px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .imp-media { animation: none; }
+      .imp-sq--a, .imp-sq--b { animation: none; opacity: 1; }
+      .imp-sq--a { transform: translate(0,0); z-index: 1; }
+      .imp-sq--b { transform: translate(61%,61%); z-index: 2; }
+    }
+
+    /* Impact/section view toggle (fixed, bottom-left) */
+    .imp-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+      padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms; }
+    .imp-toggle:hover { border-color: #052975; transform: translateY(-2px); }
+
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
     .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
     .sol-car__stage { position: relative; height: clamp(422px,48vw,458px); perspective: 1700px; }
@@ -205,6 +266,27 @@
 <!-- ============ IMPACT (giant count-up numbers) ============ -->
 <section id="impacts" data-screen-label="Impact" style="background:#ffffff">
   <div style="max-width:1240px;margin:0 auto;padding:104px 32px">
+<!-- ===== NEW: 50/50 split with two overlapping, swapping photos ===== -->
+<sc-if value="{{ impactNew }}" hint-placeholder-val="{{ true }}">
+    <div class="imp-split">
+      <div class="imp-left" data-reveal="true">
+        <h2>Real results.<br>Real time saved.</h2>
+        <p>See how finance teams around the world are transforming the way they work. From faster invoice handling to fewer errors — time gets back to where it matters.</p>
+        <div class="imp-stats" id="cnt-statband">
+          <div class="imp-stat"><div class="imp-stat__num">{{ statCust }}</div><div class="imp-stat__txt"><b>Customers worldwide</b><span>Every invoice captured and every expense approved — real work done by real finance teams.</span></div></div>
+          <div class="imp-stat"><div class="imp-stat__num">{{ statManual }}</div><div class="imp-stat__txt"><b>Less manual data entry</b><span>Eliminate manual tasks by up to 90% with automation built inside Business Central.</span></div></div>
+          <div class="imp-stat"><div class="imp-stat__num">{{ statPartners }}</div><div class="imp-stat__txt"><b>Partners worldwide</b><span>Delivered through local Business Central specialists in 45+ countries.</span></div></div>
+        </div>
+      </div>
+      <div class="imp-media">
+        <div class="imp-sq imp-sq--a"><img src="assets/images/collaboration.jpg" alt="Finance team collaborating"></div>
+        <div class="imp-sq imp-sq--b"><img src="assets/images/office.jpg" alt="Continia office"></div>
+      </div>
+    </div>
+</sc-if>
+
+<!-- ===== CLASSIC: original full-width count-up rows ===== -->
+<sc-if value="{{ impactOld }}" hint-placeholder-val="{{ false }}">
     <div data-reveal="true" class="cnt-2col" style="display:grid;grid-template-columns:clamp(340px,30vw,420px) 1fr;gap:12px 64px;align-items:end">
       <div>
         <h2 style="margin:0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#052975">Real results.<br>Real time saved.</h2>
@@ -225,8 +307,12 @@
         <div><div style="font-size:18px;font-weight:700;color:#0a1838">Partners worldwide</div><div style="margin-top:6px;font-size:15px;line-height:1.6;color:#0a1838;max-width:440px">Delivered to the international market through local Business Central specialists in 45+ countries.</div></div>
       </div>
     </div>
+</sc-if>
   </div>
 </section>
+
+<!-- Impact section view toggle (New 50/50 ⇄ Classic) -->
+<button onClick="{{ toggleImpact }}" class="imp-toggle" title="Switch the impact section layout"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i>{{ impactToggleLabel }}</button>
 
 <!-- ============ SOLUTIONS BENTO ============ -->
 <section id="solutions" data-screen-label="Solutions" style="position:relative;overflow:hidden">
@@ -402,7 +488,7 @@ const EM_PHASES = [
 ];
 
 class Component extends DCLogic {
-  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0 };
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "new" };
   _statsStarted = false;
 
   get motion() { return this.props.motion ?? true; }
@@ -430,6 +516,11 @@ class Component extends DCLogic {
     if (prevState && prevState.solView !== this.state.solView &&
         (this.state.solView === 1 || this.state.solView === 3 || this.state.solView === 4)) {
       this._playSolVideo();
+    }
+    // When the impact layout is toggled, re-arm the count-up observer on the newly-rendered stat band
+    if (prevState && prevState.impactView !== this.state.impactView && !this._statsStarted) {
+      if (this._statIo) this._statIo.disconnect();
+      this._setupStats();
     }
   }
 
@@ -599,6 +690,10 @@ class Component extends DCLogic {
       statPartners: fmt(stats.partners) + "+",
       year: new Date().getFullYear(),
       arrowBtn: { iconRight: icon("fa-light fa-arrow-right") },
+      impactNew: this.state.impactView === "new",
+      impactOld: this.state.impactView === "old",
+      toggleImpact: () => this.setState((s) => ({ impactView: s.impactView === "new" ? "old" : "new" })),
+      impactToggleLabel: "Impact · " + (this.state.impactView === "new" ? "New" : "Classic"),
       solCarousel: true,
       carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
       carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
