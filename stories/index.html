@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stories — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text, #0a1838); }
+  a { text-decoration: none; }
+  ::selection { background: var(--c-innovation-blue, #8ff8ff); color: var(--c-tech-blue, #052975); }
+
+  .st-wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(20px, 4vw, 32px); }
+  .st-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; letter-spacing: normal; color: var(--c-tech-blue, #052975); }
+  .st-eyebrow i { font-size: 17px; }
+  .st-eyebrow--light { color: var(--c-innovation-blue, #8ff8ff); }
+
+  /* ---------- Hero ---------- */
+  .st-hero { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--c-light-blue, #def5ff) 0%, #eaf7ff 62%, #ffffff 100%); padding: clamp(52px, 6vw, 84px) 0 clamp(58px, 6vw, 92px); }
+  .st-hero::before { content: ""; position: absolute; right: -8%; top: -34%; width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle at 34% 34%, rgba(143,248,255,0.5), transparent 64%); pointer-events: none; }
+  .st-hero__grid { position: relative; display: grid; grid-template-columns: 1.02fr 1fr; gap: clamp(36px, 4.4vw, 68px); align-items: center; }
+  .st-hero h1 { margin: 18px 0 0; font-size: clamp(38px, 4.6vw, 60px); font-weight: 700; line-height: 1.04; letter-spacing: -0.022em; color: var(--c-tech-blue, #052975); text-wrap: balance; }
+  .st-hero h1 .hl { color: var(--c-performance-purple, #983eae); }
+  .st-hero p { margin: 22px 0 0; max-width: 34rem; font-size: 18px; line-height: 1.62; color: #33436a; }
+  .st-jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .st-jump a { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: var(--c-tech-blue, #052975); background: #ffffff; border: 1.5px solid #cfe6f5; border-radius: 999px; padding: 9px 17px; transition: transform .2s, border-color .2s, box-shadow .2s; }
+  .st-jump a:hover { transform: translateY(-2px); border-color: var(--c-tech-blue, #052975); box-shadow: 0 10px 24px rgba(5,41,117,0.12); }
+  .st-jump a i { font-size: 12px; color: var(--c-performance-purple, #983eae); }
+
+  /* Featured story card */
+  .st-feat { position: relative; border-radius: 20px; overflow: hidden; background: var(--c-tech-blue, #052975); box-shadow: 0 34px 80px rgba(3,15,48,0.28); min-height: 430px; display: flex; flex-direction: column; justify-content: flex-end; animation: stIn .8s cubic-bezier(0.16,1,0.3,1) both; }
+  .st-feat__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 34%; }
+  .st-feat__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,20,64,0.08) 8%, rgba(4,20,64,0.42) 38%, rgba(3,14,48,0.82) 66%, rgba(3,14,48,0.96) 100%); }
+  .st-feat__body { position: relative; padding: clamp(22px, 2.6vw, 32px); color: #fff; }
+  .st-feat__tag { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-tech-blue, #052975); background: var(--c-innovation-blue, #8ff8ff); border-radius: 999px; padding: 5px 12px; }
+  .st-feat__quote { margin: 16px 0 0; font-size: clamp(19px, 1.7vw, 23px); font-weight: 600; line-height: 1.34; letter-spacing: -0.01em; text-wrap: pretty; text-shadow: 0 1px 16px rgba(3,14,48,0.7), 0 1px 3px rgba(3,14,48,0.5); }
+  .st-feat__who { margin-top: 16px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.82); }
+  .st-feat__who b { color: #fff; font-weight: 700; }
+  .st-feat__read { margin-top: 18px; display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: var(--c-innovation-blue, #8ff8ff); }
+  .st-feat__read i { transition: transform .2s; }
+  .st-feat:hover .st-feat__read i { transform: translateX(4px); }
+  @keyframes stIn { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Section scaffolding ---------- */
+  .st-sec { padding: clamp(56px, 6.4vw, 100px) 0; }
+  .st-sec--tint { background: #f4f8fd; }
+  .st-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: clamp(28px, 3vw, 46px); flex-wrap: wrap; }
+  .st-head h2 { margin: 12px 0 0; font-size: clamp(28px, 3vw, 42px); font-weight: 700; line-height: 1.08; letter-spacing: -0.018em; color: var(--c-tech-blue, #052975); }
+  .st-head p { margin: 10px 0 0; font-size: 16.5px; line-height: 1.55; color: #4a5878; max-width: 46ch; }
+  .st-seelink { display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: var(--c-performance-purple, #983eae); white-space: nowrap; flex: none; }
+  .st-seelink i { transition: transform .2s; font-size: 13px; }
+  .st-seelink:hover i { transform: translateX(4px); }
+
+  /* ---------- Customer story cards ---------- */
+  .st-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 1.8vw, 26px); }
+  .st-card { display: flex; flex-direction: column; background: #fff; border: 1px solid #e5ebf5; border-radius: 18px; overflow: hidden; transition: transform .22s, box-shadow .22s, border-color .22s; }
+  .st-card:hover { transform: translateY(-4px); box-shadow: 0 24px 54px rgba(5,41,117,0.14); border-color: #cfe6f5; }
+  .st-card__img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: #dbe6f4; }
+  .st-card__img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; transition: transform .5s cubic-bezier(0.16,1,0.3,1); }
+  .st-card:hover .st-card__img img { transform: scale(1.05); }
+  .st-card__logo { position: absolute; left: 14px; bottom: 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.02em; color: #fff; background: rgba(5,25,63,0.62); backdrop-filter: blur(4px); border-radius: 8px; padding: 5px 11px; }
+  .st-card__body { display: flex; flex-direction: column; flex: 1; padding: 22px 22px 24px; }
+  .st-card__metric { font-size: clamp(30px, 2.6vw, 38px); font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--c-tech-blue, #052975); font-variant-numeric: tabular-nums; }
+  .st-card__metric span { color: var(--c-performance-purple, #983eae); }
+  .st-card__mlabel { margin-top: 7px; font-size: 13.5px; font-weight: 600; color: #6b7894; }
+  .st-card__quote { margin: 16px 0 0; font-size: 15.5px; line-height: 1.55; color: #0a1838; }
+  .st-card__foot { margin-top: auto; padding-top: 18px; display: flex; align-items: center; gap: 11px; border-top: 1px solid #eef2f8; }
+  .st-card__foot .st-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; flex: none; }
+  .st-card__foot b { display: block; font-size: 14px; color: #0a1838; }
+  .st-card__foot small { font-size: 12.5px; color: #6b7894; }
+
+  /* ---------- Blog cards ---------- */
+  .st-grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(18px, 1.8vw, 24px); }
+  .st-post { display: flex; flex-direction: column; background: #fff; border: 1px solid #e5ebf5; border-radius: 16px; overflow: hidden; transition: transform .22s, box-shadow .22s; }
+  .st-post:hover { transform: translateY(-4px); box-shadow: 0 22px 48px rgba(5,41,117,0.13); }
+  .st-post__thumb { height: 108px; display: flex; align-items: center; justify-content: center; color: #fff; }
+  .st-post__thumb i { font-size: 34px; opacity: 0.92; }
+  .st-post__body { display: flex; flex-direction: column; flex: 1; padding: 18px 18px 20px; }
+  .st-post__tag { font-size: 11.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--c-performance-purple, #983eae); }
+  .st-post h3 { margin: 9px 0 0; font-size: 17px; font-weight: 700; line-height: 1.28; letter-spacing: -0.01em; color: var(--c-tech-blue, #052975); text-wrap: pretty; }
+  .st-post p { margin: 10px 0 0; font-size: 14px; line-height: 1.55; color: #55637f; }
+  .st-post__meta { margin-top: auto; padding-top: 16px; font-size: 12.5px; color: #8290ac; display: flex; align-items: center; gap: 8px; }
+  .st-post__meta .dot { width: 3px; height: 3px; border-radius: 50%; background: #c3cee0; }
+
+  /* ---------- Newsroom list ---------- */
+  .st-news-list { border-top: 1px solid #e5ebf5; }
+  .st-news-row { display: grid; grid-template-columns: 132px 148px 1fr auto; align-items: center; gap: 22px; padding: 22px 8px; border-bottom: 1px solid #e5ebf5; transition: background .2s, padding .2s; }
+  .st-news-row:hover { background: #f4f8fd; padding-inline: 18px; }
+  .st-news-row time { font-size: 14px; font-weight: 600; color: #6b7894; font-variant-numeric: tabular-nums; }
+  .st-chip { justify-self: start; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; }
+  .st-chip--product { color: #0e5a4a; background: #d7f2e9; }
+  .st-chip--company { color: #052975; background: #dbe8ff; }
+  .st-chip--partners { color: #7a2b8f; background: #f0dcf6; }
+  .st-news-row h3 { margin: 0; font-size: 17.5px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; color: #0a1838; }
+  .st-news-row .st-arrow { color: var(--c-performance-purple, #983eae); font-size: 15px; opacity: 0; transform: translateX(-6px); transition: opacity .2s, transform .2s; }
+  .st-news-row:hover .st-arrow { opacity: 1; transform: none; }
+
+  /* ---------- CTA band ---------- */
+  .st-cta { position: relative; overflow: hidden; background: var(--c-tech-blue, #052975); color: #fff; padding: clamp(56px, 6vw, 92px) 0; }
+  .st-cta::before { content: ""; position: absolute; left: -6%; bottom: -60%; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, rgba(143,248,255,0.22), transparent 64%); pointer-events: none; }
+  .st-cta__grid { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  .st-cta h2 { margin: 12px 0 0; font-size: clamp(28px, 3vw, 42px); font-weight: 700; line-height: 1.08; letter-spacing: -0.018em; max-width: 15ch; }
+  .st-cta p { margin: 14px 0 0; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.82); max-width: 40ch; }
+  .st-cta__btns { display: flex; flex-wrap: wrap; gap: 14px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px) {
+    .st-hero__grid { grid-template-columns: 1fr; }
+    .st-feat { min-height: 360px; }
+    .st-grid4 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .st-grid3 { grid-template-columns: 1fr; }
+    .st-head { align-items: flex-start; }
+    .st-news-row { grid-template-columns: 1fr auto; gap: 6px 14px; padding: 18px 6px; }
+    .st-news-row time { grid-row: 1; }
+    .st-news-row .st-chip { grid-row: 1; grid-column: 2; }
+    .st-news-row h3 { grid-column: 1 / -1; }
+    .st-news-row .st-arrow { display: none; }
+    .st-news-row:hover { padding-inline: 6px; }
+  }
+  @media (max-width: 460px) {
+    .st-grid4 { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Stories" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO ============ -->
+<section class="st-hero">
+  <div class="st-wrap st-hero__grid">
+    <div>
+      <span class="st-eyebrow"><i class="fa-light fa-book-open"></i> Stories</span>
+      <h1>The people behind<br>the <span class="hl">time saved.</span></h1>
+      <p>Customer successes, product news and hands-on guides from the finance teams automating their work inside Microsoft Dynamics 365 Business Central.</p>
+      <div class="st-jump">
+        <a href="#customers"><i class="fa-light fa-star"></i> Customer stories</a>
+        <a href="#blog"><i class="fa-light fa-pen-nib"></i> Blog</a>
+        <a href="#news"><i class="fa-light fa-newspaper"></i> Newsroom</a>
+      </div>
+    </div>
+    <a class="st-feat" href="#customers" aria-label="Read the featured customer story">
+      <img class="st-feat__img" src="assets/stories/featured-banner.png" alt="Two finance professionals smiling at their desk">
+      <div class="st-feat__scrim"></div>
+      <div class="st-feat__body">
+        <span class="st-feat__tag"><i class="fa-solid fa-star" style="font-size:9px"></i> Featured story</span>
+        <p class="st-feat__quote">“We closed the month two days early — the first time in years the team didn't work the weekend.”</p>
+        <div class="st-feat__who"><b>Alicia &amp; Moni</b> · Finance team, Calypso Group</div>
+        <span class="st-feat__read">Read the story <i class="fa-light fa-arrow-right"></i></span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ CUSTOMER STORIES ============ -->
+<section class="st-sec" id="customers">
+  <div class="st-wrap">
+    <div class="st-head">
+      <div>
+        <span class="st-eyebrow"><i class="fa-light fa-star"></i> Customer stories</span>
+        <h2>Real teams. Real results.</h2>
+        <p>How finance leaders won back their week — and what changed the day Continia went live.</p>
+      </div>
+      <a class="st-seelink" href="#">All customer stories <i class="fa-light fa-arrow-right"></i></a>
+    </div>
+    <div class="st-grid3">
+
+      <article class="st-card">
+        <div class="st-card__img">
+          <img src="assets/stories/diana.png" alt="Diana, finance lead">
+          <span class="st-card__logo">Nordwind Logistics</span>
+        </div>
+        <div class="st-card__body">
+          <div class="st-card__metric">90%<span>.</span></div>
+          <div class="st-card__mlabel">less manual data entry</div>
+          <p class="st-card__quote">“Invoices arrive, get recognized and posted before I've opened my inbox. My team finally does finance, not typing.”</p>
+          <div class="st-card__foot">
+            <img class="st-avatar" src="assets/stories/diana.png" alt="">
+            <div><b>Diana</b><small>CFO · Nordwind Logistics</small></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="st-card">
+        <div class="st-card__img">
+          <img src="assets/stories/moni.png" alt="Moni, finance manager">
+          <span class="st-card__logo">Calypso Group</span>
+        </div>
+        <div class="st-card__body">
+          <div class="st-card__metric">0<span>.</span></div>
+          <div class="st-card__mlabel">lost or duplicated invoices</div>
+          <p class="st-card__quote">“Every document is captured and matched automatically. We haven't chased a missing invoice in over a year.”</p>
+          <div class="st-card__foot">
+            <img class="st-avatar" src="assets/stories/moni.png" alt="">
+            <div><b>Moni</b><small>Finance Manager · Calypso Group</small></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="st-card">
+        <div class="st-card__img">
+          <img src="assets/stories/silke.png" alt="Silke, head of accounting">
+          <span class="st-card__logo">Fjord &amp; Co.</span>
+        </div>
+        <div class="st-card__body">
+          <div class="st-card__metric">2 days<span>.</span></div>
+          <div class="st-card__mlabel">faster month-end close</div>
+          <p class="st-card__quote">“Setup took an afternoon. The time we got back paid for the whole thing inside the first week.”</p>
+          <div class="st-card__foot">
+            <img class="st-avatar" src="assets/stories/silke.png" alt="">
+            <div><b>Silke</b><small>Head of Accounting · Fjord &amp; Co.</small></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOG ============ -->
+<section class="st-sec st-sec--tint" id="blog">
+  <div class="st-wrap">
+    <div class="st-head">
+      <div>
+        <span class="st-eyebrow"><i class="fa-light fa-pen-nib"></i> Blog</span>
+        <h2>Guides, tips &amp; deep dives</h2>
+        <p>Practical reads for finance and IT teams getting more out of Business Central.</p>
+      </div>
+      <a class="st-seelink" href="#">Visit the blog <i class="fa-light fa-arrow-right"></i></a>
+    </div>
+    <div class="st-grid4">
+
+      <a class="st-post" href="#">
+        <div class="st-post__thumb" style="background:linear-gradient(135deg,#052975,#0a3d9e)"><i class="fa-light fa-file-invoice"></i></div>
+        <div class="st-post__body">
+          <span class="st-post__tag">AP automation</span>
+          <h3>5 signs your invoice process is quietly costing you a week a month</h3>
+          <p>The bottlenecks hide in plain sight. Here's how to spot them.</p>
+          <div class="st-post__meta">Continia team <span class="dot"></span> 6 min read</div>
+        </div>
+      </a>
+
+      <a class="st-post" href="#">
+        <div class="st-post__thumb" style="background:linear-gradient(135deg,#983eae,#c05fd6)"><i class="fa-light fa-sparkles"></i></div>
+        <div class="st-post__body">
+          <span class="st-post__tag">Product</span>
+          <h3>What's new in Continia 2026: smarter matching, faster posting</h3>
+          <p>A tour of the release finance teams have been asking for.</p>
+          <div class="st-post__meta">Product team <span class="dot"></span> 4 min read</div>
+        </div>
+      </a>
+
+      <a class="st-post" href="#">
+        <div class="st-post__thumb" style="background:linear-gradient(135deg,#0e7a63,#2fae90)"><i class="fa-light fa-calendar-check"></i></div>
+        <div class="st-post__body">
+          <span class="st-post__tag">Finance ops</span>
+          <h3>The month-end close, re-engineered: a step-by-step playbook</h3>
+          <p>Cut days off your close without adding headcount.</p>
+          <div class="st-post__meta">Continia team <span class="dot"></span> 8 min read</div>
+        </div>
+      </a>
+
+      <a class="st-post" href="#">
+        <div class="st-post__thumb" style="background:linear-gradient(135deg,#0a6fb0,#22a3d8)"><i class="fa-light fa-file-check"></i></div>
+        <div class="st-post__body">
+          <span class="st-post__tag">E-invoicing</span>
+          <h3>PEPPOL is mandatory sooner than you think — here's your checklist</h3>
+          <p>Everything you need in place before the deadline.</p>
+          <div class="st-post__meta">Continia team <span class="dot"></span> 5 min read</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEWSROOM ============ -->
+<section class="st-sec" id="news">
+  <div class="st-wrap">
+    <div class="st-head">
+      <div>
+        <span class="st-eyebrow"><i class="fa-light fa-newspaper"></i> News</span>
+        <h2>From the newsroom</h2>
+        <p>Product launches, milestones and the occasional celebration.</p>
+      </div>
+      <a class="st-seelink" href="#">All news <i class="fa-light fa-arrow-right"></i></a>
+    </div>
+    <div class="st-news-list">
+
+      <a class="st-news-row" href="#">
+        <time>14 Jul 2026</time>
+        <span class="st-chip st-chip--company">Company</span>
+        <h3>Continia surpasses 21,000 customers worldwide</h3>
+        <i class="fa-light fa-arrow-right st-arrow"></i>
+      </a>
+
+      <a class="st-news-row" href="#">
+        <time>30 Jun 2026</time>
+        <span class="st-chip st-chip--product">Product</span>
+        <h3>Continia Banking adds real-time payment fraud screening</h3>
+        <i class="fa-light fa-arrow-right st-arrow"></i>
+      </a>
+
+      <a class="st-news-row" href="#">
+        <time>20 May 2026</time>
+        <span class="st-chip st-chip--partners">Partners</span>
+        <h3>Continia named a Microsoft Partner of the Year finalist</h3>
+        <i class="fa-light fa-arrow-right st-arrow"></i>
+      </a>
+
+      <a class="st-news-row" href="#">
+        <time>08 Apr 2026</time>
+        <span class="st-chip st-chip--product">Product</span>
+        <h3>The Expense Management mobile app gets a ground-up redesign</h3>
+        <i class="fa-light fa-arrow-right st-arrow"></i>
+      </a>
+
+      <a class="st-news-row" href="#">
+        <time>11 Mar 2026</time>
+        <span class="st-chip st-chip--company">Company</span>
+        <h3>Continia opens a new office to serve the DACH region</h3>
+        <i class="fa-light fa-arrow-right st-arrow"></i>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section class="st-cta">
+  <div class="st-wrap st-cta__grid">
+    <div>
+      <span class="st-eyebrow st-eyebrow--light"><i class="fa-light fa-comments"></i> Your turn</span>
+      <h2>Got a story worth telling?</h2>
+      <p>Join 21,000+ teams who gave manual finance work the weekend off.</p>
+    </div>
+    <div class="st-cta__btns">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="200px,52px">Start your free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="https://www.continia.com/partners/" hint-size="170px,52px">Talk to a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</x-dc>
+</body>
+</html>

@@ -101,11 +101,6 @@
     .sol-g__title { font-size: 19px; font-weight: 700; color: #ffffff; }
     .sol-g__sub { font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,0.74); }
     .sol-g__panel { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; }
-    .sol-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
-      padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
-      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms; }
-    .sol-toggle:hover { border-color: #052975; transform: translateY(-2px); }
-
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
     .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
     .sol-car__stage { position: relative; height: clamp(422px,48vw,458px); perspective: 1700px; }
@@ -135,23 +130,6 @@
     .sol-car__dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 999px; cursor: pointer;
       background: rgba(255,255,255,0.35); transition: background 200ms, transform 200ms; }
     .sol-car__dot.on { background: #8ff8ff; transform: scale(1.25); }
-
-    /* ---------- Solutions v4: 16:9 "window" (same carousel, framed as a rounded window) ---------- */
-    .sol-win-sec { background: #ffffff; padding: clamp(52px,6vw,92px) 14px; }
-    .sol-win { position: relative; width: min(1560px, 98vw); margin: 0 auto; aspect-ratio: 16 / 9;
-      border-radius: 15px; border: 3px solid var(--c-performance-purple, #983eae); overflow: hidden; background: #041e58;
-      box-shadow: 0 40px 100px rgba(3,15,48,0.34); }
-    .sol-win .sol-vid-ovl { border-radius: inherit; }
-    .sol-win__inner { position: relative; z-index: 2; height: 100%; box-sizing: border-box;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: clamp(24px,2.8vw,52px) clamp(18px,3.6vw,64px); }
-    .sol-win__inner .sol-car { margin-top: clamp(10px,1.8vw,28px); }
-    .sol-win__inner .sol-car__stage { height: clamp(380px,36vw,480px); }
-    @media (max-width: 900px) {
-      .sol-win { aspect-ratio: auto; width: 92vw; }
-      .sol-win__inner { padding: 40px 16px 26px; }
-      .sol-win__inner .sol-car__stage { height: clamp(422px,120vw,470px); }
-    }
 
     @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } .sol-car__card { transition: none !important; } }
   </style>
@@ -253,163 +231,6 @@
 <!-- ============ SOLUTIONS BENTO ============ -->
 <section id="solutions" data-screen-label="Solutions" style="position:relative;overflow:hidden">
 
-<!-- ===== NEW: glassmorphism + video background ===== -->
-<sc-if value="{{ solNew }}" hint-placeholder-val="{{ true }}">
-<div class="sol-new">
-  <video class="sol-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-    <source src="assets/video/solutions-bg.webm" type="video/webm">
-    <source src="assets/video/solutions-bg.mp4" type="video/mp4">
-  </video>
-  <div class="sol-vid-ovl" aria-hidden="true"></div>
-  <div class="sol-new__inner">
-    <div data-reveal="true" style="text-align:center;max-width:640px;margin:0 auto">
-      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our products</span>
-      <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
-      <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
-    </div>
-    <div data-reveal="true" class="cnt-bento" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px">
-
-      <div class="cnt-bento-wide sol-g" style="grid-column:span 2">
-        <div style="display:flex;align-items:center;gap:14px"><div class="sol-g__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div><div><div class="sol-g__title">Document Capture</div><div class="sol-g__sub">Automate your entire Accounts Payable</div></div></div>
-        <div class="sol-g__panel" style="margin-top:20px;padding:8px 12px">
-          <sc-for list="{{ bentoDcRows }}" as="r" hint-placeholder-count="3">
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid rgba(255,255,255,0.10)">
-              <i class="{{ r.icon }}" style="color:#8ff8ff;font-size:15px;width:18px;text-align:center"></i>
-              <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px;color:#ffffff">{{ r.a }}</div><div style="font-size:11.5px;color:rgba(255,255,255,0.6)">{{ r.b }}</div></div>
-              <div style="font-size:12.5px;font-weight:600;color:#ffffff">{{ r.c }}</div>
-              <div style="min-width:92px;text-align:center;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:700;background:{{ r.chipBg }};color:{{ r.chipFg }};transition:background 400ms,color 400ms">{{ r.chip }}</div>
-            </div>
-          </sc-for>
-        </div>
-        <p class="sol-g__sub" style="margin:18px 0 0">Invoices are imported, recognized, approved and posted automatically — from start to finish, without leaving Business Central.</p>
-      </div>
-
-      <div class="sol-g" style="position:relative;overflow:hidden">
-        <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
-        <div class="sol-g__title" style="margin-top:16px">Expense Management</div>
-        <p class="sol-g__sub" style="margin:10px 0 0">Snap a photo of the receipt — approval, coding and reimbursement happen automatically.</p>
-        <div class="sol-g__panel" style="margin-top:20px;padding:14px 16px">
-          <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.72)"><span>Client dinner &middot; Anna M.</span><span style="font-weight:700;color:#8ff8ff">€ 148.20</span></div>
-          <div style="margin-top:10px;height:6px;border-radius:999px;background:rgba(255,255,255,0.15);overflow:hidden"><div style="width:{{ emProgress }};height:100%;border-radius:999px;background:#8ff8ff;transition:width 900ms cubic-bezier(0.16,1,0.3,1)"></div></div>
-          <div style="margin-top:8px;font-size:11.5px;font-weight:700;color:#8ff8ff">{{ emStatus }}</div>
-        </div>
-      </div>
-
-      <div class="sol-g">
-        <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
-        <div class="sol-g__title" style="margin-top:16px">Continia Banking</div>
-        <p class="sol-g__sub" style="margin:10px 0 0">Direct bank communication, payment approval and automatic reconciliation.</p>
-        <div class="sol-g__panel" style="margin-top:20px;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:rgba(255,255,255,0.78)">Bank reconciliation</span><span style="padding:3px 9px;border-radius:999px;background:rgba(111,227,176,0.18);color:#6fe3b0;font-size:10.5px;font-weight:700">214 matched</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:rgba(255,255,255,0.78)">Payment batch 2041</span><span style="padding:3px 9px;border-radius:999px;background:rgba(111,227,176,0.18);color:#6fe3b0;font-size:10.5px;font-weight:700">Sent</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:rgba(255,255,255,0.78)">Approval &middot; 2 approvers</span><span style="padding:3px 9px;border-radius:999px;background:rgba(240,198,116,0.18);color:#f0c674;font-size:10.5px;font-weight:700">Pending</span></div>
-        </div>
-      </div>
-
-      <div class="sol-g">
-        <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
-        <div class="sol-g__title" style="margin-top:16px">Continia Finance</div>
-        <p class="sol-g__sub" style="margin:10px 0 0">Smart modules that ease the burden of core accounting tasks.</p>
-        <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-general-ledger" style="color:#8ff8ff"></i> General ledger</div>
-          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-extended-fixed-assets" style="color:#8ff8ff"></i> Fixed assets</div>
-          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-l-open-entries" style="color:#8ff8ff"></i> Open entries</div>
-          <div class="sol-g__panel" style="padding:12px;font-size:12px;font-weight:600;color:#ffffff;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-treasury" style="color:#8ff8ff"></i> Treasury</div>
-        </div>
-      </div>
-
-      <div class="sol-g" style="position:relative;overflow:hidden">
-        <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
-        <div class="sol-g__title" style="margin-top:16px">Document Output</div>
-        <p class="sol-g__sub" style="margin:10px 0 0">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print.</p>
-        <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
-          <div class="sol-g__panel" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:12.5px;color:#ffffff"><i class="fa-light fa-envelope" style="color:#8ff8ff"></i> Invoice 204518 <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#6fe3b0">SENT</span></div>
-          <div class="sol-g__panel" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:12.5px;color:#ffffff"><i class="fa-light fa-file-check" style="color:#8ff8ff"></i> e-Invoice (PEPPOL) <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#6fe3b0">DELIVERED</span></div>
-          <div class="sol-g__panel" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:12.5px;color:#ffffff"><i class="fa-light fa-print" style="color:#8ff8ff"></i> Reminder 30011 <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#f0c674">QUEUED</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</sc-if>
-
-<!-- ===== OLD: original light version ===== -->
-<sc-if value="{{ solOld }}" hint-placeholder-val="{{ false }}">
-<div style="background:#f6f8fb">
-  <div style="max-width:1240px;margin:0 auto;padding:104px 32px">
-    <div data-reveal="true" style="text-align:center;max-width:640px;margin:0 auto">
-      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#052975">Our products</span>
-      <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#052975">Solutions designed for your Business Central.</h2>
-      <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:#6b7894">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
-    </div>
-    <div data-reveal="true" class="cnt-bento" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px">
-
-      <div class="cnt-bento-wide" style="grid-column:span 2;background:#ffffff;border:1px solid #dde3ee;border-radius:24px;padding:32px;box-shadow:0 2px 8px rgba(5,41,117,0.08);transition:box-shadow 250ms,transform 250ms" style-hover="box-shadow:0 18px 48px rgba(5,41,117,0.14);transform:translateY(-4px)">
-        <div style="display:flex;align-items:center;gap:14px"><div style="flex:none;width:44px;height:44px;border-radius:12px;background:#def5ff;color:#052975;display:flex;align-items:center;justify-content:center;font-size:20px"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div><div><div style="font-size:19px;font-weight:700;color:#052975">Document Capture</div><div style="font-size:13.5px;color:#6b7894">Automate your entire Accounts Payable</div></div></div>
-        <div style="margin-top:20px;background:#f6f8fb;border:1px solid #eef1f6;border-radius:12px;padding:8px 12px">
-          <sc-for list="{{ bentoDcRows }}" as="r" hint-placeholder-count="3">
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid #eef1f6">
-              <i class="{{ r.icon }}" style="color:#052975;font-size:15px;width:18px;text-align:center"></i>
-              <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px;color:#0a1838">{{ r.a }}</div><div style="font-size:11.5px;color:#6b7894">{{ r.b }}</div></div>
-              <div style="font-size:12.5px;font-weight:600;color:#0a1838">{{ r.c }}</div>
-              <div style="min-width:92px;text-align:center;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:700;background:{{ r.chipBg }};color:{{ r.chipFg }};transition:background 400ms,color 400ms">{{ r.chip }}</div>
-            </div>
-          </sc-for>
-        </div>
-        <p style="margin:18px 0 0;font-size:14.5px;line-height:1.6;color:#3a4a6b">Invoices are imported, recognized, approved and posted automatically — from start to finish, without leaving Business Central.</p>
-      </div>
-
-      <div style="background:#052975;border-radius:24px;padding:32px;position:relative;overflow:hidden;transition:box-shadow 250ms,transform 250ms" style-hover="box-shadow:0 18px 48px rgba(5,41,117,0.25);transform:translateY(-4px)">
-        <div aria-hidden="true" style="position:absolute;right:-70px;bottom:-90px;width:260px;height:260px;background:rgba(143,248,255,0.12);border-top-left-radius:100%;pointer-events:none"></div>
-        <div style="flex:none;width:44px;height:44px;border-radius:12px;background:rgba(143,248,255,0.15);color:#8ff8ff;display:flex;align-items:center;justify-content:center;font-size:20px"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
-        <div style="margin-top:16px;font-size:19px;font-weight:700;color:#ffffff">Expense Management</div>
-        <p style="margin:10px 0 0;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,0.75)">Snap a photo of the receipt — approval, coding and reimbursement happen automatically.</p>
-        <div style="margin-top:20px;background:rgba(255,255,255,0.07);border:1px solid rgba(143,248,255,0.25);border-radius:12px;padding:14px 16px">
-          <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.7)"><span>Client dinner &middot; Anna M.</span><span style="font-weight:700;color:#8ff8ff">€ 148.20</span></div>
-          <div style="margin-top:10px;height:6px;border-radius:999px;background:rgba(255,255,255,0.15);overflow:hidden"><div style="width:{{ emProgress }};height:100%;border-radius:999px;background:#8ff8ff;transition:width 900ms cubic-bezier(0.16,1,0.3,1)"></div></div>
-          <div style="margin-top:8px;font-size:11.5px;font-weight:700;color:#8ff8ff">{{ emStatus }}</div>
-        </div>
-      </div>
-
-      <div style="background:#ffffff;border:1px solid #dde3ee;border-radius:24px;padding:32px;box-shadow:0 2px 8px rgba(5,41,117,0.08);transition:box-shadow 250ms,transform 250ms" style-hover="box-shadow:0 18px 48px rgba(5,41,117,0.14);transform:translateY(-4px)">
-        <div style="flex:none;width:44px;height:44px;border-radius:12px;background:#def5ff;color:#052975;display:flex;align-items:center;justify-content:center;font-size:20px"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
-        <div style="margin-top:16px;font-size:19px;font-weight:700;color:#052975">Continia Banking</div>
-        <p style="margin:10px 0 0;font-size:14.5px;line-height:1.6;color:#3a4a6b">Direct bank communication, payment approval and automatic reconciliation.</p>
-        <div style="margin-top:20px;background:#f6f8fb;border:1px solid #eef1f6;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:#3a4a6b">Bank reconciliation</span><span style="padding:3px 9px;border-radius:999px;background:#cfe2dd;color:#2f6455;font-size:10.5px;font-weight:700">214 matched</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:#3a4a6b">Payment batch 2041</span><span style="padding:3px 9px;border-radius:999px;background:#cfe2dd;color:#2f6455;font-size:10.5px;font-weight:700">Sent</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px"><span style="color:#3a4a6b">Approval &middot; 2 approvers</span><span style="padding:3px 9px;border-radius:999px;background:#fff7e3;color:#8a6516;font-size:10.5px;font-weight:700">Pending</span></div>
-        </div>
-      </div>
-
-      <div style="background:#ffffff;border:1px solid #dde3ee;border-radius:24px;padding:32px;box-shadow:0 2px 8px rgba(5,41,117,0.08);transition:box-shadow 250ms,transform 250ms" style-hover="box-shadow:0 18px 48px rgba(5,41,117,0.14);transform:translateY(-4px)">
-        <div style="flex:none;width:44px;height:44px;border-radius:12px;background:#def5ff;color:#052975;display:flex;align-items:center;justify-content:center;font-size:20px"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
-        <div style="margin-top:16px;font-size:19px;font-weight:700;color:#052975">Continia Finance</div>
-        <p style="margin:10px 0 0;font-size:14.5px;line-height:1.6;color:#3a4a6b">Smart modules that ease the burden of core accounting tasks.</p>
-        <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div style="background:#f6f8fb;border:1px solid #eef1f6;border-radius:10px;padding:12px;font-size:12px;font-weight:600;color:#052975;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-general-ledger"></i> General ledger</div>
-          <div style="background:#f6f8fb;border:1px solid #eef1f6;border-radius:10px;padding:12px;font-size:12px;font-weight:600;color:#052975;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-extended-fixed-assets"></i> Fixed assets</div>
-          <div style="background:#f6f8fb;border:1px solid #eef1f6;border-radius:10px;padding:12px;font-size:12px;font-weight:600;color:#052975;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-l-open-entries"></i> Open entries</div>
-          <div style="background:#f6f8fb;border:1px solid #eef1f6;border-radius:10px;padding:12px;font-size:12px;font-weight:600;color:#052975;display:flex;align-items:center;gap:9px"><i class="fa-kit fa-treasury"></i> Treasury</div>
-        </div>
-      </div>
-
-      <div style="background:#def5ff;border-radius:24px;padding:32px;position:relative;overflow:hidden;transition:box-shadow 250ms,transform 250ms" style-hover="box-shadow:0 18px 48px rgba(5,41,117,0.14);transform:translateY(-4px)">
-        <div aria-hidden="true" style="position:absolute;right:-60px;top:-80px;width:220px;height:220px;background:rgba(255,255,255,0.5);border-bottom-left-radius:100%;pointer-events:none"></div>
-        <div style="position:relative;flex:none;width:44px;height:44px;border-radius:12px;background:#052975;color:#8ff8ff;display:flex;align-items:center;justify-content:center;font-size:20px"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
-        <div style="position:relative;margin-top:16px;font-size:19px;font-weight:700;color:#052975">Document Output</div>
-        <p style="position:relative;margin:10px 0 0;font-size:14.5px;line-height:1.6;color:#3a4a6b">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print.</p>
-        <div style="position:relative;margin-top:20px;display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:10px;background:#ffffff;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#0a1838"><i class="fa-light fa-envelope" style="color:#052975"></i> Invoice 204518 <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#2f6455">SENT</span></div>
-          <div style="display:flex;align-items:center;gap:10px;background:#ffffff;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#0a1838"><i class="fa-light fa-file-check" style="color:#052975"></i> e-Invoice (PEPPOL) <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#2f6455">DELIVERED</span></div>
-          <div style="display:flex;align-items:center;gap:10px;background:#ffffff;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#0a1838"><i class="fa-light fa-print" style="color:#052975"></i> Reminder 30011 <span style="margin-left:auto;font-size:10.5px;font-weight:700;color:#8a6516">QUEUED</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</sc-if>
-
 <!-- ===== CAROUSEL: 3D coverflow of the five solutions ===== -->
 <sc-if value="{{ solCarousel }}" hint-placeholder-val="{{ false }}">
 <div class="sol-new">
@@ -476,77 +297,8 @@
 </div>
 </sc-if>
 
-<!-- ===== WINDOW: same coverflow, framed as a 16:9 rounded window ===== -->
-<sc-if value="{{ solWindow }}" hint-placeholder-val="{{ false }}">
-<div class="sol-win-sec">
-  <div class="sol-win">
-    <video class="sol-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-      <source src="assets/video/solutions-bg.webm" type="video/webm">
-      <source src="assets/video/solutions-bg.mp4" type="video/mp4">
-    </video>
-    <div class="sol-vid-ovl" aria-hidden="true"></div>
-    <div class="sol-win__inner">
-      <div style="text-align:center;margin:0 auto">
-        <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our products</span>
-        <h2 style="margin:12px 0 0;font-size:clamp(26px,2.6vw,40px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
-      </div>
-      <div class="sol-car">
-        <button onClick="{{ carPrev }}" class="sol-car__nav sol-car__nav--prev" aria-label="Previous solution"><i class="fa-light fa-arrow-left"></i></button>
-        <div class="sol-car__stage">
-          <div class="sol-car__track">
-            <div class="sol-car__card" style="{{ carStyle0 }}">
-              <div class="sol-g__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div>
-              <div class="sol-car__title">Document Capture</div>
-              <p class="sol-car__desc">Automate your entire Accounts Payable — invoices imported, recognized, approved and posted automatically, without leaving Business Central.</p>
-              <a href="solutions/document-capture/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">AP automation</span><span class="sol-car__pill">Invoice capture</span><span class="sol-car__pill">Approval flows</span></div>
-            </div>
-            <div class="sol-car__card" style="{{ carStyle1 }}">
-              <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
-              <div class="sol-car__title">Expense Management</div>
-              <p class="sol-car__desc">Snap a photo of the receipt — approval, coding and reimbursement happen automatically, on web and mobile.</p>
-              <a href="solutions/expense-management/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">Expense automation</span><span class="sol-car__pill">Mobile receipts</span><span class="sol-car__pill">Reimbursement</span></div>
-            </div>
-            <div class="sol-car__card" style="{{ carStyle2 }}">
-              <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
-              <div class="sol-car__title">Continia Banking</div>
-              <p class="sol-car__desc">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
-              <a href="solutions/continia-banking/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">Payment automation</span><span class="sol-car__pill">Bank reconciliation</span><span class="sol-car__pill">Payment approval</span></div>
-            </div>
-            <div class="sol-car__card" style="{{ carStyle3 }}">
-              <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
-              <div class="sol-car__title">Continia Finance</div>
-              <p class="sol-car__desc">Smart modules that ease the burden of core accounting — general ledger, fixed assets, open entries and treasury.</p>
-              <a href="solutions/continia-finance/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">General ledger</span><span class="sol-car__pill">Fixed assets</span><span class="sol-car__pill">Treasury</span></div>
-            </div>
-            <div class="sol-car__card" style="{{ carStyle4 }}">
-              <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
-              <div class="sol-car__title">Document Output</div>
-              <p class="sol-car__desc">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print — every time.</p>
-              <a href="solutions/document-output/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">E-invoicing</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Document delivery</span></div>
-            </div>
-          </div>
-        </div>
-        <button onClick="{{ carNext }}" class="sol-car__nav sol-car__nav--next" aria-label="Next solution"><i class="fa-light fa-arrow-right"></i></button>
-        <div class="sol-car__dots">
-          <sc-for list="{{ carDots }}" as="d" hint-placeholder-count="5">
-            <button class="{{ d.cls }}" onClick="{{ d.pick }}" aria-label="Go to solution"></button>
-          </sc-for>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</sc-if>
-
 </section>
 
-<!-- Solutions view toggle (New / Classic / Carousel) -->
-<button onClick="{{ toggleSol }}" class="sol-toggle" title="Switch Our Solutions design"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i>{{ solToggleLabel }}</button>
 
 <!-- ============ HOW IT WORKS ============ -->
 <section id="how" data-screen-label="How it works" style="background:#ffffff">
@@ -847,12 +599,7 @@ class Component extends DCLogic {
       statPartners: fmt(stats.partners) + "+",
       year: new Date().getFullYear(),
       arrowBtn: { iconRight: icon("fa-light fa-arrow-right") },
-      solNew: CV === 1,
-      solOld: CV === 2,
-      solCarousel: CV === 3,
-      solWindow: CV === 4,
-      toggleSol: () => this.setState((s) => ({ solView: (s.solView % 4) + 1 })),
-      solToggleLabel: "Our products · " + ({ 1: "New", 2: "Classic", 3: "Carousel", 4: "Window" }[CV]),
+      solCarousel: true,
       carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
       carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
       carStyle0: carStyleFor(0), carStyle1: carStyleFor(1), carStyle2: carStyleFor(2),
