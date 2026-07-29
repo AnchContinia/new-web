@@ -107,44 +107,44 @@
     .imp-left h2 { margin: 0; font-size: clamp(32px,3.2vw,46px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; color: #052975; }
     .imp-left > p { margin: 20px 0 0; font-size: 17px; line-height: 1.65; color: #0a1838; max-width: 34rem; }
     .imp-stats { margin-top: clamp(26px,3vw,40px); }
-    .imp-stat { display: grid; grid-template-columns: minmax(150px,44%) 1fr; gap: 6px 20px; align-items: center; padding: 20px 0; border-top: 1px solid #dde3ee; }
+    .imp-stat { display: grid; grid-template-columns: minmax(175px,48%) 1fr; gap: 6px 18px; align-items: center; padding: 20px 0; border-top: 1px solid #dde3ee; }
     .imp-stat:last-child { border-bottom: 1px solid #dde3ee; }
-    .imp-stat__num { font-size: clamp(36px,3.6vw,56px); font-weight: 700; line-height: 0.95; letter-spacing: -0.025em; color: #052975; font-variant-numeric: tabular-nums; }
+    .imp-stat__num { font-size: clamp(40px,4vw,62px); font-weight: 700; line-height: 0.95; letter-spacing: -0.025em; color: #052975; font-variant-numeric: tabular-nums; }
     .imp-stat__txt b { display: block; font-size: 15.5px; font-weight: 700; color: #0a1838; }
     .imp-stat__txt span { display: block; margin-top: 5px; font-size: 13.5px; line-height: 1.5; color: #0a1838; }
 
     .imp-media { order: -1; position: relative; width: 100%; max-width: 500px; margin: 0 auto; aspect-ratio: 1 / 1; }
     .imp-sq { position: absolute; top: 0; left: 0; width: 64%; aspect-ratio: 1 / 1; will-change: transform; }
-    .imp-sq--a { animation: impSwapA 40s cubic-bezier(0.65,0,0.35,1) infinite; }
-    .imp-sq--b { animation: impSwapB 40s cubic-bezier(0.65,0,0.35,1) infinite; }
+    .imp-sq--a { animation: impSwapA 20s cubic-bezier(0.45,0,0.55,1) infinite; }
+    .imp-sq--b { animation: impSwapB 20s cubic-bezier(0.45,0,0.55,1) infinite; }
     .imp-card { width: 100%; height: 100%; border-radius: 16px; overflow: hidden; border: 3px solid var(--c-tech-blue,#052975); box-shadow: 0 12px 30px rgba(3,15,48,0.14), 0 3px 10px rgba(3,15,48,0.08); animation: impRise 0.9s cubic-bezier(0.16,1,0.3,1) both; will-change: transform, opacity; }
     .imp-sq--a .imp-card { animation-delay: 0.08s; }
     .imp-sq--b .imp-card { animation-delay: 0.22s; }
     .imp-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     /* intro: fly up from below into place */
     @keyframes impRise { from { opacity: 0; transform: translateY(74px); } to { opacity: 1; transform: none; } }
-    /* the two squares orbit clockwise, swapping which one is in front every 20s (40s full loop) — no fade */
+    /* two squares orbit clockwise + soft cross-fade, swapping which one is in front every 10s (20s loop) */
     @keyframes impSwapA {
-      0%    { transform: translate(0,0);      z-index: 1; }
-      45%   { transform: translate(0,0);      z-index: 1; }
-      45.5% { transform: translate(0,0);      z-index: 2; }
-      47.5% { transform: translate(56%,0);    z-index: 2; }
-      50%   { transform: translate(56%,56%);  z-index: 2; }
-      95%   { transform: translate(56%,56%);  z-index: 2; }
-      95.5% { transform: translate(56%,56%);  z-index: 1; }
-      97.5% { transform: translate(0,56%);    z-index: 1; }
-      100%  { transform: translate(0,0);      z-index: 1; }
+      0%    { transform: translate(0,0);      z-index: 1; opacity: 1; }
+      40%   { transform: translate(0,0);      z-index: 1; opacity: 1; }
+      41%   { transform: translate(0,0);      z-index: 2; opacity: 1; }
+      45%   { transform: translate(56%,0);    z-index: 2; opacity: 0.5; }
+      50%   { transform: translate(56%,56%);  z-index: 2; opacity: 1; }
+      90%   { transform: translate(56%,56%);  z-index: 2; opacity: 1; }
+      91%   { transform: translate(56%,56%);  z-index: 1; opacity: 1; }
+      95%   { transform: translate(0,56%);    z-index: 1; opacity: 0.5; }
+      100%  { transform: translate(0,0);      z-index: 1; opacity: 1; }
     }
     @keyframes impSwapB {
-      0%    { transform: translate(56%,56%);  z-index: 2; }
-      45%   { transform: translate(56%,56%);  z-index: 2; }
-      45.5% { transform: translate(56%,56%);  z-index: 1; }
-      47.5% { transform: translate(0,56%);    z-index: 1; }
-      50%   { transform: translate(0,0);      z-index: 1; }
-      95%   { transform: translate(0,0);      z-index: 1; }
-      95.5% { transform: translate(0,0);      z-index: 2; }
-      97.5% { transform: translate(56%,0);    z-index: 2; }
-      100%  { transform: translate(56%,56%);  z-index: 2; }
+      0%    { transform: translate(56%,56%);  z-index: 2; opacity: 1; }
+      40%   { transform: translate(56%,56%);  z-index: 2; opacity: 1; }
+      41%   { transform: translate(56%,56%);  z-index: 1; opacity: 1; }
+      45%   { transform: translate(0,56%);    z-index: 1; opacity: 0.5; }
+      50%   { transform: translate(0,0);      z-index: 1; opacity: 1; }
+      90%   { transform: translate(0,0);      z-index: 1; opacity: 1; }
+      91%   { transform: translate(0,0);      z-index: 2; opacity: 1; }
+      95%   { transform: translate(56%,0);    z-index: 2; opacity: 0.5; }
+      100%  { transform: translate(56%,56%);  z-index: 2; opacity: 1; }
     }
     @media (max-width: 860px) {
       .imp-split { grid-template-columns: 1fr; gap: 44px; }
