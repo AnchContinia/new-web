@@ -172,10 +172,10 @@
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="#cta" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="#how" hint-size="170px,48px">See how it works</x-import>
     </div>
-    <div class="hero-proof" style="display:flex;justify-content:center;flex-wrap:wrap;gap:34px;margin-top:30px;font-size:13.5px;color:#6b7894">
-      <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> 30+ years of experience</span>
-      <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> 21,000+ customers</span>
-      <span style="display:inline-flex;align-items:center;gap:8px"><i class="fa-light fa-circle-check" style="color:#5f9e8d"></i> Quick setup from AppSource</span>
+    <div class="hero-proof" style="display:flex;justify-content:center;flex-wrap:wrap;gap:34px;margin-top:30px;font-size:16px;font-weight:700;color:#0a1838">
+      <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#5f9e8d;font-size:20px"></i> 30+ years of experience</span>
+      <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#5f9e8d;font-size:20px"></i> 21,000+ customers</span>
+      <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#5f9e8d;font-size:20px"></i> Quick setup from AppSource</span>
     </div>
     <div class="hero-mock" data-reveal="true" style="max-width:960px;margin:30px auto -26px">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" hint-size="100%,440px">
@@ -215,9 +215,9 @@
   <div style="max-width:1240px;margin:0 auto;padding:30px 32px;display:flex;align-items:center;gap:36px">
     <span style="flex:none;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);white-space:nowrap">Trusted by <span style="color:#8ff8ff;font-weight:700">21,000+</span> companies:</span>
     <div style="flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)">
-      <div id="cnt-marquee" style="display:flex;gap:64px;width:max-content;animation:cnt-marquee 38s linear infinite">
+      <div id="cnt-marquee" style="display:flex;align-items:center;gap:64px;width:max-content;animation:cnt-marquee 38s linear infinite">
         <sc-for list="{{ trustLoop }}" as="brand" hint-placeholder-count="10">
-          <span style="font-size:16px;font-weight:700;letter-spacing:0.1em;color:rgba(255,255,255,0.55);white-space:nowrap">{{ brand }}</span>
+          <img src="{{ brand }}" alt="" loading="lazy" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
         </sc-for>
       </div>
     </div>
@@ -227,7 +227,7 @@
 <!-- ============ IMPACT (giant count-up numbers) ============ -->
 <section id="impacts" data-screen-label="Impact" style="background:#ffffff">
   <div style="max-width:1240px;margin:0 auto;padding:104px 32px">
-    <div data-reveal="true" class="cnt-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end">
+    <div data-reveal="true" class="cnt-2col" style="display:grid;grid-template-columns:clamp(340px,30vw,420px) 1fr;gap:12px 64px;align-items:end">
       <div>
         <h2 style="margin:0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#052975">Real results.<br>Real time saved.</h2>
       </div>
@@ -263,7 +263,7 @@
   <div class="sol-vid-ovl" aria-hidden="true"></div>
   <div class="sol-new__inner">
     <div data-reveal="true" style="text-align:center;max-width:640px;margin:0 auto">
-      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our products</span>
       <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
       <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
     </div>
@@ -338,7 +338,7 @@
 <div style="background:#f6f8fb">
   <div style="max-width:1240px;margin:0 auto;padding:104px 32px">
     <div data-reveal="true" style="text-align:center;max-width:640px;margin:0 auto">
-      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#052975">Our solutions</span>
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#052975">Our products</span>
       <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#052975">Solutions designed for your Business Central.</h2>
       <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:#6b7894">Five scalable add-on solutions — 100% built inside, so your team keeps the interface they already know.</p>
     </div>
@@ -420,7 +420,7 @@
   <div class="sol-vid-ovl" aria-hidden="true"></div>
   <div class="sol-new__inner">
     <div style="text-align:center;margin:0 auto">
-      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our products</span>
       <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,48px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for<br>your <span style="color:#8ff8ff">Business Central.</span></h2>
       <p style="max-width:660px;margin:14px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team<br>keeps the interface they already know.</p>
     </div>
@@ -433,35 +433,35 @@
             <div class="sol-car__title">Document Capture</div>
             <p class="sol-car__desc">Automate your entire Accounts Payable — invoices imported, recognized, approved and posted automatically, without leaving Business Central.</p>
             <a href="solutions/document-capture/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-            <div class="sol-car__pills"><span class="sol-car__pill">OCR</span><span class="sol-car__pill">Approval</span><span class="sol-car__pill">Auto-posting</span></div>
+            <div class="sol-car__pills"><span class="sol-car__pill">AP automation</span><span class="sol-car__pill">Invoice capture</span><span class="sol-car__pill">Approval flows</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle1 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
             <div class="sol-car__title">Expense Management</div>
             <p class="sol-car__desc">Snap a photo of the receipt — approval, coding and reimbursement happen automatically, on web and mobile.</p>
             <a href="solutions/expense-management/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-            <div class="sol-car__pills"><span class="sol-car__pill">Mobile</span><span class="sol-car__pill">Coding</span><span class="sol-car__pill">Reimburse</span></div>
+            <div class="sol-car__pills"><span class="sol-car__pill">Expense automation</span><span class="sol-car__pill">Mobile receipts</span><span class="sol-car__pill">Reimbursement</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle2 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
             <div class="sol-car__title">Continia Banking</div>
             <p class="sol-car__desc">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
             <a href="solutions/continia-banking/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-            <div class="sol-car__pills"><span class="sol-car__pill">Payments</span><span class="sol-car__pill">Reconcile</span><span class="sol-car__pill">Approve</span></div>
+            <div class="sol-car__pills"><span class="sol-car__pill">Payment automation</span><span class="sol-car__pill">Bank reconciliation</span><span class="sol-car__pill">Payment approval</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle3 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
             <div class="sol-car__title">Continia Finance</div>
             <p class="sol-car__desc">Smart modules that ease the burden of core accounting — general ledger, fixed assets, open entries and treasury.</p>
             <a href="solutions/continia-finance/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-            <div class="sol-car__pills"><span class="sol-car__pill">Ledger</span><span class="sol-car__pill">Assets</span><span class="sol-car__pill">Treasury</span></div>
+            <div class="sol-car__pills"><span class="sol-car__pill">General ledger</span><span class="sol-car__pill">Fixed assets</span><span class="sol-car__pill">Treasury</span></div>
           </div>
           <div class="sol-car__card" style="{{ carStyle4 }}">
             <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
             <div class="sol-car__title">Document Output</div>
             <p class="sol-car__desc">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print — every time.</p>
             <a href="solutions/document-output/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-            <div class="sol-car__pills"><span class="sol-car__pill">Email</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Print</span></div>
+            <div class="sol-car__pills"><span class="sol-car__pill">E-invoicing</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Document delivery</span></div>
           </div>
         </div>
       </div>
@@ -487,7 +487,7 @@
     <div class="sol-vid-ovl" aria-hidden="true"></div>
     <div class="sol-win__inner">
       <div style="text-align:center;margin:0 auto">
-        <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our solutions</span>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our products</span>
         <h2 style="margin:12px 0 0;font-size:clamp(26px,2.6vw,40px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for your <span style="color:#8ff8ff">Business Central.</span></h2>
       </div>
       <div class="sol-car">
@@ -499,35 +499,35 @@
               <div class="sol-car__title">Document Capture</div>
               <p class="sol-car__desc">Automate your entire Accounts Payable — invoices imported, recognized, approved and posted automatically, without leaving Business Central.</p>
               <a href="solutions/document-capture/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">OCR</span><span class="sol-car__pill">Approval</span><span class="sol-car__pill">Auto-posting</span></div>
+              <div class="sol-car__pills"><span class="sol-car__pill">AP automation</span><span class="sol-car__pill">Invoice capture</span><span class="sol-car__pill">Approval flows</span></div>
             </div>
             <div class="sol-car__card" style="{{ carStyle1 }}">
               <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
               <div class="sol-car__title">Expense Management</div>
               <p class="sol-car__desc">Snap a photo of the receipt — approval, coding and reimbursement happen automatically, on web and mobile.</p>
               <a href="solutions/expense-management/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">Mobile</span><span class="sol-car__pill">Coding</span><span class="sol-car__pill">Reimburse</span></div>
+              <div class="sol-car__pills"><span class="sol-car__pill">Expense automation</span><span class="sol-car__pill">Mobile receipts</span><span class="sol-car__pill">Reimbursement</span></div>
             </div>
             <div class="sol-car__card" style="{{ carStyle2 }}">
               <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
               <div class="sol-car__title">Continia Banking</div>
               <p class="sol-car__desc">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
               <a href="solutions/continia-banking/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">Payments</span><span class="sol-car__pill">Reconcile</span><span class="sol-car__pill">Approve</span></div>
+              <div class="sol-car__pills"><span class="sol-car__pill">Payment automation</span><span class="sol-car__pill">Bank reconciliation</span><span class="sol-car__pill">Payment approval</span></div>
             </div>
             <div class="sol-car__card" style="{{ carStyle3 }}">
               <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
               <div class="sol-car__title">Continia Finance</div>
               <p class="sol-car__desc">Smart modules that ease the burden of core accounting — general ledger, fixed assets, open entries and treasury.</p>
               <a href="solutions/continia-finance/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">Ledger</span><span class="sol-car__pill">Assets</span><span class="sol-car__pill">Treasury</span></div>
+              <div class="sol-car__pills"><span class="sol-car__pill">General ledger</span><span class="sol-car__pill">Fixed assets</span><span class="sol-car__pill">Treasury</span></div>
             </div>
             <div class="sol-car__card" style="{{ carStyle4 }}">
               <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
               <div class="sol-car__title">Document Output</div>
               <p class="sol-car__desc">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print — every time.</p>
               <a href="solutions/document-output/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
-              <div class="sol-car__pills"><span class="sol-car__pill">Email</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Print</span></div>
+              <div class="sol-car__pills"><span class="sol-car__pill">E-invoicing</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Document delivery</span></div>
             </div>
           </div>
         </div>
@@ -640,7 +640,7 @@ const SIDE_NAV = [
   { icon: "fa-kit fa-document-output-solution-do-icon-file-export", name: "Document Output", active: false },
 ];
 
-const TRUST = ["KEMPINSKI", "MAERSK", "BMW", "PwC", "KPMG", "BESTSELLER", "HUMMEL", "WEBER", "TASCHEN", "EVENTIM"];
+const TRUST = ["assets/images/company-logos/bmw.png", "assets/images/company-logos/bestseller.png", "assets/images/company-logos/dunlop.png", "assets/images/company-logos/moccamaster.png", "assets/images/company-logos/marley-martha.png", "assets/images/company-logos/sagrada-familia.png"];
 const STAT_TARGETS = { cust: 21000, manual: 90, partners: 1500 };
 const EM_PHASES = [
   { p: "25%", s: "Receipt captured" },
@@ -852,7 +852,7 @@ class Component extends DCLogic {
       solCarousel: CV === 3,
       solWindow: CV === 4,
       toggleSol: () => this.setState((s) => ({ solView: (s.solView % 4) + 1 })),
-      solToggleLabel: "Our solutions · " + ({ 1: "New", 2: "Classic", 3: "Carousel", 4: "Window" }[CV]),
+      solToggleLabel: "Our products · " + ({ 1: "New", 2: "Classic", 3: "Carousel", 4: "Window" }[CV]),
       carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
       carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
       carStyle0: carStyleFor(0), carStyle1: carStyleFor(1), carStyle2: carStyleFor(2),

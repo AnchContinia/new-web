@@ -1286,13 +1286,16 @@ const CONTINIA_LINKS = {
   // "Get a free trial" CTAs go to Microsoft AppSource (SiteHeader's default CTA href)
   trial: "https://appsource.microsoft.com/en-us/marketplace/apps?search=continia",
   nav: [{
-    label: "Solutions",
+    label: "Products",
     href: "../solutions/",
     menu: true
   }, {
-    label: "Use cases",
+    label: "Solutions",
     href: "../use-cases/",
     menu: false
+  }, {
+    label: "Stories",
+    href: "../stories/"
   }, {
     label: "Pricing",
     href: "../pricing/"
@@ -1766,10 +1769,10 @@ function Header({
   onDemo
 }) {
   const [open, setOpen] = React.useState(false);
-  const links = ["Solutions", "Use cases", "Pricing", "Why Continia?"];
+  const links = ["Products", "Solutions", "Stories", "Pricing", "Why Continia?"];
   const hasMenu = {
-    "Solutions": true,
-    "Use cases": true
+    "Products": true,
+    "Solutions": true
   };
   return /*#__PURE__*/React.createElement("header", {
     className: "site-header"
