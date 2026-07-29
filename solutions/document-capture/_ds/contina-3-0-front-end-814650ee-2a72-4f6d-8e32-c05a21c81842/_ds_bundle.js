@@ -1428,9 +1428,11 @@ const CSS = `
 .cnt-sitefooter a { text-decoration: none; }
 .cnt-sitefooter__top { max-width: var(--layout-content-max, 1360px); margin: 0 auto; padding: 64px var(--layout-page-pad, 28px) 48px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
 .cnt-sitefooter__brand p { color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.6; margin: 16px 0 20px; }
-.cnt-sitefooter__social { display: flex; align-items: center; gap: 16px; }
+.cnt-sitefooter__social { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
 .cnt-sitefooter__social a { display: inline-flex; align-items: center; justify-content: center; color: #fff; transition: opacity var(--dur-base) var(--ease-standard); }
 .cnt-sitefooter__social a:hover { opacity: 0.7; }
+.cnt-sitefooter__social a[aria-label="ISO 27001"] { order: 2; flex-basis: 100%; margin-top: 8px; }
+.cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 62px !important; width: auto !important; }
 .cnt-sitefooter__col { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
 .cnt-sitefooter__col h4 { font-size: 12px; letter-spacing: var(--ls-overline); text-transform: uppercase; color: var(--c-innovation-blue); margin: 0 0 8px; font-weight: 700; }
 .cnt-sitefooter__col a { color: rgba(255,255,255,0.78); font-size: 14px; transition: color 200ms var(--ease-standard); }
