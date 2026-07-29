@@ -107,9 +107,9 @@
     .imp-left h2 { margin: 0; font-size: clamp(32px,3.2vw,46px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; color: #052975; }
     .imp-left > p { margin: 20px 0 0; font-size: 17px; line-height: 1.65; color: #0a1838; max-width: 34rem; }
     .imp-stats { margin-top: clamp(26px,3vw,40px); }
-    .imp-stat { display: grid; grid-template-columns: minmax(120px,36%) 1fr; gap: 6px 22px; align-items: center; padding: 20px 0; border-top: 1px solid #dde3ee; }
+    .imp-stat { display: grid; grid-template-columns: minmax(150px,44%) 1fr; gap: 6px 20px; align-items: center; padding: 20px 0; border-top: 1px solid #dde3ee; }
     .imp-stat:last-child { border-bottom: 1px solid #dde3ee; }
-    .imp-stat__num { font-size: clamp(30px,2.9vw,44px); font-weight: 700; line-height: 0.95; letter-spacing: -0.02em; color: #052975; font-variant-numeric: tabular-nums; }
+    .imp-stat__num { font-size: clamp(36px,3.6vw,56px); font-weight: 700; line-height: 0.95; letter-spacing: -0.025em; color: #052975; font-variant-numeric: tabular-nums; }
     .imp-stat__txt b { display: block; font-size: 15.5px; font-weight: 700; color: #0a1838; }
     .imp-stat__txt span { display: block; margin-top: 5px; font-size: 13.5px; line-height: 1.5; color: #0a1838; }
 
@@ -117,7 +117,7 @@
     .imp-sq { position: absolute; top: 0; left: 0; width: 64%; aspect-ratio: 1 / 1; will-change: transform; }
     .imp-sq--a { animation: impSwapA 40s cubic-bezier(0.65,0,0.35,1) infinite; }
     .imp-sq--b { animation: impSwapB 40s cubic-bezier(0.65,0,0.35,1) infinite; }
-    .imp-card { width: 100%; height: 100%; border-radius: 16px; overflow: hidden; border: 2px solid var(--c-innovation-blue,#8ff8ff); box-shadow: 0 30px 64px rgba(3,15,48,0.30), 0 8px 20px rgba(3,15,48,0.14); animation: impRise 0.9s cubic-bezier(0.16,1,0.3,1) both; will-change: transform, opacity; }
+    .imp-card { width: 100%; height: 100%; border-radius: 16px; overflow: hidden; border: 3px solid var(--c-tech-blue,#052975); box-shadow: 0 12px 30px rgba(3,15,48,0.14), 0 3px 10px rgba(3,15,48,0.08); animation: impRise 0.9s cubic-bezier(0.16,1,0.3,1) both; will-change: transform, opacity; }
     .imp-sq--a .imp-card { animation-delay: 0.08s; }
     .imp-sq--b .imp-card { animation-delay: 0.22s; }
     .imp-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -206,8 +206,6 @@
 
 <!-- ============ HERO (centered, big mockup below) ============ -->
 <section id="top" data-screen-label="Hero" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#def5ff 130%)">
-  <div aria-hidden="true" style="position:absolute;right:-160px;top:-220px;width:560px;height:560px;background:rgba(143,248,255,0.22);border-bottom-left-radius:100%;pointer-events:none"></div>
-  <div aria-hidden="true" style="position:absolute;left:-200px;bottom:-260px;width:620px;height:620px;background:rgba(5,41,117,0.05);border-top-right-radius:100%;pointer-events:none"></div>
   <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:58px 32px 0;text-align:center">
     <div style="display:inline-flex;align-items:center;font-size:14.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#052975">It's about time</div>
     <h1 class="hero-h1" style="margin:22px auto 0;max-width:980px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can automate it.</h1>
@@ -216,7 +214,7 @@
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="#cta" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="#how" hint-size="170px,48px">See how it works</x-import>
     </div>
-    <div class="hero-proof" style="display:flex;justify-content:center;flex-wrap:wrap;gap:34px;margin-top:30px;font-size:16px;font-weight:700;color:#0a1838">
+    <div class="hero-proof" style="display:flex;justify-content:center;flex-wrap:wrap;gap:34px;margin-top:30px;font-size:16px;font-weight:700;color:#052975">
       <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#5f9e8d;font-size:20px"></i> 30+ years of experience</span>
       <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#5f9e8d;font-size:20px"></i> 21,000+ customers</span>
       <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#5f9e8d;font-size:20px"></i> Quick setup from AppSource</span>
@@ -257,7 +255,7 @@
 <!-- ============ TRUST MARQUEE ============ -->
 <section data-screen-label="Trusted by" style="background:#052975">
   <div style="max-width:1240px;margin:0 auto;padding:30px 32px;display:flex;align-items:center;gap:36px">
-    <span style="flex:none;font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);white-space:nowrap">Trusted by <span style="color:#8ff8ff;font-weight:700">21,000+</span> companies:</span>
+    <span style="flex:none;font-size:16px;font-weight:600;color:rgba(255,255,255,0.72);white-space:nowrap">Trusted by <span style="color:#8ff8ff;font-weight:700">21,000+</span> companies:</span>
     <div style="flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)">
       <div id="cnt-marquee" style="display:flex;align-items:center;gap:64px;width:max-content;animation:cnt-marquee 38s linear infinite">
         <sc-for list="{{ trustLoop }}" as="brand" hint-placeholder-count="10">
