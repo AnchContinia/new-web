@@ -198,7 +198,7 @@
 const BASE = "https://www.continia.com/use-cases/";
 const DC = "Document Capture", CB = "Banking", EM = "Expense Management", DO = "Document Output", CF = "Finance";
 const DATA = [
-  { title: "Simplify payments and accelerate your cash flow", slug: "simplify-payments-and-accelerate-your-cash-flow", icon: "fa-money-bill-transfer", tags: [CB], desc: "Set up outgoing payments in seconds and keep money moving — directly from Business Central." },
+  { title: "Simplify payments and accelerate your cash flow", slug: "simplify-payments-and-accelerate-your-cash-flow", local: "simplify-payments-and-accelerate-your-cash-flow/", icon: "fa-money-bill-transfer", tags: [CB], desc: "Set up outgoing payments in seconds and keep money moving — directly from Business Central." },
   { title: "Enhance your cash flow with streamlined factoring", slug: "enhance-your-cash-flow-with-streamlined-factoring", icon: "fa-file-invoice-dollar", tags: [CF], desc: "Hand invoices to your factoring provider automatically and get paid sooner." },
   { title: "Exchange your e-documents securely", slug: "exchange-your-e-documents-securely", icon: "fa-file-shield", tags: [DC, DO], desc: "Send and receive e-invoices through a secure network — no email, no manual uploads." },
   { title: "Save time with automatic three-way matching", slug: "elevate-ap-efficiency-with-automatic-three-way-matching", icon: "fa-scale-balanced", tags: [DC], desc: "Match invoices, orders, and receipts automatically, so you only review the exceptions." },
@@ -272,7 +272,7 @@ class Component extends DCLogic {
     const filtered = all.filter(matches);
     const deco = (uc, i) => ({
       title: uc.title, desc: uc.desc, icon: uc.icon,
-      href: BASE + uc.slug + "/",
+      href: uc.local ? uc.local : BASE + uc.slug + "/",
       tagLabel: uc.tags.join(" · "),
       delay: Math.min(i * 35, 420) + "ms",
     });
