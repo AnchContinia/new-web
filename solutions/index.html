@@ -43,7 +43,7 @@
       .sol-dc-feat { grid-template-columns: 1fr !important; }
     }
     /* Products grid: 5 balanced (3+2 centered), expands to 4+4 */
-    .sol-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+    .sol-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: clamp(44px, 5vw, 64px); }
     .sol-grid > * { display: contents; }
     .sol-grid > * > * { flex: 0 1 var(--cw, calc(33.333% - 14px)); max-width: var(--cw, calc(33.333% - 14px)); min-width: 288px; box-sizing: border-box; }
     @media (max-width: 980px) { .sol-grid > * > * { flex-basis: calc(50% - 10px); max-width: calc(50% - 10px); } }
@@ -64,10 +64,10 @@
     .testi-card--duo { padding: 32px 34px; border-radius: 20px; height: 100%; box-sizing: border-box; }
     .testi-card--duo .testi-card__q { font-size: 15.5px; }
     .testi-card--duo .testi-card__who { margin-top: auto; padding-top: 22px; }
-    .testi-duo-page { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .testi-duo-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 900px; margin: 0 auto; }
     @media (max-width: 720px) {
       .testi-card { padding: 32px 28px; }
-      .testi-duo-page { grid-template-columns: 1fr; }
+      .testi-duo-inner { grid-template-columns: 1fr; max-width: 460px; }
     }
   </style>
 </helmet>
@@ -82,13 +82,13 @@
         <h1 style="font-size: clamp(40px, 22px + 2.6vw, 62px); line-height: 1.05; letter-spacing: -0.02em; font-weight: 700; color: #052975; margin: 24px 0 0; text-wrap: balance">Find your Continia<br>automation product</h1>
         <p style="font-size: 19px; line-height: 1.6; color: #3a4a6b; max-width: 48ch; margin: 20px 0 0">Discover how to streamline your financial processes with finance automation products for Business Central.</p>
         <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px">
-          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="md" href="#solutions" dc-props="{{ btnArrow }}" hint-size="200px,46px">Explore products</x-import>
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="md" variant="purple" href="#solutions" dc-props="{{ btnArrow }}" hint-size="200px,46px">Explore products</x-import>
           <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="md" variant="secondary" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia&amp;page=1" hint-size="160px,46px">Get a free trial</x-import>
         </div>
         <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 32px">
-          <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #2a4989"><i class="fa-light fa-circle-check" style="color: #5f9e8d; font-size: 17px"></i>Automated accounts payable and accounts receivable</div>
-          <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #2a4989"><i class="fa-light fa-circle-check" style="color: #5f9e8d; font-size: 17px"></i>Simplified travel expense management</div>
-          <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #2a4989"><i class="fa-light fa-circle-check" style="color: #5f9e8d; font-size: 17px"></i>Save time on payment processes and reconciliations</div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: #5f9e8d"><i class="fa-light fa-circle-check" style="color: #5f9e8d; font-size: 18px"></i>Automated accounts payable and accounts receivable</div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: #5f9e8d"><i class="fa-light fa-circle-check" style="color: #5f9e8d; font-size: 18px"></i>Simplified travel expense management</div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: #5f9e8d"><i class="fa-light fa-circle-check" style="color: #5f9e8d; font-size: 18px"></i>Save time on payment processes and reconciliations</div>
         </div>
       </div>
 
@@ -234,19 +234,21 @@
         <div style="overflow: hidden">
           <div style="{{ tDuoTrackStyle }}">
             <sc-for list="{{ tPages }}" as="pg" hint-placeholder-count="3">
-              <div class="testi-duo-page" style="flex: none; width: 100%; min-width: 100%; box-sizing: border-box; padding: 8px 4px">
-                <div class="testi-card testi-card--duo">
-                  <p class="testi-card__q">“{{ pg.a.q }}”</p>
-                  <div class="testi-card__who">
-                    <span class="testi-av">{{ pg.a.ini }}</span>
-                    <span style="display:flex;flex-direction:column;gap:1px"><span class="testi-name">{{ pg.a.name }}</span><span class="testi-role">{{ pg.a.role }}</span></span>
+              <div style="flex: none; width: 100%; min-width: 100%; box-sizing: border-box; padding: 8px 4px">
+                <div class="testi-duo-inner">
+                  <div class="testi-card testi-card--duo">
+                    <p class="testi-card__q">“{{ pg.a.q }}”</p>
+                    <div class="testi-card__who">
+                      <span class="testi-av">{{ pg.a.ini }}</span>
+                      <span style="display:flex;flex-direction:column;gap:1px"><span class="testi-name">{{ pg.a.name }}</span><span class="testi-role">{{ pg.a.role }}</span></span>
+                    </div>
                   </div>
-                </div>
-                <div class="testi-card testi-card--duo">
-                  <p class="testi-card__q">“{{ pg.b.q }}”</p>
-                  <div class="testi-card__who">
-                    <span class="testi-av">{{ pg.b.ini }}</span>
-                    <span style="display:flex;flex-direction:column;gap:1px"><span class="testi-name">{{ pg.b.name }}</span><span class="testi-role">{{ pg.b.role }}</span></span>
+                  <div class="testi-card testi-card--duo">
+                    <p class="testi-card__q">“{{ pg.b.q }}”</p>
+                    <div class="testi-card__who">
+                      <span class="testi-av">{{ pg.b.ini }}</span>
+                      <span style="display:flex;flex-direction:column;gap:1px"><span class="testi-name">{{ pg.b.name }}</span><span class="testi-role">{{ pg.b.role }}</span></span>
+                    </div>
                   </div>
                 </div>
               </div>
