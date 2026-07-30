@@ -1395,7 +1395,7 @@ const CONTINIA_LINKS = {
   social: [{
     label: "ISO 27001",
     svg: "assets/social/iso-27001.png",
-    size: 30,
+    size: 100,
     href: "https://www.continia.com/trust-center/"
   }, {
     label: "LinkedIn",
@@ -1432,7 +1432,7 @@ const CSS = `
 .cnt-sitefooter__social a { display: inline-flex; align-items: center; justify-content: center; color: #fff; transition: opacity var(--dur-base) var(--ease-standard); }
 .cnt-sitefooter__social a:hover { opacity: 0.7; }
 .cnt-sitefooter__social a[aria-label="ISO 27001"] { order: 2; flex-basis: 100%; margin-top: 8px; }
-.cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 62px !important; width: auto !important; }
+.cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 100px !important; width: auto !important; }
 .cnt-sitefooter__col { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
 .cnt-sitefooter__col h4 { font-size: 12px; letter-spacing: var(--ls-overline); text-transform: uppercase; color: var(--c-innovation-blue); margin: 0 0 8px; font-weight: 700; }
 .cnt-sitefooter__col a { color: rgba(255,255,255,0.78); font-size: 14px; transition: color 200ms var(--ease-standard); }
