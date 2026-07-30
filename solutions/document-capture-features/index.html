@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document Capture feature overview — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
+  * { box-sizing: border-box; }
+
+  .fo-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(56px,7vw,88px) clamp(20px,4vw,44px) clamp(48px,6vw,72px); }
+  .fo-hero__inner { max-width: 1240px; margin: 0 auto; }
+  .fo-back { display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; font-weight: 600; color: var(--c-innovation-blue); text-decoration: none; }
+  .fo-back:hover { text-decoration: underline; }
+  .fo-hero h1 { margin: 18px 0 0; font-size: clamp(34px,4vw,56px); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; }
+  .fo-hero h1 .hl { color: var(--c-innovation-blue); }
+  .fo-hero p { margin: 20px 0 0; max-width: 62ch; font-size: 1.125rem; line-height: 1.62; color: rgba(255,255,255,0.84); }
+  .fo-hero__meta { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 26px; font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .fo-hero__meta b { color: var(--c-innovation-blue); font-size: 17px; }
+
+  /* sticky module nav */
+  .fo-nav { position: sticky; top: 64px; z-index: 40; background: rgba(255,255,255,0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid #e6ebf5; }
+  .fo-nav__inner { max-width: 1240px; margin: 0 auto; padding: 12px clamp(20px,4vw,44px); display: flex; flex-wrap: wrap; gap: 8px; }
+  .fo-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 999px; border: 1px solid #dbe3f0; font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; background: #fff; transition: background 180ms, border-color 180ms, transform 180ms; }
+  .fo-nav a:hover { background: var(--c-light-blue); border-color: #b9cdec; transform: translateY(-1px); }
+  .fo-nav a span { font-size: 12px; font-weight: 700; color: #7b8bab; }
+
+  .fo-wrap { max-width: 1240px; margin: 0 auto; padding: clamp(48px,6vw,80px) clamp(20px,4vw,44px) clamp(56px,7vw,96px); }
+  .fo-mod { scroll-margin-top: 132px; }
+  .fo-mod + .fo-mod { margin-top: clamp(48px,6vw,76px); }
+  .fo-mod__head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 2px solid var(--c-light-blue); }
+  .fo-mod__head h2 { margin: 0; font-size: clamp(26px,2.4vw,34px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); }
+  .fo-mod__count { flex: none; font-size: 13px; font-weight: 700; color: #52678f; background: var(--c-light-blue); border-radius: 999px; padding: 4px 11px; }
+  .fo-mod__sum { margin: 16px 0 0; font-size: 1.0625rem; line-height: 1.6; color: var(--color-text-muted); max-width: 74ch; }
+
+  .fo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 28px; }
+  .fo-item { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 22px 22px 24px; transition: transform 220ms, box-shadow 220ms, border-color 220ms; }
+  .fo-item:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(5,41,117,0.10); border-color: #cdd9ef; }
+  .fo-item h3 { margin: 0; display: flex; gap: 10px; font-size: 16.5px; font-weight: 700; line-height: 1.35; color: var(--c-tech-blue); letter-spacing: -0.005em; }
+  .fo-item h3 i { flex: none; margin-top: 2px; font-size: 15px; color: #5f9e8d; }
+  .fo-item p { margin: 10px 0 0 25px; font-size: 14.5px; line-height: 1.6; color: var(--color-text-muted); }
+
+  .fo-note { margin: 0 0 34px; padding: 16px 20px; border-left: 3px solid #5f9e8d; background: #f4faf8; border-radius: 0 10px 10px 0; font-size: 15px; line-height: 1.6; color: #3a4a6b; }
+
+  @media (max-width: 980px) { .fo-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 620px) {
+    .fo-grid { grid-template-columns: 1fr; }
+    .fo-nav__inner { padding: 10px 20px; gap: 7px; }
+    .fo-nav a { padding: 7px 13px; font-size: 13.5px; }
+  }
+</style>
+</helmet>
+<div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Products" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO ============ -->
+<section class="fo-hero" data-screen-label="Hero">
+  <div class="fo-hero__inner">
+    <a class="fo-back" href="../document-capture/"><i class="fa-light fa-arrow-left"></i>Back to Document Capture</a>
+    <h1>Document Capture<br><span class="hl">feature overview</span></h1>
+    <p>Every Document Capture capability, module by module — from intelligent OCR and order matching to approval workflows and purchase contracts.</p>
+    <div class="fo-hero__meta">
+      <span><b>87</b> features</span>
+      <span><b>5</b> modules</span>
+      <span>100% built inside Business Central</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE NAV ============ -->
+<nav class="fo-nav" aria-label="Modules">
+  <div class="fo-nav__inner">
+      <a href="#essential">Essential <span>35</span></a>
+      <a href="#advanced-capture">Advanced Capture <span>13</span></a>
+      <a href="#order-matching">Order Matching <span>11</span></a>
+      <a href="#document-approval">Document Approval <span>20</span></a>
+      <a href="#purchase-contracts">Purchase Contracts <span>8</span></a>
+  </div>
+</nav>
+
+<!-- ============ MODULES ============ -->
+<div class="fo-wrap">
+    <section class="fo-mod" id="essential">
+      <div class="fo-mod__head">
+        <h2>Essential</h2>
+        <span class="fo-mod__count">35 features</span>
+      </div>
+      <p class="fo-mod__sum">Handle all your purchase invoices and credit memos as PDF or XML files using intelligent OCR technology.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Automated setup &amp; configuration</h3>
+          <p>Benefit from a quick and easy setup as everything is installed with a standard configuration when you start.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>OCR recognition</h3>
+          <p>Recognize header information using OCR, such as invoice number, invoice date, due date, total amounts etc.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Batch processing and registration</h3>
+          <p>Register invoices and credit memos either one-by-one or register all in one go.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Fraud check</h3>
+          <p>Avoid fraud by validating any alterations of previously captured data, such as bank account information or phone numbers on incoming documents.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Create invoices and credit memos</h3>
+          <p>Create purchase invoices and credit memos from OCR-recognized PDF-documents.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Handles all XML formats</h3>
+          <p>The solution comes with out of the box formats, PEPPOL BIS 3, OIOUBL, OIOXML, UBL, EHF, SVEFAKTURA, EBINTERFACE, XRECHNUNG, ZuGFerd, Finvoice, PINT Billing, PINT A-NZ Billing, SimplerInvoicing, and UTS.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Continia Delivery Network</h3>
+          <p>Optimize your purchase-to-pay process by effortlessly receiving and processing your electronic documents in compliance with European and local laws.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Continia eDocuments</h3>
+          <p>Manage and exchange your eBilling and eOrder documents directly from Business Central, e.g., receive purchase orders updates from your suppliers and swiftly respond directly through the Continia Delivery Network.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Auto-send eDocuments</h3>
+          <p>Automatically send eDocuments when actions like posting or releasing are performed, streamlining your workflow.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Self-billing in eDocuments</h3>
+          <p>Issue invoices and credit memos on behalf of your vendors in Continia eDocuments to cut admin work and speed up payment cycles.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Easy e-partner onboarding for eDocuments</h3>
+          <p>Quickly set up e-document exchange with customers and vendors. With e-partner onboarding (also known as Peppol First), you can instantly see which partners are ready to connect.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Embed PDF files in e-documents</h3>
+          <p>Automatically attach and send a human-readable PDF with each XML e-document to your customers and vendors. This feature applies to all supported formats, including orders, so partners always get a consistent version they can use—w…</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>View embedded PDF files</h3>
+          <p>Save time finding PDFs embedded in XML documents by having them displayed by default in the document viewer.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Dedicated email addresses</h3>
+          <p>Receive PDF and XML documents attached to e-mails with dedicated e-mail addresses provided by Continia.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Manual split and merge</h3>
+          <p>Split a group of invoices from a single PDF-document into multiple invoices.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Configurable templates and fields</h3>
+          <p>Set up custom fields to recognize from invoices and credit memos, such as dimension codes.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Notification of remaining OCR pages</h3>
+          <p>Users receive notifications when nearing the monthly OCR page quota. Thresholds can be customized.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Notify admins about open documents</h3>
+          <p>Admins are alerted earlier in the process about unregistered documents.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Split amounts by dimension</h3>
+          <p>Save time with less hassle by splitting document amounts into multiple lines according to dimensions while keeping the existing account number for all created lines.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Create G/L lines without vendor account</h3>
+          <p>Create general journal lines and increase flexibility with small purchases by selecting a bank or G/L balancing account.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Drag-and-drop</h3>
+          <p>Drag-and-drop any file attached to an invoice, credit memo or vendor.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Full document archive</h3>
+          <p>Find and see the original PDF and XML document of an invoice in seconds by using the standard built-in Navigate-functionality.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Export documents (for audits)</h3>
+          <p>Export documents (for auditing purposes).</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Apply deferral codes</h3>
+          <p>Save time by automatically having deferral codes applied to incoming purchase documents.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Check dimensions in registration</h3>
+          <p>Streamline your workflow by checking document dimensions during registration so you can avoid correcting or adding missing dimensions later.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Dynamic columns in the document journal</h3>
+          <p>Add multiple customizable columns to the document list, which can be sorted and filtered in various ways, in the document journal.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Secure Archive</h3>
+          <p>Securely store digital bookkeeping documents in their original form. Includes registration of documents to purchase journals.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Purchase order auto-archiving</h3>
+          <p>Automatically archive purchase orders when vendor updates are registered, enabling tracking of changes and access to previous versions.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Multi Entity Management</h3>
+          <p>Support for Multi Entity Management (MEM) by Binary Stream Software.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>GDPR compliant</h3>
+          <p>Ensure GDPR compliance with automated cleanup processes. Easily purge captured words, generated values, and entire records, based on document status and age, maintaining privacy and data integrity.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Duplicate transaction checking</h3>
+          <p>Automatically detect duplicate transactions in Expense Management for incoming invoices and receive a warning in the Comments section.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Create vendors/customers from PDFs and XMLs</h3>
+          <p>Save time on setup by creating vendors, customers, or customer ship-to addresses directly from PDF or XML documents.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Auto-process documents with VAT rounding issues</h3>
+          <p>Save time on manual corrections when small VAT discrepancies occur. Simply set your allowed difference limits, and invoices will be adjusted automatically — keeping your workflow smooth and uninterrupted.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Azure Blob storage authentication</h3>
+          <p>Secure your Azure-stored documents with flexible authentication options. Choose between Microsoft Entra ID, Shared Access Signatures (SAS), or Shared Key directly in the Document Capture Setup.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Continia Hub</h3>
+          <p>Access a central in-app assistance hub designed for convenience and user feedback.</p>
+        </div>
+      </div>
+    </section>
+    <section class="fo-mod" id="advanced-capture">
+      <div class="fo-mod__head">
+        <h2>Advanced Capture</h2>
+        <span class="fo-mod__count">13 features</span>
+      </div>
+      <p class="fo-mod__sum">Automatically capture and process your incoming documents with intelligent OCR.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>AI-enhanced line recognition</h3>
+          <p>Accurately recognize lines on an invoice or credit memo through AI-enhanced data capture and transfer them to purchase lines.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>AI-assisted sales document processing</h3>
+          <p>AI-driven data capture speeds up sales document processing by auto-filling fields and enabling quick customer creation.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Auto-check line item prices</h3>
+          <p>Document Capture automatically checks line items for you, making it faster and easier for you to process incoming invoices with no corresponding purchase orders.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Automatic line calculation</h3>
+          <p>Intelligent OCR automatically calculates missing fields, such as unit cost, quantity, and line amount, with configurable calculation alerts.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Automated split and merge</h3>
+          <p>Automatically split a group of invoices in a single PDF-document into multiple invoices or credit memos.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Assign item charges</h3>
+          <p>Save time and effort by having Document Capture automatically assign item charges during document registration according to the method (e.g., quantity, weight, etc.) you&#x27;ve defined in the relevant template.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Capture item tracking information</h3>
+          <p>Automatically capture and register lot numbers, serial numbers, and expiration dates from purchase documents—ensuring accurate tracking and better supply chain visibility.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Company identification</h3>
+          <p>Receive all documents with one e-mail address and have them automatically distributed to the right companies.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Create &amp; update purchase orders</h3>
+          <p>Reduce manual typing and eliminate errors by automatically creating and updating your purchase orders based on order confirmations sent by your vendor.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Prepayments</h3>
+          <p>Easily manage advance payments required by vendors for goods and services. Document Capture automatically posts documents as prepayment invoices when identified or marked as prepayments, linking them to an associated purchase orde…</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Process all document types</h3>
+          <p>Create and OCR-process other document types, such as sales orders, contracts, delivery notes, purchase receipts, attaching files to vendors, customers, and employees, etc.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Update purchase order receipts</h3>
+          <p>Update and post purchase order receipt quantities based on the supplier&#x27;s delivery notes to automate the receiving process.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Add or capture comment lines</h3>
+          <p>Capture or add text-only lines from documents and map them as comment lines, either automatically or manually.</p>
+        </div>
+      </div>
+    </section>
+    <section class="fo-mod" id="order-matching">
+      <div class="fo-mod__head">
+        <h2>Order Matching</h2>
+        <span class="fo-mod__count">11 features</span>
+      </div>
+      <p class="fo-mod__sum">Match purchase invoices to existing orders, posted receipts, return orders, and posted return shipments.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Automated matching</h3>
+          <p>Automatically match invoices and credit memos to existing purchase orders, receipts, return orders, or shipments, with precise 1:1 matching ensured by eDocuments data for greater accuracy.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Matching on totals</h3>
+          <p>Match invoices either by order number and total amount with the corresponding purchase order or posted receipt.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Matching line-by-line</h3>
+          <p>Match by using vendor item number, quantity, unit price, and line amount to find corresponding purchase order lines or posted receipt lines. Please note that this functionality requires the Advanced Capture feature module.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Match across units of measure</h3>
+          <p>Easily reconcile invoice and purchase order lines with the same total amount, even when unit of measure and unit costs differ.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Matching overview</h3>
+          <p>Get a clear overview of matched, unmatched, partially matched documents.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Add and split order line</h3>
+          <p>Add new lines or split existing order lines directly from the matching page during the purchase order matching process.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Variance handling</h3>
+          <p>Configure the purchase order/receipt match to allow unit price variance on the invoice line.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Serial number match</h3>
+          <p>Assign the invoice lines to the lot/serial numbers during matching.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Multi-document match</h3>
+          <p>One invoice can be matched to multiple receipts or orders, match one-to-many, or many-to-one.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Vendor shipment &amp; order number match</h3>
+          <p>Increase your matching accuracy when matching incoming invoices using increased line details.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Highlight purchase order changes</h3>
+          <p>Easily spot updates to purchase orders by highlighting changes in price, cost, or delivery date on a dedicated matching page.</p>
+        </div>
+      </div>
+    </section>
+    <section class="fo-mod" id="document-approval">
+      <div class="fo-mod__head">
+        <h2>Document Approval</h2>
+        <span class="fo-mod__count">20 features</span>
+      </div>
+      <p class="fo-mod__sum">Add a wide range of functionalities necessary to handle an end-to-end approval workflow.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Web Approval Portal</h3>
+          <p>Enables all employees with no direct access to Continia Document Capture 365 to gain the same opportunities to approve invoices and other documents.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Approve purchase &amp; return orders</h3>
+          <p>Approve your purchase and return orders quickly with all existing Continia workflow features, including the Web Approval Portal.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Automated approval</h3>
+          <p>Configure automatic approval of invoices and credit memos if amounts are within predefined thresholds (requires Order Matching module).</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Approval flows</h3>
+          <p>Set up an unlimited number of approval flows, and assign them to individual invoices, or all invoices from specific vendors.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Approval sharing</h3>
+          <p>Use approval sharing to share the approval of one person to another, or set it up to allow a manager to see all approvals within their department.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Notify approval-sharing users</h3>
+          <p>Notifications are sent to both the sharing (owner) and shared-to (substitute) users at the same time.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Four-eyes approval</h3>
+          <p>Configure a threshold that triggers four-eyes approval for all invoices exceeding that threshold.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Forcing approval</h3>
+          <p>Allow a superuser to force the approval of invoices and credit memos if company policies allow it.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Documents on hold</h3>
+          <p>Put an invoice or credit memos on hold to show that it has been reviewed, but not ready to be approved.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>User-specific approver list</h3>
+          <p>Narrow down the number of available approvers per user to make forwarding documents easier than ever.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Notify approvers via email</h3>
+          <p>Email notifications, including an overview containing key information, are automatically or manually sent to approvers when a document that needs approval.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Out of office</h3>
+          <p>Set up a substitute to handle approvals of an approver, when he or she is out of office for a longer period.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Forwarding documents</h3>
+          <p>Allows an approver to forward invoices or credit memos manually to a specific user.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Validation</h3>
+          <p>Ensures that the sum of all purchase lines matches the total amount on the received purchase invoice or credit memo.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Permissions</h3>
+          <p>Allows you to enforce company policies of who can approve on which accounts and dimensions.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Full audit trails</h3>
+          <p>During the approval process each version of a purchase invoice or credit memo is logged, so you can always go back in time and see who approved what and when.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Purchase allocations</h3>
+          <p>Ability to have the total amounts posted to the general ledger when an invoice or credit memo is out for approval.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Intercompany purchases</h3>
+          <p>Specify intercompany-related information in purchase document fields during the approval process.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Cross-company approval dashboard</h3>
+          <p>Simplify your approvals in the Web Approval Portal with a unified dashboard view.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Highlight relevant lines</h3>
+          <p>Highlight only the relevant lines for advanced approval in the Web Approval Portal, ensuring approvers can easily identify and focus on specific lines for review.</p>
+        </div>
+      </div>
+    </section>
+    <section class="fo-mod" id="purchase-contracts">
+      <div class="fo-mod__head">
+        <h2>Purchase Contracts</h2>
+        <span class="fo-mod__count">8 features</span>
+      </div>
+      <p class="fo-mod__sum">Get an overview of and manage all your purchase contracts.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Manage recurring costs from one place</h3>
+          <p>Centralized management and storage of all purchase contracts, subscriptions, and other recurring costs.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Register invoice as contract invoice</h3>
+          <p>Create subscriptions and contracts with all relevant information, such as supplier details, prices, start and end dates, and detailed contract lines, or create contracts and subscriptions directly from a recurring invoice.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Approve contracts</h3>
+          <p>Easily approve your contracts and subscriptions via the intuitive interface in Business Central and the Continia Web Approval Portal.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Auto-approve recurring invoices</h3>
+          <p>Recurring invoices attached to existing contracts can be set up for automatic approval when the amount is below a predefined allowable limit.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Easy overview of renewal dates</h3>
+          <p>Easily get an overview of the contracts and subscriptions that need to be reviewed and renewed. Moreover, you can automatically start the review process at regular intervals, depending on your needs.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Email notifications for approvals</h3>
+          <p>When it&#x27;s time to review the contracts and subscriptions, an email notification is sent to the relevant employees reminding them about the approval.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>History and statistics right at hand</h3>
+          <p>You&#x27;ll get access to a comprehensive archive containing all documents and files related to your contracts and subscriptions.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Purchase Contract Intelligence</h3>
+          <p>The system detects patterns in recurring invoices and suggests contract creation.</p>
+        </div>
+      </div>
+    </section>
+</div>
+
+<!-- ============ FINAL CTA ============ -->
+<section data-screen-label="Free trial CTA" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%);">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div style="max-width: 820px; margin: 0 auto; padding: 100px 32px; text-align: center; position: relative;">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Microsoft AppSource</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">Try Document Capture free for 30 days</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">Download from Microsoft Marketplace, follow the set-up, and get started in less than 15 minutes.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="220px,52px">Download free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../document-capture/" hint-size="200px,52px">Back to Document Capture</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</div>
+</x-dc>
+</body>
+</html>

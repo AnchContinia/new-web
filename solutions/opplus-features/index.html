@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPplus feature overview — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
+  * { box-sizing: border-box; }
+
+  .fo-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(56px,7vw,88px) clamp(20px,4vw,44px) clamp(48px,6vw,72px); }
+  .fo-hero__inner { max-width: 1240px; margin: 0 auto; }
+  .fo-back { display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; font-weight: 600; color: var(--c-innovation-blue); text-decoration: none; }
+  .fo-back:hover { text-decoration: underline; }
+  .fo-hero h1 { margin: 18px 0 0; font-size: clamp(34px,4vw,56px); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; }
+  .fo-hero h1 .hl { color: var(--c-innovation-blue); }
+  .fo-hero p { margin: 20px 0 0; max-width: 62ch; font-size: 1.125rem; line-height: 1.62; color: rgba(255,255,255,0.84); }
+  .fo-hero__meta { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 26px; font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .fo-hero__meta b { color: var(--c-innovation-blue); font-size: 17px; }
+
+  /* sticky module nav */
+  .fo-nav { position: sticky; top: 64px; z-index: 40; background: rgba(255,255,255,0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid #e6ebf5; }
+  .fo-nav__inner { max-width: 1240px; margin: 0 auto; padding: 12px clamp(20px,4vw,44px); display: flex; flex-wrap: wrap; gap: 8px; }
+  .fo-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 999px; border: 1px solid #dbe3f0; font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; background: #fff; transition: background 180ms, border-color 180ms, transform 180ms; }
+  .fo-nav a:hover { background: var(--c-light-blue); border-color: #b9cdec; transform: translateY(-1px); }
+  .fo-nav a span { font-size: 12px; font-weight: 700; color: #7b8bab; }
+
+  .fo-wrap { max-width: 1240px; margin: 0 auto; padding: clamp(48px,6vw,80px) clamp(20px,4vw,44px) clamp(56px,7vw,96px); }
+  .fo-mod { scroll-margin-top: 132px; }
+  .fo-mod + .fo-mod { margin-top: clamp(48px,6vw,76px); }
+  .fo-mod__head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 2px solid var(--c-light-blue); }
+  .fo-mod__head h2 { margin: 0; font-size: clamp(26px,2.4vw,34px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); }
+  .fo-mod__count { flex: none; font-size: 13px; font-weight: 700; color: #52678f; background: var(--c-light-blue); border-radius: 999px; padding: 4px 11px; }
+  .fo-mod__sum { margin: 16px 0 0; font-size: 1.0625rem; line-height: 1.6; color: var(--color-text-muted); max-width: 74ch; }
+
+  .fo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 28px; }
+  .fo-item { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 22px 22px 24px; transition: transform 220ms, box-shadow 220ms, border-color 220ms; }
+  .fo-item:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(5,41,117,0.10); border-color: #cdd9ef; }
+  .fo-item h3 { margin: 0; display: flex; gap: 10px; font-size: 16.5px; font-weight: 700; line-height: 1.35; color: var(--c-tech-blue); letter-spacing: -0.005em; }
+  .fo-item h3 i { flex: none; margin-top: 2px; font-size: 15px; color: #5f9e8d; }
+  .fo-item p { margin: 10px 0 0 25px; font-size: 14.5px; line-height: 1.6; color: var(--color-text-muted); }
+
+  .fo-note { margin: 0 0 34px; padding: 16px 20px; border-left: 3px solid #5f9e8d; background: #f4faf8; border-radius: 0 10px 10px 0; font-size: 15px; line-height: 1.6; color: #3a4a6b; }
+
+  @media (max-width: 980px) { .fo-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 620px) {
+    .fo-grid { grid-template-columns: 1fr; }
+    .fo-nav__inner { padding: 10px 20px; gap: 7px; }
+    .fo-nav a { padding: 7px 13px; font-size: 13.5px; }
+  }
+</style>
+</helmet>
+<div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Products" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO ============ -->
+<section class="fo-hero" data-screen-label="Hero">
+  <div class="fo-hero__inner">
+    <a class="fo-back" href="../opplus/"><i class="fa-light fa-arrow-left"></i>Back to OPplus</a>
+    <h1>OPplus<br><span class="hl">feature overview</span></h1>
+    <p>Every OPplus capability, module by module — payment import and export for the DACH region, plus eight additional modules.</p>
+    <div class="fo-hero__meta">
+      <span><b>24</b> features</span>
+      <span><b>3</b> modules</span>
+      <span>100% built inside Business Central</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODULE NAV ============ -->
+<nav class="fo-nav" aria-label="Modules">
+  <div class="fo-nav__inner">
+      <a href="#payment-import">Payment Import <span>8</span></a>
+      <a href="#payment-export">Payment Export <span>8</span></a>
+      <a href="#additional-modules">Additional modules <span>8</span></a>
+  </div>
+</nav>
+
+<!-- ============ MODULES ============ -->
+<div class="fo-wrap">
+    <section class="fo-mod" id="payment-import">
+      <div class="fo-mod__head">
+        <h2>Payment Import</h2>
+        <span class="fo-mod__count">8 features</span>
+      </div>
+      <p class="fo-mod__sum">Import statements and allocate open entries automatically.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Import your documents</h3>
+          <p>Automated import of bank account statements and payment advices.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Settle your open entries</h3>
+          <p>Automatic allocation of open entries with a hit-rate of up to 95%.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Payment provider integration</h3>
+          <p>Import bank statements with a single click: set up a payment provider to have your transactions directly in the system.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Flexible setup opportunities</h3>
+          <p>Flexible setup opportunities in general and with the help of accounting rules.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Import via CSV-ports</h3>
+          <p>Import via customizable CSV-ports, e.g. PayPal and Amazon Pay.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Returned debit processing</h3>
+          <p>Automatic processing of returned direct debits including opening the origin entries.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Extended settlement</h3>
+          <p>Easily perform manual settlements with extended settlements.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Partial payments</h3>
+          <p>Allocation of partial payments with payment discount, over- and under-payments, fees etc.</p>
+        </div>
+      </div>
+    </section>
+    <section class="fo-mod" id="payment-export">
+      <div class="fo-mod__head">
+        <h2>Payment Export</h2>
+        <span class="fo-mod__count">8 features</span>
+      </div>
+      <p class="fo-mod__sum">Payment proposals and files across formats in a single step.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Payment proposals</h3>
+          <p>Payment proposals across formats regardless of the direction, in a single step.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Payment file customization</h3>
+          <p>Individual set-up of payment files based on schemas for SEPA or ISO files, minimizing technical customizing costs.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Payments without posted entries</h3>
+          <p>Process payments even without posted entries.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Easy handling of SEPA direct debit mandates</h3>
+          <p>Manage your SEPA direct debit mandates in OPplus and keep track with a comprehensive log.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Payments from various customers/vendors</h3>
+          <p>Individual bank accounts at document level for payments of various customers or vendors.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Included standard reports</h3>
+          <p>Standard reports such as payment advices and payment lists are included in this module.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Individual possibilities to adjust payment proposals</h3>
+          <p>For example partial payments, payment discount, payment purposes and more.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Configurable international payment transactions</h3>
+          <p>In addition to German payment transactions, we offer further international payment transactions.</p>
+        </div>
+      </div>
+    </section>
+    <section class="fo-mod" id="additional-modules">
+      <div class="fo-mod__head">
+        <h2>Additional modules</h2>
+        <span class="fo-mod__count">8 features</span>
+      </div>
+      <p class="fo-mod__sum">Eight further modules for extended financial processes.</p>
+      <div class="fo-grid">
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>G/L Open Entries</h3>
+          <p>Create, manage and reconcile open entries on G/L accounts.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Extended Lists and Reports</h3>
+          <p>Access extended lists and reports across your financial data.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Associations</h3>
+          <p>Combine multiple customers or vendors into one entity.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Trial Balance and VAT</h3>
+          <p>Extended trial balance and VAT handling.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Installments</h3>
+          <p>Split invoices into installments for customers and vendors.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Extended Fixed Assets</h3>
+          <p>Manage assets with a comprehensive overview of status and lifecycles.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Multiple Payment Discount</h3>
+          <p>Apply multi-level payment discounts with flexible dates.</p>
+        </div>
+        <div class="fo-item">
+          <h3><i class="fa-light fa-circle-check"></i>Treasury</h3>
+          <p>Track payment-related information for multiple companies in a group.</p>
+        </div>
+      </div>
+    </section>
+</div>
+
+<!-- ============ FINAL CTA ============ -->
+<section data-screen-label="Free trial CTA" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%);">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div style="max-width: 820px; margin: 0 auto; padding: 100px 32px; text-align: center; position: relative;">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Microsoft AppSource</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">Try OPplus free for 30 days</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">Download from Microsoft Marketplace, follow the set-up, and get started in less than 15 minutes.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="220px,52px">Download free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../opplus/" hint-size="200px,52px">Back to OPplus</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</div>
+</x-dc>
+</body>
+</html>

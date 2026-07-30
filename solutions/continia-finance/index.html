@@ -24,11 +24,8 @@
   a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
   ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
   .dc-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px) clamp(80px,9vw,116px); }
-  .dc-hero::before { content: ""; position: absolute; right: -12%; top: -30%; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(143,248,255,0.22), transparent 62%); pointer-events: none; }
   .dc-hero__grid { position: relative; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
-  .dc-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; letter-spacing: normal; color: var(--c-innovation-blue); }
-  .dc-eyebrow i { font-size: 18px; }
-  .dc-hero h1 { margin: 20px 0 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
+  .dc-hero h1 { margin: 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
   .dc-hero h1 .hl { color: var(--c-innovation-blue); }
   .dc-hero p { margin: 22px 0 0; max-width: 40rem; font-size: 1.1875rem; line-height: 1.6; color: rgba(255,255,255,0.84); }
   .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
@@ -92,6 +89,18 @@
   .dc-cta h2 { margin: 0; font-size: clamp(34px,3.6vw,52px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; }
   .dc-cta p { margin: 20px auto 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.82); }
   .dc-cta__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+  /* ---------- feature-overview banner ---------- */
+  .dc-fo { margin-top: 44px; background: var(--c-light-blue); border-radius: 20px; padding: 28px clamp(22px,3vw,34px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 32px; }
+  .dc-fo__eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #52678f; }
+  .dc-fo h3 { margin: 8px 0 0; font-size: clamp(20px,1.9vw,25px); font-weight: 700; letter-spacing: -0.015em; color: var(--c-tech-blue); }
+  .dc-fo p { margin: 8px 0 0; font-size: 15px; line-height: 1.55; color: #3a4a6b; max-width: 46ch; }
+  .dc-fo__btns { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+  .dc-fo__btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 1px solid #b9cdec; background: #fff; font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; transition: background 180ms, border-color 180ms, transform 180ms; }
+  .dc-fo__btn:hover { background: #fff; border-color: var(--c-tech-blue); transform: translateY(-2px); }
+  .dc-fo__btn span { font-size: 12px; font-weight: 700; color: #7b8bab; }
+  .dc-fo__btn--all { background: #983eae; border-color: #983eae; color: #fff; }
+  .dc-fo__btn--all:hover { background: #872f9c; border-color: #872f9c; }
+  @media (max-width: 900px) { .dc-fo { flex-direction: column; align-items: flex-start; } }
   @media (max-width: 900px) {
     .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
     .dc-mock { justify-self: center; }
@@ -111,7 +120,6 @@
 <section class="dc-hero" data-screen-label="Hero">
   <div class="dc-hero__grid">
     <div>
-      <span class="dc-eyebrow"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i> Continia Finance</span>
       <h1>The finance work Business Central leaves out — <span class="hl">handled</span>.</h1>
       <p>Smart, modular add-ons that ease the everyday burden of core accounting — general ledger, fixed assets, open entries and treasury, all inside Business Central.</p>
       <div class="dc-hero__cta">
@@ -140,6 +148,20 @@
     <p>Pick the pieces you need — each one lives inside Business Central and works the way your team already does.</p>
   </div>
   <div class="dc-features"><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-book-open"></i></div><h3>General Ledger Tools</h3><p>Faster posting, allocations and period-end work.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-building"></i></div><h3>Fixed Assets</h3><p>Full asset lifecycle, depreciation and reporting.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-list"></i></div><h3>Open Entries</h3><p>Keep tight control of open items and follow-ups.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-vault"></i></div><h3>Treasury</h3><p>Cash and liquidity overview at a glance.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-diagram-project"></i></div><h3>Allocations</h3><p>Distribute costs automatically across dimensions.</p></div><div class="dc-feat"><div class="dc-feat__icon"><i class="fa-light fa-chart-line"></i></div><h3>Reporting</h3><p>Clear financial reporting without exports.</p></div></div>
+
+  <!-- feature-overview banner -->
+  <div class="dc-fo">
+    <div>
+      <span class="dc-fo__eye">Feature overview</span>
+      <h3>All 18 features, module by module</h3>
+      <p>Jump straight into the module you care about, or browse the complete Continia Finance feature list.</p>
+    </div>
+    <div class="dc-fo__btns">
+      <a class="dc-fo__btn" href="../continia-finance-features/#essential">Essential <span>10</span></a>
+      <a class="dc-fo__btn" href="../continia-finance-features/#add-on-modules">Add-on modules <span>8</span></a>
+      <a class="dc-fo__btn dc-fo__btn--all" href="../continia-finance-features/">See all features <i class="fa-light fa-arrow-right"></i></a>
+    </div>
+  </div>
 </section>
 
 <section class="dc-how" id="how" data-screen-label="How it works">
