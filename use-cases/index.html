@@ -23,6 +23,7 @@
     @keyframes ucRise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes ucFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
     @keyframes ucPhotoIn { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
+    @keyframes cntMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
     html, body { overflow-x: hidden; max-width: 100%; }
     /* ---------- Mobile makeover (<=820px) ---------- */
@@ -31,6 +32,10 @@
       .uc-float { display: none !important; }
       .uc-hero-media { min-height: 300px !important; }
       .uc-hero-img { inset: 0 !important; }
+      /* Trust marquee: stack the label above the logos so the marquee gets full width */
+      section[data-screen-label="Trusted by"] > div { flex-direction: column !important; align-items: flex-start !important; padding: 22px 20px !important; gap: 14px !important; }
+      section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
+      section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
     }
   </style>
 </helmet>
@@ -49,7 +54,6 @@
           <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="primary" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
           <a href="https://www.continia.com/partners/" style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; color: var(--c-tech-blue, #052975); text-decoration: none;" style-hover="text-decoration: underline;">Talk to a partner <i class="fa-light fa-arrow-right" style="font-size: 13px;"></i></a>
         </div>
-        <div style="font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; color: #5a6a92; text-transform: uppercase;">Trusted by <span style="color: var(--c-tech-blue, #052975); font-weight: 700;">21,000+</span> customers worldwide</div>
       </div>
       <div class="uc-hero-media" style="position: relative; min-height: 460px;">
         <div class="uc-hero-img" style="position: absolute; inset: 10px 0 26px 36px; border-radius: 15px; overflow: hidden; background: var(--c-tech-blue, #052975); border: 3px solid var(--c-tech-blue, #052975); box-shadow: 0 30px 70px rgba(2,12,40,0.14), 0 10px 26px rgba(2,12,40,0.08);">
@@ -96,11 +100,33 @@
       <div style="font-size: 18px; font-weight: 600; letter-spacing: normal; color: var(--c-innovation-blue, #8FF8FF); margin-bottom: 20px;">Use cases</div>
       <h1 style="margin: 0 0 22px; font-size: clamp(38px, 4.6vw, 62px); line-height: 1.06; font-weight: 700; color: #ffffff; letter-spacing: -0.01em; text-wrap: pretty;">Find the workflow<br>you'll automate first.</h1>
       <p style="margin: 0 0 26px; font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); max-width: 620px;">24 practical ways finance teams put Continia to work — from AP automation to fraud prevention, all inside Microsoft Dynamics 365 Business Central.</p>
-      <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.14em; color: rgba(255,255,255,0.68); text-transform: uppercase;">Trusted by <span style="color: var(--c-innovation-blue, #8FF8FF); font-weight: 700; text-shadow: 0 0 18px rgba(143,248,255,0.5);">21,000+</span> customers worldwide</div>
     </div>
   </div>
 </section>
 </sc-if>
+
+<!-- ============ TRUST MARQUEE ============ -->
+<section data-screen-label="Trusted by" style="background:#052975">
+  <div style="max-width:1240px;margin:0 auto;padding:30px 32px;display:flex;align-items:center;gap:36px">
+    <span style="flex:none;font-size:16px;font-weight:600;color:rgba(255,255,255,0.72);white-space:nowrap">Trusted by <span style="color:#8ff8ff;font-weight:700">21,000+</span> companies:</span>
+    <div style="flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)">
+      <div data-marquee style="display:flex;align-items:center;gap:64px;width:max-content;animation:cntMarquee 38s linear infinite">
+        <img src="../assets/images/company-logos/bmw.png" alt="" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/bestseller.png" alt="" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/dunlop.png" alt="" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/moccamaster.png" alt="" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/marley-martha.png" alt="" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/sagrada-familia.png" alt="" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/bmw.png" alt="" aria-hidden="true" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/bestseller.png" alt="" aria-hidden="true" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/dunlop.png" alt="" aria-hidden="true" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/moccamaster.png" alt="" aria-hidden="true" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/marley-martha.png" alt="" aria-hidden="true" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+        <img src="../assets/images/company-logos/sagrada-familia.png" alt="" aria-hidden="true" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- Sticky filter / search toolbar -->
 <div style="position: sticky; top: 64px; z-index: 40; background: rgba(255,255,255,0.94); backdrop-filter: blur(14px); border-bottom: 1px solid #e6ebf5;">
