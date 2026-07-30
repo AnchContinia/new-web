@@ -32,7 +32,7 @@
   .dc-hero__proof { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 30px; font-size: 14.5px; color: rgba(255,255,255,0.8); }
   .dc-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
   .dc-hero__proof i { color: var(--c-innovation-blue); font-size: 16px; }
-  .dc-mock { position: relative; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
+  .dc-mock { position: relative; box-sizing: border-box; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
   @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
   .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
   .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
@@ -90,17 +90,20 @@
   .dc-cta p { margin: 20px auto 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.82); }
   .dc-cta__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
   /* ---------- feature-overview banner ---------- */
-  .dc-fo { margin-top: 44px; background: var(--c-light-blue); border-radius: 20px; padding: 28px clamp(22px,3vw,34px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 32px; }
-  .dc-fo__eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #52678f; }
-  .dc-fo h3 { margin: 8px 0 0; font-size: clamp(20px,1.9vw,25px); font-weight: 700; letter-spacing: -0.015em; color: var(--c-tech-blue); }
-  .dc-fo p { margin: 8px 0 0; font-size: 15px; line-height: 1.55; color: #3a4a6b; max-width: 46ch; }
-  .dc-fo__btns { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
-  .dc-fo__btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 1px solid #b9cdec; background: #fff; font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; transition: background 180ms, border-color 180ms, transform 180ms; }
+  .dc-fo { margin-top: 44px; background: #c6ddd6; border-radius: 20px; padding: 34px clamp(22px,3vw,38px) 32px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; }
+  .dc-fo__eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #3f6d5f; }
+  .dc-fo h3 { margin: 9px 0 0; font-size: clamp(21px,2vw,27px); font-weight: 700; letter-spacing: -0.015em; color: var(--c-tech-blue); }
+  .dc-fo p { margin: 10px auto 0; font-size: 15.5px; line-height: 1.55; color: #2f4763; max-width: 54ch; }
+  .dc-fo__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
+  .dc-fo__btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 17px; border-radius: 999px; border: 1px solid rgba(5,41,117,0.20); background: rgba(255,255,255,0.92); font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; transition: background 180ms, border-color 180ms, transform 180ms; }
   .dc-fo__btn:hover { background: #fff; border-color: var(--c-tech-blue); transform: translateY(-2px); }
-  .dc-fo__btn span { font-size: 12px; font-weight: 700; color: #7b8bab; }
-  .dc-fo__btn--all { background: #983eae; border-color: #983eae; color: #fff; }
-  .dc-fo__btn--all:hover { background: #872f9c; border-color: #872f9c; }
-  @media (max-width: 900px) { .dc-fo { flex-direction: column; align-items: flex-start; } }
+  .dc-fo__btn span { font-size: 12px; font-weight: 700; color: #6b7f9c; }
+  /* plain text link, deliberately not a pill */
+  /* `a:not(.cnt-btn){text-decoration:none}` earlier in this sheet ties on specificity,
+     so this must also be an a.<class> selector to win on source order. */
+  a.dc-fo__btn--all { padding: 9px 4px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+  .dc-fo__btn--all span { color: inherit; }
+  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; text-decoration-thickness: 3px; color: #052975; }
   @media (max-width: 900px) {
     .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
     .dc-mock { justify-self: center; }

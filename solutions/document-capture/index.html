@@ -33,23 +33,51 @@
   .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
 
   /* Hero invoice mock */
-  .dc-mock { position: relative; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
+  .dc-mock { position: relative; box-sizing: border-box; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
   @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
   .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
   .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
   .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8193b9; }
-  .dc-mock__flow { display: flex; gap: 6px; margin: 16px 0 4px; }
-  .dc-mock__step { flex: 1; text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 7px 4px; border-radius: 8px; background: #f6f8fb; color: #8193b9; }
-  .dc-mock__step.on { background: #052975; color: #8ff8ff; }
-  .dc-mock__rows { margin-top: 14px; display: flex; flex-direction: column; gap: 2px; }
-  .dc-row { display: flex; align-items: center; gap: 12px; padding: 11px 6px; border-top: 1px solid #eef1f6; opacity: 0; animation: dcIn .5s cubic-bezier(0.16,1,0.3,1) forwards; }
-  .dc-row i { color: #052975; font-size: 15px; width: 18px; text-align: center; }
-  .dc-row .nm { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: #0a1838; }
-  .dc-row .amt { font-size: 13px; font-weight: 700; color: #052975; }
-  .dc-row .chip { min-width: 84px; text-align: center; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: #cfe2dd; color: #2f6455; }
-  @keyframes dcIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6b7894; }
-  .dc-mock__foot i { color: #5f9e8d; }
+  /* pipeline pills. Target the class, not `> * > *`: sc-for only inserts a
+     display:contents wrapper sometimes, so position-based selectors are unreliable. */
+  .dc-mock__flow { display: flex; gap: 5px; margin: 16px 0 0; }
+  .dc-mock__step { flex: 1; min-width: 0; text-align: center; font-size: 9.5px; font-weight: 700; letter-spacing: 0.02em; padding: 6px 3px; border-radius: 7px; background: #f4f7fb; color: #9aa8c4; white-space: nowrap; transition: background 320ms ease, color 320ms ease; }
+  .dc-mock__step.is-done { background: #e4f0ec; color: #3f7a6a; }
+  .dc-mock__step.is-on { background: #052975; color: #8ff8ff; }
+
+  .dc-mock__prog { position: relative; height: 3px; margin: 12px 0 4px; border-radius: 999px; background: #eef1f6; overflow: hidden; }
+  .dc-mock__prog i { position: absolute; inset: 0 auto 0 0; display: block; background: linear-gradient(90deg,#052975,#8ff8ff); border-radius: 999px; transition: width 520ms cubic-bezier(0.16,1,0.3,1); }
+
+  /* document preview + sweeping OCR scan line */
+  .dc-mock__doc { position: relative; margin-top: 14px; border: 1px solid #e7ecf5; border-radius: 11px; background: #fbfcfe; padding: 12px 13px; overflow: hidden; }
+  .dc-mock__docHead { display: flex; align-items: center; gap: 9px; font-size: 11.5px; font-weight: 700; color: #052975; }
+  .dc-mock__docHead i { font-size: 13px; }
+  .dc-mock__docHead b { margin-left: auto; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #e4f0ec; color: #3f7a6a; }
+  .dc-mock__lines { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .dc-mock__lines span { display: block; height: 5px; border-radius: 3px; background: #e7ecf5; }
+  .dc-mock__lines span:nth-child(1) { width: 76%; }
+  .dc-mock__lines span:nth-child(2) { width: 92%; }
+  .dc-mock__lines span:nth-child(3) { width: 61%; }
+  .dc-mock__scan { position: absolute; left: 0; right: 0; height: 46px; pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(143,248,255,0.5) 48%, rgba(5,41,117,0.5) 52%, transparent);
+    animation: dcScan 1.5s ease-in-out infinite; }
+  @keyframes dcScan { 0% { top: -46px; opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+  /* extracted fields, filling in as the pipeline advances */
+  .dc-mock__fields { margin-top: 12px; }
+  .dc-mock__field { display: flex; align-items: center; gap: 10px; padding: 8px 2px; border-top: 1px solid #f1f4f9; font-size: 12.5px; }
+  .dc-mock__field .k { flex: none; width: 84px; color: #8193b9; font-weight: 600; }
+  /* value and dashed placeholder share one slot, so the row height never jumps */
+  .dc-mock__field .slot { position: relative; flex: 1; min-width: 0; }
+  .dc-mock__field .slot .ph { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg,#e4eaf4 0 7px,transparent 7px 12px); transition: opacity 320ms ease; }
+  .dc-mock__field .slot .v { display: block; font-weight: 700; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateY(4px); transition: opacity 420ms ease, transform 420ms ease; }
+  .dc-mock__field .g { flex: none; width: 15px; text-align: center; font-size: 12px; color: #5f9e8d; opacity: 0; transition: opacity 420ms ease; }
+  .dc-mock__field.is-filled .slot .v { opacity: 1; transform: none; }
+  .dc-mock__field.is-filled .slot .ph { opacity: 0; }
+  .dc-mock__field.is-filled .g { opacity: 1; }
+
+  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: #52678f; min-height: 17px; }
+  .dc-mock__foot i { color: #5f9e8d; font-size: 13px; }
 
   /* ---------- shared section ---------- */
   .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
@@ -104,16 +132,20 @@
   .dc-cta__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
 
   /* ---------- feature-overview banner ---------- */
-  .dc-fo { margin-top: 44px; background: var(--c-light-blue); border-radius: 20px; padding: 28px clamp(22px,3vw,34px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 32px; }
-  .dc-fo__eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #52678f; }
-  .dc-fo h3 { margin: 8px 0 0; font-size: clamp(20px,1.9vw,25px); font-weight: 700; letter-spacing: -0.015em; color: var(--c-tech-blue); }
-  .dc-fo p { margin: 8px 0 0; font-size: 15px; line-height: 1.55; color: #3a4a6b; max-width: 46ch; }
-  .dc-fo__btns { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
-  .dc-fo__btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 1px solid #b9cdec; background: #fff; font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; transition: background 180ms, border-color 180ms, transform 180ms; }
+  .dc-fo { margin-top: 44px; background: #c6ddd6; border-radius: 20px; padding: 34px clamp(22px,3vw,38px) 32px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; }
+  .dc-fo__eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #3f6d5f; }
+  .dc-fo h3 { margin: 9px 0 0; font-size: clamp(21px,2vw,27px); font-weight: 700; letter-spacing: -0.015em; color: var(--c-tech-blue); }
+  .dc-fo p { margin: 10px auto 0; font-size: 15.5px; line-height: 1.55; color: #2f4763; max-width: 54ch; }
+  .dc-fo__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
+  .dc-fo__btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 17px; border-radius: 999px; border: 1px solid rgba(5,41,117,0.20); background: rgba(255,255,255,0.92); font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; transition: background 180ms, border-color 180ms, transform 180ms; }
   .dc-fo__btn:hover { background: #fff; border-color: var(--c-tech-blue); transform: translateY(-2px); }
-  .dc-fo__btn span { font-size: 12px; font-weight: 700; color: #7b8bab; }
-  .dc-fo__btn--all { background: #983eae; border-color: #983eae; color: #fff; }
-  .dc-fo__btn--all:hover { background: #872f9c; border-color: #872f9c; }
+  .dc-fo__btn span { font-size: 12px; font-weight: 700; color: #6b7f9c; }
+  /* plain text link, deliberately not a pill */
+  /* `a:not(.cnt-btn){text-decoration:none}` earlier in this sheet ties on specificity,
+     so this must also be an a.<class> selector to win on source order. */
+  a.dc-fo__btn--all { padding: 9px 4px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+  .dc-fo__btn--all span { color: inherit; }
+  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; text-decoration-thickness: 3px; color: #052975; }
 
   /* ---------- storylane interactive demo ---------- */
   .dc-sl__grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(32px,5vw,64px); align-items: center; }
@@ -136,26 +168,46 @@
   .dc-ti__media { border-radius: 18px; overflow: hidden; border: 3px solid var(--c-tech-blue); box-shadow: 0 26px 60px rgba(2,12,40,0.16); }
   .dc-ti__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-  /* ---------- youtube playlist ---------- */
-  .dc-yt { background: var(--c-tech-blue); color: #fff; }
-  .dc-yt .dc-head h2 { color: #fff; }
-  .dc-yt .dc-head .eye { color: var(--c-innovation-blue); }
-  .dc-yt .dc-head p { color: rgba(255,255,255,0.78); }
-  .dc-yt__player { max-width: 900px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid rgba(143,248,255,0.3); box-shadow: 0 30px 70px rgba(2,10,34,0.45); background: #041331; aspect-ratio: 16 / 9; }
+  /* ---------- youtube playlist (light, big player + legible chapter rail) ---------- */
+  .dc-yt { background: #f6f9fc; }
+  .dc-yt__player { max-width: 1040px; margin: 0 auto; border-radius: 18px; overflow: hidden; border: 1px solid #dde5f1; box-shadow: 0 34px 76px rgba(5,41,117,0.20); background: #0a1838; aspect-ratio: 16 / 9; }
   .dc-yt__player iframe { display: block; width: 100%; height: 100%; border: 0; }
-  .dc-yt__now { max-width: 900px; margin: 16px auto 0; font-size: 15.5px; font-weight: 700; color: var(--c-innovation-blue); text-align: center; }
-  .dc-yt__strip { display: flex; gap: 14px; overflow-x: auto; padding: 26px 4px 8px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-  /* sc-for wraps each iteration in a display:contents div -> target the grandchild */
-  .dc-yt__strip > * > * { flex: none; width: 208px; scroll-snap-align: start; display: block; padding: 0; border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; cursor: pointer; font-family: inherit; text-align: left; transition: border-color 200ms, transform 200ms, background 200ms; }
-  .dc-yt__strip > * > *:hover { transform: translateY(-3px); border-color: rgba(143,248,255,0.6); background: rgba(255,255,255,0.1); }
-  .dc-yt__thumb.is-on { border-color: var(--c-innovation-blue) !important; background: rgba(143,248,255,0.14) !important; }
-  .dc-yt__thumb img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
-  .dc-yt__thumb span { display: block; padding: 11px 13px 13px; font-size: 13px; font-weight: 600; line-height: 1.4; color: #fff; }
-  .dc-yt__thumb.is-on span { color: var(--c-innovation-blue); }
+
+  .dc-yt__caption { max-width: 1040px; margin: 18px auto 0; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+  .dc-yt__badge { flex: none; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: #983eae; border-radius: 999px; padding: 5px 11px; }
+  .dc-yt__caption b { flex: 1; min-width: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-tech-blue); }
+  .dc-yt__count { flex: none; font-size: 13.5px; font-weight: 700; color: #7b8bab; font-variant-numeric: tabular-nums; }
+
+  .dc-yt__railHead { max-width: 1040px; margin: 40px auto 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .dc-yt__railHead h3 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #52678f; }
+  .dc-yt__navBtns { display: flex; gap: 8px; }
+  .dc-yt__nav { width: 40px; height: 40px; border-radius: 999px; border: 1px solid #cdd9ea; background: #fff; color: var(--c-tech-blue); font-size: 15px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: border-color 180ms, background 180ms, transform 180ms; }
+  .dc-yt__nav:hover { border-color: var(--c-tech-blue); background: var(--c-light-blue); transform: translateY(-1px); }
+
+  .dc-yt__strip { max-width: 1040px; margin: 0 auto; display: flex; gap: 16px; overflow-x: auto; padding: 16px 2px 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .dc-yt__thumb { flex: none; width: 252px; scroll-snap-align: start; display: block; padding: 0; border: 1.5px solid #dde5f1; background: #fff; border-radius: 14px; overflow: hidden; cursor: pointer; font-family: inherit; text-align: left; transition: border-color 190ms, transform 190ms, box-shadow 190ms; }
+  .dc-yt__thumb:hover { transform: translateY(-3px); border-color: #a9c0e2; box-shadow: 0 16px 34px rgba(5,41,117,0.13); }
+  .dc-yt__thumb.is-on { border-color: #983eae; box-shadow: 0 16px 34px rgba(152,62,174,0.20); }
+
+  .dc-yt__shot { position: relative; display: block; }
+  .dc-yt__shot img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #dde5f1; }
+  .dc-yt__num { position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #fff; background: rgba(5,24,56,0.82); border-radius: 6px; padding: 3px 7px; font-variant-numeric: tabular-nums; }
+  .dc-yt__play { position: absolute; right: 8px; bottom: 8px; width: 30px; height: 30px; border-radius: 999px; background: rgba(255,255,255,0.94); color: var(--c-tech-blue); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; box-shadow: 0 3px 10px rgba(2,12,40,0.28); }
+  .dc-yt__thumb.is-on .dc-yt__play { background: #983eae; color: #fff; }
+
+  .dc-yt__meta { display: block; padding: 11px 13px 14px; }
+  .dc-yt__state { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #93a2bf; margin-bottom: 5px; }
+  .dc-yt__thumb.is-on .dc-yt__state { color: #983eae; }
+  .dc-yt__title { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.4; color: var(--c-tech-blue); }
+
+  /* ---------- merged "why teams choose it" + "built inside" ---------- */
+  .dc-ti__inside { margin-top: 28px; padding-top: 24px; border-top: 1px solid #bcd8e8; }
+  .dc-ti__insideEye { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #52678f; margin-bottom: 16px; }
+  .dc-ti .dc-inside__list { margin: 0; gap: 12px; }
+  .dc-ti .dc-inside__list span { font-size: 15.5px; }
 
   @media (max-width: 900px) {
     .dc-sl__grid, .dc-ti__grid { grid-template-columns: 1fr; }
-    .dc-fo { flex-direction: column; align-items: flex-start; }
   }
   @media (max-width: 900px) {
     .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
@@ -190,19 +242,36 @@
       </div>
     </div>
     <div class="dc-mock" aria-hidden="true">
-      <div class="dc-mock__bar"><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__title">Accounts Payable</span></div>
+      <div class="dc-mock__bar"><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__title">Accounts Payable · Business Central</span></div>
+
       <div class="dc-mock__flow">
-        <div class="dc-mock__step on">Imported</div>
-        <div class="dc-mock__step on">Recognized</div>
-        <div class="dc-mock__step on">Approved</div>
-        <div class="dc-mock__step on">Posted</div>
+        <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
+          <div class="{{ s.cls }}">{{ s.name }}</div>
+        </sc-for>
       </div>
-      <div class="dc-mock__rows">
-        <div class="dc-row" style="animation-delay:.15s"><i class="fa-light fa-file-invoice"></i><span class="nm">Invoice 100482 · Northwind</span><span class="amt">€ 4,820</span><span class="chip">Posted</span></div>
-        <div class="dc-row" style="animation-delay:.35s"><i class="fa-light fa-file-invoice"></i><span class="nm">Invoice 100483 · Fabrikam</span><span class="amt">€ 1,240</span><span class="chip">Posted</span></div>
-        <div class="dc-row" style="animation-delay:.55s"><i class="fa-light fa-file-lines"></i><span class="nm">Credit memo 5521 · Contoso</span><span class="amt">€ 612</span><span class="chip">Posted</span></div>
+      <div class="dc-mock__prog"><i style="{{ progStyle }}"></i></div>
+
+      <div class="dc-mock__doc">
+        <div class="dc-mock__docHead">
+          <i class="fa-light fa-file-invoice"></i><span>{{ docName }}</span><b>{{ docBadge }}</b>
+        </div>
+        <div class="dc-mock__lines"><span></span><span></span><span></span></div>
+        <sc-if value="{{ scanning }}" hint-placeholder-val="{{ true }}">
+          <div class="dc-mock__scan"></div>
+        </sc-if>
       </div>
-      <div class="dc-mock__foot"><i class="fa-light fa-circle-check"></i>3 of 3 matched &amp; posted automatically — 0 manual touches</div>
+
+      <div class="dc-mock__fields">
+        <sc-for list="{{ fields }}" as="f" hint-placeholder-count="5">
+          <div class="{{ f.cls }}">
+            <span class="k">{{ f.k }}</span>
+            <span class="slot"><span class="ph"></span><span class="v">{{ f.v }}</span></span>
+            <i class="fa-light fa-circle-check g"></i>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="dc-mock__foot"><i class="{{ footIcon }}"></i>{{ footText }}</div>
     </div>
   </div>
 </section>
@@ -329,41 +398,23 @@
         <h2>Set your team up for success</h2>
         <p>Add value to your workday with Document Capture and set your team up for success. Our data capture solution helps you optimize your business processes efficiently — saving you plenty of time, and making sure you can get home on time.</p>
         <p>Less manual work. Fewer errors. Faster approvals. And rock-solid fraud prevention on every invoice that comes through the door.</p>
+
+        <div class="dc-ti__inside">
+          <span class="dc-ti__insideEye">100% built inside — no new system, no integration project</span>
+          <div class="dc-inside__list">
+            <span><i class="fa-light fa-circle-check"></i>Install straight from Microsoft AppSource</span>
+            <span><i class="fa-light fa-circle-check"></i>Same interface, same data, same login</span>
+            <span><i class="fa-light fa-circle-check"></i>Updates follow your Business Central release</span>
+            <span><i class="fa-light fa-circle-check"></i>Delivered and supported by 1,500+ local partners</span>
+          </div>
+        </div>
+
         <div style="margin-top:30px;">
           <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
         </div>
       </div>
       <div class="dc-ti__media">
         <img src="../../assets/images/team-at-work.jpg" alt="Two Continia colleagues working together at a laptop" />
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BUILT INSIDE ============ -->
-<section class="dc-sec" data-screen-label="Built inside">
-  <div class="dc-inside__grid">
-    <div>
-      <span class="eye" style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--c-tech-blue);">100% built inside</span>
-      <h2>No new system.<br>No integration project.</h2>
-      <div class="dc-inside__list">
-        <span><i class="fa-light fa-circle-check"></i>Install straight from Microsoft AppSource</span>
-        <span><i class="fa-light fa-circle-check"></i>Same interface, same data, same login</span>
-        <span><i class="fa-light fa-circle-check"></i>Updates follow your Business Central release</span>
-        <span><i class="fa-light fa-circle-check"></i>Delivered and supported by 1,500+ local partners</span>
-      </div>
-      <div style="margin-top:30px;">
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
-      </div>
-    </div>
-    <div class="dc-inside__card">
-      <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8193b9;margin-bottom:14px;">Your Continia solutions</div>
-      <div style="display:flex;flex-direction:column;gap:6px;">
-        <div class="dc-inside__app active"><i class="fa-kit fa-document-capture-solution-dc-icon"></i>Document Capture</div>
-        <div class="dc-inside__app dim"><i class="fa-kit fa-expense-management-solution-em-icon"></i>Expense Management</div>
-        <div class="dc-inside__app dim"><i class="fa-kit fa-banking-solution-cb-icon"></i>Continia Banking</div>
-        <div class="dc-inside__app dim"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i>Continia Finance</div>
-        <div class="dc-inside__app dim"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i>Document Output</div>
       </div>
     </div>
   </div>
@@ -380,12 +431,31 @@
     <div class="dc-yt__player">
       <iframe src="{{ ytSrc }}" title="{{ ytTitle }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
     </div>
-    <div class="dc-yt__now">Now playing · {{ ytTitle }}</div>
+    <div class="dc-yt__caption">
+      <span class="dc-yt__badge">Now playing</span>
+      <b>{{ ytTitle }}</b>
+      <span class="dc-yt__count">{{ ytPos }}</span>
+    </div>
+
+    <div class="dc-yt__railHead">
+      <h3>All {{ ytTotal }} chapters</h3>
+      <div class="dc-yt__navBtns">
+        <button class="dc-yt__nav" onClick="{{ ytScrollPrev }}" aria-label="Scroll chapters left"><i class="fa-light fa-arrow-left"></i></button>
+        <button class="dc-yt__nav" onClick="{{ ytScrollNext }}" aria-label="Scroll chapters right"><i class="fa-light fa-arrow-right"></i></button>
+      </div>
+    </div>
     <div class="dc-yt__strip">
       <sc-for list="{{ ytThumbs }}" as="t" hint-placeholder-count="9">
-        <button class="{{ t.cls }}" onClick="{{ t.onClick }}" aria-label="{{ t.title }}">
-          <img src="{{ t.thumb }}" alt="" loading="lazy" />
-          <span>{{ t.title }}</span>
+        <button class="{{ t.cls }}" onClick="{{ t.onClick }}" aria-label="{{ t.aria }}">
+          <span class="dc-yt__shot">
+            <img src="{{ t.thumb }}" alt="" loading="lazy" />
+            <span class="dc-yt__num">{{ t.num }}</span>
+            <span class="dc-yt__play"><i class="{{ t.icon }}"></i></span>
+          </span>
+          <span class="dc-yt__meta">
+            <span class="dc-yt__state">{{ t.state }}</span>
+            <span class="dc-yt__title">{{ t.title }}</span>
+          </span>
         </button>
       </sc-for>
     </div>
@@ -413,7 +483,46 @@
 
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { vid: 0, demoOpen: false };
+  state = { vid: 0, demoOpen: false, step: 0 };
+
+  // Hero animation: one invoice walking the real Document Capture pipeline.
+  stages = ["Imported", "Recognized", "Matched", "Approved", "Posted"];
+
+  // Each field appears at the stage that would actually produce it.
+  fieldDefs = [
+    { k: "Vendor", v: "Northwind Traders", at: 1 },
+    { k: "Invoice no.", v: "100482", at: 1 },
+    { k: "Amount", v: "€ 4,820.00", at: 1 },
+    { k: "Order match", v: "PO-2291 · 3-way", at: 2 },
+    { k: "Approval", v: "M. Jaqqam · 4 s", at: 3 },
+  ];
+
+  footings = [
+    { icon: "fa-light fa-inbox-in", text: "Invoice arrived by email — starting recognition…" },
+    { icon: "fa-light fa-wand-magic-sparkles", text: "AI recognized 12 of 12 fields" },
+    { icon: "fa-light fa-code-compare", text: "Matched to PO-2291 — no variances" },
+    { icon: "fa-light fa-user-check", text: "Approved on mobile — full audit trail" },
+    { icon: "fa-light fa-circle-check", text: "Posted & archived — 0 manual touches" },
+  ];
+
+  componentDidMount() {
+    // Respect reduced motion: land on the finished state and never animate.
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { this.setState({ step: 4 }); return; }
+    this.heroTimer = setInterval(() => {
+      // hold on the finished state for one extra beat, then restart
+      this.setState((s) => ({ step: s.step >= 5 ? 0 : s.step + 1 }));
+    }, 1500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.heroTimer);
+  }
+
+  scrollRail(dx) {
+    const el = document.querySelector(".dc-yt__strip");
+    if (el) el.scrollBy({ left: dx, behavior: "smooth" });
+  }
 
   // Real Continia demo playlist, in the same order as continia.com/solutions/document-capture/
   videos = [
@@ -430,7 +539,27 @@ class Component extends DCLogic {
 
   renderVals() {
     const cur = this.videos[this.state.vid];
+    const step = Math.min(this.state.step, 4);
+    const foot = this.footings[step];
+    const pad = (n) => (n < 10 ? "0" + n : "" + n);
     return {
+      // ---- hero pipeline animation ----
+      stages: this.stages.map((name, i) => ({
+        name,
+        cls: "dc-mock__step" + (i === step ? " is-on" : i < step ? " is-done" : ""),
+      })),
+      progStyle: "width:" + ((step / (this.stages.length - 1)) * 100).toFixed(0) + "%",
+      docName: "Invoice_100482.pdf",
+      docBadge: step === 0 ? "Imported" : "OCR " + (step === 1 ? "reading" : "done"),
+      scanning: step === 0 || step === 1,
+      fields: this.fieldDefs.map((f) => ({
+        k: f.k,
+        v: f.v,
+        cls: "dc-mock__field" + (step >= f.at ? " is-filled" : ""),
+      })),
+      footIcon: foot.icon,
+      footText: foot.text,
+
       // Storylane interactive demo — only mounted once the user asks for it
       demoOpen: this.state.demoOpen,
       demoClosed: !this.state.demoOpen,
@@ -441,12 +570,26 @@ class Component extends DCLogic {
       ytSrc: "https://www.youtube-nocookie.com/embed/" + cur.id + "?rel=0&modestbranding=1"
         + (this.state.vid === 0 ? "" : "&autoplay=1"),
       ytTitle: cur.title,
-      ytThumbs: this.videos.map((v, i) => ({
-        title: v.title,
-        thumb: "https://i.ytimg.com/vi/" + v.id + "/mqdefault.jpg",
-        cls: i === this.state.vid ? "dc-yt__thumb is-on" : "dc-yt__thumb",
-        onClick: () => this.setState({ vid: i }),
-      })),
+      ytPos: (this.state.vid + 1) + " of " + this.videos.length,
+      ytTotal: this.videos.length,
+      ytScrollPrev: () => this.scrollRail(-536),
+      ytScrollNext: () => this.scrollRail(536),
+      ytThumbs: this.videos.map((v, i) => {
+        const on = i === this.state.vid;
+        return {
+          title: v.title,
+          aria: "Play chapter " + (i + 1) + ": " + v.title,
+          num: pad(i + 1),
+          // deliberately not "Chapter N" — Continia's own video art has its own
+          // burnt-in chapter numbers that skip the welcome video, so numbering
+          // here would contradict the thumbnails. The badge carries position.
+          state: on ? "Now playing" : "Watch now",
+          icon: on ? "fa-solid fa-volume-high" : "fa-solid fa-play",
+          thumb: "https://i.ytimg.com/vi/" + v.id + "/mqdefault.jpg",
+          cls: on ? "dc-yt__thumb is-on" : "dc-yt__thumb",
+          onClick: () => this.setState({ vid: i }),
+        };
+      }),
     };
   }
 }
