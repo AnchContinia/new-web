@@ -179,6 +179,11 @@
     .hero-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
     .hero-vid__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.74) 42%, rgba(222,245,255,0.88) 100%); }
+    /* The release clip is a filmed interview, not an abstract texture: faces land
+       right behind the headline, and at the clouds scrim the purple "automate it."
+       measured only 3.06:1. Lifting the mid stop to 0.82 brings it to 3.79 —
+       comparable to the clouds variant's 3.97 — and navy to 8.7. */
+    .hero-vid__scrim--r1 { background: linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.82) 42%, rgba(222,245,255,0.90) 100%); }
     .hero-wrap { z-index: 2; }
     @media (prefers-reduced-motion: reduce) { .hero-vid { display: none; } }
 
@@ -221,13 +226,20 @@
 
 <!-- ============ HERO (centered, big mockup below) ============ -->
 <section id="top" data-screen-label="Hero" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#def5ff 130%)">
-  <!-- optional video background — off by default, toggled bottom-left -->
-  <sc-if value="{{ heroVid }}" hint-placeholder-val="{{ false }}">
+  <!-- video background — three states, cycled bottom-left: clouds / release / none -->
+  <sc-if value="{{ heroClouds }}" hint-placeholder-val="{{ true }}">
     <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
       <source src="assets/video/brand-clouds.webm" type="video/webm">
       <source src="assets/video/brand-clouds.mp4" type="video/mp4">
     </video>
     <div class="hero-vid__scrim" aria-hidden="true"></div>
+  </sc-if>
+  <sc-if value="{{ heroRelease }}" hint-placeholder-val="{{ false }}">
+    <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="assets/video/release-r1.mp4" type="video/mp4">
+      <source src="assets/video/release-r1.mov" type="video/quicktime">
+    </video>
+    <div class="hero-vid__scrim hero-vid__scrim--r1" aria-hidden="true"></div>
   </sc-if>
 
   <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:58px 32px 0;text-align:center">
@@ -517,9 +529,9 @@ const EM_PHASES = [
 ];
 
 class Component extends DCLogic {
-  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "new", heroVid: true };
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "new", heroView: 0 };   // 0 = clouds, 1 = release R1, 2 = plain
   _statsStarted = false;
-  _seenHeroVid = false;   // seeded false on purpose: the first update arms autoplay
+  _seenHeroView = -1;   // seeded off-range on purpose: the first update arms autoplay
   _seenSolView = 3;
   _seenImpactView = "new";
 
@@ -538,7 +550,7 @@ class Component extends DCLogic {
     // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
     this._onResize = () => this.setState({});
     window.addEventListener("resize", this._onResize, { passive: true });
-    if (this.state.heroVid) this._playHeroVideo();
+    if (this.state.heroView !== 2) this._playHeroVideo();
   }
 
   // Muted autoplay needs the property set, not just the attribute, or Safari
@@ -566,9 +578,9 @@ class Component extends DCLogic {
     if (prevProps.motion !== this.props.motion || prevProps.flowSpeed !== this.props.flowSpeed) {
       this._applyMotion();
     }
-    if (this._seenHeroVid !== this.state.heroVid) {
-      this._seenHeroVid = this.state.heroVid;
-      if (this.state.heroVid) this._playHeroVideo();
+    if (this._seenHeroView !== this.state.heroView) {
+      this._seenHeroView = this.state.heroView;
+      if (this.state.heroView !== 2) this._playHeroVideo();
     }
     // Re-arm autoplay whenever a video-backed view (New = 1, Carousel = 3, Window = 4) is shown again
     if (this._seenSolView !== this.state.solView) {
@@ -757,9 +769,10 @@ class Component extends DCLogic {
       impactOld: this.state.impactView === "old",
       toggleImpact: () => this.setState((s) => ({ impactView: s.impactView === "new" ? "old" : "new" })),
       impactToggleLabel: "Impact · " + (this.state.impactView === "new" ? "New" : "Classic"),
-      heroVid: this.state.heroVid,
-      toggleHeroVid: () => this.setState((st) => ({ heroVid: !st.heroVid })),
-      heroVidLabel: "Hero · " + (this.state.heroVid ? "Video" : "Plain"),
+      heroClouds: this.state.heroView === 0,
+      heroRelease: this.state.heroView === 1,
+      toggleHeroVid: () => this.setState((st) => ({ heroView: (st.heroView + 1) % 3 })),
+      heroVidLabel: "Hero · " + ["Clouds", "Release R1", "Plain"][this.state.heroView],
       solCarousel: true,
       carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
       carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
