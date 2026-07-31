@@ -86,11 +86,53 @@
       .pr3__line, .pr3__sub, .pr3__col, .pr3__total b { animation:none !important; opacity:1; }
       .pr3__scan { display:none; }
     }
+
+    /* ---------- release countdown banner (between nav and hero) ---------- */
+    .pr-rel { background:linear-gradient(90deg,#052975 0%,#0a3a95 62%,#1d5aa8 100%); color:#fff; }
+    .pr-rel__inner { max-width:1360px; margin:0 auto; padding:13px 28px; display:flex; align-items:center; flex-wrap:wrap; gap:12px 22px; }
+    .pr-rel__tag { flex:none; font-size:10.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#052975; background:#8ff8ff; border-radius:999px; padding:5px 11px; }
+    .pr-rel__copy { flex:1 1 240px; margin:0; font-size:14.5px; font-weight:600; line-height:1.4; color:#fff; }
+    .pr-rel__timer { flex:none; display:flex; align-items:flex-start; gap:7px; }
+    /* class-targeted, not `> * > *` — sc-for does not always add a wrapper */
+    .pr-rel__unit { display:flex; flex-direction:column; align-items:center; min-width:44px; background:rgba(255,255,255,0.11); border:1px solid rgba(143,248,255,0.30); border-radius:9px; padding:5px 7px 6px; }
+    .pr-rel__unit b { font-size:16.5px; font-weight:700; line-height:1; color:#8ff8ff; font-variant-numeric:tabular-nums; }
+    .pr-rel__unit i { font-style:normal; margin-top:3px; font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.66); }
+    .pr-rel__live { flex:none; display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:#8ff8ff; }
+    .pr-rel__cta { flex:none; display:inline-flex; align-items:center; gap:9px; font-size:13px; font-weight:700; letter-spacing:0.02em; color:#052975; background:#8ff8ff; border-radius:999px; padding:10px 18px; text-decoration:none; transition:background 180ms, transform 180ms; }
+    .pr-rel__cta:hover { background:#c6fbff; transform:translateY(-1px); color:#052975; }
+    @media (max-width: 860px) {
+      .pr-rel__inner { padding:12px 20px; gap:10px 14px; }
+      .pr-rel__copy { flex:1 1 100%; order:1; }
+      .pr-rel__tag { order:0; }
+      .pr-rel__timer { order:2; }
+      .pr-rel__cta { order:3; margin-left:auto; }
+    }
   </style>
 </helmet>
 
 <!-- ============ HEADER ============ -->
 <x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Pricing" hint-size="100%,66px"></x-import>
+
+<!-- ============ RELEASE BANNER + COUNTDOWN ============ -->
+<sc-if value="{{ relOn }}" hint-placeholder-val="{{ true }}">
+<section class="pr-rel" data-screen-label="Release countdown">
+  <div class="pr-rel__inner">
+    <span class="pr-rel__tag">{{ relTag }}</span>
+    <p class="pr-rel__copy">{{ relHeadline }}</p>
+    <sc-if value="{{ relCounting }}" hint-placeholder-val="{{ true }}">
+      <div class="pr-rel__timer" role="timer" aria-label="{{ relAria }}">
+        <sc-for list="{{ relParts }}" as="p" hint-placeholder-count="4">
+          <span class="pr-rel__unit"><b>{{ p.v }}</b><i>{{ p.k }}</i></span>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ relLive }}" hint-placeholder-val="{{ false }}">
+      <span class="pr-rel__live"><i class="fa-solid fa-circle-check"></i>Available now</span>
+    </sc-if>
+    <a class="pr-rel__cta" href="{{ relHref }}" target="_blank" rel="noopener">{{ relCta }} <i class="fa-light fa-arrow-right"></i></a>
+  </div>
+</section>
+</sc-if>
 
 <!-- ============ HERO: itemized receipt (50/50) ============ -->
 <section id="top" data-screen-label="Hero (receipt)" class="pr3">
@@ -126,68 +168,8 @@
   </div>
 </section>
 
-<!-- ============ IMPACT ROW ============ -->
-<sc-if value="{{ showTrustBar }}" hint-placeholder-val="{{ true }}">
-<section id="impacts" data-screen-label="Trust bar" style="max-width: 1360px; margin: 0 auto; padding: 90px 28px 44px;">
-  <div style="display: flex; justify-content: center; align-items: stretch; gap: 0; flex-wrap: wrap;">
-    <sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
-      <div style="flex: 1 1 200px; text-align: center; padding: 10px 28px; border-left: 1px solid #dde3ee; display: flex; flex-direction: column; gap: 6px;">
-        <sc-if value="{{ st.pre }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: #8193b9; line-height: 1;">{{ st.pre }}</span></sc-if>
-        <strong style="font-size: clamp(38px, 2rem + 1.6vw, 52px); font-weight: 700; color: #052975; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1;">{{ st.value }}</strong>
-        <span style="font-size: 15px; color: #6b7894;">{{ st.label }}</span>
-      </div>
-    </sc-for>
-  </div>
-</section>
-</sc-if>
-
-<!-- ============ TWO LICENSE PROGRAMS ============ -->
-<section id="programs" data-screen-label="License programs" style="max-width: 1360px; margin: 0 auto; padding: 46px 28px 84px;">
-  <div data-reveal style="max-width: 720px; margin: 0 auto 48px; text-align: center;">
-    <span class="eyebrow">Licensing</span>
-    <h2 style="font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; margin: 12px 0 0;">Two ways to license.<br>One promise.</h2>
-    <p style="font-size: 1.1875rem; line-height: 1.55; color: #6b7894; margin: 16px 0 0;">However you run Business Central — online or on-premises — you get the same solutions, delivered through your Continia Partner.</p>
-  </div>
-  <div style="display: flex; gap: 24px; flex-wrap: wrap; align-items: stretch; justify-content: center;">
-
-    <div data-reveal style="flex: 1 1 420px; max-width: 620px; background: #052975; color: #fff; border-radius: 24px; padding: 40px 40px 36px; position: relative; overflow: hidden; box-shadow: 0 18px 48px rgba(5,41,117,0.22); display: flex; flex-direction: column;">
-      <img src="assets/fifth-element-single.svg" alt="" style="position: absolute; right: -120px; bottom: -140px; width: 460px; opacity: 0.16; pointer-events: none; filter: brightness(4);">
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; position: relative;">
-        <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Business Central online</span>
-        <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: #8ff8ff; color: #052975; border-radius: 999px; padding: 5px 12px;">Most common</span>
-      </div>
-      <h3 style="font-size: var(--fs-h3); font-weight: 700; margin: 14px 0 6px; position: relative;">Use &amp; Pay</h3>
-      <p style="font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 0 0 22px; position: relative;">Download the free 30-day trial from Microsoft AppSource and test everything. When the trial ends, simply activate your subscription — at the end of each month you're invoiced based on usage and activated feature modules.</p>
-      <ul style="list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 12px; position: relative;">
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px;"><i class="fa-light fa-check" style="color: #8ff8ff; font-size: 18px; flex: none;"></i>Free 30-day trial with all modules unlocked</li>
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px;"><i class="fa-light fa-check" style="color: #8ff8ff; font-size: 18px; flex: none;"></i>No upfront license — pay monthly, per use</li>
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px;"><i class="fa-light fa-check" style="color: #8ff8ff; font-size: 18px; flex: none;"></i>Scale up or down as your volume changes</li>
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px;"><i class="fa-light fa-check" style="color: #8ff8ff; font-size: 18px; flex: none;"></i>Always on the latest version</li>
-      </ul>
-      <div style="margin-top: auto; position: relative;">
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" on-click="{{ goEstimator }}" hint-size="auto,44px">Estimate your monthly price</x-import>
-      </div>
-    </div>
-
-    <div data-reveal style="flex: 1 1 420px; max-width: 620px; background: #fff; border: 1px solid #dde3ee; border-radius: 24px; padding: 40px 40px 36px; box-shadow: 0 8px 24px rgba(5,41,117,0.10); display: flex; flex-direction: column;">
-      <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #052975;">Business Central / NAV on-premises</span>
-      <h3 style="font-size: var(--fs-h3); font-weight: 700; margin: 14px 0 6px; color: #0a1838;">Pay &amp; Use</h3>
-      <p style="font-size: 15.5px; line-height: 1.6; color: #3a4a6b; margin: 0 0 22px;">Running Business Central or NAV on-premises, the license runs on a Pay &amp; Use basis. A Purchase or Subscription License is acquired through your Microsoft Dynamics Partner before you get access.</p>
-      <ul style="list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 12px;">
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px; color: #2a4989;"><i class="fa-light fa-check" style="color: #5f9e8d; font-size: 18px; flex: none;"></i>Choose Purchase or Subscription License</li>
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px; color: #2a4989;"><i class="fa-light fa-check" style="color: #5f9e8d; font-size: 18px; flex: none;"></i>Licensed through your Dynamics Partner (VAR)</li>
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px; color: #2a4989;"><i class="fa-light fa-check" style="color: #5f9e8d; font-size: 18px; flex: none;"></i>One price list covering all solutions</li>
-        <li style="display: flex; align-items: center; gap: 10px; font-size: 15.5px; color: #2a4989;"><i class="fa-light fa-check" style="color: #5f9e8d; font-size: 18px; flex: none;"></i>Same solutions, same support, same EULA</li>
-      </ul>
-      <div style="margin-top: auto;">
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" on-click="{{ goSheets }}" hint-size="auto,44px">Download the price list</x-import>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ============ ESTIMATOR ============ -->
-<section id="estimator" data-screen-label="Price estimator" style="background: #def5ff; padding: 84px 28px;">
+<section id="estimator" data-screen-label="Price estimator" style="padding: 72px 28px 84px;">
   <div style="max-width: 1360px; margin: 0 auto;">
     <div data-reveal style="max-width: 760px; margin: 0 auto 44px; text-align: center;">
       <span class="eyebrow">Price estimator</span>
@@ -288,7 +270,8 @@
 </section>
 
 <!-- ============ PRICE SHEETS ============ -->
-<section id="pricesheets" data-screen-label="Price sheets" style="max-width: 1360px; margin: 0 auto; padding: 84px 28px 64px;">
+<section id="pricesheets" data-screen-label="Price sheets" style="background: #def5ff; padding: 84px 28px 72px;">
+  <div style="max-width: 1360px; margin: 0 auto;">
   <div data-reveal style="max-width: 760px; margin: 0 auto 36px; text-align: center;">
     <span class="eyebrow">Official price sheets</span>
     <h2 style="font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; margin: 12px 0 0;">The 2026 price sheets,<br>per solution</h2>
@@ -299,6 +282,7 @@
       <button onClick="{{ c.onPick }}" style="border: 1px solid {{ c.bd }}; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; padding: 8px 16px; border-radius: 999px; transition: all 200ms cubic-bezier(0.4,0,0.2,1); background: {{ c.bg }}; color: {{ c.fg }};">{{ c.code }}</button>
     </sc-for>
   </div>
+  <p data-reveal style="text-align: center; font-size: 13px; color: #3a4a6b; margin: -22px 0 32px;">{{ sheetsNote }}</p>
   <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px;">
     <sc-for list="{{ sheets }}" as="sh" hint-placeholder-count="9">
       <div data-reveal style="background: #fff; border: 1px solid #dde3ee; border-radius: 16px; box-shadow: 0 2px 8px rgba(5,41,117,0.08); padding: 24px; display: flex; flex-direction: column; gap: 0; transition: box-shadow 250ms cubic-bezier(0.4,0,0.2,1), transform 250ms cubic-bezier(0.4,0,0.2,1);" style-hover="transform: translateY(-4px); box-shadow: 0 18px 48px rgba(5,41,117,0.14);">
@@ -309,12 +293,7 @@
             <span style="font-size: 12.5px; color: #6b7894;">{{ sh.tagline }}</span>
           </div>
         </div>
-        <sc-if value="{{ sh.available }}" hint-placeholder-val="{{ true }}">
-          <a href="{{ sh.url }}" target="_blank" rel="noopener" style="margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #052975; border: 1.5px solid #cdd4e3; border-radius: 999px; padding: 11px 18px; transition: all 200ms cubic-bezier(0.4,0,0.2,1);" style-hover="border-color: #052975; background: #def5ff;"><i class="fa-light fa-file-pdf" style="font-size: 16px;"></i>{{ sh.btnLabel }}</a>
-        </sc-if>
-        <sc-if value="{{ sh.unavailable }}" hint-placeholder-val="{{ false }}">
-          <span style="margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-size: 12.5px; font-weight: 600; color: #6b7894; border: 1.5px dashed #cdd4e3; border-radius: 999px; padding: 11px 18px;"><i class="fa-light fa-location-dot" style="font-size: 15px;"></i>{{ sh.naLabel }}</span>
-        </sc-if>
+        <a href="{{ sh.url }}" target="_blank" rel="noopener" style="margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #052975; border: 1.5px solid #cdd4e3; border-radius: 999px; padding: 11px 18px; transition: all 200ms cubic-bezier(0.4,0,0.2,1);" style-hover="border-color: #052975; background: #def5ff;"><i class="fa-light fa-file-pdf" style="font-size: 16px;"></i>{{ sh.btnLabel }}</a>
       </div>
     </sc-for>
   </div>
@@ -329,6 +308,7 @@
   </div>
 
   <p data-reveal style="text-align: center; font-size: 13px; color: #6b7894; margin: 30px auto 0; max-width: 720px; line-height: 1.6;">Both pricing programs are covered by our general End User License Agreement — <a href="https://partnerzone.blob.core.windows.net/documents/web/legal/Continia-Software-License-Terms-365BC.pdf" target="_blank" rel="noopener" style="color: #052975; font-weight: 600;">Software License Terms &amp; Terms of Service</a> · <a href="https://partnerzone.blob.core.windows.net/documents/info/EULA_2.1_Change_Summary.pdf" target="_blank" rel="noopener" style="color: #052975; font-weight: 600;">Change summary for EULA</a></p>
+  </div>
 </section>
 
 <!-- ============ MODULES ============ -->
@@ -399,10 +379,25 @@
 <div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
 <x-import component-from-global-scope="DemoDialog" from="./site/Footer.jsx" open="{{ modalOpen }}" on-close="{{ closeModal }}" hint-size="0,0"></x-import>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}, &quot;showTrustBar&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}}">
 class Component extends DCLogic {
   constructor(props) {
     super(props);
+
+    // ⚠️ PLACEHOLDER ANNOUNCEMENT — the countdown machinery is real, the copy is not.
+    // Nothing here has been confirmed by Continia. Replace `headline`, `cta`, `href`
+    // and `at` with the approved release before this is treated as actual news.
+    // `at` is currently Microsoft's published Business Central 2026 release wave 2
+    // GA date. Set `on: false` to hide the whole banner.
+    this.RELEASE = {
+      on: true,
+      at: Date.parse("2026-10-01T08:00:00Z"),
+      tag: "Release news",
+      headline: "Continia 2026 Release Wave 2 — new modules and pricing land on AppSource",
+      cta: "See what's coming",
+      href: "https://www.continia.com/news/",
+    };
+
     this.CURS = [
       { code: "DKK", fx: 7.46 }, { code: "EUR", fx: 1 }, { code: "USD", fx: 1.08 },
       { code: "GBP", fx: 0.85 }, { code: "SEK", fx: 11.2 }, { code: "NOK", fx: 11.5 },
@@ -506,7 +501,11 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this._target = this.totalEUR();
-    this.setState({ disp: this._target });
+    this.setState({ disp: this._target, now: Date.now() });
+    // Countdown ticks once a second. Cheap: it only re-renders the banner values.
+    if (this.RELEASE.on) {
+      this._relTick = setInterval(() => this.setState({ now: Date.now() }), 1000);
+    }
     this._animateReceipt();
     this._playHeroVideo();
     if ((this.props.motion ?? true)) {
@@ -540,6 +539,7 @@ class Component extends DCLogic {
     if (this._raf) cancelAnimationFrame(this._raf);
     if (this._recRaf) cancelAnimationFrame(this._recRaf);
     if (this._recLoop) clearInterval(this._recLoop);
+    if (this._relTick) clearInterval(this._relTick);
     if (this._io) this._io.disconnect();
     if (this._onScroll) window.removeEventListener("scroll", this._onScroll);
   }
@@ -673,17 +673,18 @@ class Component extends DCLogic {
     const totalDisplay = new Intl.NumberFormat("en", { style: "currency", currency: st.currency, maximumFractionDigits: 0 }).format(st.disp * this.fx());
 
     const CUR_URL = (cur) => (cur === "EUR" ? "EURO" : cur);
-    const sheets = this.SOLS.map((s) => {
-      const ok = s.avail === "all" || s.avail.includes(st.currency);
+    // Solutions that aren't sold in the selected currency are dropped entirely —
+    // e.g. PM, CM and OPplus disappear on USD — rather than shown as dead cards.
+    const availableSols = this.SOLS.filter((s) => s.avail === "all" || s.avail.includes(st.currency));
+    const sheets = availableSols.map((s) => {
       const fname = s.id === "op" ? `OPplus_Cloud_prisark_${CUR_URL(st.currency)}_JAN2026.pdf` : `${s.code}_Cloud_prisark_${CUR_URL(st.currency)}_JAN2026.pdf`;
       return {
         name: s.name, tagline: s.tagline, icon: s.icon,
-        available: ok, unavailable: !ok,
         url: `https://partnerzone.blob.core.windows.net/documents/info/PriceList/September2025/Cloud_september_2025/Pricesheets_2026/${s.code}/${fname}`,
         btnLabel: `Price sheet · ${st.currency}`,
-        naLabel: `Not in ${st.currency} — ask your partner`,
       };
     });
+    const sheetsNote = `${sheets.length} of ${this.SOLS.length} solutions are available in ${st.currency}.`;
 
     const onpremCur = ["EUR", "USD", "CAD", "GBP", "AUD", "NZD", "DKK", "NOK", "SEK"].includes(st.currency) ? st.currency : "EUR";
     const onpremUrl = `https://partnerzone.blob.core.windows.net/documents/info/PriceList/September%202025/On-premises_september_2025/ContiniaPriceList-${onpremCur}%20-%202026.xlsx`;
@@ -716,17 +717,26 @@ class Component extends DCLogic {
       onToggle: () => this.setState({ faq: st.faq === i ? -1 : i }),
     }));
 
-    const stats = [
-      { value: "30+", label: "years of experience" },
-      { value: "1,500+", label: "partners worldwide" },
-      { value: "26,000", label: "active licenses" },
-      { value: "90%", pre: "up to", label: "fewer manual tasks" },
+    // ---- release countdown ----
+    const rel = this.RELEASE;
+    const left = rel.at - (st.now || Date.now());
+    const counting = rel.on && left > 0;
+    const pad = (n) => (n < 10 ? "0" + n : "" + n);
+    const secs = Math.max(0, Math.floor(left / 1000));
+    const relParts = [
+      { k: "days", v: String(Math.floor(secs / 86400)) },
+      { k: "hrs", v: pad(Math.floor(secs / 3600) % 24) },
+      { k: "min", v: pad(Math.floor(secs / 60) % 60) },
+      { k: "sec", v: pad(secs % 60) },
     ];
 
     return {
       year: new Date().getFullYear(),
       recDC: st.rec.dc, recEM: st.rec.em, recTotal: st.rec.total,
-      stats, currencies, programs, chips, sliders, lines, faqs, tabs, modules, tabName, sheets,
+      currencies, programs, chips, sliders, lines, faqs, tabs, modules, tabName, sheets, sheetsNote,
+      relOn: rel.on, relCounting: counting, relLive: rel.on && !counting,
+      relTag: rel.tag, relHeadline: rel.headline, relCta: rel.cta, relHref: rel.href,
+      relParts, relAria: `Counting down to the ${rel.tag.toLowerCase()}`,
       currency: st.currency,
       onpremUrl,
       hasSelection: selected.length > 0,
@@ -740,7 +750,6 @@ class Component extends DCLogic {
       goEstimator: () => this.scrollTo("estimator"),
       goSheets: () => this.scrollTo("pricesheets"),
       partnerIcon: React.createElement("i", { className: "fa-light fa-location-dot" }),
-      showTrustBar: this.props.showTrustBar ?? true,
     };
   }
 }
