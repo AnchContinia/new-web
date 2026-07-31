@@ -517,22 +517,40 @@ class Component extends DCLogic {
     };
     window.addEventListener("scroll", this._onScroll, { passive: true });
     this._onScroll();
+    this._wireReveals();
+  }
+
+  // Must run after every render, not just on mount. sc-for lists (the price
+  // sheet grid) create brand-new DOM nodes when the currency changes, and those
+  // nodes start at [data-reveal] => opacity:0. The observer had already
+  // unobserved the originals, so anything created later stayed invisible —
+  // present and clickable, but at opacity 0. Re-wiring picks up the new nodes.
+  componentDidUpdate() {
+    this._wireReveals();
+  }
+
+  _wireReveals() {
+    const els = document.querySelectorAll('[data-reveal]:not([data-reveal="in"])');
+    if (!els.length) return;
     const motion = this.props.motion ?? true;
-    const els = document.querySelectorAll("[data-reveal]");
     if (!motion || !("IntersectionObserver" in window)) {
       els.forEach((el) => el.setAttribute("data-reveal", "in"));
       return;
     }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.setAttribute("data-reveal", "in"); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.12 });
+    if (!this._io) {
+      this._io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.setAttribute("data-reveal", "in");
+            this._io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+    }
     els.forEach((el) => {
       if (el.getBoundingClientRect().top < window.innerHeight) el.setAttribute("data-reveal", "in");
-      else io.observe(el);
+      else this._io.observe(el);
     });
-    this._io = io;
   }
 
   componentWillUnmount() {
