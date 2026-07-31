@@ -45,6 +45,9 @@
     @media (max-width: 640px) {
       /* Tighter section gutters + vertical rhythm */
       .hero-wrap { padding: 56px 20px 0 !important; }
+      /* variant A's mock bleeds into the next band on purpose; B and C don't */
+      .hero-wrap--b { padding: 56px 20px 64px !important; }
+      .hero-wrap--c { padding: 48px 20px 56px !important; }
       #impacts > div, #solutions > div, #how > div { padding: 60px 20px !important; }
       #cta > div { padding: 72px 20px !important; }
 
@@ -169,6 +172,56 @@
       padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
       font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms; }
     .imp-toggle:hover { border-color: #052975; transform: translateY(-2px); }
+    /* second fixed toggle, stacked above the impact one */
+    .hero-toggle { bottom: 74px; }
+
+    /* ---------- Hero variant B: rolodex drum ---------- */
+    /* The words sit on a 5-sided cylinder: each item is rotated -d*72deg around an
+       X axis that runs 0.723em BEHIND the text ((lineHeight/2)/tan(360/2N)), so
+       advancing the index rolls the drum upward like a physical rolodex. */
+    .hero-rolo { position: relative; display: block; height: 1.05em; margin-top: 0.06em;
+      perspective: 900px; transform-style: preserve-3d; color: #8ff8ff; }
+    .hero-rolo__item { display: block; }
+    .hero-rolo__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* rolodex deck — the same index drives a card that turns with the drum */
+    .hero-deck { position: relative; max-width: 620px; height: 132px; margin: 40px auto 0; transform-style: preserve-3d; perspective: 1100px; }
+    .hero-deck__card { box-sizing: border-box; position: absolute; inset: 0; display: flex; align-items: center; gap: 18px;
+      padding: 22px 26px; border-radius: 18px; text-align: left;
+      background: rgba(255,255,255,0.07); border: 1.5px solid rgba(143,248,255,0.34);
+      -webkit-backdrop-filter: blur(10px) saturate(130%); backdrop-filter: blur(10px) saturate(130%);
+      box-shadow: 0 26px 60px rgba(2,12,40,0.42);
+      /* pivot sits (height/2)/tan(36deg) behind the card so the 5 cards ride one drum */
+      transform-origin: 50% 50% -91px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .hero-deck__icon { flex: none; width: 52px; height: 52px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #8ff8ff; background: rgba(143,248,255,0.14); border: 1px solid rgba(143,248,255,0.30); }
+    .hero-deck__name { display: block; font-size: 17px; font-weight: 700; color: #ffffff; }
+    .hero-deck__note { display: block; margin-top: 5px; font-size: 14.5px; line-height: 1.5; color: rgba(255,255,255,0.78); }
+
+    /* ---------- Hero variant C: split ---------- */
+    .hero-split { display: grid; grid-template-columns: minmax(0,1.04fr) minmax(0,1fr); gap: clamp(36px,4.5vw,64px); align-items: center; }
+    .hero-split__stats { display: flex; flex-wrap: wrap; gap: 34px; margin-top: 36px; padding-top: 28px; border-top: 1px solid #cfe0f2; }
+    .hero-split__stat b { display: block; font-size: clamp(26px,2.4vw,34px); font-weight: 700; letter-spacing: -0.02em; color: #052975; line-height: 1; font-variant-numeric: tabular-nums; }
+    .hero-split__stat span { display: block; margin-top: 7px; font-size: 14px; font-weight: 500; color: #3a4a6b; }
+    /* variant C gives the product window a ~580px column instead of A's 960px,
+       so the stage pills and row text need to be dialled down to fit. */
+    .hero-split .cnt-nav { width: 158px !important; }
+    .hero-split .mock-body { padding: 14px 14px 20px !important; }
+    .hero-split .mock-steps { gap: 6px !important; }
+    .hero-split .mock-steps > div { font-size: 10px !important; padding: 7px 3px !important; }
+    .hero-split .mock-steps > div i { display: none; }
+    .hero-split .mock-row div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hero-split .mock-row > div:last-child { min-width: 82px !important; font-size: 10px !important; }
+    @media (max-width: 980px) {
+      .hero-split { grid-template-columns: 1fr; }
+      /* the longest note wraps to three lines at phone width — keep headroom, and
+         retune the pivot to (height/2)/tan(36deg) for the taller card */
+      .hero-deck { height: 180px; }
+      .hero-deck__card { transform-origin: 50% 50% -124px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-rolo__item, .hero-deck__card { transition: none !important; }
+    }
 
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
     .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
@@ -208,7 +261,10 @@
 <x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" hint-size="100%,66px"></x-import>
 
 <!-- ============ HERO (centered, big mockup below) ============ -->
-<section id="top" data-screen-label="Hero" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#def5ff 130%)">
+<section id="top" data-screen-label="Hero" style="position:relative;overflow:hidden;background:{{ heroBg }}">
+
+  <!-- ---------- A · Center (product window below the copy) ---------- -->
+  <sc-if value="{{ heroCenter }}" hint-placeholder-val="{{ true }}">
   <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:58px 32px 0;text-align:center">
     <div style="display:inline-flex;align-items:center;font-size:14.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#052975">It's about time</div>
     <h1 class="hero-h1" style="margin:22px auto 0;max-width:980px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can automate it.</h1>
@@ -237,7 +293,7 @@
               </sc-for>
             </div>
             <sc-for list="{{ flowRows }}" as="row" hint-placeholder-count="5">
-              <div style="display:flex;align-items:center;gap:12px;padding:11px 8px;border-top:1px solid #eef1f6">
+              <div class="mock-row" style="display:flex;align-items:center;gap:12px;padding:11px 8px;border-top:1px solid #eef1f6">
                 <i class="{{ row.icon }}" style="color:#052975;font-size:16px;width:20px;text-align:center"></i>
                 <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px;color:#0a1838">{{ row.doc }}</div><div style="font-size:12px;color:#6b7894">{{ row.vendor }}</div></div>
                 <div style="font-size:13px;font-weight:600;color:#0a1838">{{ row.amt }}</div>
@@ -253,7 +309,97 @@
       </x-import>
     </div>
   </div>
+  </sc-if>
+
+  <!-- ---------- B · Rolodex (drum headline + turning deck card) ---------- -->
+  <sc-if value="{{ heroRolodex }}" hint-placeholder-val="{{ false }}">
+  <img src="assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position:absolute;left:50%;bottom:-46%;transform:translateX(-50%);width:118%;opacity:0.10;pointer-events:none">
+  <div class="hero-wrap hero-wrap--b" style="position:relative;max-width:1080px;margin:0 auto;padding:82px 32px 96px;text-align:center">
+    <div style="display:inline-flex;align-items:center;font-size:14.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#8ff8ff">It's about time</div>
+    <h1 class="hero-h1" style="margin:22px auto 0;max-width:900px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#ffffff">
+      Automate your
+      <span class="hero-rolo" aria-hidden="true">
+        <sc-for list="{{ roloItems }}" as="r" hint-placeholder-count="5">
+          <span class="hero-rolo__item" style="{{ r.style }}">{{ r.word }}</span>
+        </sc-for>
+      </span>
+      <span class="hero-rolo__sr">{{ roloAll }}</span>
+    </h1>
+    <p class="hero-sub" style="margin:26px auto 0;max-width:620px;font-size:18px;line-height:1.65;color:rgba(255,255,255,0.84)">Continia eliminates up to 90% of manual finance tasks — 100% built inside Microsoft Dynamics 365 Business Central, so there is no new system to learn.</p>
+    <div class="hero-cta" style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:34px">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="#cta" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" class-name="cnt-btn--ghostdark" href="#how" hint-size="170px,48px">See how it works</x-import>
+    </div>
+    <div class="hero-deck">
+      <sc-for list="{{ roloDeck }}" as="c" hint-placeholder-count="5">
+        <div class="hero-deck__card" style="{{ c.style }}">
+          <span class="hero-deck__icon"><i class="{{ c.icon }}"></i></span>
+          <span><span class="hero-deck__name">{{ c.name }}</span><span class="hero-deck__note">{{ c.note }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+    <div class="hero-proof" style="display:flex;justify-content:center;flex-wrap:wrap;gap:30px;margin-top:34px;font-size:15px;font-weight:600;color:rgba(255,255,255,0.80)">
+      <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#8ff8ff;font-size:18px"></i> 30+ years of experience</span>
+      <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#8ff8ff;font-size:18px"></i> 21,000+ customers</span>
+      <span style="display:inline-flex;align-items:center;gap:9px"><i class="fa-light fa-circle-check" style="color:#8ff8ff;font-size:18px"></i> Quick setup from AppSource</span>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ---------- C · Split (copy left, product window right) ---------- -->
+  <sc-if value="{{ heroSplit }}" hint-placeholder-val="{{ false }}">
+  <div class="hero-wrap hero-wrap--c" style="position:relative;max-width:1300px;margin:0 auto;padding:62px 32px 78px">
+    <div class="hero-split">
+      <div>
+        <div style="display:inline-flex;align-items:center;font-size:14.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#052975">It's about time</div>
+        <h1 class="hero-h1" style="margin:20px 0 0;font-size:clamp(36px,3.9vw,58px);font-weight:700;line-height:1.06;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can automate it.</h1>
+        <p class="hero-sub" style="margin:22px 0 0;max-width:52ch;font-size:18px;line-height:1.65;color:#0a1838">Continia eliminates up to 90% of manual finance tasks — document capture, expenses, payments and outgoing documents, 100% built inside Microsoft Dynamics 365 Business Central.</p>
+        <div class="hero-cta" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:30px">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="#cta" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="#how" hint-size="170px,48px">See how it works</x-import>
+        </div>
+        <div class="hero-split__stats">
+          <div class="hero-split__stat"><b>21,000+</b><span>customers worldwide</span></div>
+          <div class="hero-split__stat"><b>30+</b><span>years of experience</span></div>
+          <div class="hero-split__stat"><b>1,500+</b><span>local partners</span></div>
+        </div>
+      </div>
+      <div class="hero-mock" style="min-width:0">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" hint-size="100%,440px">
+          <div style="display:flex;background:#ffffff;text-align:left">
+            <div class="cnt-nav" style="flex:none;width:200px;border-right:1px solid #eef1f6;padding:16px 10px;display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ sideNav }}" as="n" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;font-size:12.5px;font-weight:600;background:{{ n.bg }};color:{{ n.fg }};white-space:nowrap"><i class="{{ n.icon }}" style="font-size:14px;width:18px;text-align:center"></i>{{ n.name }}</div>
+              </sc-for>
+            </div>
+            <div class="mock-body" style="flex:1;min-width:0;padding:16px 18px 24px">
+              <div class="mock-steps" style="display:flex;gap:8px;margin-bottom:12px">
+                <sc-for list="{{ flowSteps }}" as="step" hint-placeholder-count="4">
+                  <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 4px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ step.bg }};color:{{ step.fg }};transition:background 400ms,color 400ms;white-space:nowrap"><i class="{{ step.icon }}"></i><span>{{ step.name }}</span></div>
+                </sc-for>
+              </div>
+              <sc-for list="{{ flowRows }}" as="row" hint-placeholder-count="5">
+                <div class="mock-row" style="display:flex;align-items:center;gap:12px;padding:11px 8px;border-top:1px solid #eef1f6">
+                  <i class="{{ row.icon }}" style="color:#052975;font-size:16px;width:20px;text-align:center"></i>
+                  <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13.5px;color:#0a1838">{{ row.doc }}</div><div style="font-size:12px;color:#6b7894">{{ row.vendor }}</div></div>
+                  <div style="font-size:13px;font-weight:600;color:#0a1838">{{ row.amt }}</div>
+                  <div style="min-width:98px;text-align:center;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;background:{{ row.chipBg }};color:{{ row.chipFg }};transition:background 400ms,color 400ms">{{ row.chip }}</div>
+                </div>
+              </sc-for>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 8px 4px;border-top:1px solid #eef1f6;font-size:12.5px;color:#6b7894">
+                <span><strong style="color:#052975">{{ postedCount }}</strong> of 5 posted automatically</span>
+                <span style="color:#5f9e8d;font-weight:700;display:inline-flex;align-items:center;gap:6px"><i class="fa-light fa-circle-check"></i> 0 manual touches</span>
+              </div>
+            </div>
+          </div>
+        </x-import>
+      </div>
+    </div>
+  </div>
+  </sc-if>
 </section>
+
+<button onClick="{{ cycleHero }}" class="imp-toggle hero-toggle" title="Switch the hero design"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i>{{ heroToggleLabel }}</button>
 
 <!-- ============ TRUST MARQUEE ============ -->
 <section data-screen-label="Trusted by" style="background:#052975">
@@ -484,6 +630,16 @@ const SIDE_NAV = [
   { icon: "fa-kit fa-document-output-solution-do-icon-file-export", name: "Document Output", active: false },
 ];
 
+// Hero variant B: the rolodex drum. One entry per Continia solution, so the drum
+// and the deck card underneath it always agree.
+const ROLO = [
+  { word: "invoice capture", name: "Continia Document Capture", icon: "fa-kit fa-document-capture-solution-dc-icon", note: "Intelligent OCR reads every invoice and registers it straight in Business Central." },
+  { word: "expense reports", name: "Continia Expense Management", icon: "fa-kit fa-expense-management-solution-em-icon", note: "Receipts captured, coded and approved from any phone — no spreadsheets." },
+  { word: "vendor payments", name: "Continia Banking", icon: "fa-kit fa-banking-solution-cb-icon", note: "Payment files, payment status and bank reconciliation in one connected flow." },
+  { word: "finance routines", name: "Continia Finance", icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon", note: "Add the finance modules your team needs, without leaving Business Central." },
+  { word: "document delivery", name: "Continia Document Output", icon: "fa-kit fa-document-output-solution-do-icon-file-export", note: "Send the right document to the right customer, in the right format, automatically." },
+];
+
 const TRUST = ["assets/images/company-logos/bmw.png", "assets/images/company-logos/bestseller.png", "assets/images/company-logos/dunlop.png", "assets/images/company-logos/moccamaster.png", "assets/images/company-logos/marley-martha.png", "assets/images/company-logos/sagrada-familia.png"];
 const STAT_TARGETS = { cust: 21000, manual: 90, partners: 1500 };
 const EM_PHASES = [
@@ -494,7 +650,7 @@ const EM_PHASES = [
 ];
 
 class Component extends DCLogic {
-  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "new" };
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "new", heroView: 0, roloIndex: 0 };
   _statsStarted = false;
 
   get motion() { return this.props.motion ?? true; }
@@ -512,12 +668,29 @@ class Component extends DCLogic {
     // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
     this._onResize = () => this.setState({});
     window.addEventListener("resize", this._onResize, { passive: true });
+    this._syncRolo();
+  }
+
+  // The drum only ticks while hero variant B is on screen, so the other two
+  // variants never pay for a re-render they don't use. Idempotent on purpose —
+  // componentDidUpdate calls it on every render, and `_roloArmed` records which
+  // (heroView, motion) pair the live interval belongs to.
+  _syncRolo() {
+    const want = this.state.heroView === 1 && this.motion;
+    if (want === this._roloArmed) return;
+    this._roloArmed = want;
+    clearInterval(this._rolo);
+    if (!want) return;
+    this._rolo = setInterval(() => {
+      this.setState((s) => ({ roloIndex: (s.roloIndex + 1) % ROLO.length }));
+    }, 2300);
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.motion !== this.props.motion || prevProps.flowSpeed !== this.props.flowSpeed) {
       this._applyMotion();
     }
+    this._syncRolo();
     // Re-arm autoplay whenever a video-backed view (New = 1, Carousel = 3, Window = 4) is shown again
     if (prevState && prevState.solView !== this.state.solView &&
         (this.state.solView === 1 || this.state.solView === 3 || this.state.solView === 4)) {
@@ -547,6 +720,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     clearInterval(this._flow);
+    clearInterval(this._rolo);
     window.removeEventListener("scroll", this._onScroll);
     if (this._onResize) window.removeEventListener("resize", this._onResize);
     if (this._io) this._io.disconnect();
@@ -687,6 +861,43 @@ class Component extends DCLogic {
       pick: () => this.setState({ carIndex: i }),
     }));
 
+    // ----- Hero view toggle (0 = Center, 1 = Rolodex, 2 = Split) -----
+    const HV = this.state.heroView;
+    const HERO_BG = [
+      "linear-gradient(180deg,#ffffff 0%,#def5ff 130%)",
+      "linear-gradient(150deg,#031845 0%,#052975 42%,#0d3f8f 78%,#1d5aa8 120%)",
+      "linear-gradient(180deg,#ffffff 0%,#def5ff 150%)",
+    ];
+    const HERO_NAME = ["Center", "Rolodex", "Split"];
+
+    // Rolodex drum: item i sits at -d*72deg on a 5-sided cylinder whose axis runs
+    // 0.723em behind the text — ((lineHeight 1.05)/2) / tan(36deg). Advancing the
+    // index rolls every item up one facet.
+    const RN = ROLO.length, RI = this.state.roloIndex;
+    const roloOffset = (i) => { let d = ((i - RI) % RN + RN) % RN; return d > RN / 2 ? d - RN : d; };
+    const roloItems = ROLO.map((r, i) => {
+      const d = roloOffset(i);
+      const a = Math.abs(d);
+      return {
+        word: r.word,
+        style: "position:absolute;left:0;right:0;top:0;white-space:nowrap;" +
+          "transform-origin:50% 50% -0.723em;transform:rotateX(" + (-d * 72) + "deg);" +
+          "opacity:" + (a === 0 ? 1 : a === 1 ? 0.11 : 0) + ";" +
+          "backface-visibility:hidden;-webkit-backface-visibility:hidden;" +
+          "transition:transform 760ms cubic-bezier(0.16,1,0.3,1),opacity 760ms cubic-bezier(0.16,1,0.3,1);",
+      };
+    });
+    // the deck rides the same drum as the words, one facet per solution
+    const roloDeck = ROLO.map((r, i) => {
+      const d = roloOffset(i);
+      return {
+        icon: r.icon, name: r.name, note: r.note,
+        style: "transform:rotateX(" + (-d * 72) + "deg);opacity:" + (d === 0 ? 1 : 0) +
+          ";pointer-events:" + (d === 0 ? "auto" : "none") +
+          ";transition:transform 760ms cubic-bezier(0.16,1,0.3,1),opacity 620ms cubic-bezier(0.16,1,0.3,1);",
+      };
+    });
+
     return {
       flowRows, flowSteps, postedCount, sideNav, bentoDcRows,
       emProgress: em.p, emStatus: em.s,
@@ -700,6 +911,15 @@ class Component extends DCLogic {
       impactOld: this.state.impactView === "old",
       toggleImpact: () => this.setState((s) => ({ impactView: s.impactView === "new" ? "old" : "new" })),
       impactToggleLabel: "Impact · " + (this.state.impactView === "new" ? "New" : "Classic"),
+      heroBg: HERO_BG[HV],
+      heroCenter: HV === 0,
+      heroRolodex: HV === 1,
+      heroSplit: HV === 2,
+      cycleHero: () => this.setState((st) => ({ heroView: (st.heroView + 1) % 3 })),
+      heroToggleLabel: "Hero · " + HERO_NAME[HV],
+      roloItems,
+      roloAll: ROLO.map((r) => r.word).join(", "),
+      roloDeck,
       solCarousel: true,
       carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
       carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
