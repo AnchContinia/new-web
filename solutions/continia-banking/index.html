@@ -110,7 +110,10 @@
      so this must also be an a.<class> selector to win on source order. */
   a.dc-fo__btn--all { padding: 9px 6px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: none; }
   .dc-fo__btn--all span { color: inherit; }
+  a.dc-fo__btn--all { gap: 9px; }
+  a.dc-fo__btn--all i { transition: transform 180ms; }
   a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; color: #052975; }
+  a.dc-fo__btn--all:hover i { transform: translateX(4px); }
   @media (max-width: 900px) {
     .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
     .dc-mock { justify-self: center; }
@@ -170,7 +173,7 @@
       <a class="dc-fo__btn" href="../continia-banking-features/#essential">Essential <span>38</span></a>
       <a class="dc-fo__btn" href="../continia-banking-features/#direct-communication">Direct Communication <span>5</span></a>
       <a class="dc-fo__btn" href="../continia-banking-features/#security">Security <span>9</span></a>
-      <a class="dc-fo__btn dc-fo__btn--all" href="../continia-banking-features/">See all features</a>
+      <a class="dc-fo__btn dc-fo__btn--all" href="../continia-banking-features/">See all features <i class="fa-light fa-arrow-right" style="font-size:13px;color:var(--c-tech-blue)"></i></a>
     </div>
   </div>
 </section>

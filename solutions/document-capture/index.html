@@ -146,7 +146,10 @@
      so this must also be an a.<class> selector to win on source order. */
   a.dc-fo__btn--all { padding: 9px 6px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: none; }
   .dc-fo__btn--all span { color: inherit; }
+  a.dc-fo__btn--all { gap: 9px; }
+  a.dc-fo__btn--all i { transition: transform 180ms; }
   a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; color: #052975; }
+  a.dc-fo__btn--all:hover i { transform: translateX(4px); }
 
   /* ---------- tighter rhythm across the white run: stats -> what's inside -> demo ---------- */
   /* three unbroken white bands stacked, so the default .dc-sec padding read as
@@ -349,7 +352,7 @@
       <a class="dc-fo__btn" href="../document-capture-features/#order-matching">Order Matching <span>11</span></a>
       <a class="dc-fo__btn" href="../document-capture-features/#document-approval">Document Approval <span>20</span></a>
       <a class="dc-fo__btn" href="../document-capture-features/#purchase-contracts">Purchase Contracts <span>8</span></a>
-      <a class="dc-fo__btn dc-fo__btn--all" href="../document-capture-features/">See all features</a>
+      <a class="dc-fo__btn dc-fo__btn--all" href="../document-capture-features/">See all features <i class="fa-light fa-arrow-right" style="font-size:13px;color:var(--c-tech-blue)"></i></a>
     </div>
   </div>
 </section>

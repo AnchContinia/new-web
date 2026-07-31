@@ -586,6 +586,10 @@ class Component extends DCLogic {
     requestAnimationFrame(() => {
       const v = document.querySelector(".pr3__vid");
       if (!v) return;
+      // ⚠️ The runtime drops the bare `loop` attribute entirely (autoplay/muted/
+      // playsinline survive, loop does not), so the clip froze on its last frame
+      // after ~21 s. Set it as a property.
+      v.loop = true;
       v.muted = true; v.setAttribute("muted", "");
       const p = v.play(); if (p && p.catch) p.catch(() => {});
     });

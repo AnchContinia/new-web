@@ -232,7 +232,7 @@
 
   <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:58px 32px 0;text-align:center">
     <div style="display:inline-flex;align-items:center;font-size:14.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#052975">It's about time</div>
-    <h1 class="hero-h1" style="margin:22px auto 0;max-width:980px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can automate it.</h1>
+    <h1 class="hero-h1" style="margin:22px auto 0;max-width:980px;font-size:clamp(38px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-0.025em;color:#052975">You can't buy back time.<br>But you can <span style="color:#983eae">automate it.</span></h1>
     <p class="hero-sub" style="margin:24px auto 0;max-width:600px;font-size:18px;line-height:1.65;color:#0a1838">Continia eliminates up to 90% of manual finance tasks — document capture, expenses, payments and outgoing documents, 100% built inside Microsoft Dynamics 365 Business Central.</p>
     <div class="hero-cta" style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:34px">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="#cta" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
@@ -517,9 +517,9 @@ const EM_PHASES = [
 ];
 
 class Component extends DCLogic {
-  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "new", heroVid: false };
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "new", heroVid: true };
   _statsStarted = false;
-  _seenHeroVid = false;
+  _seenHeroVid = false;   // seeded false on purpose: the first update arms autoplay
   _seenSolView = 3;
   _seenImpactView = "new";
 
@@ -538,6 +538,7 @@ class Component extends DCLogic {
     // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
     this._onResize = () => this.setState({});
     window.addEventListener("resize", this._onResize, { passive: true });
+    if (this.state.heroVid) this._playHeroVideo();
   }
 
   // Muted autoplay needs the property set, not just the attribute, or Safari
@@ -546,6 +547,10 @@ class Component extends DCLogic {
     requestAnimationFrame(() => {
       const v = document.querySelector(".hero-vid");
       if (!v) return;
+      // ⚠️ The runtime drops the bare `loop` attribute entirely (autoplay/muted/
+      // playsinline survive, loop does not), so the clip froze on its last frame
+      // after ~21 s. Set it as a property.
+      v.loop = true;
       v.muted = true;
       v.setAttribute("muted", "");
       const pr = v.play();
@@ -589,6 +594,7 @@ class Component extends DCLogic {
     requestAnimationFrame(() => {
       const v = document.querySelector(".sol-vid");
       if (!v) return;
+      v.loop = true;   // same dropped-attribute problem as .hero-vid
       v.muted = true;
       v.setAttribute("muted", "");
       const p = v.play();
