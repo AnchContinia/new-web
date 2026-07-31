@@ -87,10 +87,16 @@
   .dc-head p { margin: 16px 0 0; font-size: 1.125rem; line-height: 1.6; color: var(--color-text-muted); }
 
   /* ---------- stats ---------- */
-  .dc-stats { background: var(--c-light-blue); }
-  .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(48px,6vw,72px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; text-align: center; }
+  .dc-stats { background: #ffffff; }
+  .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(44px,5.5vw,66px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 0; text-align: center; }
+  .dc-stat { padding: 12px 16px; border-left: 1px solid #e5eaf3; }
+  .dc-stat em { display: block; font-style: normal; font-size: 13px; font-weight: 600; color: #6b7894; margin-bottom: 4px; }
   .dc-stat b { display: block; font-size: clamp(38px,3.4vw,54px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); line-height: 1; font-variant-numeric: tabular-nums; }
-  .dc-stat span { display: block; margin-top: 12px; font-size: 17.5px; font-weight: 700; line-height: 1.4; color: var(--c-tech-blue); }
+  .dc-stat span { display: block; margin-top: 14px; font-size: 15.5px; font-weight: 500; line-height: 1.45; color: #6b7894; }
+  @media (max-width: 900px) {
+    .dc-stat { border-left: 0; padding: 0 8px; }
+    .dc-stat:nth-child(even) { border-left: 1px solid #e5eaf3; }
+  }
 
   /* ---------- feature grid ---------- */
   .dc-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
@@ -274,7 +280,7 @@
 <!-- ============ STATS ============ -->
 <section class="dc-stats" data-screen-label="Impact">
   <div class="dc-stats__grid">
-    <div class="dc-stat"><b>80%</b><span>faster invoice processing</span></div>
+    <div class="dc-stat"><em>up to</em><b>80%</b><span>faster invoice processing</span></div>
     <div class="dc-stat"><b>⅔</b><span>lower cost on manual tasks</span></div>
     <div class="dc-stat"><b>95%</b><span>automatic matching accuracy</span></div>
     <div class="dc-stat"><b>10+</b><span>hours saved every week</span></div>
