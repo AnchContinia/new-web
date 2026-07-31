@@ -90,7 +90,7 @@
     /* ---------- release countdown banner (between nav and hero) ---------- */
     .pr-rel { background:linear-gradient(90deg,#052975 0%,#0a3a95 62%,#1d5aa8 100%); color:#fff; }
     .pr-rel__inner { max-width:1360px; margin:0 auto; padding:13px 28px; display:flex; align-items:center; flex-wrap:wrap; gap:12px 22px; }
-    .pr-rel__tag { flex:none; font-size:10.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#052975; background:#8ff8ff; border-radius:999px; padding:5px 11px; }
+    .pr-rel__tag { flex:none; font-size:11.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#8ff8ff; }
     .pr-rel__copy { flex:1 1 240px; margin:0; font-size:14.5px; font-weight:600; line-height:1.4; color:#fff; }
     .pr-rel__timer { flex:none; display:flex; align-items:flex-start; gap:7px; }
     /* class-targeted, not `> * > *` — sc-for does not always add a wrapper */
@@ -147,7 +147,7 @@
       <h1>Your bill, itemized<br>to the cent.</h1>
       <p>No seats you don't fill, no tiers you don't reach. Every line is a module you actually run — start with a free 30-day trial and pay only for real usage.</p>
       <div class="pr3__cta">
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" on-click="{{ goEstimator }}" hint-size="auto,48px">Estimate your price</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" on-click="{{ goEstimator }}" hint-size="auto,48px">Estimate your price</x-import>
         <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" on-click="{{ goSheets }}" hint-size="auto,48px">Download price sheets</x-import>
       </div>
     </div>
