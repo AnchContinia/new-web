@@ -108,9 +108,9 @@
   /* plain text link, deliberately not a pill */
   /* `a:not(.cnt-btn){text-decoration:none}` earlier in this sheet ties on specificity,
      so this must also be an a.<class> selector to win on source order. */
-  a.dc-fo__btn--all { padding: 9px 4px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+  a.dc-fo__btn--all { padding: 9px 6px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: none; }
   .dc-fo__btn--all span { color: inherit; }
-  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; text-decoration-thickness: 3px; color: #052975; }
+  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; color: #052975; }
   @media (max-width: 900px) {
     .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
     .dc-mock { justify-self: center; }
@@ -169,7 +169,7 @@
     <div class="dc-fo__btns">
       <a class="dc-fo__btn" href="../document-output-features/#essential">Essential <span>32</span></a>
       <a class="dc-fo__btn" href="../document-output-features/#security">Security <span>3</span></a>
-      <a class="dc-fo__btn dc-fo__btn--all" href="../document-output-features/">See all features <i class="fa-light fa-arrow-right"></i></a>
+      <a class="dc-fo__btn dc-fo__btn--all" href="../document-output-features/">See all features</a>
     </div>
   </div>
 </section>

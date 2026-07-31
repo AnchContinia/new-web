@@ -88,7 +88,7 @@
 
   /* ---------- stats ---------- */
   .dc-stats { background: #ffffff; }
-  .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(44px,5.5vw,66px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 0; text-align: center; }
+  .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(30px,3.6vw,42px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 0; text-align: center; }
   .dc-stat { padding: 12px 16px; border-left: 1px solid #e5eaf3; }
   .dc-stat em { display: block; font-style: normal; font-size: 13px; font-weight: 600; color: #6b7894; margin-bottom: 4px; }
   .dc-stat b { display: block; font-size: clamp(38px,3.4vw,54px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); line-height: 1; font-variant-numeric: tabular-nums; }
@@ -144,9 +144,16 @@
   /* plain text link, deliberately not a pill */
   /* `a:not(.cnt-btn){text-decoration:none}` earlier in this sheet ties on specificity,
      so this must also be an a.<class> selector to win on source order. */
-  a.dc-fo__btn--all { padding: 9px 4px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+  a.dc-fo__btn--all { padding: 9px 6px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: none; }
   .dc-fo__btn--all span { color: inherit; }
-  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; text-decoration-thickness: 3px; color: #052975; }
+  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; color: #052975; }
+
+  /* ---------- tighter rhythm across the white run: stats -> what's inside -> demo ---------- */
+  /* three unbroken white bands stacked, so the default .dc-sec padding read as
+     dead air rather than separation. */
+  #features.dc-sec { padding-top: clamp(32px,4vw,48px); padding-bottom: clamp(40px,4.8vw,58px); }
+  #features .dc-head { margin-bottom: clamp(32px,3.6vw,40px); }
+  .dc-sl.dc-sec { padding-top: clamp(30px,3.6vw,44px); padding-bottom: clamp(56px,6.6vw,84px); }
 
   /* ---------- storylane interactive demo ---------- */
   .dc-sl__grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(32px,5vw,64px); align-items: center; }
@@ -166,8 +173,10 @@
   .dc-ti__grid { display: grid; grid-template-columns: 1.02fr 0.98fr; gap: clamp(32px,5vw,68px); align-items: center; }
   .dc-ti h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
   .dc-ti p { margin: 18px 0 0; font-size: 1.0625rem; line-height: 1.65; color: #3a4a6b; max-width: 54ch; }
-  .dc-ti__media { border-radius: 18px; overflow: hidden; border: 3px solid var(--c-tech-blue); box-shadow: 0 26px 60px rgba(2,12,40,0.16); }
-  .dc-ti__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  /* portrait crop — the asset is 981x1200, so the frame follows it instead of
+     letterboxing a landscape box. */
+  .dc-ti__media { border-radius: 18px; overflow: hidden; border: 3px solid var(--c-tech-blue); box-shadow: 0 26px 60px rgba(2,12,40,0.16); aspect-ratio: 4 / 5; }
+  .dc-ti__media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 
   /* ---------- youtube playlist (light, big player + legible chapter rail) ---------- */
   .dc-yt { background: #f6f9fc; }
@@ -340,7 +349,7 @@
       <a class="dc-fo__btn" href="../document-capture-features/#order-matching">Order Matching <span>11</span></a>
       <a class="dc-fo__btn" href="../document-capture-features/#document-approval">Document Approval <span>20</span></a>
       <a class="dc-fo__btn" href="../document-capture-features/#purchase-contracts">Purchase Contracts <span>8</span></a>
-      <a class="dc-fo__btn dc-fo__btn--all" href="../document-capture-features/">See all features <i class="fa-light fa-arrow-right"></i></a>
+      <a class="dc-fo__btn dc-fo__btn--all" href="../document-capture-features/">See all features</a>
     </div>
   </div>
 </section>
@@ -415,7 +424,7 @@
         </div>
       </div>
       <div class="dc-ti__media">
-        <img src="../../assets/images/team-at-work.jpg" alt="Two Continia colleagues working together at a laptop" />
+        <img src="../../assets/images/silke-vertical.jpg" alt="Continia colleague working in Business Central" />
       </div>
     </div>
   </div>
