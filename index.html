@@ -179,11 +179,9 @@
     .hero-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
     .hero-vid__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.74) 42%, rgba(222,245,255,0.88) 100%); }
-    /* The release clip is a filmed interview, not an abstract texture: faces land
-       right behind the headline, and at the clouds scrim the purple "automate it."
-       measured only 3.06:1. Lifting the mid stop to 0.82 brings it to 3.79 —
-       comparable to the clouds variant's 3.97 — and navy to 8.7. */
-    .hero-vid__scrim--r1 { background: linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.82) 42%, rgba(222,245,255,0.90) 100%); }
+    /* The Release R1 state deliberately renders NO scrim — the clip plays at full
+       strength behind the copy. That means the navy/purple headline is running
+       unprotected over footage; contrast is a known open item, not an oversight. */
     .hero-wrap { z-index: 2; }
     @media (prefers-reduced-motion: reduce) { .hero-vid { display: none; } }
 
@@ -239,7 +237,6 @@
       <source src="assets/video/release-r1.mp4" type="video/mp4">
       <source src="assets/video/release-r1.mov" type="video/quicktime">
     </video>
-    <div class="hero-vid__scrim hero-vid__scrim--r1" aria-hidden="true"></div>
   </sc-if>
 
   <div class="hero-wrap" style="position:relative;max-width:1240px;margin:0 auto;padding:58px 32px 0;text-align:center">
