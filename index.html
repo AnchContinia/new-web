@@ -124,6 +124,9 @@
     .imp-sq--a .imp-card { animation-delay: 0.08s; }
     .imp-sq--b .imp-card { animation-delay: 0.22s; }
     .imp-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* third view: same layout, no tech-blue outline. The border was doing the
+       edge definition, so the shadow picks it up. */
+    .imp-split--bare .imp-card { border: 0; box-shadow: 0 18px 44px rgba(3,15,48,0.18), 0 4px 14px rgba(3,15,48,0.10); }
     /* intro: fly up from below into place */
     @keyframes impRise { from { opacity: 0; transform: translateY(74px); } to { opacity: 1; transform: none; } }
     /* two squares orbit clockwise, swapping which one is in front every 10s (20s loop) — no fade */
@@ -323,9 +326,10 @@
 <!-- ============ IMPACT (giant count-up numbers) ============ -->
 <section id="impacts" data-screen-label="Impact" style="background:#ffffff">
   <div style="max-width:1240px;margin:0 auto;padding:104px 32px">
-<!-- ===== NEW: 50/50 split with two overlapping, swapping photos ===== -->
-<sc-if value="{{ impactNew }}" hint-placeholder-val="{{ true }}">
-    <div class="imp-split">
+<!-- ===== NEW + NO-OUTLINE: 50/50 split with two overlapping, swapping photos.
+         Both views share this markup; only {{ impactSplitCls }} differs. ===== -->
+<sc-if value="{{ impactSplit }}" hint-placeholder-val="{{ true }}">
+    <div class="imp-split {{ impactSplitCls }}">
       <div class="imp-left" data-reveal="true">
         <h2>Real results.<br>Real time saved.</h2>
         <p>See how finance teams around the world are transforming the way they work. From faster invoice handling to fewer errors — time gets back to where it matters.</p>
@@ -781,10 +785,14 @@ class Component extends DCLogic {
       statPartners: fmt(stats.partners) + "+",
       year: new Date().getFullYear(),
       arrowBtn: { iconRight: icon("fa-light fa-arrow-right") },
-      impactNew: this.state.impactView === "new",
+      // "new" and "bare" render the same markup; only the modifier class differs
+      impactSplit: this.state.impactView !== "old",
+      impactSplitCls: this.state.impactView === "bare" ? "imp-split--bare" : "",
       impactOld: this.state.impactView === "old",
-      toggleImpact: () => this.setState((s) => ({ impactView: s.impactView === "new" ? "old" : "new" })),
-      impactToggleLabel: "Impact · " + (this.state.impactView === "new" ? "New" : "Classic"),
+      toggleImpact: () => this.setState((s) => ({
+        impactView: s.impactView === "new" ? "old" : s.impactView === "old" ? "bare" : "new",
+      })),
+      impactToggleLabel: "Impact · " + ({ new: "New", old: "Classic", bare: "No outline" })[this.state.impactView],
       heroCls: this.state.heroView === 1 ? "hero-dark" : "",
       heroClouds: this.state.heroView === 0,
       heroRelease: this.state.heroView === 1,
