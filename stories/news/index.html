@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newsroom — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text, #0a1838); }
+  a { text-decoration: none; }
+  ::selection { background: var(--c-innovation-blue, #8ff8ff); color: var(--c-tech-blue, #052975); }
+
+  /* ---------- shared with stories/index.html ---------- */
+  .st-wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(20px, 4vw, 32px); }
+  .st-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; color: var(--c-tech-blue, #052975); }
+  .st-eyebrow i { font-size: 17px; }
+  .st-sec { padding: clamp(40px, 4.4vw, 64px) 0; }
+  .st-sec--tint { background: #f4f8fd; }
+
+  /* ---------- category-page hero ---------- */
+  .ct-hero { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--c-light-blue, #def5ff) 0%, #eef9ff 58%, #ffffff 100%);
+    padding: clamp(26px, 3vw, 38px) 0 clamp(38px, 4.4vw, 58px); }
+  .ct-hero::before { content: ""; position: absolute; right: -6%; top: -42%; width: 520px; height: 520px; border-radius: 50%;
+    background: radial-gradient(circle at 36% 36%, rgba(143,248,255,0.5), transparent 64%); pointer-events: none; }
+  .ct-crumb { position: relative; display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: #52678f; margin-bottom: clamp(20px, 2.4vw, 30px); }
+  .ct-crumb a { color: var(--c-tech-blue, #052975); display: inline-flex; align-items: center; gap: 7px; }
+  .ct-crumb a:hover { color: var(--c-performance-purple, #983eae); }
+  .ct-crumb i { font-size: 11px; }
+  .ct-crumb span[aria-current] { color: #52678f; }
+  .ct-hero__grid { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+  .ct-hero h1 { margin: 14px 0 0; font-size: clamp(34px, 3.8vw, 54px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; color: var(--c-tech-blue, #052975); }
+  .ct-hero h1 .hl { color: var(--c-performance-purple, #983eae); }
+  .ct-hero p { margin: 16px 0 0; max-width: 44rem; font-size: 17.5px; line-height: 1.6; color: #33436a; }
+  .ct-count { flex: none; display: inline-flex; align-items: baseline; gap: 9px; padding: 12px 20px; border-radius: 14px;
+    background: #fff; border: 1px solid #cfe6f5; box-shadow: 0 8px 22px rgba(5,41,117,0.08); }
+  .ct-count b { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue, #052975); font-variant-numeric: tabular-nums; }
+  .ct-count span { font-size: 13.5px; color: #52678f; }
+
+  /* ---------- filter chips ---------- */
+  .ct-filters { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: clamp(22px, 2.4vw, 32px); }
+  .ct-chip { display: inline-flex; align-items: center; gap: 9px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    border-radius: 999px; padding: 9px 17px; transition: transform .18s, border-color .18s, background .18s, color .18s; }
+  .ct-chip:hover { transform: translateY(-2px); }
+  .ct-chip b { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; opacity: 0.72; }
+  .ct-empty { padding: 40px 0; text-align: center; font-size: 15.5px; color: #52678f; }
+
+  /* ---------- back-to-hub band ---------- */
+  .ct-back { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 0 0 clamp(34px,4vw,54px); }
+  .ct-back a { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--c-tech-blue, #052975);
+    background: #fff; border: 1.5px solid #cfe6f5; border-radius: 999px; padding: 11px 20px; transition: transform .2s, border-color .2s, box-shadow .2s; }
+  .ct-back a:hover { transform: translateY(-2px); border-color: var(--c-tech-blue, #052975); box-shadow: 0 10px 24px rgba(5,41,117,0.12); }
+  .ct-back a i { font-size: 12px; color: var(--c-performance-purple, #983eae); }
+
+  /* ---------- newsroom ---------- */
+  .nw-list { border-top: 1px solid #e5ebf5; }
+  .nw-row { display: grid; grid-template-columns: 132px 148px 1fr auto; align-items: center; gap: 22px; padding: 19px 8px;
+    border-bottom: 1px solid #e5ebf5; transition: background .2s, padding .2s; }
+  .nw-row:hover { background: #f4f8fd; padding-inline: 18px; }
+  .nw-row time { font-size: 14px; font-weight: 600; color: #6b7894; font-variant-numeric: tabular-nums; }
+  .nw-chip { justify-self: start; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; }
+  .nw-row h3 { margin: 0; font-size: 17.5px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; color: #0a1838; }
+  .nw-row .nw-arrow { color: var(--c-performance-purple, #983eae); font-size: 15px; opacity: 0; transform: translateX(-6px); transition: opacity .2s, transform .2s; }
+  .nw-row:hover .nw-arrow { opacity: 1; transform: none; }
+  @media (max-width: 720px) {
+    .nw-row { grid-template-columns: 1fr auto; gap: 6px 14px; padding: 16px 6px; }
+    .nw-row time { grid-row: 1; }
+    .nw-row .nw-chip { grid-row: 1; grid-column: 2; }
+    .nw-row h3 { grid-column: 1 / -1; }
+    .nw-row .nw-arrow { display: none; }
+    .nw-row:hover { padding-inline: 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Stories" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO ============ -->
+<section class="ct-hero">
+  <div class="st-wrap">
+    <nav class="ct-crumb" aria-label="Breadcrumb">
+      <a href="../"><i class="fa-light fa-arrow-left"></i> Stories</a>
+      <i class="fa-light fa-chevron-right" style="font-size:10px;opacity:0.5"></i>
+      <span aria-current="page">News</span>
+    </nav>
+    <div class="ct-hero__grid">
+      <div>
+        <span class="st-eyebrow"><i class="fa-light fa-newspaper"></i> News</span>
+        <h1>From the<br><span class="hl">newsroom.</span></h1>
+        <p>Product launches, milestones and the occasional celebration.</p>
+      </div>
+      <span class="ct-count"><b>5</b><span>announcements</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NEWS ============ -->
+<section class="st-sec" style="padding-top: 0;">
+  <div class="st-wrap">
+    <div class="ct-filters">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+        <button class="ct-chip" style="{{ c.style }}" onClick="{{ c.pick }}">{{ c.label }}<b>{{ c.n }}</b></button>
+      </sc-for>
+    </div>
+    <div class="nw-list">
+      <sc-for list="{{ items }}" as="n" hint-placeholder-count="5">
+        <a class="nw-row" href="#">
+          <time>{{ n.date }}</time>
+          <span class="nw-chip" style="{{ n.chipStyle }}">{{ n.cat }}</span>
+          <h3>{{ n.title }}</h3>
+          <i class="fa-light fa-arrow-right nw-arrow"></i>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+</section>
+<!-- ============ BACK TO HUB ============ -->
+<div class="ct-back"><a href="../"><i class="fa-light fa-arrow-left"></i> Back to all stories</a></div>
+
+<!-- ============ CTA BAND (shared site-wide pattern) ============ -->
+<section data-screen-label="Final CTA" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%);">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div style="max-width: 820px; margin: 0 auto; padding: 76px 32px 80px; text-align: center; position: relative;">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Stay close</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">See what the latest release changes for your team</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">Every Continia app installs straight from Microsoft AppSource and updates with your Business Central release.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="200px,52px">Start your free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="https://www.continia.com/partners/" hint-size="170px,52px">Talk to a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+// The same five items the Stories hub lists, newest first. This page is the full
+// index — add real releases to NEWS and the filter counts follow.
+const CHIP_STYLE = {
+  Company: "color: #052975; background: #dbe8ff;",
+  Product: "color: #0e5a4a; background: #d7f2e9;",
+  Partners: "color: #7a2b8f; background: #f0dcf6;",
+};
+const NEWS = [
+  { date: "14 Jul 2026", cat: "Company", title: "Continia surpasses 21,000 customers worldwide" },
+  { date: "30 Jun 2026", cat: "Product", title: "Continia Banking adds real-time payment fraud screening" },
+  { date: "20 May 2026", cat: "Partners", title: "Continia named a Microsoft Partner of the Year finalist" },
+  { date: "08 Apr 2026", cat: "Product", title: "The Expense Management mobile app gets a ground-up redesign" },
+  { date: "11 Mar 2026", cat: "Company", title: "Continia opens a new office to serve the DACH region" },
+];
+
+class Component extends DCLogic {
+  state = { cat: "All" };
+
+  renderVals() {
+    const active = this.state.cat;
+    const cats = ["All", ...NEWS.map((n) => n.cat).filter((c, i, a) => a.indexOf(c) === i)];
+    const chips = cats.map((c) => {
+      const on = c === active;
+      return {
+        label: c,
+        n: c === "All" ? NEWS.length : NEWS.filter((n) => n.cat === c).length,
+        pick: () => this.setState({ cat: c }),
+        style: on
+          ? "background: var(--c-tech-blue, #052975); border: 1.5px solid var(--c-tech-blue, #052975); color: #fff;"
+          : "background: #fff; border: 1.5px solid #cfe6f5; color: var(--c-tech-blue, #052975);",
+      };
+    });
+    const items = (active === "All" ? NEWS : NEWS.filter((n) => n.cat === active))
+      .map((n) => ({ ...n, chipStyle: CHIP_STYLE[n.cat] || CHIP_STYLE.Company }));
+    return { chips, items };
+  }
+}
+</script>
+</body>
+</html>
