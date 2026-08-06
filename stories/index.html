@@ -18,7 +18,12 @@
 <script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
 <style>
   html { scroll-behavior: smooth; }
-  html, body { overflow-x: hidden; max-width: 100%; }
+  /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+     overflow-y to auto, which made BODY the scroller: window.scrollY stuck at 0,
+     window never fired `scroll`, and the sticky header unstuck after ~840px.
+     `clip` clips the same way without creating a scroll box. */
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
   body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text, #0a1838); }
   a { text-decoration: none; }
   ::selection { background: var(--c-innovation-blue, #8ff8ff); color: var(--c-tech-blue, #052975); }
@@ -116,8 +121,9 @@
   /* ================= HERO VARIANTS (toggle, bottom-left) ================= */
   .st-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
     padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
-    font-family: inherit; font-size: 13px; font-weight: 600; color: var(--c-tech-blue, #052975); cursor: pointer; transition: transform .2s, border-color .2s; }
+    font-family: inherit; font-size: 13px; font-weight: 600; color: var(--c-tech-blue, #052975); cursor: pointer; transition: transform .2s, border-color .2s, opacity .22s; }
   .st-toggle:hover { border-color: var(--c-tech-blue, #052975); transform: translateY(-2px); }
+  body.cnt-footer-in-view .st-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
 
   /* ---------- 2 · Editorial rail (stacked headline + portrait cards) ---------- */
   .st-h2 { position: relative; overflow: hidden; background: linear-gradient(180deg, #f7fbff 0%, #ffffff 100%); padding: clamp(40px,4.6vw,62px) 0 clamp(34px,4vw,52px); }
@@ -637,9 +643,45 @@ class Component extends DCLogic {
     return !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }
 
-  componentDidMount() { this._sync(); }
+  componentDidMount() { this._sync(); this._watchFooter(); }
   componentDidUpdate() { this._sync(); }
-  componentWillUnmount() { this._teardown(); }
+  componentWillUnmount() {
+    this._teardown();
+    if (this._onFootScroll) {
+      document.removeEventListener("scroll", this._onFootScroll, { capture: true });
+      window.removeEventListener("resize", this._onFootScroll);
+    }
+    document.body.classList.remove("cnt-footer-in-view");
+  }
+
+  // Fade the fixed bottom-left toggle out once the footer legal bar reaches the
+  // viewport — it used to sit right on top of it. The flag goes on <body> rather
+  // than on the button because <body> is outside the dc render tree and so
+  // survives a re-render; a class on the button itself would be wiped by the
+  // next renderVals() pass.
+  _watchFooter() {
+    // Re-queries the legal bar on every (rAF-throttled) scroll rather than
+    // holding a node reference: an IntersectionObserver attached at mount goes
+    // deaf the moment the runtime re-renders the footer and swaps the node out.
+    // Measuring the rect and listening on document in the CAPTURE phase is the
+    // same pattern the reading-progress bar uses, for the same reason.
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
+  }
+
 
   _sync() {
     if (this._mounted === this.state.hero) return;

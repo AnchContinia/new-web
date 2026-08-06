@@ -1471,12 +1471,10 @@ const CSS = `
 .cnt-sitefooter__col a:hover { color: var(--c-innovation-blue); }
 .cnt-sitefooter__bottom { border-top: 1px solid rgba(255,255,255,0.15); }
 .cnt-sitefooter__bottominner { max-width: var(--layout-content-max, 1360px); margin: 0 auto; padding: 20px var(--layout-page-pad, 28px); display: flex; align-items: center; gap: 12px 22px; flex-wrap: wrap; font-size: 13px; color: rgba(255,255,255,0.65); }
-.cnt-sitefooter__legal { display: flex; gap: 18px; flex-wrap: wrap; }
+.cnt-sitefooter__legal { display: flex; gap: 18px; flex-wrap: wrap; margin-left: auto; }
 .cnt-sitefooter__legal a { color: rgba(255,255,255,0.65); transition: color 200ms var(--ease-standard); }
 .cnt-sitefooter__legal a:hover { color: var(--c-innovation-blue); }
-.cnt-sitefooter__badges { display: flex; gap: 8px; margin-left: auto; }
-.cnt-sitefooter__badge { border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-pill); padding: 5px 12px; font-size: 10.5px; letter-spacing: 0.08em; font-weight: var(--fw-semibold); color: rgba(255,255,255,0.85); white-space: nowrap; text-transform: uppercase; }
-@media (max-width: 920px) { .cnt-sitefooter__top { grid-template-columns: 1fr 1fr; } .cnt-sitefooter__badges { margin-left: 0; }
+@media (max-width: 920px) { .cnt-sitefooter__top { grid-template-columns: 1fr 1fr; }
   /* let the brand block span both columns, or the three badge logos have only
      half the viewport and the first one wraps onto its own line */
   .cnt-sitefooter__brand { grid-column: 1 / -1; } }
@@ -1537,13 +1535,7 @@ function SiteFooter({
   }, links.legal.map(l => /*#__PURE__*/React.createElement("a", {
     key: l.label,
     href: l.href
-  }, l.label))), /*#__PURE__*/React.createElement("div", {
-    className: "cnt-sitefooter__badges"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "cnt-sitefooter__badge"
-  }, "ISO 27001"), /*#__PURE__*/React.createElement("span", {
-    className: "cnt-sitefooter__badge"
-  }, "Built inside Business Central")))));
+  }, l.label))))));
 }
 Object.assign(__ds_scope, { CONTINIA_LINKS: __ds_scope.CONTINIA_LINKS, SiteFooter });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/SiteFooter.jsx", error: String((e && e.message) || e) }); }

@@ -18,7 +18,12 @@
 <script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
 <style>
   html { scroll-behavior: smooth; }
-  html, body { overflow-x: hidden; max-width: 100%; }
+  /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+     overflow-y to auto, which made BODY the scroller: window.scrollY stuck at 0,
+     window never fired `scroll`, and the sticky header unstuck after ~840px.
+     `clip` clips the same way without creating a scroll box. */
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
   body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
   a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
   a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
@@ -37,18 +42,46 @@
   .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
   .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
   .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8193b9; }
-  .dc-mock__flow { display: flex; gap: 6px; margin: 16px 0 4px; }
-  .dc-mock__step { flex: 1; text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 7px 4px; border-radius: 8px; background: #052975; color: #8ff8ff; }
-  .dc-mock__rows { margin-top: 14px; display: flex; flex-direction: column; gap: 2px; }
-  .dc-row { display: flex; align-items: center; gap: 12px; padding: 11px 6px; border-top: 1px solid #eef1f6; opacity: 0; animation: dcIn .5s cubic-bezier(0.16,1,0.3,1) forwards; }
-  .dc-row i { color: #052975; font-size: 15px; width: 18px; text-align: center; }
-  .dc-row .nm { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: #0a1838; }
-  .dc-row .amt { font-size: 13px; font-weight: 700; color: #052975; }
-  .dc-row .chip { min-width: 84px; text-align: center; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: #cfe2dd; color: #2f6455; }
-  .dc-row .chip.warn { background: #fff2d6; color: #8a6516; }
-  @keyframes dcIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6b7894; }
-  .dc-mock__foot i { color: #5f9e8d; }
+  /* pipeline pills. Target the class, not `> * > *`: sc-for only inserts a
+     display:contents wrapper sometimes, so position-based selectors are unreliable. */
+  .dc-mock__flow { display: flex; gap: 5px; margin: 16px 0 0; }
+  .dc-mock__step { flex: 1; min-width: 0; text-align: center; font-size: 9.5px; font-weight: 700; letter-spacing: 0.02em; padding: 6px 3px; border-radius: 7px; background: #f4f7fb; color: #9aa8c4; white-space: nowrap; transition: background 320ms ease, color 320ms ease; }
+  .dc-mock__step.is-done { background: #e4f0ec; color: #3f7a6a; }
+  .dc-mock__step.is-on { background: #052975; color: #8ff8ff; }
+
+  .dc-mock__prog { position: relative; height: 3px; margin: 12px 0 4px; border-radius: 999px; background: #eef1f6; overflow: hidden; }
+  .dc-mock__prog i { position: absolute; inset: 0 auto 0 0; display: block; background: linear-gradient(90deg,#052975,#8ff8ff); border-radius: 999px; transition: width 520ms cubic-bezier(0.16,1,0.3,1); }
+
+  /* record preview + sweeping processing line */
+  .dc-mock__doc { position: relative; margin-top: 14px; border: 1px solid #e7ecf5; border-radius: 11px; background: #fbfcfe; padding: 12px 13px; overflow: hidden; }
+  .dc-mock__docHead { display: flex; align-items: center; gap: 9px; font-size: 11.5px; font-weight: 700; color: #052975; }
+  .dc-mock__docHead i { font-size: 13px; }
+  .dc-mock__docHead b { margin-left: auto; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #e4f0ec; color: #3f7a6a; }
+  .dc-mock__lines { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .dc-mock__lines span { display: block; height: 5px; border-radius: 3px; background: #e7ecf5; }
+  .dc-mock__lines span:nth-child(1) { width: 76%; }
+  .dc-mock__lines span:nth-child(2) { width: 92%; }
+  .dc-mock__lines span:nth-child(3) { width: 61%; }
+  .dc-mock__scan { position: absolute; left: 0; right: 0; height: 46px; pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(143,248,255,0.5) 48%, rgba(5,41,117,0.5) 52%, transparent);
+    animation: dcScan 1.5s ease-in-out infinite; }
+  @keyframes dcScan { 0% { top: -46px; opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+  /* fields, filling in as the pipeline advances */
+  .dc-mock__fields { margin-top: 12px; }
+  .dc-mock__field { display: flex; align-items: center; gap: 10px; padding: 8px 2px; border-top: 1px solid #f1f4f9; font-size: 12.5px; }
+  .dc-mock__field .k { flex: none; width: 84px; color: #8193b9; font-weight: 600; }
+  /* value and dashed placeholder share one slot, so the row height never jumps */
+  .dc-mock__field .slot { position: relative; flex: 1; min-width: 0; }
+  .dc-mock__field .slot .ph { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg,#e4eaf4 0 7px,transparent 7px 12px); transition: opacity 320ms ease; }
+  .dc-mock__field .slot .v { display: block; font-weight: 700; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateY(4px); transition: opacity 420ms ease, transform 420ms ease; }
+  .dc-mock__field .g { flex: none; width: 15px; text-align: center; font-size: 12px; color: #5f9e8d; opacity: 0; transition: opacity 420ms ease; }
+  .dc-mock__field.is-filled .slot .v { opacity: 1; transform: none; }
+  .dc-mock__field.is-filled .slot .ph { opacity: 0; }
+  .dc-mock__field.is-filled .g { opacity: 1; }
+
+  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: #52678f; min-height: 17px; }
+  .dc-mock__foot i { color: #5f9e8d; font-size: 13px; }
   .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
   .dc-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
   .dc-head .eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
@@ -123,7 +156,7 @@
     .dc-steps::before { display: none; }
   }
   @media (max-width: 560px) { .dc-features { grid-template-columns: 1fr; } .dc-steps { grid-template-columns: 1fr 1fr; } }
-  @media (prefers-reduced-motion: reduce) { .dc-mock, .dc-row { animation: none !important; opacity: 1 !important; } }
+  @media (prefers-reduced-motion: reduce) { .dc-mock { animation: none !important; opacity: 1 !important; } .dc-mock__scan { display: none !important; } }
 </style>
 </helmet>
 <div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
@@ -143,9 +176,35 @@
     </div>
     <div class="dc-mock" aria-hidden="true">
       <div class="dc-mock__bar"><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__title">Payment batch</span></div>
-      <div class="dc-mock__flow"><div class="dc-mock__step">Proposed</div><div class="dc-mock__step">Approved</div><div class="dc-mock__step">Exported</div><div class="dc-mock__step">Reconciled</div></div>
-      <div class="dc-mock__rows"><div class="dc-row" style="animation-delay:0.15s"><i class="fa-light fa-building-columns"></i><span class="nm">Payment batch 2041</span><span class="amt">€ 84,200</span><span class="chip">Approved</span></div><div class="dc-row" style="animation-delay:0.35s"><i class="fa-light fa-file-export"></i><span class="nm">Bank file · SEPA</span><span class="amt"></span><span class="chip">Exported</span></div><div class="dc-row" style="animation-delay:0.55s"><i class="fa-light fa-code-compare"></i><span class="nm">Reconciliation</span><span class="amt">214</span><span class="chip">Matched</span></div></div>
-      <div class="dc-mock__foot"><i class="fa-light fa-circle-check"></i>Proposed, approved, exported and reconciled — in one flow</div>
+
+      <div class="dc-mock__flow">
+        <sc-for list="{{ stages }}" as="s" hint-placeholder-count="4">
+          <div class="{{ s.cls }}">{{ s.name }}</div>
+        </sc-for>
+      </div>
+      <div class="dc-mock__prog"><i style="{{ progStyle }}"></i></div>
+
+      <div class="dc-mock__doc">
+        <div class="dc-mock__docHead">
+          <i class="{{ docIcon }}"></i><span>{{ docName }}</span><b>{{ docBadge }}</b>
+        </div>
+        <div class="dc-mock__lines"><span></span><span></span><span></span></div>
+        <sc-if value="{{ scanning }}" hint-placeholder-val="{{ true }}">
+          <div class="dc-mock__scan"></div>
+        </sc-if>
+      </div>
+
+      <div class="dc-mock__fields">
+        <sc-for list="{{ fields }}" as="f" hint-placeholder-count="5">
+          <div class="{{ f.cls }}">
+            <span class="k">{{ f.k }}</span>
+            <span class="slot"><span class="ph"></span><span class="v">{{ f.v }}</span></span>
+            <i class="fa-light fa-circle-check g"></i>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="dc-mock__foot"><i class="{{ footIcon }}"></i>{{ footText }}</div>
     </div>
   </div>
 </section>
@@ -229,5 +288,75 @@
 <div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
 </div>
 </x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+// Hero pipeline animation, ported from solutions/document-capture/. The
+// mechanics are product-agnostic; the sample data below is this page's own,
+// carried over from the static mock it replaces.
+//
+// Two runtime traps this file has to respect (see HANDOFF.md §3):
+//   1. the bindings method must be called renderVals(), not render()
+//   2. this <script> must sit OUTSIDE </x-dc> — inside, it never registers
+// Both fail silently, with no console error and no entry in __ds_ns.__errors.
+class Component extends DCLogic {
+  state = { step: 0 };
+
+  stages = ["Proposed", "Approved", "Exported", "Reconciled"];
+  scanLabel = "Checking";
+
+  // Each field appears at the stage that would actually produce it.
+  fieldDefs = [
+    { k: "Batch", v: "Payment batch 2041", at: 0 },
+    { k: "Amount", v: "€ 84,200", at: 0 },
+    { k: "Approval", v: "2 approvers", at: 1 },
+    { k: "Bank file", v: "SEPA", at: 2 },
+    { k: "Reconciled", v: "214 entries", at: 3 },
+  ];
+
+  footings = [
+    { icon: "fa-light fa-list-check", text: "Payment proposal built from open entries" },
+    { icon: "fa-light fa-user-check", text: "Approved — segregation of duties enforced" },
+    { icon: "fa-light fa-file-export", text: "Bank file exported in the bank's own format" },
+    { icon: "fa-light fa-circle-check", text: "Proposed, approved, exported and reconciled — in one flow" },
+  ];
+
+  componentDidMount() {
+    // Respect reduced motion: land on the finished state and never animate.
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { this.setState({ step: this.stages.length - 1 }); return; }
+    this.heroTimer = setInterval(() => {
+      // hold on the finished state for one extra beat, then restart
+      this.setState((s) => ({ step: s.step >= this.stages.length ? 0 : s.step + 1 }));
+    }, 1500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.heroTimer);
+  }
+
+  renderVals() {
+    const last = this.stages.length - 1;
+    const step = Math.min(this.state.step, last);
+    const foot = this.footings[step];
+    return {
+      stages: this.stages.map((name, i) => ({
+        name,
+        cls: "dc-mock__step" + (i === step ? " is-on" : i < step ? " is-done" : ""),
+      })),
+      progStyle: "width:" + ((step / last) * 100).toFixed(0) + "%",
+      docIcon: "fa-light fa-file-export",
+      docName: "Payment_batch_2041.xml",
+      docBadge: step === 1 ? this.scanLabel : this.stages[step],
+      scanning: step === 0 || step === 1,
+      fields: this.fieldDefs.map((f) => ({
+        k: f.k,
+        v: f.v,
+        cls: "dc-mock__field" + (step >= f.at ? " is-filled" : ""),
+      })),
+      footIcon: foot.icon,
+      footText: foot.text,
+    };
+  }
+}
+</script>
 </body>
 </html>

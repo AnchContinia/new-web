@@ -17,7 +17,14 @@
   <script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
   <style>
     html { scroll-behavior: smooth; }
-    html, body { overflow-x: hidden; max-width: 100%; }
+    /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+       overflow-y to auto, which made BODY the scroller: window.scrollY was stuck
+       at 0, window never fired `scroll`, and the sticky header unstuck after
+       ~840px because .sc-host is only viewport-tall. `clip` clips the same way
+       without creating a scroll box. Keep hidden on <html> — it propagates to
+       the viewport, which is what actually kills sideways scroll. */
+    html { overflow-x: hidden; max-width: 100%; }
+    body { overflow-x: clip; max-width: 100%; }
     body { margin: 0; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; color: #0a1838; background: #ffffff; -webkit-font-smoothing: antialiased; }
     a:not(.cnt-btn) { color: #052975; }
     a:not(.cnt-btn):hover { color: #0a317f; }
@@ -170,10 +177,16 @@
     /* Impact/section view toggle (fixed, bottom-left) */
     .imp-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
       padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
-      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms; }
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer;
+      transition: transform 200ms, border-color 200ms, opacity 220ms var(--ease-standard, ease-out); }
     .imp-toggle:hover { border-color: #052975; transform: translateY(-2px); }
     /* second fixed toggle, stacked above the impact one */
     .hero-toggle { bottom: 74px; }
+    /* Both toggles sat on top of the footer legal bar at the bottom of the page.
+       An IntersectionObserver flags the legal bar on <body> — a node the dc
+       runtime never re-renders, so the class survives a render pass. */
+    body.cnt-footer-in-view .imp-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
+    @media (prefers-reduced-motion: reduce) { .imp-toggle { transition: none; } }
 
     /* ---------- Hero video background (optional, toggled bottom-left) ---------- */
     /* The scrim keeps the navy headline legible over the clip: the darkest frame
@@ -562,15 +575,43 @@ class Component extends DCLogic {
     this._setupReveals();
     this._setupStats();
     this._playSolVideo();
-    this._onScroll = () => {
-      const h = document.getElementById("cnt-header");
-      if (h) h.style.boxShadow = window.scrollY > 10 ? "0 8px 24px rgba(5,41,117,0.10)" : "none";
-    };
-    window.addEventListener("scroll", this._onScroll, { passive: true });
+    // (The header shadow used to be hand-rolled here against #cnt-header — an id
+    // that does not exist — and off window.scrollY, which was pinned at 0. The
+    // bundle's own SiteHeader `--scrolled` modifier does it now that BODY is no
+    // longer the scroll container.)
     // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
     this._onResize = () => this.setState({});
     window.addEventListener("resize", this._onResize, { passive: true });
     if (this.state.heroView !== 2) this._playHeroVideo();
+    this._watchFooter();
+  }
+
+  // Fade the fixed bottom-left toggles out once the footer legal bar reaches the
+  // viewport — they used to sit right on top of it. The flag goes on <body>
+  // rather than on the buttons because <body> is outside the dc render tree and
+  // therefore survives a re-render; a class set on the button itself would be
+  // wiped by the next renderVals() pass.
+  _watchFooter() {
+    // Re-queries the legal bar on every (rAF-throttled) scroll rather than
+    // holding a node reference: an IntersectionObserver attached at mount goes
+    // deaf the moment the runtime re-renders the footer and swaps the node out.
+    // Measuring the rect and listening on document in the CAPTURE phase is the
+    // same pattern the reading-progress bar uses, for the same reason.
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
   }
 
   // Muted autoplay needs the property set, not just the attribute, or Safari
@@ -636,10 +677,14 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     clearInterval(this._flow);
-    window.removeEventListener("scroll", this._onScroll);
     if (this._onResize) window.removeEventListener("resize", this._onResize);
     if (this._io) this._io.disconnect();
     if (this._statIo) this._statIo.disconnect();
+    if (this._onFootScroll) {
+      document.removeEventListener("scroll", this._onFootScroll, { capture: true });
+      window.removeEventListener("resize", this._onFootScroll);
+    }
+    document.body.classList.remove("cnt-footer-in-view");
   }
 
   _applyMotion() {

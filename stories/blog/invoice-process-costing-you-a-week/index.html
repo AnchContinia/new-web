@@ -155,11 +155,11 @@
 // Reading-progress bar. Plain DOM, deliberately outside <x-dc> — it needs no
 // state, and a dc-script setState per scroll frame would re-render the page.
 (function () {
-  // ⚠️ On this site `html, body { overflow-x: hidden }` makes BODY the scroll
-  // container, so `window.scrollY` is permanently 0 and `window` never fires a
-  // scroll event. Read the article's viewport-relative rect instead, and listen
-  // on document in the CAPTURE phase so the event is caught from whichever
-  // element is actually scrolling.
+  // Measured off the article's viewport-relative rect rather than a scroll
+  // offset, with the listener on document in the CAPTURE phase — so it is
+  // indifferent to which element actually scrolls. (It had to be: BODY used to
+  // be the scroll container and window.scrollY was pinned at 0. That is fixed
+  // now, but rect-based is still the more robust reading.)
   var tick = false;
   function paint() {
     tick = false;

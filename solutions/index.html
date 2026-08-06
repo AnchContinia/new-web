@@ -17,7 +17,12 @@
   <script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
   <style>
     html { scroll-behavior: smooth; }
-    html, body { overflow-x: hidden; max-width: 100%; }
+    /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+     overflow-y to auto, which made BODY the scroller: window.scrollY stuck at 0,
+     window never fired `scroll`, and the sticky header unstuck after ~840px.
+     `clip` clips the same way without creating a scroll box. */
+    html { overflow-x: hidden; max-width: 100%; }
+    body { overflow-x: clip; max-width: 100%; }
     body { margin: 0; font-family: var(--font-sans, "Alliance No.2", "Helvetica Neue", Arial, sans-serif); color: #0a1838; background: #ffffff; -webkit-font-smoothing: antialiased; }
     a:not(.cnt-btn) { color: #052975; }
     a:not(.cnt-btn):hover { color: #0a317f; }
@@ -54,6 +59,15 @@
     .sol-grid > * > * { flex: 0 1 var(--cw, calc(33.333% - 14px)); max-width: var(--cw, calc(33.333% - 14px)); min-width: 288px; box-sizing: border-box; }
     @media (max-width: 980px) { .sol-grid > * > * { flex-basis: calc(50% - 10px); max-width: calc(50% - 10px); } }
     @media (max-width: 620px) { .sol-grid > * > * { flex-basis: 100%; max-width: 100%; min-width: 0; } }
+    /* Secondary to the READ MORE link beside it, so it is differentiated by
+       weight and colour rather than by another accent hue: sage #5f9e8d only
+       reaches 3.11:1 on white and would fail AA at 12px. Muted navy is 8.85:1.
+       The `a.` prefix is deliberate — the bundle's `a:not(.cnt-btn)` rule ties
+       on specificity and would win on source order. */
+    a.sol-card__feat { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #3a4a6b; text-decoration: none; }
+    a.sol-card__feat i { color: #052975; font-size: 11px; transition: transform 180ms var(--ease-standard, ease-out); }
+    a.sol-card__feat:hover { color: #052975; }
+    a.sol-card__feat:hover i { transform: translateX(4px); }
     .sol-more-btn { display: inline-flex; align-items: center; gap: 10px; font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: 0.02em; color: #052975; background: #ffffff; border: 1.5px solid #cdd4e3; border-radius: 999px; padding: 13px 26px; cursor: pointer; transition: transform 220ms cubic-bezier(0.16,1,0.3,1), border-color 220ms, box-shadow 220ms; }
     .sol-more-btn:hover { border-color: #052975; box-shadow: 0 8px 24px rgba(5,41,117,0.14); transform: translateY(-2px); }
     .sol-more-btn i { font-size: 12px; }
@@ -182,7 +196,10 @@
                 <div style="display: flex; align-items: flex-start; gap: 9px; font-size: 13.5px; line-height: 1.5; color: #3a4a6b"><i class="fa-light fa-check" style="color: #5f9e8d; margin-top: 3px; flex: none"></i><span>{{ b }}</span></div>
               </sc-for>
             </div>
-            <a href="{{ s.href }}" style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: #052975; text-decoration: none; margin-top: 4px">READ MORE <i class="fa-light fa-arrow-right"></i></a>
+            <div style="display: flex; align-items: center; gap: 8px 20px; flex-wrap: wrap; margin-top: 4px">
+              <a href="{{ s.href }}" style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: #052975; text-decoration: none">READ MORE <i class="fa-light fa-arrow-right"></i></a>
+              <a class="sol-card__feat" href="{{ s.feat }}">All features <i class="fa-light fa-arrow-right"></i></a>
+            </div>
           </div>
         </x-import>
       </sc-for>
@@ -422,7 +439,6 @@ class Component extends DCLogic {
     calcSel: { dc: true, em: true, banking: false, pm: false, dout: false, fin: false, opplus: false, cm: false },
   };
 
-  headerRef = React.createRef();
 
   heroDocs = [
     { doc: "Invoice 100482", vendor: "Northwind Traders", amt: "€ 4,820.00" },
@@ -440,14 +456,14 @@ class Component extends DCLogic {
   ];
 
   solutions = [
-    { key: "dc", name: "Document Capture", icon: "fa-kit fa-document-capture-solution-dc-icon", group: "Accounts payable", tagline: "Streamline your invoice processing with end-to-end AP automation.", bullets: ["Intelligent data capture", "Automatic three-way matching", "Secure e-invoice exchange", "Automated invoice approval flows"], href: "https://www.continia.com/solutions/document-capture/" },
-    { key: "em", name: "Expense Management", icon: "fa-kit fa-expense-management-solution-em-icon", group: "Expenses", tagline: "Get a real-time overview of employee spending.", bullets: ["Mobile expense tracking app", "Easy travel expense reporting", "Auto-import credit card transactions", "Efficient expense approval workflows"], href: "https://www.continia.com/solutions/expense-management/" },
-    { key: "banking", name: "Continia Banking", icon: "fa-kit fa-banking-solution-cb-icon", group: "Payments & banking", tagline: "Speed up and secure your payment processes.", bullets: ["Direct bank communication", "Built-in payment fraud prevention", "Validation and error-handling", "Flexible and secure payment flows"], href: "https://www.continia.com/solutions/banking/" },
-    { key: "dout", name: "Document Output", icon: "fa-kit fa-document-output-solution-do-icon-file-export", group: "Accounts receivable", tagline: "Automate your document delivery and customize your emails.", bullets: ["Send emails in the background", "Customize and protect your PDFs", "Create targeted email templates", "Auto-send remittance advices"], href: "https://www.continia.com/solutions/document-output/" },
-    { key: "fin", name: "Continia Finance", icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon", group: "Finance", tagline: "Optimize your advanced financial processes with 7 specialized modules.", bullets: ["Group reconciliations", "Simplify financial reporting and fixed asset accounting", "Manage discounts and installments"], href: "https://www.continia.com/solutions/finance/" },
-    { key: "pm", name: "Payment Management", icon: "fa-light fa-money-bill-transfer", group: "Payments & banking", tagline: "Automate your vendor payments and bank reconciliations.", bullets: ["Automatic bank reconciliation", "Direct bank communication", "Manage payment service providers", "Secure payment approvals"], href: "https://www.continia.com/solutions/payment-management/" },
-    { key: "opplus", name: "OPplus", icon: "fa-light fa-arrows-rotate", group: "Payments & banking · DACH", tagline: "An all-in-one payment product for the DACH region.", bullets: ["Import and export payments", "Access extended lists and reports", "Handle partial payments", "Keep track with G/L open entries"], href: "https://www.continia.com/solutions/opplus/" },
-    { key: "cm", name: "Collection Management", icon: "fa-light fa-hand-holding-dollar", group: "Accounts receivable · Denmark", tagline: "Optimize your collection process for the Danish market.", bullets: ["Collect outstanding receivables instantly", "One provider for all receivables", "View and manage agreement statuses"], href: "https://www.continia.com/solutions/collection-management/" },
+    { key: "dc", feat: "document-capture-features/", name: "Document Capture", icon: "fa-kit fa-document-capture-solution-dc-icon", group: "Accounts payable", tagline: "Streamline your invoice processing with end-to-end AP automation.", bullets: ["Intelligent data capture", "Automatic three-way matching", "Secure e-invoice exchange", "Automated invoice approval flows"], href: "https://www.continia.com/solutions/document-capture/" },
+    { key: "em", feat: "expense-management-features/", name: "Expense Management", icon: "fa-kit fa-expense-management-solution-em-icon", group: "Expenses", tagline: "Get a real-time overview of employee spending.", bullets: ["Mobile expense tracking app", "Easy travel expense reporting", "Auto-import credit card transactions", "Efficient expense approval workflows"], href: "https://www.continia.com/solutions/expense-management/" },
+    { key: "banking", feat: "continia-banking-features/", name: "Continia Banking", icon: "fa-kit fa-banking-solution-cb-icon", group: "Payments & banking", tagline: "Speed up and secure your payment processes.", bullets: ["Direct bank communication", "Built-in payment fraud prevention", "Validation and error-handling", "Flexible and secure payment flows"], href: "https://www.continia.com/solutions/banking/" },
+    { key: "dout", feat: "document-output-features/", name: "Document Output", icon: "fa-kit fa-document-output-solution-do-icon-file-export", group: "Accounts receivable", tagline: "Automate your document delivery and customize your emails.", bullets: ["Send emails in the background", "Customize and protect your PDFs", "Create targeted email templates", "Auto-send remittance advices"], href: "https://www.continia.com/solutions/document-output/" },
+    { key: "fin", feat: "continia-finance-features/", name: "Continia Finance", icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon", group: "Finance", tagline: "Optimize your advanced financial processes with 7 specialized modules.", bullets: ["Group reconciliations", "Simplify financial reporting and fixed asset accounting", "Manage discounts and installments"], href: "https://www.continia.com/solutions/finance/" },
+    { key: "pm", feat: "payment-management-features/", name: "Payment Management", icon: "fa-light fa-money-bill-transfer", group: "Payments & banking", tagline: "Automate your vendor payments and bank reconciliations.", bullets: ["Automatic bank reconciliation", "Direct bank communication", "Manage payment service providers", "Secure payment approvals"], href: "https://www.continia.com/solutions/payment-management/" },
+    { key: "opplus", feat: "opplus-features/", name: "OPplus", icon: "fa-light fa-arrows-rotate", group: "Payments & banking · DACH", tagline: "An all-in-one payment product for the DACH region.", bullets: ["Import and export payments", "Access extended lists and reports", "Handle partial payments", "Keep track with G/L open entries"], href: "https://www.continia.com/solutions/opplus/" },
+    { key: "cm", feat: "collection-management-features/", name: "Collection Management", icon: "fa-light fa-hand-holding-dollar", group: "Accounts receivable · Denmark", tagline: "Optimize your collection process for the Danish market.", bullets: ["Collect outstanding receivables instantly", "One provider for all receivables", "View and manage agreement statuses"], href: "https://www.continia.com/solutions/collection-management/" },
   ];
 
   testimonials = [
@@ -461,12 +477,9 @@ class Component extends DCLogic {
   get motionOn() { return this.props.motion !== false; }
 
   componentDidMount() {
-    this.onScroll = () => {
-      const h = this.headerRef.current;
-      if (!h) return;
-      h.style.boxShadow = window.scrollY > 10 ? "0 8px 24px rgba(5,41,117,0.10)" : "none";
-    };
-    window.addEventListener("scroll", this.onScroll, { passive: true });
+    // (A hand-rolled header shadow used to live here, driven off window.scrollY —
+    // which was pinned at 0 — and written to a headerRef the template never
+    // consumed. SiteHeader's own `--scrolled` modifier does it now.)
 
     if (this.motionOn) {
       this.setState({ tick: 0 });
@@ -490,7 +503,6 @@ class Component extends DCLogic {
     clearInterval(this.heroTimer);
     clearInterval(this.tTimer);
     clearInterval(this.tDuoTimer);
-    window.removeEventListener("scroll", this.onScroll);
     if (this.io) this.io.disconnect();
     if (this.ioCount) this.ioCount.disconnect();
   }
@@ -597,7 +609,6 @@ class Component extends DCLogic {
     }));
 
     return {
-      headerRef: this.headerRef,
       headerLogoProps: { width: 204, height: 30, style: { display: "block", flex: "none" } },
       footerLogoProps: { width: 190, height: 28, style: { display: "block", flex: "none" } },
       btnArrow: { iconRight: React.createElement("i", { className: "fa-light fa-arrow-right" }) },
