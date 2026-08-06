@@ -1393,6 +1393,16 @@ const CONTINIA_LINKS = {
     href: BASE + "/license-terms/"
   }],
   social: [{
+    label: "Built inside Business Central",
+    svg: "../assets/social/built-inside.png",
+    size: 92,
+    href: "https://appsource.microsoft.com/en-us/marketplace/apps?search=continia"
+  }, {
+    label: "Microsoft Marketplace",
+    svg: "../assets/social/microsoft-marketplace.png",
+    size: 134,
+    href: "https://appsource.microsoft.com/en-us/marketplace/apps?search=continia"
+  }, {
     label: "ISO 27001",
     svg: "../assets/social/iso-27001.png",
     size: 150,
@@ -1431,8 +1441,25 @@ const CSS = `
 .cnt-sitefooter__social { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
 .cnt-sitefooter__social a { display: inline-flex; align-items: center; justify-content: center; color: #fff; transition: opacity var(--dur-base) var(--ease-standard); }
 .cnt-sitefooter__social a:hover { opacity: 0.7; }
-.cnt-sitefooter__social a[aria-label="ISO 27001"] { order: 2; flex-basis: 100%; margin-top: 8px; }
-.cnt-sitefooter__social a[aria-label="ISO 27001"] img { width: 162px !important; height: auto !important; max-width: 100% !important; }
+/* Trust/badge row — BUILT INSIDE, Microsoft Marketplace and the ISO seal share
+   one line under the social icons. The ::after is a zero-height flex item that
+   forces the wrap, so the split is deterministic instead of depending on how wide
+   the brand column happens to be. Sized by HEIGHT, not width: the three marks have
+   very different aspect ratios (2.5 / 3.9 / 1.1), and a common height is what makes
+   them read as a set. The square seal gets ~1.6x the wordmark height, or it looks
+   undersized next to them. */
+.cnt-sitefooter__social::after { content: ""; flex: 0 0 100%; height: 0; order: 1; }
+.cnt-sitefooter__social a[aria-label="Built inside Business Central"] { order: 2; }
+.cnt-sitefooter__social a[aria-label="Microsoft Marketplace"] { order: 3; }
+.cnt-sitefooter__social a[aria-label="ISO 27001"] { order: 4; }
+.cnt-sitefooter__social a[aria-label="Built inside Business Central"] img { height: 36px !important; width: auto !important; max-width: 100% !important; }
+.cnt-sitefooter__social a[aria-label="Microsoft Marketplace"] img { height: 34px !important; width: auto !important; max-width: 100% !important; }
+.cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 56px !important; width: auto !important; max-width: 100% !important; }
+@media (max-width: 1160px) {
+  .cnt-sitefooter__social a[aria-label="Built inside Business Central"] img { height: 29px !important; }
+  .cnt-sitefooter__social a[aria-label="Microsoft Marketplace"] img { height: 27px !important; }
+  .cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 45px !important; }
+}
 .cnt-sitefooter__col { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
 .cnt-sitefooter__col h4 { font-size: 12px; letter-spacing: var(--ls-overline); text-transform: uppercase; color: var(--c-innovation-blue); margin: 0 0 8px; font-weight: 700; }
 .cnt-sitefooter__col a { color: rgba(255,255,255,0.78); font-size: 14px; transition: color 200ms var(--ease-standard); }
@@ -1444,7 +1471,10 @@ const CSS = `
 .cnt-sitefooter__legal a:hover { color: var(--c-innovation-blue); }
 .cnt-sitefooter__badges { display: flex; gap: 8px; margin-left: auto; }
 .cnt-sitefooter__badge { border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-pill); padding: 5px 12px; font-size: 10.5px; letter-spacing: 0.08em; font-weight: var(--fw-semibold); color: rgba(255,255,255,0.85); white-space: nowrap; text-transform: uppercase; }
-@media (max-width: 920px) { .cnt-sitefooter__top { grid-template-columns: 1fr 1fr; } .cnt-sitefooter__badges { margin-left: 0; } }
+@media (max-width: 920px) { .cnt-sitefooter__top { grid-template-columns: 1fr 1fr; } .cnt-sitefooter__badges { margin-left: 0; }
+  /* let the brand block span both columns, or the three badge logos have only
+     half the viewport and the first one wraps onto its own line */
+  .cnt-sitefooter__brand { grid-column: 1 / -1; } }
 `;
 let _i = false;
 function useStyle() {
