@@ -1449,16 +1449,21 @@ const CSS = `
    them read as a set. The square seal gets ~1.6x the wordmark height, or it looks
    undersized next to them. */
 .cnt-sitefooter__social::after { content: ""; flex: 0 0 100%; height: 0; order: 1; }
-.cnt-sitefooter__social a[aria-label="Built inside Business Central"] { order: 2; }
-.cnt-sitefooter__social a[aria-label="Microsoft Marketplace"] { order: 3; }
-.cnt-sitefooter__social a[aria-label="ISO 27001"] { order: 4; }
+.cnt-sitefooter__social a[aria-label="ISO 27001"] { order: 2; }
+.cnt-sitefooter__social a[aria-label="Built inside Business Central"] { order: 3; }
+.cnt-sitefooter__social a[aria-label="Microsoft Marketplace"] { order: 4; }
 .cnt-sitefooter__social a[aria-label="Built inside Business Central"] img { height: 36px !important; width: auto !important; max-width: 100% !important; }
 .cnt-sitefooter__social a[aria-label="Microsoft Marketplace"] img { height: 34px !important; width: auto !important; max-width: 100% !important; }
-.cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 56px !important; width: auto !important; max-width: 100% !important; }
+.cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 68px !important; width: auto !important; max-width: 100% !important; }
 @media (max-width: 1160px) {
+  /* Below this the 4-col grid leaves the brand column ~240px, which is narrower
+     than the three-logo row (~271px) — the last mark wrapped onto its own line.
+     Give brand the full width and drop the nav to three equal columns. */
+  .cnt-sitefooter__top { grid-template-columns: 1fr 1fr 1fr; }
+  .cnt-sitefooter__brand { grid-column: 1 / -1; }
   .cnt-sitefooter__social a[aria-label="Built inside Business Central"] img { height: 29px !important; }
   .cnt-sitefooter__social a[aria-label="Microsoft Marketplace"] img { height: 27px !important; }
-  .cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 45px !important; }
+  .cnt-sitefooter__social a[aria-label="ISO 27001"] img { height: 54px !important; }
 }
 .cnt-sitefooter__col { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
 .cnt-sitefooter__col h4 { font-size: 12px; letter-spacing: var(--ls-overline); text-transform: uppercase; color: var(--c-innovation-blue); margin: 0 0 8px; font-weight: 700; }
