@@ -114,7 +114,7 @@
     </div>
     <div class="bl-grid">
       <sc-for list="{{ posts }}" as="p" hint-placeholder-count="4">
-        <a class="bl-post" href="#">
+        <a class="bl-post" href="{{ p.slug }}/">
           <div class="bl-post__thumb" style="background:{{ p.grad }}"><i class="{{ p.icon }}"></i></div>
           <div class="bl-post__body">
             <span class="bl-post__tag">{{ p.tag }}</span>
@@ -150,16 +150,16 @@
 // Same four posts the Stories hub lists — this page is the full index, not a
 // second set of content. Add real posts to POSTS and the filter counts follow.
 const POSTS = [
-  { tag: "AP automation", icon: "fa-light fa-file-invoice", grad: "linear-gradient(135deg,#052975,#0a3d9e)",
+  { slug: "invoice-process-costing-you-a-week", tag: "AP automation", icon: "fa-light fa-file-invoice", grad: "linear-gradient(135deg,#052975,#0a3d9e)",
     title: "5 signs your invoice process is quietly costing you a week a month",
     excerpt: "The bottlenecks hide in plain sight. Here's how to spot them.", author: "Continia team", read: "6 min read" },
-  { tag: "Product", icon: "fa-light fa-sparkles", grad: "linear-gradient(135deg,#983eae,#c05fd6)",
+  { slug: "whats-new-in-continia-2026", tag: "Product", icon: "fa-light fa-sparkles", grad: "linear-gradient(135deg,#983eae,#c05fd6)",
     title: "What's new in Continia 2026: smarter matching, faster posting",
     excerpt: "A tour of the release finance teams have been asking for.", author: "Product team", read: "4 min read" },
-  { tag: "Finance ops", icon: "fa-light fa-calendar-check", grad: "linear-gradient(135deg,#0e7a63,#2fae90)",
+  { slug: "month-end-close-playbook", tag: "Finance ops", icon: "fa-light fa-calendar-check", grad: "linear-gradient(135deg,#0e7a63,#2fae90)",
     title: "The month-end close, re-engineered: a step-by-step playbook",
     excerpt: "Cut days off your close without adding headcount.", author: "Continia team", read: "8 min read" },
-  { tag: "E-invoicing", icon: "fa-light fa-file-check", grad: "linear-gradient(135deg,#0a6fb0,#22a3d8)",
+  { slug: "peppol-readiness-checklist", tag: "E-invoicing", icon: "fa-light fa-file-check", grad: "linear-gradient(135deg,#0a6fb0,#22a3d8)",
     title: "PEPPOL is mandatory sooner than you think — here's your checklist",
     excerpt: "Everything you need in place before the deadline.", author: "Continia team", read: "5 min read" },
 ];

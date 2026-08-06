@@ -117,7 +117,7 @@
     </div>
     <div class="nw-list">
       <sc-for list="{{ items }}" as="n" hint-placeholder-count="5">
-        <a class="nw-row" href="#">
+        <a class="nw-row" href="{{ n.slug }}/">
           <time>{{ n.date }}</time>
           <span class="nw-chip" style="{{ n.chipStyle }}">{{ n.cat }}</span>
           <h3>{{ n.title }}</h3>
@@ -155,11 +155,11 @@ const CHIP_STYLE = {
   Partners: "color: #7a2b8f; background: #f0dcf6;",
 };
 const NEWS = [
-  { date: "14 Jul 2026", cat: "Company", title: "Continia surpasses 21,000 customers worldwide" },
-  { date: "30 Jun 2026", cat: "Product", title: "Continia Banking adds real-time payment fraud screening" },
-  { date: "20 May 2026", cat: "Partners", title: "Continia named a Microsoft Partner of the Year finalist" },
-  { date: "08 Apr 2026", cat: "Product", title: "The Expense Management mobile app gets a ground-up redesign" },
-  { date: "11 Mar 2026", cat: "Company", title: "Continia opens a new office to serve the DACH region" },
+  { slug: "21000-customers-worldwide", date: "14 Jul 2026", cat: "Company", title: "Continia surpasses 21,000 customers worldwide" },
+  { slug: "banking-real-time-fraud-screening", date: "30 Jun 2026", cat: "Product", title: "Continia Banking adds real-time payment fraud screening" },
+  { slug: "microsoft-partner-of-the-year-finalist", date: "20 May 2026", cat: "Partners", title: "Continia named a Microsoft Partner of the Year finalist" },
+  { slug: "expense-management-app-redesign", date: "08 Apr 2026", cat: "Product", title: "The Expense Management mobile app gets a ground-up redesign" },
+  { slug: "new-dach-office", date: "11 Mar 2026", cat: "Company", title: "Continia opens a new office to serve the DACH region" },
 ];
 
 class Component extends DCLogic {
