@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find a partner — Continia</title>
+<script src="../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<link rel="stylesheet" href="../assets/company.css">
+<style>
+  .co-partner { display: flex; flex-direction: column; }
+  .co-partner__top { display: flex; gap: 14px; align-items: center; }
+  .co-partner__mark { flex: none; width: 48px; height: 48px; border-radius: 13px; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #fff; }
+  .co-partner h3 { margin: 0; font-size: 17px; }
+  .co-partner__loc { display: inline-flex; align-items: center; gap: 7px; margin-top: 5px;
+    font-size: 13.5px; color: #6b7894; }
+  .co-partner__loc i { font-size: 12px; color: #8290ac; }
+  .co-partner__tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+  .co-partner__tag { font-size: 11.5px; font-weight: 600; padding: 5px 11px; border-radius: 999px;
+    background: #eef4fd; color: #3a4a6b; }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" hint-size="100%,66px"></x-import>
+
+<section class="co-hero" data-screen-label="Hero">
+  <img class="co-hero__wm" src="../../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <div class="co-wrap">
+    <nav class="co-crumb" aria-label="Breadcrumb">
+      <a href="../../">Home</a><i class="fa-light fa-chevron-right"></i><span aria-current="page">Find a partner</span>
+    </nav>
+    <div class="co-hero__inner">
+      <span class="co-hero__eye">Find a partner</span>
+      <h1>Every Continia rollout starts with a local partner.</h1>
+      <p class="co-hero__deck">More than 1,500 Microsoft partners implement and support Continia. Filter by region to see who works near you — or go straight to Continia's full finder.</p>
+    </div>
+  </div>
+</section>
+
+<section class="co-sec" data-screen-label="Partner directory">
+  <div class="co-wrap">
+<div class="co-note"><i class="fa-light fa-circle-info"></i><p><b>Prototype copy.</b> This directory is placeholder content for the site prototype — the firms listed are invented. Continia's real partner finder is at <a href="https://www.continia.com/partners/" target="_blank" rel="noopener">continia.com/partners</a>.</p></div>
+    <div class="co-tools">
+      <div class="co-search">
+        <i class="fa-light fa-magnifying-glass"></i>
+        <input type="text" value="{{ q }}" onChange="{{ onSearch }}" placeholder="Search by name, country or product…">
+      </div>
+      <span class="co-count">{{ countLabel }}</span>
+    </div>
+    <div class="co-chips" style="margin-bottom:26px">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="7">
+        <button class="{{ c.cls }}" onClick="{{ c.pick }}">{{ c.label }}<span class="co-chip__n">{{ c.n }}</span></button>
+      </sc-for>
+    </div>
+    <sc-if value="{{ hasAny }}" hint-placeholder-val="{{ true }}">
+      <div class="co-grid co-grid--3">
+        <sc-for list="{{ partners }}" as="p" hint-placeholder-count="15">
+          <div class="co-card co-card--hover co-partner">
+            <div class="co-partner__top">
+              <span class="co-partner__mark" style="{{ p.markStyle }}">{{ p.ini }}</span>
+              <div>
+                <h3>{{ p.name }}</h3>
+                <span class="co-partner__loc"><i class="fa-light fa-location-dot"></i>{{ p.country }}</span>
+              </div>
+            </div>
+            <div class="co-partner__tags">
+              <sc-for list="{{ p.products }}" as="pr" hint-placeholder-count="2">
+                <span class="co-partner__tag">{{ pr }}</span>
+              </sc-for>
+            </div>
+            <a class="co-role__go" href="https://www.continia.com/partners/" target="_blank" rel="noopener" style="margin-top:18px">CONTACT PARTNER <i class="fa-light fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noneShown }}" hint-placeholder-val="{{ false }}">
+      <div class="co-empty">
+        <i class="fa-light fa-magnifying-glass"></i>
+        No partners match that search. Try another region, or use the full finder on continia.com/partners.
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section class="co-sec co-band" data-screen-label="Why a partner">
+  <div class="co-wrap">
+    <div class="co-head co-head--mid">
+      <span class="co-head__eye">Why go through a partner</span>
+      <h2>Continia does not implement directly — on purpose</h2>
+      <p>Your partner knows your market's rules, your language and your Business Central setup. We build the software; they make it fit.</p>
+    </div>
+    <div class="co-grid co-grid--3">
+      <div class="co-card"><div class="co-card__icon"><i class="fa-light fa-map-location-dot"></i></div><h3>Local knowledge</h3><p>Local e-invoicing rules, banking formats and VAT requirements, handled by people who work with them daily.</p></div>
+      <div class="co-card"><div class="co-card__icon"><i class="fa-light fa-screwdriver-wrench"></i></div><h3>One implementation</h3><p>The same partner that runs your Business Central runs your Continia setup. No second vendor in the room.</p></div>
+      <div class="co-card"><div class="co-card__icon"><i class="fa-light fa-headset"></i></div><h3>Support that knows you</h3><p>First-line support from someone who already knows your configuration, with our specialists behind them.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="co-cta" data-screen-label="CTA">
+  <img class="co-cta__wm" src="../../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <div class="co-cta__inner">
+    <span class="co-cta__eye">Are you a partner?</span>
+    <h2>Join the Continia partner network</h2>
+    <p>If you implement Microsoft Dynamics 365 Business Central, adding Continia to your portfolio takes one conversation.</p>
+    <div class="co-cta__btns">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://www.continia.com/partners/" hint-size="200px,52px">Become a partner</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../contact/" hint-size="180px,52px">Contact us</x-import>
+    </div>
+  </div>
+</section>
+
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+// Region filter + free-text search over the partner directory. HANDOFF §3.
+class Component extends DCLogic {
+  state = { region: "All", q: "" };
+
+  partners = [
+    { name: "Nordic Dynamics Group", country: "Denmark", region: "Nordics", products: ["Document Capture", "Payment Management"], ini: "AA" },
+    { name: "Aalborg Business Systems", country: "Denmark", region: "Nordics", products: ["Document Capture", "Expense Management"], ini: "AB" },
+    { name: "Fjord ERP Consulting", country: "Norway", region: "Nordics", products: ["Continia Banking", "Document Output"], ini: "FE" },
+    { name: "Lakeside Dynamics", country: "Sweden", region: "Nordics", products: ["Document Capture", "Continia Finance"], ini: "LD" },
+    { name: "Rheinland BC Partner", country: "Germany", region: "DACH", products: ["OPplus", "Payment Management"], ini: "RB" },
+    { name: "Alpen Business Solutions", country: "Austria", region: "DACH", products: ["OPplus", "Document Capture"], ini: "AS" },
+    { name: "Zurich ERP Werkstatt", country: "Switzerland", region: "DACH", products: ["OPplus", "Continia Finance"], ini: "ZE" },
+    { name: "Lowlands Dynamics", country: "Netherlands", region: "Benelux", products: ["Document Output", "Expense Management"], ini: "LO" },
+    { name: "Meridian Business Central", country: "United Kingdom", region: "UK & Ireland", products: ["Document Capture", "Continia Banking"], ini: "MB" },
+    { name: "Shannon ERP Partners", country: "Ireland", region: "UK & Ireland", products: ["Document Capture", "Document Output"], ini: "SE" },
+    { name: "Iberia Dynamics Lab", country: "Spain", region: "Southern Europe", products: ["Expense Management", "Payment Management"], ini: "IL" },
+    { name: "Adriatic Business Systems", country: "Italy", region: "Southern Europe", products: ["Document Capture", "Continia Finance"], ini: "AD" },
+    { name: "Great Lakes Dynamics", country: "United States", region: "North America", products: ["Document Capture", "Expense Management"], ini: "GL" },
+    { name: "Pacific BC Group", country: "United States", region: "North America", products: ["Document Output", "Payment Management"], ini: "PB" },
+    { name: "Maple Dynamics", country: "Canada", region: "North America", products: ["Document Capture", "Continia Banking"], ini: "MD" },
+  ];
+
+  // one stable colour per region, so the marks read as a grouping rather than decoration
+  regionColour = {
+    "Nordics": ["#052975", "#1d5aa8"],
+    "DACH": ["#0e7a63", "#2fae90"],
+    "Benelux": ["#0a6fb0", "#22a3d8"],
+    "UK & Ireland": ["#983eae", "#c05fd6"],
+    "Southern Europe": ["#2f6455", "#5f9e8d"],
+    "North America": ["#1d5aa8", "#4d92d6"],
+  };
+
+  get regions() { return ["All", ...new Set(this.partners.map((p) => p.region))]; }
+
+  _match(p) {
+    const q = this.state.q.trim().toLowerCase();
+    if (!q) return true;
+    return (p.name + " " + p.country + " " + p.region + " " + p.products.join(" ")).toLowerCase().includes(q);
+  }
+
+  renderVals() {
+    const sel = this.state.region;
+    const shown = this.partners.filter((p) => (sel === "All" || p.region === sel) && this._match(p));
+    return {
+      q: this.state.q,
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      chips: this.regions.map((r) => ({
+        label: r,
+        n: (r === "All" ? this.partners : this.partners.filter((p) => p.region === r)).filter((p) => this._match(p)).length,
+        cls: "co-chip" + (r === sel ? " is-on" : ""),
+        pick: () => this.setState({ region: r }),
+      })),
+      countLabel: shown.length + (shown.length === 1 ? " partner" : " partners"),
+      hasAny: shown.length > 0,
+      noneShown: shown.length === 0,
+      partners: shown.map((p) => {
+        const c = this.regionColour[p.region] || ["#052975", "#1d5aa8"];
+        return { name: p.name, country: p.country, products: p.products, ini: p.ini,
+                 markStyle: "background:linear-gradient(135deg," + c[0] + "," + c[1] + ")" };
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>

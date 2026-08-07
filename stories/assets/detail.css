@@ -45,8 +45,13 @@ a { text-decoration: none; }
 .dt-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: #b7c4da; }
 
 /* ---------- key visual ---------- */
-.dt-kv { position: relative; height: clamp(180px, 22vw, 300px); border-radius: 20px; overflow: hidden;
+/* max-width tracks .dt-body so the key visual lines up with the article below
+   it rather than overhanging into the page margin. */
+.dt-kv { position: relative; max-width: 1040px; height: clamp(180px, 22vw, 300px); border-radius: 20px; overflow: hidden;
   display: flex; align-items: center; justify-content: center; box-shadow: 0 28px 64px rgba(3,15,48,0.22); }
+/* Single-column pages (news) have no TOC, so the visual matches the prose
+   measure instead — edges aligned reads intentional, 1040 over 768 does not. */
+.dt-kv--narrow { max-width: 48rem; }
 .dt-kv i { font-size: clamp(52px, 6vw, 86px); color: #fff; opacity: 0.94; }
 /* a photo KV gets more height than a gradient one: the source portraits are
    square, so a 4:1 band crops them down to a pair of eyes. */
@@ -54,10 +59,12 @@ a { text-decoration: none; }
 .dt-kv img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 
 /* ---------- body layout: sticky TOC + prose ---------- */
-.dt-body { display: grid; grid-template-columns: minmax(0, 1fr) 244px; gap: clamp(32px, 4vw, 64px);
+/* Capped narrower than .st-wrap on purpose: the prose now fills its column,
+   so the space between it and the TOC is just the grid gap (was 292px). */
+.dt-body { max-width: 1040px; display: grid; grid-template-columns: minmax(0, 1fr) 244px; gap: clamp(32px, 4vw, 64px);
   align-items: start; padding: clamp(36px, 4.4vw, 62px) 0 clamp(30px, 3.6vw, 48px); }
 .dt-body--solo { grid-template-columns: minmax(0, 1fr); }
-.dt-body--solo .dt-prose { max-width: 46rem; }
+.dt-body--solo .dt-prose { max-width: 48rem; }
 .dt-toc { position: sticky; top: 92px; }
 .dt-toc__label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8290ac; }
 .dt-toc ol { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
@@ -65,7 +72,7 @@ a { text-decoration: none; }
   color: #52678f; transition: color .18s, border-color .18s; }
 .dt-toc a:hover { color: var(--c-tech-blue, #052975); border-color: var(--c-performance-purple, #983eae); }
 
-.dt-prose { max-width: 44rem; font-size: 17.5px; line-height: 1.72; color: #1d2a45; }
+.dt-prose { max-width: none; font-size: 17.5px; line-height: 1.72; color: #1d2a45; }
 .dt-prose > p { margin: 0 0 22px; }
 .dt-prose > p.lead { font-size: 20px; line-height: 1.6; color: #0a1838; }
 .dt-prose h2 { margin: 44px 0 14px; scroll-margin-top: 96px; font-size: clamp(23px, 2vw, 30px); font-weight: 700;
@@ -123,6 +130,9 @@ a { text-decoration: none; }
 
 @media (max-width: 980px) {
   .dt-body { grid-template-columns: 1fr; }
+  /* With the TOC gone the prose would stretch to the full wrap — 836px at 900px
+     viewport, about 95 characters. Cap it at the same measure the news pages use. */
+  .dt-prose { max-width: 48rem; }
   .dt-toc { position: static; order: -1; padding: 18px 20px; border-radius: 16px; background: #f4f8fd; border: 1px solid #e0e8f4; }
   .dt-toc ol { flex-direction: row; flex-wrap: wrap; gap: 8px; }
   .dt-toc a { border-left: 0; border: 1.5px solid #cfe6f5; border-radius: 999px; padding: 7px 14px; background: #fff; font-size: 13px; }

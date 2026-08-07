@@ -38,7 +38,8 @@
     .cnt-btn.cnt-btn--ghostdark:hover { --_bg: rgba(255,255,255,0.12); --_bd: #ffffff; --_fg: #8ff8ff; }
     /* Trust marquee: stack the label above the logos so the marquee gets full width */
     @media (max-width: 820px) {
-      section[data-screen-label="Trusted by"] > div { flex-direction: column !important; align-items: flex-start !important; padding: 22px 20px !important; gap: 14px !important; }
+      section[data-screen-label="Trusted by"] > div { flex-direction: column !important; align-items: center !important; padding: 22px 20px !important; gap: 14px !important; }
+      section[data-screen-label="Trusted by"] > div > span { text-align: center !important; }
       section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
       section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
     }
@@ -51,7 +52,7 @@
     /* ---------- Mobile (<=640px) ---------- */
     @media (max-width: 640px) {
       /* Tighter section gutters + vertical rhythm */
-      .hero-wrap { padding: 56px 20px 0 !important; }
+      .hero-wrap { padding: 56px 20px 54px !important; }
       #impacts > div, #solutions > div, #how > div { padding: 60px 20px !important; }
       #cta > div { padding: 72px 20px !important; }
 
@@ -67,8 +68,11 @@
       /* Proof points stack, left-aligned */
       .hero-proof { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; text-align: left; margin-top: 26px !important; }
 
-      /* BC mockup: compact + scrolls inside its own card, never the page */
-      .hero-mock { margin-top: 40px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; }
+      /* BC mockup is hidden on phones: at 390px it rendered ~595px tall, got
+         clipped by the trust band, and needed sideways scrolling to read. The
+         hero carries its own bottom padding here because the mockup's -26px
+         bottom margin was what used to close the gap to the band. */
+      .hero-mock { display: none !important; }
       .mock-body { padding: 12px !important; }
       .mock-steps { gap: 5px !important; }
       .mock-steps > div { font-size: 9.5px !important; min-width: 0 !important; padding: 7px 3px !important; }
@@ -85,14 +89,8 @@
       /* How it works: allow the desktop one-line headline to wrap on mobile */
       #how h2 { white-space: normal !important; }
 
-      /* Solutions carousel: move nav arrows into a bottom control bar so they
-         don't cover the card. Arrows flank the dots: [<]  • • • • •  [>] */
-      .sol-car { padding-bottom: 62px; }
-      .sol-car__nav { top: auto !important; bottom: 8px; transform: none !important; width: 44px; height: 44px; }
-      .sol-car__nav:hover { transform: scale(1.06) !important; background: #def5ff; }
-      .sol-car__nav--prev { left: 18px; right: auto; }
-      .sol-car__nav--next { right: 18px; left: auto; }
-      .sol-car__dots { position: absolute; bottom: 24px; left: 0; right: 0; margin-top: 0; }
+      /* (the carousel's mobile rules live after the base ones further down —
+         placed here they lost on source order) */
     }
 
     /* ---------- Solutions: glassmorphism + video bg (new) ---------- */
@@ -245,6 +243,21 @@
     .sol-car__nav--prev { left: clamp(2px,3vw,32px); }
     .sol-car__nav--next { right: clamp(2px,3vw,32px); }
     .sol-car__dots { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+    /* Solutions carousel on mobile: nav arrows drop into a bottom control bar so
+       they don't cover the card — [<]  • • • • •  [>]. Placed after the base
+       rules on purpose; inside the earlier @media block the width/height here
+       tied on specificity and lost on source order, leaving 52px arrows. */
+    @media (max-width: 640px) {
+      /* the active card is ~437px tall inside a 422px stage, so it bleeds ~7px
+         past each end — these clearances are measured from the card, not the stage */
+      .sol-car { margin-top: 34px; padding-bottom: 88px; }
+      .sol-car__nav { top: auto; bottom: 14px; transform: none; width: 44px; height: 44px; }
+      .sol-car__nav:hover { transform: scale(1.06); background: #def5ff; }
+      .sol-car__nav--prev { left: 18px; right: auto; }
+      .sol-car__nav--next { right: 18px; left: auto; }
+      /* 32px lines the dots up with the centre of the 44px arrows */
+      .sol-car__dots { position: absolute; bottom: 32px; left: 0; right: 0; margin-top: 0; }
+    }
     .sol-car__dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 999px; cursor: pointer;
       background: rgba(255,255,255,0.35); transition: background 200ms, transform 200ms; }
     .sol-car__dot.on { background: #8ff8ff; transform: scale(1.25); }
@@ -504,7 +517,7 @@
 
 <!-- ============ FINAL CTA ============ -->
 <section id="cta" data-screen-label="Final CTA" style="position:relative;overflow:hidden;background:linear-gradient(135deg,#041e58 0%,#052975 45%,#1d5aa8 90%,#8ff8ff 160%)">
-  <img src="assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position:absolute;left:50%;bottom:-40%;transform:translateX(-50%);width:120%;opacity:0.08;pointer-events:none">
+  <img src="assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position:absolute;left:50%;bottom:-12%;transform:translateX(-50%);width:170%;opacity:0.08;pointer-events:none">
   <div data-reveal="true" style="position:relative;max-width:820px;margin:0 auto;padding:110px 32px;text-align:center">
     <h2 style="margin:0;font-size:clamp(34px,3.6vw,52px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">It's about time to future-proof your finance operations</h2>
     <p style="margin:20px auto 0;max-width:560px;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.78)">Get all your tools in one place and work faster —<br>without leaving Business Central.</p>

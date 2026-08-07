@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meet the team — Continia</title>
+<script src="../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<link rel="stylesheet" href="../assets/company.css">
+<style>
+  /* four across on desktop, tighter than the generic 3-up card grid */
+  .co-grid--4team { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px 24px; }
+  @media (max-width: 980px) { .co-grid--4team { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .co-grid--4team { grid-template-columns: 1fr; } }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" hint-size="100%,66px"></x-import>
+
+<section class="co-hero" data-screen-label="Hero">
+  <img class="co-hero__wm" src="../../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <div class="co-wrap">
+    <nav class="co-crumb" aria-label="Breadcrumb">
+      <a href="../../">Home</a><i class="fa-light fa-chevron-right"></i><span aria-current="page">Meet the team</span>
+    </nav>
+    <div class="co-hero__inner">
+      <span class="co-hero__eye">Meet the team</span>
+      <h1>The people behind the products.</h1>
+      <p class="co-hero__deck">Continia is a Danish software company with teams across product, engineering, partners and support — all working on the same thing: less manual work inside Business Central.</p>
+    </div>
+  </div>
+</section>
+
+<section class="co-sec" data-screen-label="Team">
+  <div class="co-wrap">
+<div class="co-note"><i class="fa-light fa-circle-info"></i><p><b>Prototype copy.</b> The people below are placeholder profiles for the site prototype — the names and titles are invented, and the tiles show initials rather than photographs precisely because none of these are real Continia employees. The real leadership team is published at <a href="https://www.continia.com/meet-the-team/" target="_blank" rel="noopener">continia.com/meet-the-team</a>.</p></div>
+    <div class="co-tools">
+      <div class="co-chips">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+          <button class="{{ c.cls }}" onClick="{{ c.pick }}">{{ c.label }}<span class="co-chip__n">{{ c.n }}</span></button>
+        </sc-for>
+      </div>
+      <span class="co-count">{{ countLabel }}</span>
+    </div>
+    <div class="co-grid co-grid--4team">
+      <sc-for list="{{ people }}" as="p" hint-placeholder-count="12">
+        <div class="co-person">
+          <div class="co-person__av" style="{{ p.avStyle }}">{{ p.ini }}</div>
+          <h3>{{ p.name }}</h3>
+          <span class="co-person__role">{{ p.role }}</span>
+          <span class="co-person__tag">{{ p.team }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section class="co-cta" data-screen-label="CTA">
+  <img class="co-cta__wm" src="../../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <div class="co-cta__inner">
+    <span class="co-cta__eye">Join us</span>
+    <h2>We are usually hiring</h2>
+    <p>If you want to work on software that finance teams use every single day, take a look at what is open right now.</p>
+    <div class="co-cta__btns">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="../career/" hint-size="200px,52px">See open roles</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../working-at-continia/" hint-size="180px,52px">Working at Continia</x-import>
+    </div>
+  </div>
+</section>
+
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+// Department filter for the team grid.
+// Traps (HANDOFF §3): the bindings method must be renderVals(), not render(),
+// and this <script> must stay OUTSIDE </x-dc>. Both fail silently.
+class Component extends DCLogic {
+  state = { team: "All" };
+
+  people = [
+    { team: "Leadership", ini: "AN", name: "Anders Nørgaard", role: "Chief Executive Officer", a: "#052975", b: "#0a3d9e" },
+    { team: "Leadership", ini: "MJ", name: "Marie Juhl", role: "Chief Financial Officer", a: "#0a3d9e", b: "#1d5aa8" },
+    { team: "Leadership", ini: "TB", name: "Thomas Brandt", role: "Chief Technology Officer", a: "#052975", b: "#1d5aa8" },
+    { team: "Leadership", ini: "SL", name: "Sofie Lund", role: "Chief Commercial Officer", a: "#1d5aa8", b: "#22a3d8" },
+    { team: "Product", ini: "KH", name: "Kasper Holm", role: "VP, Product", a: "#0e7a63", b: "#2fae90" },
+    { team: "Product", ini: "ER", name: "Elena Ricci", role: "Head of Product Design", a: "#2f6455", b: "#5f9e8d" },
+    { team: "Product", ini: "JW", name: "Jonas Weber", role: "Product Manager, Banking", a: "#0e7a63", b: "#46be9e" },
+    { team: "Engineering", ini: "PA", name: "Priya Anand", role: "VP, Engineering", a: "#983eae", b: "#c05fd6" },
+    { team: "Engineering", ini: "MK", name: "Mikkel Krogh", role: "Head of Platform", a: "#872f9c", b: "#983eae" },
+    { team: "Partners", ini: "LG", name: "Laura Gilbank", role: "Director, Partner Network", a: "#0a6fb0", b: "#22a3d8" },
+    { team: "Partners", ini: "DS", name: "Diego Santos", role: "Regional Partner Lead, Iberia", a: "#1d5aa8", b: "#4d92d6" },
+    { team: "People", ini: "HB", name: "Hanne Bech", role: "Chief People Officer", a: "#052975", b: "#983eae" },
+  ];
+
+  get teams() { return ["All", ...new Set(this.people.map((p) => p.team))]; }
+
+  renderVals() {
+    const sel = this.state.team;
+    const shown = sel === "All" ? this.people : this.people.filter((p) => p.team === sel);
+    return {
+      chips: this.teams.map((t) => ({
+        label: t,
+        n: t === "All" ? this.people.length : this.people.filter((p) => p.team === t).length,
+        cls: "co-chip" + (t === sel ? " is-on" : ""),
+        pick: () => this.setState({ team: t }),
+      })),
+      countLabel: shown.length + (shown.length === 1 ? " person" : " people"),
+      people: shown.map((p) => ({
+        ini: p.ini, name: p.name, role: p.role, team: p.team,
+        avStyle: "background:linear-gradient(135deg," + p.a + "," + p.b + ")",
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

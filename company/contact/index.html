@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Continia</title>
+<script src="../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="../_ds2/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<link rel="stylesheet" href="../assets/company.css">
+<style>
+  .co-grid--4off { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 1080px) { .co-grid--4off { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .co-grid--4off { grid-template-columns: 1fr; } }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" hint-size="100%,66px"></x-import>
+
+<section class="co-hero" data-screen-label="Hero">
+  <img class="co-hero__wm" src="../../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <div class="co-wrap">
+    <nav class="co-crumb" aria-label="Breadcrumb">
+      <a href="../../">Home</a><i class="fa-light fa-chevron-right"></i><span aria-current="page">Contact</span>
+    </nav>
+    <div class="co-hero__inner">
+      <span class="co-hero__eye">Contact</span>
+      <h1>Talk to us.</h1>
+      <p class="co-hero__deck">Whether you are comparing products, running an implementation or writing about us — here is the shortest path to the right person.</p>
+    </div>
+  </div>
+</section>
+
+<section class="co-sec" data-screen-label="Contact">
+  <div class="co-wrap">
+    <div class="co-split" style="align-items:start">
+      <div>
+        <div class="co-head">
+          <span class="co-head__eye">Send a message</span>
+          <h2>Tell us what you need</h2>
+          <p>Questions about products, pricing or partnership. We route it to the right team and reply within one business day.</p>
+        </div>
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div class="co-empty" style="text-align:left">
+            <i class="fa-light fa-circle-check" style="color:#5f9e8d"></i>
+            <b style="color:#052975">Thanks — that would normally be on its way.</b>
+            <p style="margin:8px 0 0">This form is a prototype and does not send anything yet. Use <a href="https://www.continia.com/contact/" target="_blank" rel="noopener">continia.com/contact</a> to reach Continia for real.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <div class="co-form">
+            <div class="co-form__row">
+              <div class="co-field"><label>Name</label><input type="text" value="{{ name }}" onChange="{{ onName }}" placeholder="Your name"></div>
+              <div class="co-field"><label>Work email</label><input type="text" value="{{ email }}" onChange="{{ onEmail }}" placeholder="you@company.com"></div>
+            </div>
+            <div class="co-field"><label>What is it about?</label>
+              <select value="{{ topic }}" onChange="{{ onTopic }}">
+                <sc-for list="{{ topics }}" as="t" hint-placeholder-count="4">
+                  <option value="{{ t }}">{{ t }}</option>
+                </sc-for>
+              </select>
+            </div>
+            <div class="co-field"><label>Message</label><textarea value="{{ msg }}" onChange="{{ onMsg }}" placeholder="A sentence or two is plenty."></textarea></div>
+            <div>
+              <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" onClick="{{ submit }}" hint-size="auto,48px">Send message</x-import>
+            </div>
+            <p class="co-form__note">Prototype form — nothing is submitted or stored. For real enquiries use <a href="https://www.continia.com/contact/" target="_blank" rel="noopener">continia.com/contact</a>.</p>
+          </div>
+        </sc-if>
+      </div>
+      <div>
+        <div class="co-head">
+          <span class="co-head__eye">Faster routes</span>
+          <h2>Or go straight to the right place</h2>
+        </div>
+        <div class="co-grid" style="gap:16px">
+          <a class="co-card co-card--hover" href="https://www.continia.com/partners/" target="_blank" rel="noopener" style="text-decoration:none;display:block">
+            <div class="co-card__icon"><i class="fa-light fa-handshake"></i></div>
+            <h3>Looking to buy?</h3>
+            <p>Continia sells through local partners. They handle licensing, setup and training in your market.</p>
+          </a>
+          <a class="co-card co-card--hover" href="https://www.continia.com/support/" target="_blank" rel="noopener" style="text-decoration:none;display:block">
+            <div class="co-card__icon"><i class="fa-light fa-life-ring"></i></div>
+            <h3>Existing customer?</h3>
+            <p>Support runs through your partner first, with our specialists behind them when it needs to escalate.</p>
+          </a>
+          <a class="co-card co-card--hover" href="https://docs.continia.com/" target="_blank" rel="noopener" style="text-decoration:none;display:block">
+            <div class="co-card__icon"><i class="fa-light fa-book"></i></div>
+            <h3>Just need the docs?</h3>
+            <p>Setup guides, release notes and how-tos for every product, kept current with each release.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="co-sec co-band" data-screen-label="Offices">
+  <div class="co-wrap">
+    <div class="co-head">
+      <span class="co-head__eye">Offices</span>
+      <h2>Where you will find us</h2>
+      <p>Addresses shown here are indicative prototype content — confirm on continia.com/contact.</p>
+    </div>
+    <div class="co-grid co-grid--4off">
+      <div class="co-office"><span class="co-office__flag">Headquarters</span><h3>Continia Software A/S</h3><address>Bredskifte All&eacute; 13<br>8210 Aarhus V<br>Denmark</address></div>
+      <div class="co-office"><span class="co-office__flag">DACH region</span><h3>Continia Software GmbH</h3><address>Munich<br>Germany</address></div>
+      <div class="co-office"><span class="co-office__flag">Benelux</span><h3>Continia Software B.V.</h3><address>Amsterdam<br>Netherlands</address></div>
+      <div class="co-office"><span class="co-office__flag">North America</span><h3>Continia Software Inc.</h3><address>United States</address></div>
+    </div>
+  </div>
+</section>
+
+<section class="co-cta" data-screen-label="CTA">
+  <img class="co-cta__wm" src="../../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <div class="co-cta__inner">
+    <span class="co-cta__eye">Prefer to try first?</span>
+    <h2>Start a free trial instead</h2>
+    <p>Every Continia product installs from Microsoft AppSource and runs inside your own Business Central for 30 days.</p>
+    <div class="co-cta__btns">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="200px,52px">Download free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../find-a-partner/" hint-size="180px,52px">Find a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+// Contact form. Deliberately does not submit anywhere — see the note in the
+// markup. Only enough state to demonstrate the flow. HANDOFF §3 traps 1 & 2.
+class Component extends DCLogic {
+  state = { name: "", email: "", topic: "Products & pricing", msg: "", sent: false };
+
+  topics = ["Products & pricing", "Becoming a partner", "Support", "Press & other"];
+
+  renderVals() {
+    return {
+      name: this.state.name, email: this.state.email,
+      topic: this.state.topic, msg: this.state.msg,
+      topics: this.topics,
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      onName: (e) => this.setState({ name: e.target.value }),
+      onEmail: (e) => this.setState({ email: e.target.value }),
+      onTopic: (e) => this.setState({ topic: e.target.value }),
+      onMsg: (e) => this.setState({ msg: e.target.value }),
+      submit: () => this.setState({ sent: true }),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1340,22 +1340,22 @@ const CONTINIA_LINKS = {
   }],
   company: [{
     label: "Contact",
-    href: BASE + "/contact/"
+    href: "company/contact/"
   }, {
     label: "Meet the team",
-    href: BASE + "/meet-the-team/"
+    href: "company/meet-the-team/"
   }, {
     label: "About us",
-    href: BASE + "/about-us/"
+    href: "company/about-us/"
   }, {
     label: "Career",
-    href: BASE + "/career/"
+    href: "company/career/"
   }, {
     label: "Working at Continia",
-    href: BASE + "/working-at-continia/"
+    href: "company/working-at-continia/"
   }, {
     label: "Find a partner",
-    href: BASE + "/find-a-partner/"
+    href: "company/find-a-partner/"
   }],
   resources: [{
     label: "Use cases",
@@ -1558,7 +1558,8 @@ const CSS = `
 .cnt-siteheader__link { font-size: 15px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; padding: 8px 12px; display: inline-flex; align-items: center; gap: 7px; transition: color var(--dur-base) var(--ease-standard); }
 .cnt-siteheader__link:hover { color: var(--c-tech-blue); }
 .cnt-siteheader__link i { font-size: 11px; opacity: 0.55; }
-.cnt-siteheader__link--active { color: var(--c-tech-blue); box-shadow: inset 0 -2px 0 var(--c-innovation-blue); padding-bottom: 3px; }
+/* No padding-bottom override here. The nav row stretches every link to the same height, so trimming the bottom padding never moved the underline (box-shadow: inset draws on the border box) — it only pushed the active label 2.5px down, which read as the current page sitting a notch lower. */
+.cnt-siteheader__link--active { color: var(--c-tech-blue); box-shadow: inset 0 -2px 0 var(--c-innovation-blue); }
 .cnt-siteheader__navitem { position: relative; display: inline-flex; }
 .cnt-siteheader__dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px); margin-top: 10px; min-width: 266px; background: #fff; border: 1px solid var(--color-border); border-radius: 14px; box-shadow: 0 20px 50px rgba(5,41,117,0.18); padding: 8px; display: grid; gap: 2px; opacity: 0; visibility: hidden; transition: opacity 180ms var(--ease-standard), transform 180ms var(--ease-standard); z-index: 60; }
 .cnt-siteheader__dropdown::before { content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
