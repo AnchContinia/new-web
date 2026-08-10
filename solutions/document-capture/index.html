@@ -224,8 +224,22 @@
   .dc-ti .dc-inside__list { margin: 0; gap: 12px; }
   .dc-ti .dc-inside__list span { font-size: 15.5px; }
 
+  /* ---------- PartnerZone training ---------- */
+  .dc-pz { background: #fff; border-top: 1px solid #e5eaf3; }
+  .dc-pz__grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: clamp(32px,5vw,64px); align-items: center; }
+  .dc-pz h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
+  .dc-pz p { margin: 18px 0 0; font-size: 1.0625rem; line-height: 1.62; color: var(--color-text-muted); max-width: 52ch; }
+  .dc-pz__btns { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 30px; }
+  .dc-pz__note { margin-top: 18px; font-size: 13.5px; color: #6b7894; display: flex; align-items: center; gap: 8px; }
+  .dc-pz__note i { color: #93a2bf; }
+  /* the asset is 2500x1667, so the frame is 3:2 and nothing gets cropped off
+     the lockup. No border here — it is a full-bleed key visual, not a photo. */
+  .dc-pz__media { border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 2;
+    box-shadow: 0 26px 60px rgba(5,41,117,0.20); }
+  .dc-pz__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
   @media (max-width: 900px) {
-    .dc-sl__grid, .dc-ti__grid { grid-template-columns: 1fr; }
+    .dc-sl__grid, .dc-ti__grid, .dc-pz__grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 900px) {
     .dc-hero__grid { grid-template-columns: 1fr; }
@@ -482,6 +496,28 @@
           </span>
         </button>
       </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARTNERZONE ============ -->
+<section class="dc-pz" data-screen-label="PartnerZone training">
+  <div class="dc-sec">
+    <div class="dc-pz__grid">
+      <div>
+        <span class="eye" style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#52678f;">For partners</span>
+        <h2>Hands-on Document Capture training</h2>
+        <p>PartnerZone is the Continia partner portal — the same place your team already goes for price lists, licence terms and product documentation. Document Capture training material lives there too.</p>
+        <p>Sign in with your partner account to get started. Not a partner yet? Any of our 1,500+ partners can take you through Document Capture instead.</p>
+        <div class="dc-pz__btns">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="https://partnerzone.continia.com/" target="_blank" hint-size="auto,48px">Open PartnerZone</x-import>
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="../../company/find-a-partner/" hint-size="auto,48px">Find a partner</x-import>
+        </div>
+        <span class="dc-pz__note"><i class="fa-light fa-lock"></i>PartnerZone requires a Continia partner sign-in.</span>
+      </div>
+      <div class="dc-pz__media">
+        <img src="../../assets/images/partnerzone-dc-training.jpg" alt="Continia PartnerZone key visual — hands-on training for Document Capture" />
+      </div>
     </div>
   </div>
 </section>
