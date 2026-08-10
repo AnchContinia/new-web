@@ -54,7 +54,7 @@
       /* Tighter section gutters + vertical rhythm */
       .hero-wrap { padding: 56px 20px 54px !important; }
       #impacts > div, #solutions > div, #how > div { padding: 60px 20px !important; }
-      #cta > div { padding: 72px 20px !important; }
+      section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
 
       /* Hero type scales down and wraps naturally */
       .hero-h1 { font-size: clamp(24px, 6.6vw, 32px) !important; letter-spacing: -0.02em !important; margin-top: 16px !important; }
@@ -517,11 +517,12 @@
 
 <!-- ============ FINAL CTA ============ -->
 <section id="cta" data-screen-label="Final CTA" style="position:relative;overflow:hidden;background:linear-gradient(135deg,#041e58 0%,#052975 45%,#1d5aa8 90%,#8ff8ff 160%)">
-  <img src="assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position:absolute;left:50%;bottom:-12%;transform:translateX(-50%);width:170%;opacity:0.08;pointer-events:none">
-  <div data-reveal="true" style="position:relative;max-width:820px;margin:0 auto;padding:110px 32px;text-align:center">
-    <h2 style="margin:0;font-size:clamp(34px,3.6vw,52px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">It's about time to future-proof your finance operations</h2>
-    <p style="margin:20px auto 0;max-width:560px;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.78)">Get all your tools in one place and work faster —<br>without leaving Business Central.</p>
-    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:36px">
+  <img src="assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div data-reveal="true" style="position:relative;max-width: 820px;margin:0 auto;padding: 110px 32px;text-align:center">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Get started</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">It's about time to future&#8209;proof your finance operations</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">Get all your tools in one place and work faster — without leaving Business Central.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" class-name="cnt-btn--innovation" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" class-name="cnt-btn--ghostdark" href="#footer" hint-size="180px,48px">Talk to a partner</x-import>
     </div>

@@ -242,7 +242,13 @@
   @media (prefers-reduced-motion: reduce) {
     .dc-mock, .dc-row { animation: none !important; opacity: 1 !important; }
   }
-</style>
+
+    /* CTA band above the footer — one treatment site-wide; the inline
+       padding needs !important to lose here. */
+    @media (max-width: 640px) {
+      section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+    }
+  </style>
 </helmet>
 <div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
 

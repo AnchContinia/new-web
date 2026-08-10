@@ -21,7 +21,13 @@
   .co-grid--4off { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   @media (max-width: 1080px) { .co-grid--4off { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .co-grid--4off { grid-template-columns: 1fr; } }
-</style>
+
+    /* CTA band above the footer — one treatment site-wide; the inline
+       padding needs !important to lose here. */
+    @media (max-width: 640px) {
+      section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+    }
+  </style>
 </helmet>
 
 <x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" hint-size="100%,66px"></x-import>

@@ -46,6 +46,12 @@
       section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
       section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
     }
+  
+    /* CTA band above the footer — one treatment site-wide; the inline
+       padding needs !important to lose here. */
+    @media (max-width: 640px) {
+      section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+    }
   </style>
 </helmet>
 

@@ -142,3 +142,8 @@ a { text-decoration: none; }
   .dt-stats, .dt-facts { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* CTA band above the footer — one treatment site-wide (mobile). */
+@media (max-width: 640px) {
+  section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+}
