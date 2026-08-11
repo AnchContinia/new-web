@@ -242,7 +242,10 @@
     .sol-car__nav:hover { transform: translateY(-50%) scale(1.09); background: #def5ff; }
     .sol-car__nav--prev { left: clamp(2px,3vw,32px); }
     .sol-car__nav--next { right: clamp(2px,3vw,32px); }
-    .sol-car__dots { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+    /* margin-top was 10px when the dots were bare 9px circles. They now carry
+       8px of padding as hit area, so the row is 16px taller and the dot centres
+       have to come back up by the same amount to sit where they did. */
+    .sol-car__dots { display: flex; justify-content: center; gap: 0; margin-top: 2px; }
     /* Solutions carousel on mobile: nav arrows drop into a bottom control bar so
        they don't cover the card — [<]  • • • • •  [>]. Placed after the base
        rules on purpose; inside the earlier @media block the width/height here
@@ -255,14 +258,24 @@
       .sol-car__nav:hover { transform: scale(1.06); background: #def5ff; }
       .sol-car__nav--prev { left: 18px; right: auto; }
       .sol-car__nav--next { right: 18px; left: auto; }
-      /* 32px lines the dots up with the centre of the 44px arrows */
-      .sol-car__dots { position: absolute; bottom: 32px; left: 0; right: 0; margin-top: 0; }
+      /* 24px lines the dots up with the centre of the 44px arrows, now that each
+         dot sits inside a 25px box (was 32px against a bare 9px dot) */
+      .sol-car__dots { position: absolute; bottom: 24px; left: 0; right: 0; margin-top: 0; }
     }
-    .sol-car__dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 999px; cursor: pointer;
-      background: rgba(255,255,255,0.35); transition: background 200ms, transform 200ms; }
+    /* The dot stays 9px; the button becomes 25x25. `background-clip: content-box`
+       paints only the content box, so the padding is invisible hit area rather
+       than a 25px blob — they were 9x9 targets, which is below any guideline. */
+    .sol-car__dot { box-sizing: content-box; width: 9px; height: 9px; padding: 8px; border: none;
+      border-radius: 999px; cursor: pointer; background: rgba(255,255,255,0.35);
+      background-clip: content-box; transition: background 200ms, transform 200ms; }
     .sol-car__dot.on { background: #8ff8ff; transform: scale(1.25); }
 
     @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } .sol-car__card { transition: none !important; } }
+  
+    /* Prototype-only view switchers, off on phones (fixed — these were the ones landing on top of the footer links and the logo marquee). */
+    @media (max-width: 640px) {
+      .imp-toggle, .hero-toggle { display: none !important; }
+    }
   </style>
 </helmet>
 
@@ -342,7 +355,11 @@
     <div style="flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)">
       <div id="cnt-marquee" style="display:flex;align-items:center;gap:64px;width:max-content;animation:cnt-marquee 38s linear infinite">
         <sc-for list="{{ trustLoop }}" as="brand" hint-placeholder-count="10">
-          <img src="{{ brand }}" alt="" loading="lazy" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
+          <!-- No loading="lazy" here. The marquee is ~2000px wide, so on a phone
+               most of these sit far outside the viewport HORIZONTALLY and the
+               browser never fetches them — they scrolled into view blank. The
+               other three trust-banner pages already load them eagerly. -->
+          <img src="{{ brand }}" alt="" style="height:auto;width:auto;max-height:30px;max-width:160px;object-fit:contain;opacity:0.82;flex:none" />
         </sc-for>
       </div>
     </div>

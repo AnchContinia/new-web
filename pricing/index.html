@@ -101,7 +101,9 @@
     /* class-targeted, not `> * > *` — sc-for does not always add a wrapper */
     .pr-rel__unit { display:flex; flex-direction:column; align-items:center; min-width:44px; background:rgba(255,255,255,0.11); border:1px solid rgba(143,248,255,0.30); border-radius:9px; padding:5px 7px 6px; }
     .pr-rel__unit b { font-size:16.5px; font-weight:700; line-height:1; color:#8ff8ff; font-variant-numeric:tabular-nums; }
-    .pr-rel__unit i { font-style:normal; margin-top:3px; font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.66); }
+    /* 9px was the smallest type anywhere on the site; 11px is the floor the rest
+       of it uses. The unit box is already 44px wide, so the wider label fits. */
+    .pr-rel__unit i { font-style:normal; margin-top:3px; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:rgba(255,255,255,0.72); }
     .pr-rel__live { flex:none; display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:#8ff8ff; }
     .pr-rel__cta { flex:none; display:inline-flex; align-items:center; gap:9px; font-size:13px; font-weight:700; letter-spacing:0.02em; color:#052975; background:#8ff8ff; border-radius:999px; padding:10px 18px; text-decoration:none; transition:background 180ms, transform 180ms; }
     .pr-rel__cta:hover { background:#c6fbff; transform:translateY(-1px); color:#052975; }

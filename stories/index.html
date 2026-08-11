@@ -264,6 +264,11 @@
     @media (max-width: 640px) {
       section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
     }
+  
+    /* Prototype-only view switchers, off on phones (fixed — same overlap as the homepage). */
+    @media (max-width: 640px) {
+      .st-toggle { display: none !important; }
+    }
   </style>
 </helmet>
 

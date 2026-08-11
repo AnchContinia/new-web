@@ -52,6 +52,11 @@
     @media (max-width: 640px) {
       section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
     }
+  
+    /* Prototype-only view switchers, off on phones (inline, not overlapping anything; hidden for consistency — easy to bring back). */
+    @media (max-width: 640px) {
+      .uc-toggle { display: none !important; }
+    }
   </style>
 </helmet>
 

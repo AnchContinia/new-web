@@ -62,6 +62,15 @@
   .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6b7894; }
   .dc-mock__foot i { color: #5f9e8d; }
 
+  /* Same treatment the eight product pages got: four nowrap pills across
+     ~350px forced a sub-11px label. Two-up instead. Placed after the base
+     rules — equal specificity means source order decides. */
+  @media (max-width: 640px) {
+    .dc-mock__flow { flex-wrap: wrap; }
+    .dc-mock__step { flex: 1 1 calc(50% - 5px); font-size: 11px; }
+  }
+
+
   /* ---------- shared section ---------- */
   .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
   .dc-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
@@ -89,6 +98,7 @@
   .dc-how .dc-head .eye { color: var(--c-innovation-blue); }
   .dc-how .dc-head p { color: rgba(255,255,255,0.78); }
   .dc-steps { position: relative; display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; max-width: 1080px; margin: 0 auto; }
+  .dc-steps--4 { grid-template-columns: repeat(4,1fr); }
   .dc-steps::before { content: ""; position: absolute; top: 27px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, rgba(143,248,255,0.15), rgba(143,248,255,0.55), rgba(143,248,255,0.15)); }
   .dc-step { position: relative; text-align: center; }
   .dc-step__num { position: relative; width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; background: #041e58; border: 2px solid rgba(143,248,255,0.45); color: var(--c-innovation-blue); display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1; }
@@ -120,6 +130,8 @@
     .dc-features { grid-template-columns: 1fr 1fr; }
     .dc-stats__grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
     .dc-steps { grid-template-columns: 1fr 1fr 1fr; gap: 28px 16px; }
+    /* 3-up would leave a 4th step stranded on its own row. */
+    .dc-steps--4 { grid-template-columns: 1fr 1fr; }
     .dc-steps::before { display: none; }
   }
   @media (max-width: 560px) {
@@ -235,7 +247,10 @@
       <h2>Four steps from proposal to reconciled.</h2>
       <p>Every payment run follows the same automated path — you only step in when a check needs a human decision.</p>
     </div>
-    <div class="dc-steps" style="max-width:920px;grid-template-columns:repeat(4,1fr)">
+    <!-- Column count is a CLASS, not an inline style. Inline beats every media
+         query, so the 4-up grid used to survive down to a 390px phone at 72px
+         a column — one or two words per line. -->
+    <div class="dc-steps dc-steps--4" style="max-width:920px">
       <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-file-invoice-dollar"></i></div><h4>1 · Propose</h4><p>Business Central builds the payment proposal from due invoices — no manual entry.</p></div>
       <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-shield-check"></i></div><h4>2 · Validate</h4><p>Amounts, IBANs and payee details are checked and fraud-screened before approval.</p></div>
       <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-paper-plane"></i></div><h4>3 · Send</h4><p>Approved payments go straight to the bank as a secure file — no portal login.</p></div>

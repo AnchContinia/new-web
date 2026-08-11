@@ -82,6 +82,15 @@
 
   .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: #52678f; min-height: 17px; }
   .dc-mock__foot i { color: #5f9e8d; font-size: 13px; }
+
+  /* Placed AFTER every .dc-mock__* base rule on purpose. Sitting above them,
+     this block lost `.dc-mock__docHead b` on source order — equal specificity,
+     later rule wins, media query or not. */
+  @media (max-width: 640px) {
+    .dc-mock__flow { flex-wrap: wrap; }
+    .dc-mock__step { flex: 1 1 calc(50% - 5px); font-size: 11px; padding: 7px 4px; }
+    .dc-mock__docHead b { font-size: 11px; }
+  }
   .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
   .dc-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
   .dc-head .eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }

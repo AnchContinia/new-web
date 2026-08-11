@@ -1475,6 +1475,11 @@ const CSS = `
 .cnt-sitefooter__legal a { color: rgba(255,255,255,0.65); transition: color 200ms var(--ease-standard); }
 .cnt-sitefooter__legal a:hover { color: var(--c-innovation-blue); }
 @media (max-width: 920px) { .cnt-sitefooter__top { grid-template-columns: 1fr 1fr; }
+}
+/* One column below 640px — at two, "Payment Management", "Collection
+   Management" and the "Contina Software" heading all broke across lines. */
+@media (max-width: 640px) {
+  .cnt-sitefooter__top { grid-template-columns: 1fr; gap: 30px; }
   /* let the brand block span both columns, or the three badge logos have only
      half the viewport and the first one wraps onto its own line */
   .cnt-sitefooter__brand { grid-column: 1 / -1; } }
@@ -1578,7 +1583,14 @@ const CSS = `
 @media (max-width: 980px) {
   .cnt-siteheader__inner { display: flex; justify-content: space-between; }
   .cnt-siteheader__nav, .cnt-siteheader__find { display: none; }
-  .cnt-siteheader__burger { display: block; }
+  /* 44x44 minimum. It was 37x35 (20px glyph + 6px padding) — the one
+     control on a phone that everyone reaches for, and the easiest to miss. */
+  .cnt-siteheader__burger { display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; padding: 0; }
+  /* box-sizing matters here: .cnt-btn is content-box, so a bare min-height:44px
+     set the CONTENT to 44 and padding+border pushed the button to 64, taking
+     the whole header from 63px to 86px. */
+  .cnt-siteheader .cnt-btn { box-sizing: border-box; min-height: 44px; }
   .cnt-siteheader__mobile { display: flex; flex-direction: column; gap: 2px; padding: 8px var(--layout-page-pad, 28px) 18px; border-top: 1px solid var(--color-border); }
 }
 @media (max-width: 640px) {
