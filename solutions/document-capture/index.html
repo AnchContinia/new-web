@@ -31,7 +31,9 @@
 
   /* ---------- Hero ---------- */
   .dc-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px) clamp(80px,9vw,116px); }
-  .dc-hero__grid { position: relative; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
+  /* z-index 2 puts the copy and the mock ABOVE .dc-hero__scrim (z-index 1).
+     Without it the scrim painted over everything and the whole hero went hazy. */
+  .dc-hero__grid { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
   .dc-hero h1 { margin: 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
   .dc-hero p { margin: 22px 0 0; max-width: 40rem; font-size: 1.1875rem; line-height: 1.6; color: rgba(255,255,255,0.84); }
   .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
@@ -91,6 +93,121 @@
     .dc-mock__step { flex: 1 1 calc(50% - 5px); font-size: 11px; padding: 7px 4px; }
     .dc-mock__docHead b { font-size: 11px; }
   }
+
+  /* ---------- hero background: three states, switched bottom-left ---------- */
+  /* Deep smart green. Sage #5f9e8d is hue 163.8° at 25% saturation — far too
+     light for a band that carries white type — so this is the same hue taken to
+     70% saturation and 18% lightness: 9.65:1 against white, 7.83:1 against the
+     cyan accents, so nothing else in the hero has to change. */
+  .dc-hero--green { background: linear-gradient(165deg, #0e4e3d 0%, #0b3f31 62%, #093a2e 100%); }
+  .dc-hero--video { background: #02091a; }
+  .dc-hero__vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  /* Same dark treatment the homepage gives Release R1: tech blue washed over
+     near-black, with a heavier pool behind the copy so the headline holds. */
+  .dc-hero__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(76% 60% at 32% 44%, rgba(5,41,117,0.50), rgba(5,41,117,0) 72%),
+      linear-gradient(180deg, rgba(2,9,26,0.78) 0%, rgba(4,26,74,0.66) 34%, rgba(3,16,48,0.72) 62%, rgba(2,9,26,0.86) 100%); }
+  .dc-hero--video .dc-hero h1, .dc-hero--video h1 { text-shadow: 0 2px 28px rgba(2,9,26,0.55); }
+  .dc-hero--video p { text-shadow: 0 1px 16px rgba(2,9,26,0.6); }
+  @media (prefers-reduced-motion: reduce) { .dc-hero__vid { display: none; } }
+
+  /* ---------- prototype switches (fixed, bottom-left) ---------- */
+  .dc-switch { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+    padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee;
+    box-shadow: 0 8px 24px rgba(5,41,117,0.16); font-family: var(--font-sans); font-size: 13px;
+    font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms, opacity 220ms; }
+  .dc-switch:hover { border-color: #052975; transform: translateY(-2px); }
+  .dc-switch--mock { bottom: 74px; }
+  .dc-switch i { font-size: 13px; }
+  /* Both sat on top of the footer legal bar at the end of the page. Same
+     rect-based watcher the homepage uses — an IntersectionObserver goes deaf
+     here, because the runtime swaps the footer node out from under it. */
+  body.cnt-footer-in-view .dc-switch { opacity: 0; pointer-events: none; transform: translateY(14px); }
+  /* Off on phones, like every other prototype switch on the site. */
+  @media (max-width: 640px) { .dc-switch { display: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .dc-switch { transition: none; } }
+
+  /* ---------- mock animations 2-4 ---------- */
+  /* All four variants share one card. A min-height keeps the hero from jumping
+     as you switch — the pipeline view is the tallest at 436px content. */
+  .dc-mock__stage { min-height: 348px; }
+
+  /* 2 · Inbox — throughput rather than one document's journey */
+  .dc-mock__inboxHead { display: flex; align-items: baseline; gap: 8px; margin: 16px 0 10px; }
+  .dc-mock__inboxHead b { font-size: 22px; font-weight: 700; color: #052975; letter-spacing: -0.02em; }
+  /* ⚠️ Class, not `.dc-mock__inboxHead span` — trap 5b again. The bare
+     descendant selector caught the {{ inboxPosted }} wrapper inside <b>,
+     so the counter rendered 12.5px grey instead of 22px navy. */
+  .dc-mock__inboxK { font-size: 12.5px; color: #6b7894; }
+  .dc-mock__meter { height: 5px; border-radius: 999px; background: #eef1f6; overflow: hidden; margin-bottom: 12px; }
+  .dc-mock__meter i { display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg,#052975,#46be9e); transition: width 620ms cubic-bezier(0.16,1,0.3,1); }
+  .dc-mock__q { display: flex; flex-direction: column; gap: 2px; }
+  .dc-mock__qrow { display: grid; grid-template-columns: 18px 1fr auto 92px; gap: 10px; align-items: center;
+    padding: 9px 2px; border-top: 1px solid #f1f4f9; font-size: 12.5px;
+    transition: opacity 420ms ease, transform 420ms ease; }
+  .dc-mock__qrow i { color: #8193b9; font-size: 14px; }
+  .dc-mock__qrow .nm { font-weight: 600; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dc-mock__qrow .amt { color: #3a4a6b; font-variant-numeric: tabular-nums; }
+  .dc-mock__qchip { text-align: center; padding: 4px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.02em; transition: background 380ms ease, color 380ms ease; }
+  .dc-mock__qchip.s0 { background: #eef1f6; color: #6b7894; }
+  .dc-mock__qchip.s1 { background: #def5ff; color: #052975; }
+  .dc-mock__qchip.s2 { background: #e4f0ec; color: #2f6455; }
+  .dc-mock__qrow.is-new { animation: dcSlideIn 480ms cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes dcSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+  /* 3 · Three-way match — invoice lines against the purchase order */
+  .dc-mock__mHead { display: grid; grid-template-columns: 1fr 26px 1fr; gap: 8px; margin: 16px 0 8px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8193b9; }
+  .dc-mock__mHead span:last-child { text-align: right; }
+  .dc-mock__mRow { display: grid; grid-template-columns: 1fr 26px 1fr; gap: 8px; align-items: center;
+    padding: 10px 0; border-top: 1px solid #f1f4f9; font-size: 12.5px; color: #0a1838; }
+  .dc-mock__mRow .r { text-align: right; }
+  .dc-mock__mRow .v { font-variant-numeric: tabular-nums; }
+  .dc-mock__link { justify-self: center; width: 22px; height: 22px; border-radius: 999px; display: grid; place-items: center;
+    font-size: 11px; background: #eef1f6; color: #9aa8c4; transition: background 380ms ease, color 380ms ease, transform 380ms ease; }
+  .dc-mock__mRow.is-ok .dc-mock__link { background: #e4f0ec; color: #2f6455; transform: scale(1.08); }
+  .dc-mock__mRow.is-flag .dc-mock__link { background: #fff2d6; color: #8a6516; }
+  .dc-mock__mNote { margin-top: 12px; display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; background: #f6f8fb; color: #52678f; transition: background 380ms ease, color 380ms ease; }
+  .dc-mock__mNote.is-flag { background: #fff7e3; color: #8a6516; }
+  .dc-mock__mNote.is-ok { background: #e4f0ec; color: #2f6455; }
+  /* totals strip — closes the story and fills the space four lines leave behind */
+  .dc-mock__tot { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 14px;
+    padding-top: 12px; border-top: 1px solid #f1f4f9; }
+  .dc-mock__tot div { text-align: center; }
+  /* ⚠️ Class, not `.dc-mock__tot span` — HANDOFF trap 5b. Every {{ binding }}
+     renders as <span class="sc-interp">, so a bare descendant selector also hit
+     the value inside <b>: "3 of 3" came out as a grey 10.5px "3" on its own
+     line above a bold "of 3". */
+  .dc-mock__totK { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #9aa8c4; }
+  .dc-mock__tot b { display: block; margin-top: 5px; font-size: 14px; font-weight: 700; color: #052975;
+    font-variant-numeric: tabular-nums; }
+  .dc-mock__tot b.ok { color: #2f6455; }
+
+  /* 4 · Approval — the routing chain, and how long it actually takes */
+  .dc-mock__aHead { margin: 16px 0 4px; font-size: 12.5px; color: #6b7894; }
+  .dc-mock__aHead b { color: #052975; font-size: 14px; }
+  .dc-mock__chain { display: flex; flex-direction: column; gap: 0; margin-top: 10px; }
+  .dc-mock__ap { display: grid; grid-template-columns: 38px 1fr auto; gap: 12px; align-items: center; padding: 11px 0; position: relative; }
+  /* the connector between avatars, drawn from each row down to the next */
+  .dc-mock__ap:not(:last-child)::after { content: ""; position: absolute; left: 18px; top: 46px; bottom: -6px; width: 2px;
+    background: #eef1f6; transition: background 420ms ease; }
+  .dc-mock__ap.is-done:not(:last-child)::after { background: #cfe4dc; }
+  .dc-mock__av { width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em; background: #eef1f6; color: #9aa8c4;
+    transition: background 420ms ease, color 420ms ease, box-shadow 420ms ease; }
+  .dc-mock__ap.is-live .dc-mock__av { background: #def5ff; color: #052975; box-shadow: 0 0 0 4px rgba(5,41,117,0.10); }
+  .dc-mock__ap.is-done .dc-mock__av { background: #e4f0ec; color: #2f6455; }
+  .dc-mock__ap .who { font-size: 13.5px; font-weight: 600; color: #0a1838; }
+  .dc-mock__ap .role { display: block; font-size: 11.5px; font-weight: 500; color: #8193b9; margin-top: 2px; }
+  .dc-mock__apState { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: #9aa8c4; font-variant-numeric: tabular-nums;
+    transition: color 420ms ease; }
+  .dc-mock__ap.is-live .dc-mock__apState { color: #052975; }
+  .dc-mock__ap.is-done .dc-mock__apState { color: #2f6455; }
 
   /* ---------- shared section ---------- */
   .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
@@ -277,7 +394,14 @@
 <x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Products" hint-size="100%,66px"></x-import>
 
 <!-- ============ HERO ============ -->
-<section class="dc-hero" data-screen-label="Hero">
+<section class="{{ heroCls }}" data-screen-label="Hero">
+  <sc-if value="{{ heroVideo }}" hint-placeholder-val="{{ false }}">
+    <video class="dc-hero__vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="../../assets/video/release-r1.mp4" type="video/mp4">
+      <source src="../../assets/video/release-r1.mov" type="video/quicktime">
+    </video>
+    <div class="dc-hero__scrim" aria-hidden="true"></div>
+  </sc-if>
   <div class="dc-hero__grid">
     <div>
       <h1>Automate your Accounts Payable, end to end.</h1>
@@ -290,37 +414,102 @@
     <div class="dc-mock" aria-hidden="true">
       <div class="dc-mock__bar"><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__title">Accounts Payable · Business Central</span></div>
 
-      <div class="dc-mock__flow">
-        <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
-          <div class="{{ s.cls }}">{{ s.name }}</div>
-        </sc-for>
-      </div>
-      <div class="dc-mock__prog"><i style="{{ progStyle }}"></i></div>
+      <div class="dc-mock__stage">
 
-      <div class="dc-mock__doc">
-        <div class="dc-mock__docHead">
-          <i class="fa-light fa-file-invoice"></i><span>{{ docName }}</span><b>{{ docBadge }}</b>
+      <!-- 1 · PIPELINE — one invoice walking Imported → Posted -->
+      <sc-if value="{{ animPipeline }}" hint-placeholder-val="{{ true }}">
+        <div class="dc-mock__flow">
+          <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
+            <div class="{{ s.cls }}">{{ s.name }}</div>
+          </sc-for>
         </div>
-        <div class="dc-mock__lines"><span></span><span></span><span></span></div>
-        <sc-if value="{{ scanning }}" hint-placeholder-val="{{ true }}">
-          <div class="dc-mock__scan"></div>
-        </sc-if>
-      </div>
+        <div class="dc-mock__prog"><i style="{{ progStyle }}"></i></div>
 
-      <div class="dc-mock__fields">
-        <sc-for list="{{ fields }}" as="f" hint-placeholder-count="5">
-          <div class="{{ f.cls }}">
-            <span class="k">{{ f.k }}</span>
-            <span class="slot"><span class="ph"></span><span class="v">{{ f.v }}</span></span>
-            <i class="fa-light fa-circle-check g"></i>
+        <div class="dc-mock__doc">
+          <div class="dc-mock__docHead">
+            <i class="fa-light fa-file-invoice"></i><span>{{ docName }}</span><b>{{ docBadge }}</b>
+          </div>
+          <div class="dc-mock__lines"><span></span><span></span><span></span></div>
+          <sc-if value="{{ scanning }}" hint-placeholder-val="{{ true }}">
+            <div class="dc-mock__scan"></div>
+          </sc-if>
+        </div>
+
+        <div class="dc-mock__fields">
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="5">
+            <div class="{{ f.cls }}">
+              <span class="k">{{ f.k }}</span>
+              <span class="slot"><span class="ph"></span><span class="v">{{ f.v }}</span></span>
+              <i class="fa-light fa-circle-check g"></i>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- 2 · INBOX — the whole morning's post, clearing itself -->
+      <sc-if value="{{ animInbox }}" hint-placeholder-val="{{ false }}">
+        <div class="dc-mock__inboxHead">
+          <b>{{ inboxPosted }}</b><span class="dc-mock__inboxK">of {{ inboxTotal }} invoices posted automatically</span>
+        </div>
+        <div class="dc-mock__meter"><i style="{{ inboxMeter }}"></i></div>
+        <div class="dc-mock__q">
+          <sc-for list="{{ inboxRows }}" as="r" hint-placeholder-count="6">
+            <div class="{{ r.cls }}">
+              <i class="fa-light fa-file-invoice"></i>
+              <span class="nm">{{ r.vendor }}</span>
+              <span class="amt">{{ r.amt }}</span>
+              <span class="{{ r.chipCls }}">{{ r.chip }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- 3 · THREE-WAY MATCH — invoice lines against the purchase order -->
+      <sc-if value="{{ animMatch }}" hint-placeholder-val="{{ false }}">
+        <div class="dc-mock__mHead"><span>Invoice 100482</span><span></span><span>PO-2291</span></div>
+        <sc-for list="{{ matchRows }}" as="m" hint-placeholder-count="4">
+          <div class="{{ m.cls }}">
+            <span><span class="v">{{ m.left }}</span></span>
+            <span class="dc-mock__link"><i class="{{ m.icon }}"></i></span>
+            <span class="r"><span class="v">{{ m.right }}</span></span>
           </div>
         </sc-for>
-      </div>
+        <div class="{{ matchNoteCls }}"><i class="{{ matchNoteIcon }}"></i>{{ matchNote }}</div>
+        <div class="dc-mock__tot">
+          <div><span class="dc-mock__totK">Invoice</span><b>€ 4,820.00</b></div>
+          <div><span class="dc-mock__totK">Order</span><b>€ 4,820.00</b></div>
+          <div><span class="dc-mock__totK">Variance</span><b class="{{ matchVarCls }}">{{ matchVar }}</b></div>
+        </div>
+      </sc-if>
 
+      <!-- 4 · APPROVAL — who touched it, and for how long -->
+      <sc-if value="{{ animApproval }}" hint-placeholder-val="{{ false }}">
+        <div class="dc-mock__aHead"><b>€ 4,820.00</b> · Northwind Traders · routed by amount</div>
+        <div class="dc-mock__chain">
+          <sc-for list="{{ approvers }}" as="a" hint-placeholder-count="3">
+            <div class="{{ a.cls }}">
+              <span class="dc-mock__av">{{ a.initials }}</span>
+              <span><span class="who">{{ a.name }}</span><span class="role">{{ a.role }}</span></span>
+              <span class="dc-mock__apState">{{ a.state }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div class="dc-mock__tot">
+          <div><span class="dc-mock__totK">Routed</span><b>By amount</b></div>
+          <div><span class="dc-mock__totK">Approvers</span><b>{{ apDone }} of 3</b></div>
+          <div><span class="dc-mock__totK">Elapsed</span><b class="{{ apElapsedCls }}">{{ apElapsed }}</b></div>
+        </div>
+      </sc-if>
+
+      </div>
       <div class="dc-mock__foot"><i class="{{ footIcon }}"></i>{{ footText }}</div>
     </div>
   </div>
 </section>
+
+<!-- Prototype switches. Not part of the page design — see HANDOFF §8. -->
+<button onClick="{{ cycleHeroBg }}" class="dc-switch" title="Switch the hero background"><i class="fa-light fa-palette"></i>{{ heroBgLabel }}</button>
+<button onClick="{{ cycleAnim }}" class="dc-switch dc-switch--mock" title="Switch the hero animation"><i class="fa-light fa-shuffle"></i>{{ animLabel }}</button>
 
 <!-- ============ STATS ============ -->
 <section class="dc-stats" data-screen-label="Impact">
@@ -551,7 +740,14 @@
 
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { vid: 0, demoOpen: false, step: 0 };
+  // bg:   0 tech blue · 1 smart green · 2 Release R1 video
+  // anim: 0 pipeline · 1 inbox · 2 three-way match · 3 approval
+  state = { vid: 0, demoOpen: false, step: 0, bg: 0, anim: 0 };
+
+  // Each animation runs on the same 1500 ms beat but has its own length, so a
+  // short one does not sit idle waiting for a long one's cycle to come round.
+  animLen = [6, 9, 7, 7];
+  _seenBg = 0;
 
   // Hero animation: one invoice walking the real Document Capture pipeline.
   stages = ["Imported", "Recognized", "Matched", "Approved", "Posted"];
@@ -573,18 +769,110 @@ class Component extends DCLogic {
     { icon: "fa-light fa-circle-check", text: "Posted & archived — 0 manual touches" },
   ];
 
+  // --- 2 · inbox -----------------------------------------------------------
+  // Six invoices arriving together and clearing themselves. Row i is recognized
+  // at beat i and posted two beats later, so the queue drains as a wave rather
+  // than all at once.
+  inboxDefs = [
+    { vendor: "Northwind Traders", amt: "€ 4,820.00" },
+    { vendor: "Fabrikam Inc.", amt: "€ 1,240.50" },
+    { vendor: "Contoso Ltd.", amt: "€ 612.00" },
+    { vendor: "Adatum Corp.", amt: "€ 9,310.75" },
+    { vendor: "Tailspin Toys", amt: "€ 2,054.20" },
+    { vendor: "Litware Inc.", amt: "€ 780.40" },
+  ];
+
+  // --- 3 · three-way match -------------------------------------------------
+  // Four invoice lines against PO-2291. Line 3 comes up short, the receipt
+  // explains it, and the line clears — which is the interesting case, and the
+  // one a person would otherwise have chased by hand.
+  matchDefs = [
+    { left: "Steel bracket · 120", right: "120 ordered", ok: 1 },
+    { left: "Hex bolt M8 · 500", right: "500 ordered", ok: 2 },
+    { left: "Washer 8 mm · 48", right: "50 ordered", ok: 4, flagAt: 3 },
+    { left: "Freight", right: "Agreed rate", ok: 5 },
+  ];
+
+  matchNotes = [
+    { icon: "fa-light fa-code-compare", text: "Matching invoice lines against PO-2291…", cls: "" },
+    { icon: "fa-light fa-code-compare", text: "Matching invoice lines against PO-2291…", cls: "" },
+    { icon: "fa-light fa-code-compare", text: "Matching invoice lines against PO-2291…", cls: "" },
+    { icon: "fa-light fa-triangle-exclamation", text: "Line 3 · 2 units short of the order", cls: " is-flag" },
+    { icon: "fa-light fa-box-check", text: "Receipt confirms 48 received — within tolerance", cls: " is-flag" },
+    { icon: "fa-light fa-circle-check", text: "4 of 4 lines matched", cls: " is-ok" },
+    { icon: "fa-light fa-circle-check", text: "4 of 4 lines matched · ready to post", cls: " is-ok" },
+  ];
+
+  // --- 4 · approval --------------------------------------------------------
+  // Invented names, like the rest of the mock's sample data. The elapsed times
+  // are the point: the routing is the slow part on paper and is not, here.
+  approverDefs = [
+    { initials: "ML", name: "Mia Lund", role: "Cost centre owner", took: "2 s" },
+    { initials: "JB", name: "Jonas Berg", role: "Finance manager", took: "1 s" },
+    { initials: "SR", name: "Sofia Reyes", role: "Controller · over € 2,500", took: "1 s" },
+  ];
+
   componentDidMount() {
-    // Respect reduced motion: land on the finished state and never animate.
+    this._watchFooter();
+    // Respect reduced motion: land on each animation's finished state, never animate.
     const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) { this.setState({ step: 4 }); return; }
     this.heroTimer = setInterval(() => {
-      // hold on the finished state for one extra beat, then restart
-      this.setState((s) => ({ step: s.step >= 5 ? 0 : s.step + 1 }));
+      this.setState((s) => ({ step: (s.step + 1) % this.animLen[s.anim] }));
     }, 1500);
+  }
+
+  // ⚠️ The runtime calls componentDidUpdate(prevProps) — there is NO prevState
+  // argument, so changes have to be tracked against fields of our own.
+  componentDidUpdate() {
+    if (this._seenBg !== this.state.bg) {
+      this._seenBg = this.state.bg;
+      if (this.state.bg === 2) this._playHeroVideo();
+    }
   }
 
   componentWillUnmount() {
     clearInterval(this.heroTimer);
+    document.removeEventListener("scroll", this._onFootScroll, { capture: true });
+    window.removeEventListener("resize", this._onFootScroll);
+  }
+
+  // Muted autoplay needs the PROPERTY set, not just the attribute, or Safari
+  // refuses. ⚠️ The runtime also drops the bare `loop` attribute — autoplay,
+  // muted and playsinline survive, loop does not — so the clip froze on its
+  // last frame. Set it as a property too.
+  _playHeroVideo() {
+    requestAnimationFrame(() => {
+      const v = document.querySelector(".dc-hero__vid");
+      if (!v) return;
+      v.loop = true;
+      v.muted = true;
+      v.setAttribute("muted", "");
+      const pr = v.play();
+      if (pr && pr.catch) pr.catch(() => {});
+    });
+  }
+
+  // The two switches sit on top of the footer's legal bar at the end of the
+  // page. ⚠️ An IntersectionObserver goes deaf here — the runtime replaces the
+  // footer node, and the observer keeps watching the detached one. Measure the
+  // rect on a rAF-throttled scroll instead, re-querying every time.
+  _watchFooter() {
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
   }
 
   scrollRail(dx) {
@@ -607,11 +895,99 @@ class Component extends DCLogic {
 
   renderVals() {
     const cur = this.videos[this.state.vid];
-    const step = Math.min(this.state.step, 4);
-    const foot = this.footings[step];
+    const anim = this.state.anim;
+    const raw = this.state.step;
+    const step = Math.min(raw, 4);
     const pad = (n) => (n < 10 ? "0" + n : "" + n);
+
+    // ---- 2 · inbox ----
+    const inboxRows = this.inboxDefs.map((r, i) => {
+      const s = raw >= i + 2 ? 2 : raw >= i ? 1 : 0;
+      return {
+        vendor: r.vendor, amt: r.amt,
+        chip: ["Queued", "Recognized", "Posted"][s],
+        chipCls: "dc-mock__qchip s" + s,
+        cls: "dc-mock__qrow" + (raw === i ? " is-new" : ""),
+      };
+    });
+    const posted = inboxRows.filter((r) => r.chip === "Posted").length;
+
+    // ---- 3 · three-way match ----
+    const matchRows = this.matchDefs.map((m) => {
+      const flagged = m.flagAt !== undefined && raw >= m.flagAt && raw < m.ok;
+      const ok = raw >= m.ok;
+      return {
+        left: m.left, right: m.right,
+        icon: ok ? "fa-solid fa-check" : flagged ? "fa-solid fa-exclamation" : "fa-light fa-minus",
+        cls: "dc-mock__mRow" + (ok ? " is-ok" : flagged ? " is-flag" : ""),
+      };
+    });
+    const note = this.matchNotes[Math.min(raw, this.matchNotes.length - 1)];
+
+    // ---- 4 · approval ----
+    const approvers = this.approverDefs.map((a, i) => {
+      const done = raw >= i + 2;
+      const live = raw === i + 1;
+      return {
+        initials: a.initials, name: a.name, role: a.role,
+        state: done ? "Approved · " + a.took : live ? "Reviewing" : "Waiting",
+        cls: "dc-mock__ap" + (done ? " is-done" : live ? " is-live" : ""),
+      };
+    });
+    const allApproved = approvers.every((a) => a.state.indexOf("Approved") === 0);
+
+    // The footer line belongs to whichever animation is on screen.
+    const foot = [
+      this.footings[step],
+      { icon: posted === this.inboxDefs.length ? "fa-light fa-circle-check" : "fa-light fa-inbox-in",
+        text: posted === this.inboxDefs.length
+          ? "Morning post cleared — 0 manual touches"
+          : "6 invoices arrived at 08:14 — clearing themselves" },
+      // deliberately NOT note.text — the note is already on the card, and
+      // repeating it verbatim two lines down read like a rendering bug
+      { icon: "fa-light fa-layer-group", text: "Three-way matched — invoice, order and receipt" },
+      { icon: allApproved ? "fa-light fa-circle-check" : "fa-light fa-user-check",
+        text: allApproved ? "Approved in 4 s — full audit trail" : "Routed automatically by amount and cost centre" },
+    ][anim];
+
     return {
-      // ---- hero pipeline animation ----
+      // ---- hero background: tech blue / smart green / Release R1 ----
+      heroCls: "dc-hero" + ["", " dc-hero--green", " dc-hero--video"][this.state.bg],
+      heroVideo: this.state.bg === 2,
+      cycleHeroBg: () => this.setState((s) => ({ bg: (s.bg + 1) % 3 })),
+      heroBgLabel: "Hero · " + ["Tech blue", "Smart green", "Release R1"][this.state.bg],
+
+      // ---- which mock animation is running ----
+      animPipeline: anim === 0,
+      animInbox: anim === 1,
+      animMatch: anim === 2,
+      animApproval: anim === 3,
+      // step resets with the animation, or a short one would start mid-story
+      cycleAnim: () => this.setState((s) => ({ anim: (s.anim + 1) % 4, step: 0 })),
+      animLabel: "Mock · " + ["Pipeline", "Inbox", "Match", "Approval"][anim],
+
+      // ---- 2 · inbox ----
+      inboxRows,
+      inboxPosted: 34 + posted,
+      inboxTotal: 40,
+      inboxMeter: "width:" + (((34 + posted) / 40) * 100).toFixed(0) + "%",
+
+      // ---- 3 · three-way match ----
+      matchRows,
+      matchNote: note.text,
+      matchNoteIcon: note.icon,
+      matchNoteCls: "dc-mock__mNote" + note.cls,
+      // the short line is genuinely 2 units under until the receipt explains it
+      matchVar: raw === 3 ? "− 2 units" : "€ 0.00",
+      matchVarCls: raw === 3 ? "" : "ok",
+
+      // ---- 4 · approval ----
+      approvers,
+      apDone: approvers.filter((a) => a.state.indexOf("Approved") === 0).length,
+      apElapsed: allApproved ? "4 s" : Math.max(0, raw - 1) + " s",
+      apElapsedCls: allApproved ? "ok" : "",
+
+      // ---- 1 · hero pipeline animation ----
       stages: this.stages.map((name, i) => ({
         name,
         cls: "dc-mock__step" + (i === step ? " is-on" : i < step ? " is-done" : ""),
