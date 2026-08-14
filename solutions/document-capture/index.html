@@ -101,13 +101,21 @@
      cyan accents, so nothing else in the hero has to change. */
   .dc-hero--green { background: linear-gradient(165deg, #0e4e3d 0%, #0b3f31 62%, #093a2e 100%); }
   .dc-hero--video { background: #02091a; }
-  .dc-hero__vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-  /* Same dark treatment the homepage gives Release R1: tech blue washed over
-     near-black, with a heavier pool behind the copy so the headline holds. */
+  /* 26%, not the default 50%. The hero is far wider than 16:9, so `cover` throws
+     away half the frame height — 728px of 1432 at 2546px wide — and centring
+     that window cut through both people's heads. Biasing it upwards keeps them
+     whole, and at narrower widths there is barely any crop for it to affect. */
+  .dc-hero__vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    object-position: 50% 26%; z-index: 0; }
+  /* Tech blue only — no near-black. Measured over 10 frames of the full clip
+     with tools/tune_scrim.py: worst case 5.30:1 for the headline and 5.79:1 for
+     the body, against the 3:1 and 4.5:1 AA thresholds. A step lighter still
+     (0.44/0.20 · 0.40/0.28/0.44) also passes, at 4.35:1 and 4.80:1 — noted in
+     case Andreas wants it lighter again, but that leaves little margin. */
   .dc-hero__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-      radial-gradient(76% 60% at 32% 44%, rgba(5,41,117,0.50), rgba(5,41,117,0) 72%),
-      linear-gradient(180deg, rgba(2,9,26,0.78) 0%, rgba(4,26,74,0.66) 34%, rgba(3,16,48,0.72) 62%, rgba(2,9,26,0.86) 100%); }
+      radial-gradient(72% 60% at 30% 46%, rgba(5,41,117,0.50), rgba(5,41,117,0.26) 72%),
+      linear-gradient(180deg, rgba(5,41,117,0.46) 0%, rgba(5,41,117,0.34) 46%, rgba(5,41,117,0.50) 100%); }
   .dc-hero--video .dc-hero h1, .dc-hero--video h1 { text-shadow: 0 2px 28px rgba(2,9,26,0.55); }
   .dc-hero--video p { text-shadow: 0 1px 16px rgba(2,9,26,0.6); }
   @media (prefers-reduced-motion: reduce) { .dc-hero__vid { display: none; } }
