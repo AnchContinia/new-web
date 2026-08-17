@@ -39,10 +39,43 @@
       section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
       section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
     }
-    /* ---------- Hero mock: a queue that never finishes ---------- */
+    /* ================= Hero mock: three views behind one switch =================
+       All three share ONE stage, so switching never moves the hero or the copy
+       beside it. The min-height is on .sol-mock (the whole white body) rather
+       than the stage, because Queue and Routing carry a full-width head strip
+       and Coverage does not — sizing only the stage would let the card breathe
+       by ~44px on every switch. One 900ms beat drives all three; each view
+       divides it differently (see the dc-script's *_BEATS constants). */
+    /* 360px is the Queue view's natural height — the tallest of the three — so
+       the shared floor costs the card nothing and keeps it at the 414px it has
+       always been. Coverage (~275) and Routing (~349) stretch up to meet it. */
+    .sol-mock { display: flex; flex-direction: column; min-height: 360px; background: #ffffff; }
+    .sol-mock__body { display: flex; flex: 1; min-height: 0; }
+    .sol-mock__stage { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    /* Shared footing. `margin-top: auto` pins it to the bottom of whichever view
+       is showing, so a short view does not leave it floating mid-card. */
+    .sol-mock__foot { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #f6f8fb; font-size: 12.5px; color: #3a4a6b; margin-top: auto; }
+    .sol-mock__foot > i { color: #4c7e71; flex: none; }
+    .sol-mock__footN { font-variant-numeric: tabular-nums; font-weight: 700; color: #052975; }
+
+    /* ---------- the product rail, shared by all three ---------- */
+    /* Driven by {{ railItems }} now instead of five hand-written rows: Coverage
+       walks it product by product, and Routing lights up whichever product just
+       took a document. In Queue it simply rests on Document Capture. */
+    .bc-mock__rail { flex: 0 1 174px; min-width: 110px; background: #f6f8fb; border-right: 1px solid #eef1f6; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; }
+    .sol-rail__hd { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; color: #687590; padding: 0 8px 8px; }
+    .sol-rail__it { display: flex; align-items: center; gap: 9px; font-size: 12.5px; padding: 8px; border-radius: 8px; color: #3a4a6b; transition: background 380ms ease, color 380ms ease; }
+    .sol-rail__it > i { font-size: 14px; width: 17px; text-align: center; flex: none; }
+    .sol-rail__it.on { background: #def5ff; color: #052975; font-weight: 600; }
+    .sol-rail__nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ---------- 1 · QUEUE — a queue that never finishes ---------- */
     /* The old loop marched all five rows to Posted and then sat there for half
        its cycle — the still frame is what made it look dead. Documents now
        arrive and clear continuously, so there is always a mix on screen. */
+    .sol-mock__bar { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-bottom: 1px solid #eef1f6; flex-wrap: wrap; }
+    .sol-mock__st { display: flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 600; color: #687590; }
+    .sol-mock__stN { font-variant-numeric: tabular-nums; color: #052975; }
     .bc-row { position: relative; }
     /* a fresh document dropping into the slot the posted one just left */
     .bc-row.is-new { animation: bcIn 520ms cubic-bezier(0.16,1,0.3,1) both; }
@@ -50,9 +83,76 @@
     /* the beat a document posts, its row washes green and settles */
     .bc-row.is-posted { animation: bcPost 900ms ease-out both; }
     @keyframes bcPost { 0% { background: #dcece6; } 100% { background: transparent; } }
+
+    /* ---------- 2 · COVERAGE — the rail walks the products ---------- */
+    /* Answers the headline directly ("Find your Continia automation product"):
+       instead of one product's queue, it tours five of them and shows what each
+       one actually does. Every line restates a bullet already on this page. */
+    .sol-cov { padding: 20px 20px 4px; display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .sol-cov__head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .sol-cov__ico { width: 40px; height: 40px; border-radius: 11px; background: #def5ff; color: #052975; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; flex: none; }
+    .sol-cov__ttl { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .sol-cov__grp { font-size: 10.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: #687590; }
+    .sol-cov__name { font-size: 16px; font-weight: 700; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* The product's own tagline, verbatim from `this.solutions` — the same
+       sentence its card carries further down the page. */
+    .sol-cov__tag { font-size: 13px; line-height: 1.5; color: #3a4a6b; margin-top: 14px; }
+    .sol-cov__steps { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+    /* Each line fades up as the beat reaches it, so the card reveals rather than
+       appearing whole. The dim state is still legible, not invisible. */
+    .sol-cov__step { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #687590; opacity: 0.38; transform: translateY(5px); transition: opacity 420ms ease, transform 420ms cubic-bezier(0.16,1,0.3,1), color 420ms ease; }
+    .sol-cov__step > i { font-size: 15px; width: 17px; text-align: center; flex: none; color: #cdd4e3; transition: color 420ms ease; }
+    .sol-cov__step.on { opacity: 1; transform: none; color: #3a4a6b; }
+    .sol-cov__step.on > i { color: #4c7e71; }
+    /* `margin-top: auto` pins the bar to the base of the card. Coverage is the
+       shortest of the three views, so without it the leftover space of the
+       shared stage opened as a void between the steps and the footing. */
+    .sol-cov__bar { height: 4px; border-radius: 999px; background: #eef1f6; margin: auto 0 16px; overflow: hidden; }
+    .sol-cov__bar > i { display: block; height: 100%; border-radius: 999px; background: #052975; transition: width 800ms cubic-bezier(0.16,1,0.3,1); }
+
+    /* ---------- 3 · ROUTING — every document type, and who handles it ---------- */
+    /* A stack, not a cycle: a new document lands on top each time and the oldest
+       drops off. Two beats per document — it arrives, then its product resolves
+       — which is what makes the chip worth watching. */
+    .sol-rt__head { display: flex; align-items: baseline; gap: 8px; padding: 11px 16px; border-bottom: 1px solid #eef1f6; }
+    .sol-rt__n { font-size: 19px; font-weight: 700; color: #052975; font-variant-numeric: tabular-nums; }
+    .sol-rt__k { font-size: 12.5px; color: #687590; }
+    .sol-rt__row { display: flex; align-items: center; gap: 11px; padding: 10px 16px; border-bottom: 1px solid #eef1f6; }
+    /* Only the arrival beat carries this class — kept across both beats the
+       class never leaves the element, and a CSS animation only replays when it
+       is removed and re-added. */
+    .sol-rt__row.is-new { animation: solRtIn 520ms cubic-bezier(0.16,1,0.3,1) both; }
+    @keyframes solRtIn { from { opacity: 0; transform: translateY(-11px); } to { opacity: 1; transform: none; } }
+    .sol-rt__row > i { color: #052975; font-size: 16px; width: 18px; text-align: center; flex: none; }
+    .sol-rt__txt { display: flex; flex-direction: column; gap: 1px; flex: 1 1 auto; min-width: 0; overflow: hidden; }
+    .sol-rt__t { font-size: 13px; font-weight: 600; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sol-rt__w { font-size: 11.5px; color: #687590; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sol-rt__chip { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 999px; flex: none; max-width: 172px; transition: background-color 320ms ease, color 320ms ease; }
+    .sol-rt__chip > i { font-size: 12px; flex: none; }
+    /* ⚠️ No font-size here — every {{ binding }} renders as a .sc-interp span,
+       so a loose `span` rule inside a component silently restyles bindings
+       (HANDOFF trap 5b). Ellipsis only. */
+    .sol-rt__chip > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sol-rt__chip.is-wait { background-color: #f4f6fa; color: #586f9f; }
+
     @media (prefers-reduced-motion: reduce) {
-      .bc-row.is-new, .bc-row.is-posted { animation: none; }
+      .bc-row.is-new, .bc-row.is-posted, .sol-rt__row.is-new { animation: none; }
+      .sol-cov__step, .sol-cov__bar > i, .sol-rail__it, .sol-rt__chip { transition: none; }
     }
+
+    /* ---------- prototype switch (fixed, bottom-left) ---------- */
+    /* Same component as the Document Capture page's two switches. */
+    .sol-switch { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+      padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee;
+      box-shadow: 0 8px 24px rgba(5,41,117,0.16); font-family: inherit; font-size: 13px;
+      font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms, opacity 220ms; }
+    .sol-switch:hover { border-color: #052975; transform: translateY(-2px); }
+    .sol-switch > i { font-size: 13px; }
+    /* It sits on top of the footer's legal bar at the end of the page. ⚠️ An
+       IntersectionObserver goes deaf here — the runtime replaces the footer
+       node — so this is driven by a rect measured on scroll (trap 6b). */
+    body.cnt-footer-in-view .sol-switch { opacity: 0; pointer-events: none; transform: translateY(14px); }
+    @media (prefers-reduced-motion: reduce) { .sol-switch { transition: none; } }
 
     /* ---------- Hero: the pricing page's sky video, same treatment ---------- */
     /* Overlay is lifted verbatim from pricing's .pr3__ovl — darkest on the left
@@ -149,6 +249,16 @@
     /* Prototype-only view switchers, off on phones (inline, not overlapping anything; hidden for consistency — easy to bring back). */
     @media (max-width: 640px) {
       .testi-toggle { display: none !important; }
+      .sol-switch { display: none !important; }
+    }
+    /* Phone: the rail is gone (rule above), so the mock loses 174px of width —
+       Coverage and Routing get their padding back and the chip stops competing
+       with the document title for the same row. */
+    @media (max-width: 640px) {
+      /* 390px, not 360: without the rail the stage-count bar wraps to two lines,
+         which makes Queue — still the tallest — 30px taller than on desktop. */
+      .sol-mock { min-height: 390px; }
+      .sol-cov { padding: 18px 16px 4px; }
     }
   </style>
 </helmet>
@@ -180,39 +290,87 @@
 
       <div style="position: relative; min-width: 0">
         <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" style="box-shadow: 0 30px 70px rgba(2,12,40,0.14), 0 10px 26px rgba(2,12,40,0.08); border-radius: 16px" hint-size="100%,440px">
-          <div style="background: #ffffff">
-            <div style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-bottom: 1px solid #eef1f6; flex-wrap: wrap">
-              <sc-for list="{{ stageBar }}" as="st" hint-placeholder-count="4">
-                <div style="display: flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 600; color: #6b7894">
-                  <span style="{{ st.dotStyle }}"></span><span>{{ st.label }}</span>
-                  <span style="font-variant-numeric: tabular-nums; color: #052975">{{ st.n }}</span>
-                </div>
-              </sc-for>
-            </div>
-            <div style="display: flex">
-              <div class="bc-mock__rail" style="flex: 0 1 174px; min-width: 110px; background: #f6f8fb; border-right: 1px solid #eef1f6; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px">
-                <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.15em; color: #8193b9; padding: 0 8px 8px">CONTINIA</div>
-                <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 600; padding: 8px; border-radius: 8px; background: #def5ff; color: #052975"><i class="fa-kit fa-document-capture-solution-dc-icon" style="font-size: 14px; width: 17px; text-align: center"></i>Document Capture</div>
-                <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; padding: 8px; border-radius: 8px; color: #3a4a6b"><i class="fa-kit fa-banking-solution-cb-icon" style="font-size: 14px; width: 17px; text-align: center"></i>Banking</div>
-                <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; padding: 8px; border-radius: 8px; color: #3a4a6b"><i class="fa-kit fa-expense-management-solution-em-icon" style="font-size: 14px; width: 17px; text-align: center"></i>Expenses</div>
-                <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; padding: 8px; border-radius: 8px; color: #3a4a6b"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon" style="font-size: 14px; width: 17px; text-align: center"></i>Finance</div>
-                <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; padding: 8px; border-radius: 8px; color: #3a4a6b"><i class="fa-kit fa-document-output-solution-do-icon-file-export" style="font-size: 14px; width: 17px; text-align: center"></i>Document Output</div>
-              </div>
-              <div style="flex: 1; display: flex; flex-direction: column; min-width: 0">
-                <sc-for list="{{ heroRows }}" as="r" hint-placeholder-count="5">
-                  <div class="{{ r.cls }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #eef1f6">
-                    <i class="fa-light fa-file-invoice" style="color: #052975; font-size: 18px; flex: none"></i>
-                    <div style="display: flex; flex-direction: column; gap: 1px; flex: 1 1 auto; min-width: 0; overflow: hidden">
-                      <span style="font-size: 13px; font-weight: 600; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.doc }}</span>
-                      <span style="font-size: 11.5px; color: #6b7894; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.vendor }}</span>
-                    </div>
-                    <span style="margin-left: auto; font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; color: #0a1838; white-space: nowrap; flex: none">{{ r.amt }}</span>
-                    <span style="{{ r.chipStyle }}">{{ r.label }}</span>
+          <div class="sol-mock">
+            <!-- 1 · QUEUE — the stage counters across the top -->
+            <sc-if value="{{ mockQueue }}" hint-placeholder-val="{{ true }}">
+              <div class="sol-mock__bar">
+                <sc-for list="{{ stageBar }}" as="st" hint-placeholder-count="4">
+                  <div class="sol-mock__st">
+                    <span style="{{ st.dotStyle }}"></span><span class="sol-mock__stL">{{ st.label }}</span>
+                    <span class="sol-mock__stN">{{ st.n }}</span>
                   </div>
                 </sc-for>
-                <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #f6f8fb; font-size: 12.5px; color: #3a4a6b; margin-top: auto">
-                  <i class="fa-light fa-circle-check" style="color: #5f9e8d"></i>
-                  <span><strong style="font-variant-numeric: tabular-nums; color: #052975">{{ heroPosted }}</strong> posted automatically · 0 manual touches</span>
+              </div>
+            </sc-if>
+
+            <!-- 3 · ROUTING — a running count of what has landed -->
+            <sc-if value="{{ mockRouting }}" hint-placeholder-val="{{ false }}">
+              <div class="sol-rt__head">
+                <span class="sol-rt__n">{{ rtCount }}</span>
+                <span class="sol-rt__k">documents in today · handled by</span>
+              </div>
+            </sc-if>
+
+            <div class="sol-mock__body">
+              <div class="bc-mock__rail">
+                <div class="sol-rail__hd">CONTINIA</div>
+                <sc-for list="{{ railItems }}" as="ri" hint-placeholder-count="5">
+                  <div class="{{ ri.cls }}"><i class="{{ ri.icon }}"></i><span class="sol-rail__nm">{{ ri.name }}</span></div>
+                </sc-for>
+              </div>
+
+              <div class="sol-mock__stage">
+                <sc-if value="{{ mockQueue }}" hint-placeholder-val="{{ true }}">
+                  <sc-for list="{{ heroRows }}" as="r" hint-placeholder-count="5">
+                    <div class="{{ r.cls }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #eef1f6">
+                      <i class="fa-light fa-file-invoice" style="color: #052975; font-size: 18px; flex: none"></i>
+                      <div style="display: flex; flex-direction: column; gap: 1px; flex: 1 1 auto; min-width: 0; overflow: hidden">
+                        <span style="font-size: 13px; font-weight: 600; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.doc }}</span>
+                        <span style="font-size: 11.5px; color: #6b7894; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.vendor }}</span>
+                      </div>
+                      <span style="margin-left: auto; font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; color: #0a1838; white-space: nowrap; flex: none">{{ r.amt }}</span>
+                      <span style="{{ r.chipStyle }}">{{ r.label }}</span>
+                    </div>
+                  </sc-for>
+                </sc-if>
+
+                <!-- 2 · COVERAGE — one product at a time, and what it does -->
+                <sc-if value="{{ mockCoverage }}" hint-placeholder-val="{{ false }}">
+                  <div class="sol-cov">
+                    <div class="sol-cov__head">
+                      <span class="sol-cov__ico"><i class="{{ covIcon }}"></i></span>
+                      <span class="sol-cov__ttl">
+                        <span class="sol-cov__grp">{{ covGroup }}</span>
+                        <span class="sol-cov__name">{{ covName }}</span>
+                      </span>
+                    </div>
+                    <div class="sol-cov__tag">{{ covTag }}</div>
+                    <div class="sol-cov__steps">
+                      <sc-for list="{{ covSteps }}" as="s" hint-placeholder-count="3">
+                        <div class="{{ s.cls }}"><i class="{{ s.icon }}"></i>{{ s.text }}</div>
+                      </sc-for>
+                    </div>
+                    <div class="sol-cov__bar"><i style="{{ covBarStyle }}"></i></div>
+                  </div>
+                </sc-if>
+
+                <!-- 3 · ROUTING — the stack of arrivals -->
+                <sc-if value="{{ mockRouting }}" hint-placeholder-val="{{ false }}">
+                  <sc-for list="{{ rtRows }}" as="r" hint-placeholder-count="5">
+                    <div class="{{ r.cls }}">
+                      <i class="{{ r.icon }}"></i>
+                      <span class="sol-rt__txt">
+                        <span class="sol-rt__t">{{ r.type }}</span>
+                        <span class="sol-rt__w">{{ r.who }}</span>
+                      </span>
+                      <span class="{{ r.chipCls }}" style="{{ r.chipStyle }}"><i class="{{ r.chipIcon }}"></i><span>{{ r.chip }}</span></span>
+                    </div>
+                  </sc-for>
+                </sc-if>
+
+                <div class="sol-mock__foot">
+                  <i class="fa-light fa-circle-check"></i>
+                  <span><span class="sol-mock__footN">{{ mockFootN }}</span>{{ mockFootText }}</span>
                 </div>
               </div>
             </div>
@@ -222,6 +380,9 @@
       </div>
     </div>
   </section>
+
+  <!-- Prototype switch. Not part of the page design — see HANDOFF §8. -->
+  <button onClick="{{ cycleMock }}" class="sol-switch" title="Switch the hero animation"><i class="fa-light fa-shuffle"></i>{{ mockLabel }}</button>
 
   <section data-screen-label="Trusted by" style="background:#052975">
     <div style="max-width:1240px;margin:0 auto;padding:30px 32px;display:flex;align-items:center;gap:36px">
@@ -498,6 +659,7 @@ class Component extends DCLogic {
   state = {
     solMore: false,
     tick: 12,
+    mockView: 0,          // 0 Queue (default) · 1 Coverage · 2 Routing
     tIndex: 0,
     tPage: 0,
     testiView: "duo",
@@ -528,6 +690,48 @@ class Component extends DCLogic {
     { label: "Recognized", bg: "#def5ff", fg: "#052975" },
     { label: "For approval", bg: "#fff7e3", fg: "#8a6516" },
     { label: "Posted", bg: "#cfe2dd", fg: "#2f6455" },
+  ];
+
+  // The five products in the mock's rail. `chip` is the pair used by the
+  // Routing view; every one clears AA at 11px on its own tint (measured:
+  // 11.78 / 8.77 / 8.68 / 5.59 / 4.80 : 1). Three of them are the status-chip
+  // tints already used elsewhere in this card, so the card stays one family.
+  // `key` indexes back into `this.solutions`, so the Coverage view's tagline is
+  // the product card's own sentence rather than a second copy that can drift.
+  railDefs = [
+    { key: "dc", name: "Document Capture", icon: "fa-kit fa-document-capture-solution-dc-icon", chip: "Document Capture", bg: "#def5ff", fg: "#052975" },
+    { key: "banking", name: "Banking", icon: "fa-kit fa-banking-solution-cb-icon", chip: "Continia Banking", bg: "#e4ecfb", fg: "#0b3a8f" },
+    { key: "em", name: "Expenses", icon: "fa-kit fa-expense-management-solution-em-icon", chip: "Expense Management", bg: "#f0e6f6", fg: "#5c2a6b" },
+    { key: "fin", name: "Finance", icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon", chip: "Continia Finance", bg: "#dcece6", fg: "#2f6455" },
+    { key: "dout", name: "Document Output", icon: "fa-kit fa-document-output-solution-do-icon-file-export", chip: "Document Output", bg: "#fff2dd", fg: "#8a6516" },
+  ];
+
+  // ⚠️ Content honesty (HANDOFF §7): every line below restates a bullet this
+  // page already publishes in `this.solutions`, dressed as in-app activity with
+  // Microsoft's own demo vendor names — the same convention the queue view has
+  // shipped with. No product gains a capability it is not already credited with.
+  covDefs = [
+    { group: "Accounts payable", lines: ["Invoice 100482 captured · Northwind Traders", "Three-way matched against PO-2291", "Sent through the approval flow"] },
+    { group: "Payments & banking", lines: ["Payment proposal · 14 vendor invoices", "Fraud prevention check passed", "Sent to the bank over direct communication"] },
+    { group: "Expenses", lines: ["Receipt from the mobile app · M. Jensen", "Matched to the imported card transaction", "Added to the expense approval workflow"] },
+    { group: "Finance", lines: ["Group reconciliation across 3 companies", "Fixed asset depreciation posted", "Financial report refreshed"] },
+    { group: "Accounts receivable", lines: ["Sales invoice 2291 · Adatum Corp.", "PDF customized and password-protected", "Emailed in the background"] },
+  ];
+
+  // Eleven again — prime, and larger than the five visible rows, so a document
+  // can never appear twice in the same window (same reasoning as heroDocs).
+  rtDefs = [
+    { type: "Vendor invoice", who: "Northwind Traders", icon: "fa-light fa-file-invoice", p: 0 },
+    { type: "Travel receipt", who: "M. Jensen · mobile app", icon: "fa-light fa-receipt", p: 2 },
+    { type: "Bank statement", who: "Imported · 128 entries", icon: "fa-light fa-building-columns", p: 1 },
+    { type: "Sales invoice", who: "Adatum Corp.", icon: "fa-light fa-file-lines", p: 4 },
+    { type: "Credit memo", who: "Contoso Ltd.", icon: "fa-light fa-file-invoice", p: 0 },
+    { type: "Payment file", who: "14 vendors", icon: "fa-light fa-money-bill-transfer", p: 1 },
+    { type: "Mileage claim", who: "S. Berg · mobile app", icon: "fa-light fa-car", p: 2 },
+    { type: "Reconciliation", who: "3 companies", icon: "fa-light fa-scale-balanced", p: 3 },
+    { type: "Order confirmation", who: "Fabrikam Inc.", icon: "fa-light fa-file-circle-check", p: 0 },
+    { type: "Remittance advice", who: "Tailspin Toys", icon: "fa-light fa-envelope-open-text", p: 4 },
+    { type: "Expense report", who: "A. Holm · mobile app", icon: "fa-light fa-folder-open", p: 2 },
   ];
 
   solutions = [
@@ -572,8 +776,31 @@ class Component extends DCLogic {
     });
   }
 
+  // The switch sits on top of the footer's legal bar at the end of the page.
+  // ⚠️ An IntersectionObserver goes deaf here (trap 6b) — the runtime replaces
+  // the footer node and the observer keeps watching the detached one. Measure
+  // the rect on a rAF-throttled scroll instead, re-querying every time.
+  _watchFooter() {
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
+  }
+
   componentDidMount() {
     this._playHeroVideo();
+    this._watchFooter();
     // (A hand-rolled header shadow used to live here, driven off window.scrollY —
     // which was pinned at 0 — and written to a headerRef the template never
     // consumed. SiteHeader's own `--scrolled` modifier does it now.)
@@ -604,6 +831,10 @@ class Component extends DCLogic {
     clearInterval(this.tDuoTimer);
     if (this.io) this.io.disconnect();
     if (this.ioCount) this.ioCount.disconnect();
+    if (this._onFootScroll) {
+      document.removeEventListener("scroll", this._onFootScroll, { capture: true });
+      window.removeEventListener("resize", this._onFootScroll);
+    }
   }
 
   setupReveals() {
@@ -687,6 +918,65 @@ class Component extends DCLogic {
       dotStyle: "width:9px;height:9px;border-radius:999px;flex:none;background:" + s.bg + ";border:1px solid " + s.fg + "55",
     }));
 
+    // ---------- the two alternative mock views ----------
+    const view = this.state.mockView;   // 0 Queue · 1 Coverage · 2 Routing
+    const NP = this.railDefs.length;    // 5 products in the rail
+
+    // 2 · COVERAGE. Three beats per product: one per line, so the card reveals
+    // itself rather than appearing whole, and the rail steps in time with it.
+    const COV_BEATS = 3;
+    const covIdx = Math.floor(tick / COV_BEATS) % NP;
+    // ⚠️ Under prefers-reduced-motion the tick is frozen at 1, which would leave
+    // this card stuck two thirds revealed — it reads as broken rather than
+    // still. Jump to the finished state instead, as the DC hero does.
+    const covStep = this.motionOn ? tick % COV_BEATS : COV_BEATS - 1;   // 0..2 → lines lit
+    const covProd = this.railDefs[covIdx], covData = this.covDefs[covIdx];
+    const covSteps = covData.lines.map((text, i) => ({
+      text,
+      cls: "sol-cov__step" + (i <= covStep ? " on" : ""),
+      icon: i <= covStep ? "fa-light fa-circle-check" : "fa-light fa-circle",
+    }));
+    const covBarStyle = "width:" + Math.round(((covStep + 1) / COV_BEATS) * 100) + "%";
+
+    // 3 · ROUTING. Two beats per document — it lands, then its product resolves.
+    // ⚠️ `is-new` is on the arrival beat ONLY. Row 0 is always the newest, so if
+    // the class stayed for both beats it would never be removed and re-added,
+    // and the CSS animation would play once and never again.
+    const RT_BEATS = 2, RT_ROWS = 5, RT_N = this.rtDefs.length;
+    const arrivals = Math.floor(tick / RT_BEATS);
+    const resolved = tick % RT_BEATS === 1;                 // newest chip settled?
+    const rtRows = Array.from({ length: RT_ROWS }, (_, k) => {
+      const d = this.rtDefs[(((arrivals - k) % RT_N) + RT_N) % RT_N];
+      const p = this.railDefs[d.p];
+      const waiting = k === 0 && !resolved;
+      return {
+        type: d.type, who: d.who, icon: d.icon,
+        cls: "sol-rt__row" + (k === 0 && !resolved ? " is-new" : ""),
+        chip: waiting ? "Received" : p.chip,
+        chipIcon: waiting ? "fa-light fa-inbox" : p.icon,
+        chipCls: "sol-rt__chip" + (waiting ? " is-wait" : ""),
+        // The tint is per product, so it has to be inline; `background-color`,
+        // never the `background` shorthand (trap 22).
+        chipStyle: waiting ? "" : "background-color:" + p.bg + ";color:" + p.fg,
+      };
+    });
+    // Reads like a counter that keeps climbing without ever running to 4 digits.
+    const rtCount = 128 + (arrivals % 120);
+
+    // The rail is shared: Coverage walks it, Routing lights up whichever
+    // product just took a document, Queue rests on Document Capture.
+    const railOn = view === 1 ? covIdx : view === 2 ? this.rtDefs[arrivals % RT_N].p : 0;
+    const railItems = this.railDefs.map((r, i) => ({
+      name: r.name, icon: r.icon,
+      cls: "sol-rail__it" + (i === railOn ? " on" : ""),
+    }));
+
+    const mockFoot = [
+      { n: postedSoFar, t: " posted automatically · 0 manual touches" },
+      { n: 8, t: " Continia products, one Business Central" },
+      { n: 8, t: " Continia products, one Business Central" },
+    ][view];
+
     const cardSolutions = this.solutions.map((s) => ({
       ...s,
       extras: { icon: React.createElement("i", { className: s.icon }) },
@@ -736,6 +1026,24 @@ class Component extends DCLogic {
       heroRows,
       stageBar,
       heroPosted: postedSoFar,
+      railItems,
+      mockQueue: view === 0,
+      mockCoverage: view === 1,
+      mockRouting: view === 2,
+      covIcon: covProd.icon,
+      covName: covProd.chip,
+      covGroup: covData.group,
+      covTag: (this.solutions.find((s) => s.key === covProd.key) || {}).tagline || "",
+      covSteps,
+      covBarStyle,
+      rtRows,
+      rtCount,
+      mockFootN: mockFoot.n,
+      mockFootText: mockFoot.t,
+      // Resetting the tick means a view always starts at its own beat 0 —
+      // otherwise Coverage could open mid-product and Routing mid-arrival.
+      cycleMock: () => this.setState((s) => ({ mockView: (s.mockView + 1) % 3, tick: 0 })),
+      mockLabel: "Mock · " + ["Queue", "Coverage", "Routing"][view],
       cardsShown,
       cardsGridStyle: "--cw:" + (this.state.solMore ? "calc(25% - 15px)" : "calc(33.333% - 14px)"),
       toggleSolMore: () => this.setState((s) => ({ solMore: !s.solMore })),
