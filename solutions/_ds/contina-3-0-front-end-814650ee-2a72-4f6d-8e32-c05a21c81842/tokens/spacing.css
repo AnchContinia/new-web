@@ -42,10 +42,14 @@
   --border-width: 1px;            /* @kind other */
   --border-width-strong: 1.5px;   /* @kind other */
 
-  /* layout */
-  --container-max: 1200px;
-  --container-wide: 1360px;
-  --container-narrow: 760px;
+  /* layout — ONE canonical content geometry (hard rule, pricing session 2026):
+     every page & section uses the SAME width. Mixed widths (1200 vs 1360)
+     caused visible jumps between pages. */
+  --layout-content-max: 1360px;
+  --layout-page-pad: 28px;
+  --container-max: var(--layout-content-max);   /* legacy alias */
+  --container-wide: var(--layout-content-max);  /* legacy alias */
+  --container-narrow: 760px; /* prose & forms only */
 
   /* motion — calm, confident easing; quick but never bouncy */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);   /* @kind other */

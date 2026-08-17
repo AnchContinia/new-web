@@ -48,7 +48,7 @@
 
 <section class="co-sec" data-screen-label="Open roles">
   <div class="co-wrap">
-<div class="co-note"><i class="fa-light fa-circle-info"></i><p><b>Prototype copy.</b> These openings are placeholder content for the site prototype. Continia's real vacancies are listed at <a href="https://www.continia.com/career/" target="_blank" rel="noopener">continia.com/career</a>, and every role below links there.</p></div>
+<div class="co-note"><i class="fa-light fa-circle-info"></i><p><b>Prototype copy.</b> These openings are placeholder content for the site prototype. Continia's real vacancies are not on this prototype — see <a href="https://www.continia.com/" target="_blank" rel="noopener">continia.com</a>, where every role below links.</p></div>
     <div class="co-tools">
       <div class="co-search">
         <i class="fa-light fa-magnifying-glass"></i>
@@ -73,7 +73,7 @@
                 <span><i class="fa-light fa-clock"></i>{{ r.type }}</span>
               </div>
             </div>
-            <a class="co-role__go" href="https://www.continia.com/career/" target="_blank" rel="noopener">VIEW ROLE <i class="fa-light fa-arrow-up-right-from-square"></i></a>
+            <a class="co-role__go" href="https://www.continia.com/" target="_blank" rel="noopener">VIEW ROLE <i class="fa-light fa-arrow-up-right-from-square"></i></a>
           </div>
         </sc-for>
       </div>
@@ -81,7 +81,7 @@
     <sc-if value="{{ noRoles }}" hint-placeholder-val="{{ false }}">
       <div class="co-empty">
         <i class="fa-light fa-magnifying-glass"></i>
-        No roles match that search. Try a different team, or check the full list on continia.com/career.
+        No roles match that search. Try a different team, or check the real openings on continia.com.
       </div>
     </sc-if>
   </div>
@@ -110,7 +110,7 @@
     <h2>Send us an open application</h2>
     <p>We hire steadily rather than in bursts. If nothing fits right now, tell us what you do and we will keep it on file.</p>
     <div class="co-cta__btns">
-      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://www.continia.com/career/" hint-size="200px,52px">Go to continia.com/career</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://www.continia.com/" hint-size="200px,52px">Go to continia.com</x-import>
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../working-at-continia/" hint-size="180px,52px">Working at Continia</x-import>
     </div>
   </div>

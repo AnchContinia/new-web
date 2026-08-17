@@ -1287,11 +1287,11 @@ const CONTINIA_LINKS = {
   trial: "https://appsource.microsoft.com/en-us/marketplace/apps?search=continia",
   nav: [{
     label: "Products",
-    href: "solutions/",
+    href: "products/",
     menu: true
   }, {
     label: "Solutions",
-    href: "use-cases/",
+    href: "solutions/",
     menu: false
   }, {
     label: "Stories",
@@ -1306,36 +1306,36 @@ const CONTINIA_LINKS = {
   // opticalScale: per-icon optical-size correction for fa-kit icons (see readme "Iconography")
   solutions: [{
     label: "Document Capture",
-    href: "solutions/document-capture/",
+    href: "products/document-capture/",
     icon: "fa-kit fa-document-capture-solution-dc-icon",
     opticalScale: 1.18
   }, {
     label: "Expense Management",
-    href: "solutions/expense-management/",
+    href: "products/expense-management/",
     icon: "fa-kit fa-expense-management-solution-em-icon"
   }, {
     label: "Document Output",
-    href: "solutions/document-output/",
+    href: "products/document-output/",
     icon: "fa-kit fa-document-output-solution-do-icon-file-export"
   }, {
     label: "Payment Management",
-    href: "solutions/payment-management/",
+    href: "products/payment-management/",
     icon: "fa-light fa-money-bill-transfer"
   }, {
     label: "Continia Banking",
-    href: "solutions/continia-banking/",
+    href: "products/continia-banking/",
     icon: "fa-kit fa-banking-solution-cb-icon"
   }, {
     label: "Continia Finance",
-    href: "solutions/continia-finance/",
+    href: "products/continia-finance/",
     icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon"
   }, {
     label: "Collection Management",
-    href: "solutions/collection-management/",
+    href: "products/collection-management/",
     icon: "fa-light fa-hand-holding-dollar"
   }, {
     label: "OPplus",
-    href: "solutions/opplus/",
+    href: "products/opplus/",
     icon: "fa-light fa-layer-group"
   }],
   company: [{
@@ -1359,7 +1359,7 @@ const CONTINIA_LINKS = {
   }],
   resources: [{
     label: "Use cases",
-    href: BASE + "/use-cases/"
+    href: BASE + "/solutions/"
   }, {
     label: "News",
     href: BASE + "/news/"
@@ -1973,27 +1973,27 @@ const {
 const SOLUTIONS = [{
   icon: "document-capture-solution-dc-icon",
   name: "Document Capture",
-  href: "/solutions/document-capture/",
+  href: "/products/document-capture/",
   desc: "Automate your entire Accounts Payable — streamline your invoice process from start to finish."
 }, {
   icon: "banking-solution-cb-icon",
   name: "Continia Banking",
-  href: "/solutions/banking/",
+  href: "/products/banking/",
   desc: "Streamline payments and secure your financial operations directly within your Business Central."
 }, {
   icon: "finance-solution-cf-add-modules--stack-icon",
   name: "Continia Finance",
-  href: "/solutions/finance/",
+  href: "/products/finance/",
   desc: "Optimize your financial processes and ease the burden of core accounting tasks."
 }, {
   icon: "expense-management-solution-em-icon",
   name: "Expense Management",
-  href: "/solutions/expense-management/",
+  href: "/products/expense-management/",
   desc: "Simplify employee expense reporting and get a real-time overview of employee spending."
 }, {
   icon: "document-output-solution-do-icon-file-export",
   name: "Document Output",
-  href: "/solutions/document-output/",
+  href: "/products/document-output/",
   desc: "Automate and customize your document distribution — send and manage your outgoing documents easily."
 }];
 

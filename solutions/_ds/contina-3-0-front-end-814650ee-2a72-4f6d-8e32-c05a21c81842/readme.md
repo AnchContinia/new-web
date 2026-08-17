@@ -92,6 +92,11 @@ How Continia writes. Source: brand story + core values in the guide.
 - Generous line-height on body (1.6); tight on big display.
 
 ### Layout, shape & depth
+- **One canonical content width — hard rule.** Every page section wrapper is
+  `max-width: var(--layout-content-max)` (1360px) +
+  `padding-inline: var(--layout-page-pad)` (28px). Never mix widths across
+  pages/tabs — 1200 vs 1360 caused a visible jump when switching pages
+  (pricing session 2026). `--container-max`/`--container-wide` now alias it.
 - **Generous whitespace.** Clean, uncluttered, lots of breathing room.
 - **Rounded UI-style elements** — pill buttons, rounded cards (12–24px radii),
   large rounded "pop-up window" panels.
@@ -187,6 +192,12 @@ over generic FA icons when representing a Continia solution or module.
 See the **Icons** group in the Design System tab (`guidelines/icons-solutions.html`,
 `guidelines/icons-modules.html`) for the full rendered set.
 
+**Optical-size gotcha:** the custom kit icons are not optically normalized —
+`fa-document-capture-solution-dc-icon` renders ~18% smaller than the other
+solution icons at the same font-size. Give it `transform: scale(1.18)` (or +18%
+font-size) when it sits in a row with sibling icons. Per-icon corrections are
+recorded as `opticalScale` in `components/navigation/links.js`.
+
 ---
 
 ## Field-tested web patterns (frontpage redesign, July 2026)
@@ -226,10 +237,10 @@ before inventing new ones. Visual index: `guidelines/patterns-frontpage.html`
     and count-ups to their end state (accessibility + screenshots).
 - **Copy** — a two-line time-motif headline tested best: *"You can't buy back
   time. / But you can automate it."* Keep the H1 to exactly 2 lines (`<br>`,
-  clamp ~38–68px). Hero badge: plain white pill, soft shadow, **no border, no
-  icon** — wide-tracked caps ("IT'S ABOUT TIME · CONTINIA 3.0"). Proof points
-  as an inline checkmark row (`fa-light fa-circle-check` in Smart Green) under
-  the hero CTAs rather than a stat band.
+  clamp ~38–68px). ~~Hero badge: white pill~~ — **superseded** (Why Continia
+  session): no pill badge above the H1; a plain wide-tracked caps eyebrow only.
+  Proof points as an inline checkmark row (`fa-light fa-circle-check` in Smart
+  Green) under the hero CTAs rather than a stat band.
 
 Gotchas:
 
@@ -237,9 +248,98 @@ Gotchas:
   **and** `display:block; width:100%; height:100%` on the element itself, or it
   won't fill its wrapper.
 - The **5th element** works best huge and cropped on tall gradient sections
-  (final CTA). As a small corner watermark (~10% opacity) in footers it adds
-  noise without payoff — skip it there.
+  (final CTA). **Never in the header/hero**, and max **one instance per page**
+  — e.g. peeking from the bottom-right corner of a dark section. As a small
+  corner watermark (~10% opacity) in footers it adds noise without payoff —
+  skip it there.
 - Footer: standard lockup + legal row — no giant full-width wordmark.
+
+### From the pricing redesign (July 2026)
+
+- **Never re-implement the site chrome.** Use `SiteHeader` / `SiteFooter` from
+  the bundle (`components/navigation/`) on every page — copy-pasted nav/footers
+  drifted apart (active state, grouping, logo size). Pass `activeItem` for the
+  current page.
+- **Active nav state** (the official "current page" marking, built into
+  SiteHeader): `color: var(--c-tech-blue); box-shadow: inset 0 -2px 0
+  var(--c-innovation-blue); padding-bottom: 3px`.
+- **Canonical link map:** official continia.com URLs (nav, solutions, company,
+  resources, legal, social, docs/learn/partnerzone subdomains) live in
+  `components/navigation/links.js` as `CONTINIA_LINKS` (also exported from the
+  bundle). Edit there; never hand-retype URLs per page.
+- **Footer anatomy (spec):** brand column (white logo + tagline + social icons)
+  · Solutions · Continia Software · Resources · legal bar with ©-line, policy
+  links and ISO 27001 + BUILT INSIDE badges. Implemented by `SiteFooter`.
+- **Logo** bakes in `overflow: visible; display: block` — the SVG previously
+  clipped the "i"-dots in tight containers.
+
+### From the Why Continia redesign (July 2026)
+
+- **Hero:** dark Tech Blue **gradient** hero preferred over light variants.
+  Above the H1: plain wide-tracked caps eyebrow — **no pill badge** (this
+  supersedes the frontpage badge recipe).
+- **Glow on key numbers (dark surfaces):** Innovation Blue at 50% opacity,
+  tight radius — `text-shadow: 0 0 18px rgba(143,248,255,0.5)`. Subtle, never
+  neon.
+- **Trust bar (canonical copy):** "TRUSTED BY **21,000+** CUSTOMERS WORLDWIDE"
+  in wide-tracked caps; the number bold, Innovation Blue, with the 50% glow.
+  Reuse the frontpage trust-bar structure — don't redesign per page.
+- **Section H2s:** one line where possible ("Why finance teams choose
+  Continia") — avoid forced `<br>` breaks.
+- **Copy tone:** don't restate brand values verbatim in body copy
+  ("Practical, reliable…"); lead with the user benefit ("Easy to use — that's
+  the promise.").
+- **Testimonial carousel (canonical pattern):** centered caps eyebrow + "Hear
+  from our partners" H2; white card (max ~840px) with 1px `#dde3ee` border,
+  24px radius, soft blue shadow, **Light Blue quarter-circle in the top-right
+  corner**; initials avatar; arrows + pill dots below; auto-advance ~6.5s,
+  pause on hover.
+- **PopupWindow mockups on dark sections:** 1px **Innovation Blue** stroke on
+  the window; generous height and a wide content column so vendor/data lists
+  read as real UI.
+- **Motion:** looping attention animations (proof boxes cycling in/out from
+  the bottom) are OK on hero-level content — but everything respects
+  `prefers-reduced-motion` and the `motion` prop.
+
+### From the Solutions redesign (July 2026)
+
+- **Solutions layout-switcher:** three layouts (Bento / Classic grid / By
+  workflow) behind pill buttons in ONE section beats three separate pages.
+  Bento with mini live-UI (table rows, chips, progress) is the strongest.
+- **Final-CTA gradient (de-facto standard):** Tech Blue → Light Blue →
+  Innovation Blue gradient with the 5th element centered at ~8% opacity —
+  reused from Pricing; use for end-of-page CTAs (this is the page's one
+  5th-element instance).
+- **FAQ ("Good to know" style):** individual white cards with rounded corners
+  and soft shadows — NOT one merged accordion list. Blue border on the active
+  card. At 10+ questions: show 6 + a "Show all N questions" button.
+- **Nav layout (canonical, built into SiteHeader):** 3-zone grid — logo left,
+  links absolutely centered, actions right. Use on all marketing pages.
+- **Logo sizing gotcha — superseded:** never force a fixed **width** on the
+  Logo mount (`width: 204px` clipped it). Give only `height` — the SVG computes
+  its own width from the viewBox. `overflow: visible; display: block` is baked
+  into the component; keep `overflow: visible` on tight wrappers too.
+- **Mock-table text overflow:** document names in BC mockups (hero flow, bento
+  cards) need `max-width` + `text-overflow: ellipsis; white-space: nowrap` or
+  they collide with the amount column.
+
+### From the frontpage nav/footer pass (July 2026)
+
+- **One chrome across the site:** nav + footer are copied 1:1 between pages
+  (same layout, links, URLs) so every page feels like one site — that chrome IS
+  `SiteHeader`/`SiteFooter`; never fork it per page.
+- **Active underline = "you are here":** the inset Innovation Blue underline
+  marks ONLY the current page. Never copy it along when reusing the nav — set
+  `activeItem` per page.
+- **Responsive header:** below 980px hide nav links + "Find a partner", but
+  logo (left) and CTA (right) stay put via `space-between` — never a lonely
+  centered logo. Built into SiteHeader.
+- **Link conventions:** same-page sections use `#anchors` (e.g. `#solutions` on
+  the frontpage); everything else points at real continia.com URLs from
+  `CONTINIA_LINKS`. The "Get a free trial" CTA goes to **Microsoft AppSource**
+  (`CONTINIA_LINKS.trial` — SiteHeader's default).
+- **Hover recipe:** nav links dark navy → Tech Blue; footer links on dark
+  white/72–78% → Innovation Blue. Always `transition: color 200ms`.
 
 ---
 
@@ -281,6 +381,10 @@ directory has a `.jsx`, a `.d.ts`, a `.prompt.md`, and a `@dsCard` HTML demo:
 - `components/data-display/` — **Card** (feature/brand/tint; *starting point*),
   **Tag** (pill badge), **StatusChip** (4-state document/finance pill:
   neutral / info / warning / success), **StatPanel** (quarter-circle big number).
+- `components/navigation/` — **SiteHeader** (canonical sticky site nav;
+  `activeItem` current-page marking, CTA, burger; *starting point*) +
+  **SiteFooter** (official 4-col anatomy + legal bar) + `links.js`
+  (`CONTINIA_LINKS` canonical URL map). The site chrome — never rebuild per page.
 - `components/brand/` — **Logo** (lockup / mark-only, brand colors),
   **PopupWindow** (the signature UI-element frame).
 

@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document Capture — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+     overflow-y to auto, which made BODY the scroller: window.scrollY stuck at 0,
+     window never fired `scroll`, and the sticky header unstuck after ~840px.
+     `clip` clips the same way without creating a scroll box. */
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
+  a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
+  a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
+  ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
+
+  /* ---------- Hero ---------- */
+  .dc-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px) clamp(80px,9vw,116px); }
+  /* z-index 2 puts the copy and the mock ABOVE .dc-hero__scrim (z-index 1).
+     Without it the scrim painted over everything and the whole hero went hazy. */
+  .dc-hero__grid { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
+  .dc-hero h1 { margin: 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
+  .dc-hero p { margin: 22px 0 0; max-width: 40rem; font-size: 1.1875rem; line-height: 1.6; color: rgba(255,255,255,0.84); }
+  .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+
+  /* Hero invoice mock */
+  .dc-mock { position: relative; box-sizing: border-box; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
+  .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
+  .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8193b9; }
+  /* pipeline pills. Target the class, not `> * > *`: sc-for only inserts a
+     display:contents wrapper sometimes, so position-based selectors are unreliable. */
+  .dc-mock__flow { display: flex; gap: 5px; margin: 16px 0 0; }
+  .dc-mock__step { flex: 1; min-width: 0; text-align: center; font-size: 9.5px; font-weight: 700; letter-spacing: 0.02em; padding: 6px 3px; border-radius: 7px; background: #f4f7fb; color: #9aa8c4; white-space: nowrap; transition: background 320ms ease, color 320ms ease; }
+  .dc-mock__step.is-done { background: #e4f0ec; color: #3f7a6a; }
+  .dc-mock__step.is-on { background: #052975; color: #8ff8ff; }
+
+  .dc-mock__prog { position: relative; height: 3px; margin: 12px 0 4px; border-radius: 999px; background: #eef1f6; overflow: hidden; }
+  .dc-mock__prog i { position: absolute; inset: 0 auto 0 0; display: block; background: linear-gradient(90deg,#052975,#8ff8ff); border-radius: 999px; transition: width 520ms cubic-bezier(0.16,1,0.3,1); }
+
+  /* document preview + sweeping OCR scan line */
+  .dc-mock__doc { position: relative; margin-top: 14px; border: 1px solid #e7ecf5; border-radius: 11px; background: #fbfcfe; padding: 12px 13px; overflow: hidden; }
+  .dc-mock__docHead { display: flex; align-items: center; gap: 9px; font-size: 11.5px; font-weight: 700; color: #052975; }
+  .dc-mock__docHead i { font-size: 13px; }
+  .dc-mock__docHead b { margin-left: auto; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #e4f0ec; color: #3f7a6a; }
+  .dc-mock__lines { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .dc-mock__lines span { display: block; height: 5px; border-radius: 3px; background: #e7ecf5; }
+  .dc-mock__lines span:nth-child(1) { width: 76%; }
+  .dc-mock__lines span:nth-child(2) { width: 92%; }
+  .dc-mock__lines span:nth-child(3) { width: 61%; }
+  .dc-mock__scan { position: absolute; left: 0; right: 0; height: 46px; pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(143,248,255,0.5) 48%, rgba(5,41,117,0.5) 52%, transparent);
+    animation: dcScan 1.5s ease-in-out infinite; }
+  @keyframes dcScan { 0% { top: -46px; opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+  /* extracted fields, filling in as the pipeline advances */
+  .dc-mock__fields { margin-top: 12px; }
+  .dc-mock__field { display: flex; align-items: center; gap: 10px; padding: 8px 2px; border-top: 1px solid #f1f4f9; font-size: 12.5px; }
+  .dc-mock__field .k { flex: none; width: 84px; color: #8193b9; font-weight: 600; }
+  /* value and dashed placeholder share one slot, so the row height never jumps */
+  .dc-mock__field .slot { position: relative; flex: 1; min-width: 0; }
+  .dc-mock__field .slot .ph { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg,#e4eaf4 0 7px,transparent 7px 12px); transition: opacity 320ms ease; }
+  .dc-mock__field .slot .v { display: block; font-weight: 700; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateY(4px); transition: opacity 420ms ease, transform 420ms ease; }
+  .dc-mock__field .g { flex: none; width: 15px; text-align: center; font-size: 12px; color: #5f9e8d; opacity: 0; transition: opacity 420ms ease; }
+  .dc-mock__field.is-filled .slot .v { opacity: 1; transform: none; }
+  .dc-mock__field.is-filled .slot .ph { opacity: 0; }
+  .dc-mock__field.is-filled .g { opacity: 1; }
+
+  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: #52678f; min-height: 17px; }
+  .dc-mock__foot i { color: #5f9e8d; font-size: 13px; }
+
+  /* Placed AFTER every .dc-mock__* base rule on purpose. Sitting above them,
+     this block lost `.dc-mock__docHead b` on source order — equal specificity,
+     later rule wins, media query or not. */
+  @media (max-width: 640px) {
+    .dc-mock__flow { flex-wrap: wrap; }
+    .dc-mock__step { flex: 1 1 calc(50% - 5px); font-size: 11px; padding: 7px 4px; }
+    .dc-mock__docHead b { font-size: 11px; }
+  }
+
+  /* ---------- hero background: three states, switched bottom-left ---------- */
+  /* Deep smart green. Sage #5f9e8d is hue 163.8° at 25% saturation — far too
+     light for a band that carries white type — so this is the same hue taken to
+     70% saturation and 18% lightness: 9.65:1 against white, 7.83:1 against the
+     cyan accents, so nothing else in the hero has to change. */
+  .dc-hero--green { background: linear-gradient(165deg, #0e4e3d 0%, #0b3f31 62%, #093a2e 100%); }
+  .dc-hero--video { background: #02091a; }
+  /* 26%, not the default 50%. The hero is far wider than 16:9, so `cover` throws
+     away half the frame height — 728px of 1432 at 2546px wide — and centring
+     that window cut through both people's heads. Biasing it upwards keeps them
+     whole, and at narrower widths there is barely any crop for it to affect. */
+  .dc-hero__vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    object-position: 50% 26%; z-index: 0; }
+  /* Tech blue only — no near-black. Andreas's values, 2026-08-11. The 222deg
+     axis and the fully opaque final stop pool the colour into the bottom-left,
+     which is why the lower band reads much darker than the top. */
+  .dc-hero__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(72% 60% at 30% 46%, rgba(5, 41, 117, 0.5), rgba(5, 41, 117, 0.26)),
+      linear-gradient(222deg, rgba(5, 41, 117, 0.46), rgba(5, 41, 117, 0.34) 18.07%, rgba(5, 41, 117, 1)); }
+  .dc-hero--video .dc-hero h1, .dc-hero--video h1 { text-shadow: 0 2px 28px rgba(2,9,26,0.55); }
+  .dc-hero--video p { text-shadow: 0 1px 16px rgba(2,9,26,0.6); }
+  @media (prefers-reduced-motion: reduce) { .dc-hero__vid { display: none; } }
+
+  /* ---------- prototype switches (fixed, bottom-left) ---------- */
+  .dc-switch { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+    padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee;
+    box-shadow: 0 8px 24px rgba(5,41,117,0.16); font-family: var(--font-sans); font-size: 13px;
+    font-weight: 600; color: #052975; cursor: pointer; transition: transform 200ms, border-color 200ms, opacity 220ms; }
+  .dc-switch:hover { border-color: #052975; transform: translateY(-2px); }
+  .dc-switch--mock { bottom: 74px; }
+  .dc-switch i { font-size: 13px; }
+  /* Both sat on top of the footer legal bar at the end of the page. Same
+     rect-based watcher the homepage uses — an IntersectionObserver goes deaf
+     here, because the runtime swaps the footer node out from under it. */
+  body.cnt-footer-in-view .dc-switch { opacity: 0; pointer-events: none; transform: translateY(14px); }
+  /* Off on phones, like every other prototype switch on the site. */
+  @media (max-width: 640px) { .dc-switch { display: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .dc-switch { transition: none; } }
+
+  /* ---------- mock animations 2-4 ---------- */
+  /* All four variants share one card. A min-height keeps the hero from jumping
+     as you switch — the pipeline view is the tallest at 436px content. */
+  .dc-mock__stage { min-height: 348px; }
+
+  /* 2 · Inbox — throughput rather than one document's journey */
+  .dc-mock__inboxHead { display: flex; align-items: baseline; gap: 8px; margin: 16px 0 10px; }
+  .dc-mock__inboxHead b { font-size: 22px; font-weight: 700; color: #052975; letter-spacing: -0.02em; }
+  /* ⚠️ Class, not `.dc-mock__inboxHead span` — trap 5b again. The bare
+     descendant selector caught the {{ inboxPosted }} wrapper inside <b>,
+     so the counter rendered 12.5px grey instead of 22px navy. */
+  .dc-mock__inboxK { font-size: 12.5px; color: #6b7894; }
+  .dc-mock__meter { height: 5px; border-radius: 999px; background: #eef1f6; overflow: hidden; margin-bottom: 12px; }
+  .dc-mock__meter i { display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg,#052975,#46be9e); transition: width 620ms cubic-bezier(0.16,1,0.3,1); }
+  .dc-mock__q { display: flex; flex-direction: column; gap: 2px; }
+  .dc-mock__qrow { display: grid; grid-template-columns: 18px 1fr auto 92px; gap: 10px; align-items: center;
+    padding: 9px 2px; border-top: 1px solid #f1f4f9; font-size: 12.5px;
+    transition: opacity 420ms ease, transform 420ms ease; }
+  .dc-mock__qrow i { color: #8193b9; font-size: 14px; }
+  .dc-mock__qrow .nm { font-weight: 600; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dc-mock__qrow .amt { color: #3a4a6b; font-variant-numeric: tabular-nums; }
+  .dc-mock__qchip { text-align: center; padding: 4px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.02em; transition: background 380ms ease, color 380ms ease; }
+  .dc-mock__qchip.s0 { background: #eef1f6; color: #6b7894; }
+  .dc-mock__qchip.s1 { background: #def5ff; color: #052975; }
+  .dc-mock__qchip.s2 { background: #e4f0ec; color: #2f6455; }
+  .dc-mock__qrow.is-new { animation: dcSlideIn 480ms cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes dcSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+  /* 3 · Three-way match — invoice lines against the purchase order */
+  .dc-mock__mHead { display: grid; grid-template-columns: 1fr 26px 1fr; gap: 8px; margin: 16px 0 8px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8193b9; }
+  .dc-mock__mHead span:last-child { text-align: right; }
+  .dc-mock__mRow { display: grid; grid-template-columns: 1fr 26px 1fr; gap: 8px; align-items: center;
+    padding: 10px 0; border-top: 1px solid #f1f4f9; font-size: 12.5px; color: #0a1838; }
+  .dc-mock__mRow .r { text-align: right; }
+  .dc-mock__mRow .v { font-variant-numeric: tabular-nums; }
+  .dc-mock__link { justify-self: center; width: 22px; height: 22px; border-radius: 999px; display: grid; place-items: center;
+    font-size: 11px; background: #eef1f6; color: #9aa8c4; transition: background 380ms ease, color 380ms ease, transform 380ms ease; }
+  .dc-mock__mRow.is-ok .dc-mock__link { background: #e4f0ec; color: #2f6455; transform: scale(1.08); }
+  .dc-mock__mRow.is-flag .dc-mock__link { background: #fff2d6; color: #8a6516; }
+  .dc-mock__mNote { margin-top: 12px; display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; background: #f6f8fb; color: #52678f; transition: background 380ms ease, color 380ms ease; }
+  .dc-mock__mNote.is-flag { background: #fff7e3; color: #8a6516; }
+  .dc-mock__mNote.is-ok { background: #e4f0ec; color: #2f6455; }
+  /* totals strip — closes the story and fills the space four lines leave behind */
+  .dc-mock__tot { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 14px;
+    padding-top: 12px; border-top: 1px solid #f1f4f9; }
+  .dc-mock__tot div { text-align: center; }
+  /* ⚠️ Class, not `.dc-mock__tot span` — HANDOFF trap 5b. Every {{ binding }}
+     renders as <span class="sc-interp">, so a bare descendant selector also hit
+     the value inside <b>: "3 of 3" came out as a grey 10.5px "3" on its own
+     line above a bold "of 3". */
+  .dc-mock__totK { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #9aa8c4; }
+  .dc-mock__tot b { display: block; margin-top: 5px; font-size: 14px; font-weight: 700; color: #052975;
+    font-variant-numeric: tabular-nums; }
+  .dc-mock__tot b.ok { color: #2f6455; }
+
+  /* 4 · Approval — the routing chain, and how long it actually takes */
+  .dc-mock__aHead { margin: 16px 0 4px; font-size: 12.5px; color: #6b7894; }
+  .dc-mock__aHead b { color: #052975; font-size: 14px; }
+  .dc-mock__chain { display: flex; flex-direction: column; gap: 0; margin-top: 10px; }
+  .dc-mock__ap { display: grid; grid-template-columns: 38px 1fr auto; gap: 12px; align-items: center; padding: 11px 0; position: relative; }
+  /* the connector between avatars, drawn from each row down to the next */
+  .dc-mock__ap:not(:last-child)::after { content: ""; position: absolute; left: 18px; top: 46px; bottom: -6px; width: 2px;
+    background: #eef1f6; transition: background 420ms ease; }
+  .dc-mock__ap.is-done:not(:last-child)::after { background: #cfe4dc; }
+  .dc-mock__av { width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em; background: #eef1f6; color: #9aa8c4;
+    transition: background 420ms ease, color 420ms ease, box-shadow 420ms ease; }
+  .dc-mock__ap.is-live .dc-mock__av { background: #def5ff; color: #052975; box-shadow: 0 0 0 4px rgba(5,41,117,0.10); }
+  .dc-mock__ap.is-done .dc-mock__av { background: #e4f0ec; color: #2f6455; }
+  .dc-mock__ap .who { font-size: 13.5px; font-weight: 600; color: #0a1838; }
+  .dc-mock__ap .role { display: block; font-size: 11.5px; font-weight: 500; color: #8193b9; margin-top: 2px; }
+  .dc-mock__apState { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: #9aa8c4; font-variant-numeric: tabular-nums;
+    transition: color 420ms ease; }
+  .dc-mock__ap.is-live .dc-mock__apState { color: #052975; }
+  .dc-mock__ap.is-done .dc-mock__apState { color: #2f6455; }
+
+  /* ---------- shared section ---------- */
+  .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
+  .dc-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
+  .dc-head .eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
+  .dc-head h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
+  .dc-head p { margin: 16px 0 0; font-size: 1.125rem; line-height: 1.6; color: var(--color-text-muted); }
+
+  /* ---------- stats ---------- */
+  .dc-stats { background: #ffffff; }
+  .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(30px,3.6vw,42px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 0; text-align: center; }
+  .dc-stat { padding: 12px 16px; border-left: 1px solid #e5eaf3; }
+  .dc-stat em { display: block; font-style: normal; font-size: 13px; font-weight: 600; color: #6b7894; margin-bottom: 4px; }
+  .dc-stat b { display: block; font-size: clamp(38px,3.4vw,54px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); line-height: 1; font-variant-numeric: tabular-nums; }
+  .dc-stat span { display: block; margin-top: 14px; font-size: 15.5px; font-weight: 500; line-height: 1.45; color: #6b7894; }
+  @media (max-width: 900px) {
+    .dc-stat { border-left: 0; padding: 0 8px; }
+    .dc-stat:nth-child(even) { border-left: 1px solid #e5eaf3; }
+  }
+
+  /* ---------- feature grid ---------- */
+  .dc-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .dc-feat { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; padding: 30px; transition: transform 250ms, box-shadow 250ms, border-color 250ms; }
+  .dc-feat:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); border-color: #cdd9ef; }
+  .dc-feat__icon { width: 54px; height: 54px; border-radius: 14px; background: var(--c-light-blue); color: var(--c-tech-blue); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .dc-feat h3 { margin: 20px 0 0; font-size: 20px; font-weight: 700; color: var(--c-tech-blue); letter-spacing: -0.01em; }
+  .dc-feat p { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--color-text-muted); }
+
+  /* ---------- how it works ---------- */
+  .dc-how { background: var(--c-tech-blue); color: #fff; }
+  .dc-how .dc-head h2 { color: #fff; }
+  .dc-how .dc-head .eye { color: var(--c-innovation-blue); }
+  .dc-how .dc-head p { color: rgba(255,255,255,0.78); }
+  .dc-steps { position: relative; display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; max-width: 1080px; margin: 0 auto; }
+  .dc-steps::before { content: ""; position: absolute; top: 27px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, rgba(143,248,255,0.15), rgba(143,248,255,0.55), rgba(143,248,255,0.15)); }
+  .dc-step { position: relative; text-align: center; }
+  .dc-step__num { position: relative; width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; background: #041e58; border: 2px solid rgba(143,248,255,0.45); color: var(--c-innovation-blue); display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1; }
+  .dc-step h4 { margin: 18px 0 0; font-size: 16px; font-weight: 700; color: #fff; }
+  .dc-step p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,0.72); }
+
+  /* ---------- built inside ---------- */
+  /* the standalone "Built inside" section was merged into .dc-ti, so only the
+     proof-point list survives here — grid/card/app rules removed as dead. */
+  .dc-inside__list { margin: 24px 0 0; display: flex; flex-direction: column; gap: 14px; }
+  .dc-inside__list span { display: flex; align-items: center; gap: 12px; font-size: 16px; color: var(--color-text); }
+  .dc-inside__list i { color: #5f9e8d; font-size: 18px; }
+
+  /* ---------- final CTA ---------- */
+  .dc-cta { position: relative; overflow: hidden; background: linear-gradient(135deg,#041e58 0%,#052975 45%,#1d5aa8 90%,#8ff8ff 165%); color: #fff; text-align: center; }
+  .dc-cta__inner { max-width: 760px; margin: 0 auto; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px); }
+  .dc-cta h2 { margin: 0; font-size: clamp(34px,3.6vw,52px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; }
+  .dc-cta p { margin: 20px auto 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.82); }
+  .dc-cta__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+
+  /* ---------- feature-overview banner ---------- */
+  .dc-fo { margin-top: 44px; background: #c6ddd6; border-radius: 20px; padding: 34px clamp(22px,3vw,38px) 32px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; }
+  .dc-fo__eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #3f6d5f; }
+  .dc-fo h3 { margin: 9px 0 0; font-size: clamp(21px,2vw,27px); font-weight: 700; letter-spacing: -0.015em; color: var(--c-tech-blue); }
+  .dc-fo p { margin: 10px auto 0; font-size: 15.5px; line-height: 1.55; color: #2f4763; max-width: 54ch; }
+  .dc-fo__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
+  .dc-fo__btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 17px; border-radius: 999px; border: 1px solid rgba(5,41,117,0.20); background: rgba(255,255,255,0.92); font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; transition: background 180ms, border-color 180ms, transform 180ms; }
+  .dc-fo__btn:hover { background: #fff; border-color: var(--c-tech-blue); transform: translateY(-2px); }
+  .dc-fo__btn span { font-size: 12px; font-weight: 700; color: #6b7f9c; }
+  /* plain text link, deliberately not a pill */
+  /* `a:not(.cnt-btn){text-decoration:none}` earlier in this sheet ties on specificity,
+     so this must also be an a.<class> selector to win on source order. */
+  a.dc-fo__btn--all { padding: 9px 6px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: none; }
+  .dc-fo__btn--all span { color: inherit; }
+  a.dc-fo__btn--all { gap: 9px; }
+  a.dc-fo__btn--all i { transition: transform 180ms; }
+  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; color: #052975; }
+  a.dc-fo__btn--all:hover i { transform: translateX(4px); }
+
+  /* ---------- tighter rhythm across the white run: stats -> what's inside -> demo ---------- */
+  /* three unbroken white bands stacked, so the default .dc-sec padding read as
+     dead air rather than separation. */
+  #features.dc-sec { padding-top: clamp(32px,4vw,48px); padding-bottom: clamp(40px,4.8vw,58px); }
+  #features .dc-head { margin-bottom: clamp(32px,3.6vw,40px); }
+  .dc-sl.dc-sec { padding-top: clamp(30px,3.6vw,44px); padding-bottom: clamp(56px,6.6vw,84px); }
+
+  /* ---------- storylane interactive demo ---------- */
+  .dc-sl__grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(32px,5vw,64px); align-items: center; }
+  .dc-sl h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
+  .dc-sl p { margin: 16px 0 0; font-size: 1.0625rem; line-height: 1.62; color: var(--color-text-muted); max-width: 52ch; }
+  .dc-sl__frame { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--color-border); box-shadow: 0 26px 60px rgba(5,41,117,0.16); background: #0b1f4a; aspect-ratio: 800 / 473; }
+  .dc-sl__frame img, .dc-sl__frame iframe { display: block; width: 100%; height: 100%; border: 0; object-fit: cover; }
+  .dc-sl__play { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: rgba(4,20,60,0.34); border: 0; cursor: pointer; font-family: inherit; color: #fff; transition: background 220ms; }
+  .dc-sl__play:hover { background: rgba(4,20,60,0.18); }
+  .dc-sl__play i { font-size: 22px; width: 62px; height: 62px; border-radius: 999px; background: #983eae; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(26,19,72,0.45); transition: transform 220ms; }
+  .dc-sl__play:hover i { transform: scale(1.08); }
+  .dc-sl__play b { font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
+  .dc-sl__hint { margin-top: 14px; font-size: 13.5px; color: #6b7894; }
+
+  /* ---------- text + image module ---------- */
+  .dc-ti { background: var(--c-light-blue); }
+  .dc-ti__grid { display: grid; grid-template-columns: 1.02fr 0.98fr; gap: clamp(32px,5vw,68px); align-items: center; }
+  .dc-ti h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
+  .dc-ti p { margin: 18px 0 0; font-size: 1.0625rem; line-height: 1.65; color: #3a4a6b; max-width: 54ch; }
+  /* portrait crop — the asset is 981x1200, so the frame follows it instead of
+     letterboxing a landscape box. */
+  .dc-ti__media { border-radius: 18px; overflow: hidden; box-shadow: 0 26px 60px rgba(2,12,40,0.16); aspect-ratio: 4 / 5; max-width: 380px; margin: 0 auto; }
+  .dc-ti__media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+
+  /* ---------- youtube playlist (light, big player + legible chapter rail) ---------- */
+  .dc-yt { background: #f6f9fc; }
+  .dc-yt__player { max-width: 1040px; margin: 0 auto; border-radius: 18px; overflow: hidden; border: 1px solid #dde5f1; box-shadow: 0 34px 76px rgba(5,41,117,0.20); background: #0a1838; aspect-ratio: 16 / 9; }
+  .dc-yt__player iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+  .dc-yt__caption { max-width: 1040px; margin: 18px auto 0; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+  .dc-yt__badge { flex: none; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: #983eae; border-radius: 999px; padding: 5px 11px; }
+  .dc-yt__caption b { flex: 1; min-width: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-tech-blue); }
+  .dc-yt__count { flex: none; font-size: 13.5px; font-weight: 700; color: #7b8bab; font-variant-numeric: tabular-nums; }
+
+  .dc-yt__railHead { max-width: 1040px; margin: 40px auto 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .dc-yt__railHead h3 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #52678f; }
+  .dc-yt__navBtns { display: flex; gap: 8px; }
+  .dc-yt__nav { width: 40px; height: 40px; border-radius: 999px; border: 1px solid #cdd9ea; background: #fff; color: var(--c-tech-blue); font-size: 15px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: border-color 180ms, background 180ms, transform 180ms; }
+  .dc-yt__nav:hover { border-color: var(--c-tech-blue); background: var(--c-light-blue); transform: translateY(-1px); }
+
+  .dc-yt__strip { max-width: 1040px; margin: 0 auto; display: flex; gap: 16px; overflow-x: auto; padding: 16px 2px 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .dc-yt__thumb { flex: none; width: 252px; scroll-snap-align: start; display: block; padding: 0; border: 1.5px solid #dde5f1; background: #fff; border-radius: 14px; overflow: hidden; cursor: pointer; font-family: inherit; text-align: left; transition: border-color 190ms, transform 190ms, box-shadow 190ms; }
+  .dc-yt__thumb:hover { transform: translateY(-3px); border-color: #a9c0e2; box-shadow: 0 16px 34px rgba(5,41,117,0.13); }
+  .dc-yt__thumb.is-on { border-color: #983eae; box-shadow: 0 16px 34px rgba(152,62,174,0.20); }
+
+  .dc-yt__shot { position: relative; display: block; }
+  .dc-yt__shot img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #dde5f1; }
+  .dc-yt__num { position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; color: #fff; background: rgba(5,24,56,0.82); border-radius: 6px; padding: 3px 7px; font-variant-numeric: tabular-nums; }
+  .dc-yt__play { position: absolute; right: 8px; bottom: 8px; width: 30px; height: 30px; border-radius: 999px; background: rgba(255,255,255,0.94); color: var(--c-tech-blue); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; box-shadow: 0 3px 10px rgba(2,12,40,0.28); }
+  .dc-yt__thumb.is-on .dc-yt__play { background: #983eae; color: #fff; }
+
+  .dc-yt__meta { display: block; padding: 11px 13px 14px; }
+  .dc-yt__state { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #93a2bf; margin-bottom: 5px; }
+  .dc-yt__thumb.is-on .dc-yt__state { color: #983eae; }
+  .dc-yt__title { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.4; color: var(--c-tech-blue); }
+
+  /* ---------- merged "why teams choose it" + "built inside" ---------- */
+  .dc-ti__inside { margin-top: 28px; padding-top: 24px; border-top: 1px solid #bcd8e8; }
+  .dc-ti__insideEye { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #52678f; margin-bottom: 16px; }
+  .dc-ti .dc-inside__list { margin: 0; gap: 12px; }
+  .dc-ti .dc-inside__list span { font-size: 15.5px; }
+
+  /* ---------- PartnerZone training ---------- */
+  .dc-pz { background: #fff; border-top: 1px solid #e5eaf3; }
+  .dc-pz__grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: clamp(32px,5vw,64px); align-items: center; }
+  .dc-pz h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
+  .dc-pz p { margin: 18px 0 0; font-size: 1.0625rem; line-height: 1.62; color: var(--color-text-muted); max-width: 52ch; }
+  .dc-pz__btns { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 30px; }
+  .dc-pz__note { margin-top: 18px; font-size: 13.5px; color: #6b7894; display: flex; align-items: center; gap: 8px; }
+  .dc-pz__note i { color: #93a2bf; }
+  /* the asset is 2500x1667, so the frame is 3:2 and nothing gets cropped off
+     the lockup. No border here — it is a full-bleed key visual, not a photo. */
+  .dc-pz__media { border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 2;
+    box-shadow: 0 26px 60px rgba(5,41,117,0.20); }
+  .dc-pz__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  @media (max-width: 900px) {
+    .dc-sl__grid, .dc-ti__grid, .dc-pz__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 900px) {
+    .dc-hero__grid { grid-template-columns: 1fr; }
+    .dc-mock { justify-self: center; }
+    .dc-features { grid-template-columns: 1fr 1fr; }
+    .dc-stats__grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
+    .dc-steps { grid-template-columns: 1fr 1fr 1fr; gap: 28px 16px; }
+    .dc-steps::before { display: none; }
+  }
+  @media (max-width: 560px) {
+    .dc-features { grid-template-columns: 1fr; }
+    .dc-steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dc-mock, .dc-row { animation: none !important; opacity: 1 !important; }
+  }
+
+    /* CTA band above the footer — one treatment site-wide; the inline
+       padding needs !important to lose here. */
+    @media (max-width: 640px) {
+      section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+    }
+  </style>
+</helmet>
+<div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Products" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO ============ -->
+<section class="{{ heroCls }}" data-screen-label="Hero">
+  <sc-if value="{{ heroVideo }}" hint-placeholder-val="{{ false }}">
+    <video class="dc-hero__vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="../../assets/video/release-r1.mp4" type="video/mp4">
+      <source src="../../assets/video/release-r1.mov" type="video/quicktime">
+    </video>
+    <div class="dc-hero__scrim" aria-hidden="true"></div>
+  </sc-if>
+  <div class="dc-hero__grid">
+    <div>
+      <h1>Automate your Accounts Payable, end to end.</h1>
+      <p>Capture, code, match and post supplier invoices automatically — with AI-powered recognition, three-way matching and approvals, 100% built inside Microsoft Dynamics 365 Business Central.</p>
+      <div class="dc-hero__cta">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" href="#how" hint-size="auto,48px">See how it works</x-import>
+      </div>
+    </div>
+    <div class="dc-mock" aria-hidden="true">
+      <div class="dc-mock__bar"><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__title">Accounts Payable · Business Central</span></div>
+
+      <div class="dc-mock__stage">
+
+      <!-- 1 · PIPELINE — one invoice walking Imported → Posted -->
+      <sc-if value="{{ animPipeline }}" hint-placeholder-val="{{ true }}">
+        <div class="dc-mock__flow">
+          <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
+            <div class="{{ s.cls }}">{{ s.name }}</div>
+          </sc-for>
+        </div>
+        <div class="dc-mock__prog"><i style="{{ progStyle }}"></i></div>
+
+        <div class="dc-mock__doc">
+          <div class="dc-mock__docHead">
+            <i class="fa-light fa-file-invoice"></i><span>{{ docName }}</span><b>{{ docBadge }}</b>
+          </div>
+          <div class="dc-mock__lines"><span></span><span></span><span></span></div>
+          <sc-if value="{{ scanning }}" hint-placeholder-val="{{ true }}">
+            <div class="dc-mock__scan"></div>
+          </sc-if>
+        </div>
+
+        <div class="dc-mock__fields">
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="5">
+            <div class="{{ f.cls }}">
+              <span class="k">{{ f.k }}</span>
+              <span class="slot"><span class="ph"></span><span class="v">{{ f.v }}</span></span>
+              <i class="fa-light fa-circle-check g"></i>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- 2 · INBOX — the whole morning's post, clearing itself -->
+      <sc-if value="{{ animInbox }}" hint-placeholder-val="{{ false }}">
+        <div class="dc-mock__inboxHead">
+          <b>{{ inboxPosted }}</b><span class="dc-mock__inboxK">of {{ inboxTotal }} invoices posted automatically</span>
+        </div>
+        <div class="dc-mock__meter"><i style="{{ inboxMeter }}"></i></div>
+        <div class="dc-mock__q">
+          <sc-for list="{{ inboxRows }}" as="r" hint-placeholder-count="6">
+            <div class="{{ r.cls }}">
+              <i class="fa-light fa-file-invoice"></i>
+              <span class="nm">{{ r.vendor }}</span>
+              <span class="amt">{{ r.amt }}</span>
+              <span class="{{ r.chipCls }}">{{ r.chip }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- 3 · THREE-WAY MATCH — invoice lines against the purchase order -->
+      <sc-if value="{{ animMatch }}" hint-placeholder-val="{{ false }}">
+        <div class="dc-mock__mHead"><span>Invoice 100482</span><span></span><span>PO-2291</span></div>
+        <sc-for list="{{ matchRows }}" as="m" hint-placeholder-count="4">
+          <div class="{{ m.cls }}">
+            <span><span class="v">{{ m.left }}</span></span>
+            <span class="dc-mock__link"><i class="{{ m.icon }}"></i></span>
+            <span class="r"><span class="v">{{ m.right }}</span></span>
+          </div>
+        </sc-for>
+        <div class="{{ matchNoteCls }}"><i class="{{ matchNoteIcon }}"></i>{{ matchNote }}</div>
+        <div class="dc-mock__tot">
+          <div><span class="dc-mock__totK">Invoice</span><b>€ 4,820.00</b></div>
+          <div><span class="dc-mock__totK">Order</span><b>€ 4,820.00</b></div>
+          <div><span class="dc-mock__totK">Variance</span><b class="{{ matchVarCls }}">{{ matchVar }}</b></div>
+        </div>
+      </sc-if>
+
+      <!-- 4 · APPROVAL — who touched it, and for how long -->
+      <sc-if value="{{ animApproval }}" hint-placeholder-val="{{ false }}">
+        <div class="dc-mock__aHead"><b>€ 4,820.00</b> · Northwind Traders · routed by amount</div>
+        <div class="dc-mock__chain">
+          <sc-for list="{{ approvers }}" as="a" hint-placeholder-count="3">
+            <div class="{{ a.cls }}">
+              <span class="dc-mock__av">{{ a.initials }}</span>
+              <span><span class="who">{{ a.name }}</span><span class="role">{{ a.role }}</span></span>
+              <span class="dc-mock__apState">{{ a.state }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div class="dc-mock__tot">
+          <div><span class="dc-mock__totK">Routed</span><b>By amount</b></div>
+          <div><span class="dc-mock__totK">Approvers</span><b>{{ apDone }} of 3</b></div>
+          <div><span class="dc-mock__totK">Elapsed</span><b class="{{ apElapsedCls }}">{{ apElapsed }}</b></div>
+        </div>
+      </sc-if>
+
+      </div>
+      <div class="dc-mock__foot"><i class="{{ footIcon }}"></i>{{ footText }}</div>
+    </div>
+  </div>
+</section>
+
+<!-- Prototype switches. Not part of the page design — see HANDOFF §8. -->
+<button onClick="{{ cycleHeroBg }}" class="dc-switch" title="Switch the hero background"><i class="fa-light fa-palette"></i>{{ heroBgLabel }}</button>
+<button onClick="{{ cycleAnim }}" class="dc-switch dc-switch--mock" title="Switch the hero animation"><i class="fa-light fa-shuffle"></i>{{ animLabel }}</button>
+
+<!-- ============ STATS ============ -->
+<section class="dc-stats" data-screen-label="Impact">
+  <div class="dc-stats__grid">
+    <div class="dc-stat"><em>up to</em><b>80%</b><span>faster invoice processing</span></div>
+    <div class="dc-stat"><b>⅔</b><span>lower cost on manual tasks</span></div>
+    <div class="dc-stat"><b>95%</b><span>automatic matching accuracy</span></div>
+    <div class="dc-stat"><b>10+</b><span>hours saved every week</span></div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section class="dc-sec" id="features" data-screen-label="Features">
+  <div class="dc-head">
+    <span class="eye">What's inside</span>
+    <h2>Everything your AP team needs, in one place</h2>
+    <p>From the moment an invoice arrives to the moment it's posted — Document Capture handles the whole journey.</p>
+  </div>
+  <div class="dc-features">
+    <div class="dc-feat">
+      <div class="dc-feat__icon"><i class="fa-light fa-file-magnifying-glass"></i></div>
+      <h3>Data Capture</h3>
+      <p>Intelligent OCR reads every invoice and drops the recognized values straight into the right Business Central fields — no manual typing, far fewer errors.</p>
+    </div>
+    <div class="dc-feat">
+      <div class="dc-feat__icon"><i class="fa-light fa-file-contract"></i></div>
+      <h3>Purchase Contracts</h3>
+      <p>Keep every vendor agreement in one place, so you never pay for a subscription you no longer use and always have full visibility of recurring spend.</p>
+    </div>
+    <div class="dc-feat">
+      <div class="dc-feat__icon"><i class="fa-light fa-code-compare"></i></div>
+      <h3>Order Matching</h3>
+      <p>Automatic three-way matching checks each invoice against its purchase order and receipt, with variance tolerances you control.</p>
+    </div>
+    <div class="dc-feat">
+      <div class="dc-feat__icon"><i class="fa-light fa-vault"></i></div>
+      <h3>Secure Archive</h3>
+      <p>Encrypted document storage with a full audit trail — retrieve any invoice in seconds and stay ready for every compliance check.</p>
+    </div>
+    <div class="dc-feat">
+      <div class="dc-feat__icon"><i class="fa-light fa-user-check"></i></div>
+      <h3>Approval Workflow</h3>
+      <p>Route invoices for approval automatically, with email notifications and a mobile Web Approval Portal so decisions never wait for the office.</p>
+    </div>
+    <div class="dc-feat">
+      <div class="dc-feat__icon"><i class="fa-light fa-network-wired"></i></div>
+      <h3>Continia eDocuments</h3>
+      <p>Receive and process electronic documents over Peppol, NemHandel and KSeF — compliant with regional e-invoicing rules out of the box.</p>
+    </div>
+  </div>
+
+  <!-- feature-overview banner -->
+  <div class="dc-fo">
+    <div>
+      <span class="dc-fo__eye">Feature overview</span>
+      <h3>All 87 features, module by module</h3>
+      <p>Jump straight into the module you care about, or browse the complete Document Capture feature list.</p>
+    </div>
+    <div class="dc-fo__btns">
+      <a class="dc-fo__btn" href="../document-capture-features/#essential">Essential <span>35</span></a>
+      <a class="dc-fo__btn" href="../document-capture-features/#advanced-capture">Advanced Capture <span>13</span></a>
+      <a class="dc-fo__btn" href="../document-capture-features/#order-matching">Order Matching <span>11</span></a>
+      <a class="dc-fo__btn" href="../document-capture-features/#document-approval">Document Approval <span>20</span></a>
+      <a class="dc-fo__btn" href="../document-capture-features/#purchase-contracts">Purchase Contracts <span>8</span></a>
+      <a class="dc-fo__btn dc-fo__btn--all" href="../document-capture-features/">See all features <i class="fa-light fa-arrow-right" style="font-size:13px;color:var(--c-tech-blue)"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTERACTIVE DEMO (Storylane) ============ -->
+<section class="dc-sec dc-sl" data-screen-label="Interactive demo">
+  <div class="dc-sl__grid">
+    <div>
+      <span class="eye" style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--c-tech-blue);">Interactive demo</span>
+      <h2>Try Document Capture step by step</h2>
+      <p>Get a hands-on look at how Document Capture streamlines invoice processing directly in Microsoft Dynamics 365 Business Central.</p>
+      <p>You'll see how documents move through import, registration, approval, posting and archiving in one connected workflow — a clearer view of how the solution supports accounts payable from start to finish.</p>
+      <p class="dc-sl__hint">Free to try, no sign-up, at your own pace.</p>
+    </div>
+    <div>
+      <div class="dc-sl__frame">
+        <sc-if value="{{ demoOpen }}" hint-placeholder-val="{{ false }}">
+          <iframe src="{{ demoSrc }}" title="Document Capture interactive demo" allow="fullscreen" loading="lazy"></iframe>
+        </sc-if>
+        <sc-if value="{{ demoClosed }}" hint-placeholder-val="{{ true }}">
+          <img src="../../assets/images/dc-storylane-poster.jpg" alt="Document Capture interactive demo preview" />
+          <button class="dc-sl__play" onClick="{{ openDemo }}" aria-label="Take a tour of Document Capture">
+            <i class="fa-solid fa-play"></i>
+            <b>TAKE A TOUR</b>
+          </button>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="dc-how" id="how" data-screen-label="How it works">
+  <div class="dc-sec">
+    <div class="dc-head">
+      <span class="eye">How it works</span>
+      <h2>Five steps. Zero manual entry.</h2>
+      <p>Every invoice follows the same automated path — you only step in when something needs a human decision.</p>
+    </div>
+    <div class="dc-steps">
+      <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-file-import"></i></div><h4>1 · Capture</h4><p>Invoices arrive by email, PDF, scan or e-document — all collected in one inbox.</p></div>
+      <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-wand-magic-sparkles"></i></div><h4>2 · Recognize</h4><p>AI-powered OCR reads the header and lines and maps them to Business Central.</p></div>
+      <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-code-compare"></i></div><h4>3 · Match</h4><p>Three-way matching verifies each line against orders and receipts.</p></div>
+      <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-user-check"></i></div><h4>4 · Approve</h4><p>Routed to the right approvers on web or mobile, with a full audit trail.</p></div>
+      <div class="dc-step"><div class="dc-step__num"><i class="fa-light fa-circle-check"></i></div><h4>5 · Post</h4><p>Approved invoices post automatically — archived and ready to pay.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEXT + IMAGE ============ -->
+<section class="dc-ti" data-screen-label="Set your team up for success">
+  <div class="dc-sec">
+    <div class="dc-ti__grid">
+      <div>
+        <span class="eye" style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#52678f;">Why teams choose it</span>
+        <h2>Set your team up for success</h2>
+        <p>Add value to your workday with Document Capture and set your team up for success. Our data capture solution helps you optimize your business processes efficiently — saving you plenty of time, and making sure you can get home on time.</p>
+        <p>Less manual work. Fewer errors. Faster approvals. And rock-solid fraud prevention on every invoice that comes through the door.</p>
+
+        <div class="dc-ti__inside">
+          <span class="dc-ti__insideEye">100% built inside — no new system, no integration project</span>
+          <div class="dc-inside__list">
+            <span><i class="fa-light fa-circle-check"></i>Install straight from Microsoft AppSource</span>
+            <span><i class="fa-light fa-circle-check"></i>Same interface, same data, same login</span>
+            <span><i class="fa-light fa-circle-check"></i>Updates follow your Business Central release</span>
+            <span><i class="fa-light fa-circle-check"></i>Delivered and supported by 1,500+ local partners</span>
+          </div>
+        </div>
+
+        <div style="margin-top:30px;">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+        </div>
+      </div>
+      <div class="dc-ti__media">
+        <img src="../../assets/images/silke-vertical.jpg" alt="Continia colleague working in Business Central" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ YOUTUBE DEMO PLAYLIST ============ -->
+<section class="dc-yt" data-screen-label="Demo videos">
+  <div class="dc-sec">
+    <div class="dc-head">
+      <span class="eye">Demo videos</span>
+      <h2>Check out a Document Capture demo</h2>
+      <p>Pick any chapter in the playlist below to jump straight to that part of the workflow.</p>
+    </div>
+    <div class="dc-yt__player">
+      <iframe src="{{ ytSrc }}" title="{{ ytTitle }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="dc-yt__caption">
+      <span class="dc-yt__badge">Now playing</span>
+      <b>{{ ytTitle }}</b>
+      <span class="dc-yt__count">{{ ytPos }}</span>
+    </div>
+
+    <div class="dc-yt__railHead">
+      <h3>All {{ ytTotal }} chapters</h3>
+      <div class="dc-yt__navBtns">
+        <button class="dc-yt__nav" onClick="{{ ytScrollPrev }}" aria-label="Scroll chapters left"><i class="fa-light fa-arrow-left"></i></button>
+        <button class="dc-yt__nav" onClick="{{ ytScrollNext }}" aria-label="Scroll chapters right"><i class="fa-light fa-arrow-right"></i></button>
+      </div>
+    </div>
+    <div class="dc-yt__strip">
+      <sc-for list="{{ ytThumbs }}" as="t" hint-placeholder-count="9">
+        <button class="{{ t.cls }}" onClick="{{ t.onClick }}" aria-label="{{ t.aria }}">
+          <span class="dc-yt__shot">
+            <img src="{{ t.thumb }}" alt="" loading="lazy" />
+            <span class="dc-yt__num">{{ t.num }}</span>
+            <span class="dc-yt__play"><i class="{{ t.icon }}"></i></span>
+          </span>
+          <span class="dc-yt__meta">
+            <span class="dc-yt__state">{{ t.state }}</span>
+            <span class="dc-yt__title">{{ t.title }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARTNERZONE ============ -->
+<section class="dc-pz" data-screen-label="PartnerZone training">
+  <div class="dc-sec">
+    <div class="dc-pz__grid">
+      <div>
+        <span class="eye" style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#52678f;">For partners</span>
+        <h2>Hands-on Document Capture training</h2>
+        <p>PartnerZone is the Continia partner portal — the same place your team already goes for price lists, licence terms and product documentation. Document Capture training material lives there too.</p>
+        <p>Sign in with your partner account to get started. Not a partner yet? Any of our 1,500+ partners can take you through Document Capture instead.</p>
+        <div class="dc-pz__btns">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="purple" href="https://partnerzone.continia.com/" target="_blank" hint-size="auto,48px">Open PartnerZone</x-import>
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="../../company/find-a-partner/" hint-size="auto,48px">Find a partner</x-import>
+        </div>
+        <span class="dc-pz__note"><i class="fa-light fa-lock"></i>PartnerZone requires a Continia partner sign-in.</span>
+      </div>
+      <div class="dc-pz__media">
+        <img src="../../assets/images/partnerzone-dc-training.jpg" alt="Continia PartnerZone key visual — hands-on training for Document Capture" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section data-screen-label="Free trial CTA" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%);">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div style="max-width: 820px; margin: 0 auto; padding: 110px 32px; text-align: center; position: relative;">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Microsoft AppSource</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">Start your free trial today</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">See Continia in action with a 30-day free trial directly from Microsoft Marketplace. Simply download one of our apps, follow the set-up, and get started in less than 15 minutes.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="220px,52px">Download free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="https://www.continia.com/partners/" hint-size="180px,52px">Find a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  // bg:   0 Release R1 video (default) · 1 tech blue · 2 smart green
+  // anim: 0 pipeline · 1 inbox · 2 three-way match · 3 approval
+  state = { vid: 0, demoOpen: false, step: 0, bg: 0, anim: 0 };
+
+  // Each animation runs on the same 1500 ms beat but has its own length, so a
+  // short one does not sit idle waiting for a long one's cycle to come round.
+  animLen = [6, 9, 7, 7];
+  _seenBg = 0;
+
+  // Hero animation: one invoice walking the real Document Capture pipeline.
+  stages = ["Imported", "Recognized", "Matched", "Approved", "Posted"];
+
+  // Each field appears at the stage that would actually produce it.
+  fieldDefs = [
+    { k: "Vendor", v: "Northwind Traders", at: 1 },
+    { k: "Invoice no.", v: "100482", at: 1 },
+    { k: "Amount", v: "€ 4,820.00", at: 1 },
+    { k: "Order match", v: "PO-2291 · 3-way", at: 2 },
+    { k: "Approval", v: "M. Jaqqam · 4 s", at: 3 },
+  ];
+
+  footings = [
+    { icon: "fa-light fa-inbox-in", text: "Invoice arrived by email — starting recognition…" },
+    { icon: "fa-light fa-wand-magic-sparkles", text: "AI recognized 12 of 12 fields" },
+    { icon: "fa-light fa-code-compare", text: "Matched to PO-2291 — no variances" },
+    { icon: "fa-light fa-user-check", text: "Approved on mobile — full audit trail" },
+    { icon: "fa-light fa-circle-check", text: "Posted & archived — 0 manual touches" },
+  ];
+
+  // --- 2 · inbox -----------------------------------------------------------
+  // Six invoices arriving together and clearing themselves. Row i is recognized
+  // at beat i and posted two beats later, so the queue drains as a wave rather
+  // than all at once.
+  inboxDefs = [
+    { vendor: "Northwind Traders", amt: "€ 4,820.00" },
+    { vendor: "Fabrikam Inc.", amt: "€ 1,240.50" },
+    { vendor: "Contoso Ltd.", amt: "€ 612.00" },
+    { vendor: "Adatum Corp.", amt: "€ 9,310.75" },
+    { vendor: "Tailspin Toys", amt: "€ 2,054.20" },
+    { vendor: "Litware Inc.", amt: "€ 780.40" },
+  ];
+
+  // --- 3 · three-way match -------------------------------------------------
+  // Four invoice lines against PO-2291. Line 3 comes up short, the receipt
+  // explains it, and the line clears — which is the interesting case, and the
+  // one a person would otherwise have chased by hand.
+  matchDefs = [
+    { left: "Steel bracket · 120", right: "120 ordered", ok: 1 },
+    { left: "Hex bolt M8 · 500", right: "500 ordered", ok: 2 },
+    { left: "Washer 8 mm · 48", right: "50 ordered", ok: 4, flagAt: 3 },
+    { left: "Freight", right: "Agreed rate", ok: 5 },
+  ];
+
+  matchNotes = [
+    { icon: "fa-light fa-code-compare", text: "Matching invoice lines against PO-2291…", cls: "" },
+    { icon: "fa-light fa-code-compare", text: "Matching invoice lines against PO-2291…", cls: "" },
+    { icon: "fa-light fa-code-compare", text: "Matching invoice lines against PO-2291…", cls: "" },
+    { icon: "fa-light fa-triangle-exclamation", text: "Line 3 · 2 units short of the order", cls: " is-flag" },
+    { icon: "fa-light fa-box-check", text: "Receipt confirms 48 received — within tolerance", cls: " is-flag" },
+    { icon: "fa-light fa-circle-check", text: "4 of 4 lines matched", cls: " is-ok" },
+    { icon: "fa-light fa-circle-check", text: "4 of 4 lines matched · ready to post", cls: " is-ok" },
+  ];
+
+  // --- 4 · approval --------------------------------------------------------
+  // Invented names, like the rest of the mock's sample data. The elapsed times
+  // are the point: the routing is the slow part on paper and is not, here.
+  approverDefs = [
+    { initials: "ML", name: "Mia Lund", role: "Cost centre owner", took: "2 s" },
+    { initials: "JB", name: "Jonas Berg", role: "Finance manager", took: "1 s" },
+    { initials: "SR", name: "Sofia Reyes", role: "Controller · over € 2,500", took: "1 s" },
+  ];
+
+  componentDidMount() {
+    this._watchFooter();
+    // The video is the default hero now, so it has to be started on mount —
+    // componentDidUpdate only fires when the background is switched.
+    if (this.state.bg === 0) this._playHeroVideo();
+    // Respect reduced motion: land on each animation's finished state, never animate.
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { this.setState({ step: 4 }); return; }
+    this.heroTimer = setInterval(() => {
+      this.setState((s) => ({ step: (s.step + 1) % this.animLen[s.anim] }));
+    }, 1500);
+  }
+
+  // ⚠️ The runtime calls componentDidUpdate(prevProps) — there is NO prevState
+  // argument, so changes have to be tracked against fields of our own.
+  componentDidUpdate() {
+    if (this._seenBg !== this.state.bg) {
+      this._seenBg = this.state.bg;
+      if (this.state.bg === 0) this._playHeroVideo();
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.heroTimer);
+    document.removeEventListener("scroll", this._onFootScroll, { capture: true });
+    window.removeEventListener("resize", this._onFootScroll);
+  }
+
+  // Muted autoplay needs the PROPERTY set, not just the attribute, or Safari
+  // refuses. ⚠️ The runtime also drops the bare `loop` attribute — autoplay,
+  // muted and playsinline survive, loop does not — so the clip froze on its
+  // last frame. Set it as a property too.
+  _playHeroVideo() {
+    requestAnimationFrame(() => {
+      const v = document.querySelector(".dc-hero__vid");
+      if (!v) return;
+      v.loop = true;
+      v.muted = true;
+      v.setAttribute("muted", "");
+      const pr = v.play();
+      if (pr && pr.catch) pr.catch(() => {});
+    });
+  }
+
+  // The two switches sit on top of the footer's legal bar at the end of the
+  // page. ⚠️ An IntersectionObserver goes deaf here — the runtime replaces the
+  // footer node, and the observer keeps watching the detached one. Measure the
+  // rect on a rAF-throttled scroll instead, re-querying every time.
+  _watchFooter() {
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
+  }
+
+  scrollRail(dx) {
+    const el = document.querySelector(".dc-yt__strip");
+    if (el) el.scrollBy({ left: dx, behavior: "smooth" });
+  }
+
+  // Real Continia demo playlist, in the same order as continia.com/solutions/document-capture/
+  videos = [
+    { id: "s3E4a13SK38", title: "Welcome to the Document Capture solution demo" },
+    { id: "CM2c7MiZO2c", title: "Document Capture role center in Business Central" },
+    { id: "n4rIPYxx-V4", title: "Simple invoice" },
+    { id: "orrbRL_Lr_w", title: "Live invoice" },
+    { id: "1pIDsbEdHKM", title: "Order match" },
+    { id: "MUeP-5sBb6E", title: "Purchase contract match" },
+    { id: "XH5622LJ0mE", title: "Recognize and register XML" },
+    { id: "LTiga8DjGqE", title: "Approvals" },
+    { id: "yBRMd08pUM0", title: "Post, navigate and search" },
+  ];
+
+  renderVals() {
+    const cur = this.videos[this.state.vid];
+    const anim = this.state.anim;
+    const raw = this.state.step;
+    const step = Math.min(raw, 4);
+    const pad = (n) => (n < 10 ? "0" + n : "" + n);
+
+    // ---- 2 · inbox ----
+    const inboxRows = this.inboxDefs.map((r, i) => {
+      const s = raw >= i + 2 ? 2 : raw >= i ? 1 : 0;
+      return {
+        vendor: r.vendor, amt: r.amt,
+        chip: ["Queued", "Recognized", "Posted"][s],
+        chipCls: "dc-mock__qchip s" + s,
+        cls: "dc-mock__qrow" + (raw === i ? " is-new" : ""),
+      };
+    });
+    const posted = inboxRows.filter((r) => r.chip === "Posted").length;
+
+    // ---- 3 · three-way match ----
+    const matchRows = this.matchDefs.map((m) => {
+      const flagged = m.flagAt !== undefined && raw >= m.flagAt && raw < m.ok;
+      const ok = raw >= m.ok;
+      return {
+        left: m.left, right: m.right,
+        icon: ok ? "fa-solid fa-check" : flagged ? "fa-solid fa-exclamation" : "fa-light fa-minus",
+        cls: "dc-mock__mRow" + (ok ? " is-ok" : flagged ? " is-flag" : ""),
+      };
+    });
+    const note = this.matchNotes[Math.min(raw, this.matchNotes.length - 1)];
+
+    // ---- 4 · approval ----
+    const approvers = this.approverDefs.map((a, i) => {
+      const done = raw >= i + 2;
+      const live = raw === i + 1;
+      return {
+        initials: a.initials, name: a.name, role: a.role,
+        state: done ? "Approved · " + a.took : live ? "Reviewing" : "Waiting",
+        cls: "dc-mock__ap" + (done ? " is-done" : live ? " is-live" : ""),
+      };
+    });
+    const allApproved = approvers.every((a) => a.state.indexOf("Approved") === 0);
+
+    // The footer line belongs to whichever animation is on screen.
+    const foot = [
+      this.footings[step],
+      { icon: posted === this.inboxDefs.length ? "fa-light fa-circle-check" : "fa-light fa-inbox-in",
+        text: posted === this.inboxDefs.length
+          ? "Morning post cleared — 0 manual touches"
+          : "6 invoices arrived at 08:14 — clearing themselves" },
+      // deliberately NOT note.text — the note is already on the card, and
+      // repeating it verbatim two lines down read like a rendering bug
+      { icon: "fa-light fa-layer-group", text: "Three-way matched — invoice, order and receipt" },
+      { icon: allApproved ? "fa-light fa-circle-check" : "fa-light fa-user-check",
+        text: allApproved ? "Approved in 4 s — full audit trail" : "Routed automatically by amount and cost centre" },
+    ][anim];
+
+    return {
+      // ---- hero background: tech blue / smart green / Release R1 ----
+      heroCls: "dc-hero" + [" dc-hero--video", "", " dc-hero--green"][this.state.bg],
+      heroVideo: this.state.bg === 0,
+      cycleHeroBg: () => this.setState((s) => ({ bg: (s.bg + 1) % 3 })),
+      heroBgLabel: "Hero · " + ["Release R1", "Tech blue", "Smart green"][this.state.bg],
+
+      // ---- which mock animation is running ----
+      animPipeline: anim === 0,
+      animInbox: anim === 1,
+      animMatch: anim === 2,
+      animApproval: anim === 3,
+      // step resets with the animation, or a short one would start mid-story
+      cycleAnim: () => this.setState((s) => ({ anim: (s.anim + 1) % 4, step: 0 })),
+      animLabel: "Mock · " + ["Pipeline", "Inbox", "Match", "Approval"][anim],
+
+      // ---- 2 · inbox ----
+      inboxRows,
+      inboxPosted: 34 + posted,
+      inboxTotal: 40,
+      inboxMeter: "width:" + (((34 + posted) / 40) * 100).toFixed(0) + "%",
+
+      // ---- 3 · three-way match ----
+      matchRows,
+      matchNote: note.text,
+      matchNoteIcon: note.icon,
+      matchNoteCls: "dc-mock__mNote" + note.cls,
+      // the short line is genuinely 2 units under until the receipt explains it
+      matchVar: raw === 3 ? "− 2 units" : "€ 0.00",
+      matchVarCls: raw === 3 ? "" : "ok",
+
+      // ---- 4 · approval ----
+      approvers,
+      apDone: approvers.filter((a) => a.state.indexOf("Approved") === 0).length,
+      apElapsed: allApproved ? "4 s" : Math.max(0, raw - 1) + " s",
+      apElapsedCls: allApproved ? "ok" : "",
+
+      // ---- 1 · hero pipeline animation ----
+      stages: this.stages.map((name, i) => ({
+        name,
+        cls: "dc-mock__step" + (i === step ? " is-on" : i < step ? " is-done" : ""),
+      })),
+      progStyle: "width:" + ((step / (this.stages.length - 1)) * 100).toFixed(0) + "%",
+      docName: "Invoice_100482.pdf",
+      docBadge: step === 0 ? "Imported" : "OCR " + (step === 1 ? "reading" : "done"),
+      scanning: step === 0 || step === 1,
+      fields: this.fieldDefs.map((f) => ({
+        k: f.k,
+        v: f.v,
+        cls: "dc-mock__field" + (step >= f.at ? " is-filled" : ""),
+      })),
+      footIcon: foot.icon,
+      footText: foot.text,
+
+      // Storylane interactive demo — only mounted once the user asks for it
+      demoOpen: this.state.demoOpen,
+      demoClosed: !this.state.demoOpen,
+      demoSrc: "https://app.storylane.io/demo/ziteo65cpkss?embed=inline",
+      openDemo: () => this.setState({ demoOpen: true }),
+
+      // YouTube playlist. Autoplay only on an explicit click, never on first paint.
+      ytSrc: "https://www.youtube-nocookie.com/embed/" + cur.id + "?rel=0&modestbranding=1"
+        + (this.state.vid === 0 ? "" : "&autoplay=1"),
+      ytTitle: cur.title,
+      ytPos: (this.state.vid + 1) + " of " + this.videos.length,
+      ytTotal: this.videos.length,
+      ytScrollPrev: () => this.scrollRail(-536),
+      ytScrollNext: () => this.scrollRail(536),
+      ytThumbs: this.videos.map((v, i) => {
+        const on = i === this.state.vid;
+        return {
+          title: v.title,
+          aria: "Play chapter " + (i + 1) + ": " + v.title,
+          num: pad(i + 1),
+          // deliberately not "Chapter N" — Continia's own video art has its own
+          // burnt-in chapter numbers that skip the welcome video, so numbering
+          // here would contradict the thumbnails. The badge carries position.
+          state: on ? "Now playing" : "Watch now",
+          icon: on ? "fa-solid fa-volume-high" : "fa-solid fa-play",
+          thumb: "https://i.ytimg.com/vi/" + v.id + "/mqdefault.jpg",
+          cls: on ? "dc-yt__thumb is-on" : "dc-yt__thumb",
+          onClick: () => this.setState({ vid: i }),
+        };
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>
