@@ -39,20 +39,18 @@
       section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
       section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
     }
-    /* ---------- the mock's navy stroke ----------
-       On .cnt-popup itself, NOT a second absolutely-positioned box. The old
-       overlay hardcoded `border-radius: 16px` while the bundle clips the popup's
-       content at 14px, so its arc was rounder than the clip and the white body
-       poked out past the stroke in both bottom corners — invisible at the top,
-       where the navy title bar hides the same gap.
-       `outline` + a negative offset draws the stroke 3px inside the border box
-       without touching layout (a real `border` would add 6px, since .cnt-popup
-       is content-box with an auto height), and the outline follows the element's
-       own border-radius — so the stroke and the clip can never drift apart
-       again, whatever the bundle changes the radius to.
-       ⚠️ Scoped to the hero: .cnt-popup is a bundle component, and the price
-       calculator further down this page uses it too. */
-    .sol-hero-grid .cnt-popup { outline: 3px solid #052975; outline-offset: -3px; }
+    /* The mock carries NO stroke — removed on request 2026-08-17, the same call
+       as the solutions hero photo on 2026-08-06. It rests on the bundle's own
+       radius and shadow, and its corners are clean by construction because
+       .cnt-popup clips its content itself.
+       ⚠️ Do not reintroduce it as an absolutely-positioned overlay: that box has
+       to restate the radius, and the 16px it guessed was rounder than the 14px
+       the bundle actually clips to, so the white body poked out past the stroke
+       in both bottom corners. If a stroke is ever wanted again, put it on
+       .cnt-popup itself as `outline: Npx solid …; outline-offset: -Npx`, scoped
+       to .sol-hero-grid — an outline follows the element's own radius and costs
+       no layout, where a real border would add 2N px (.cnt-popup is content-box
+       with an auto height). */
 
     /* ================= Hero mock: three views behind one switch =================
        All three share ONE stage, so switching never moves the hero or the copy
