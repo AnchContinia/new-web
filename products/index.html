@@ -689,8 +689,13 @@
 class Component extends DCLogic {
   state = {
     solMore: false,
-    tick: 12,
-    mockView: 0,          // 0 Queue (default) · 1 Coverage · 2 Routing
+    // 0, not 12. componentDidMount resets this to 0 anyway once motion is on,
+    // so 12 only ever described the pre-mount frame — and for Queue the two are
+    // identical (12 % 4 === 0, and the phase is all that frame shows). For
+    // Coverage they are not: floor(12 / 3) % 5 === 4 opened the card on Document
+    // Output for one frame before the reset snapped it back to Document Capture.
+    tick: 0,
+    mockView: 1,          // 0 Queue · 1 Coverage (default) · 2 Routing
     tIndex: 0,
     tPage: 0,
     testiView: "duo",
