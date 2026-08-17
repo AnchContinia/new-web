@@ -268,7 +268,10 @@
     .sol-car__dot { box-sizing: content-box; width: 9px; height: 9px; padding: 8px; border: none;
       border-radius: 999px; cursor: pointer; background: rgba(255,255,255,0.35);
       background-clip: content-box; transition: background 200ms, transform 200ms; }
-    .sol-car__dot.on { background: #8ff8ff; transform: scale(1.25); }
+    /* ⚠️ `background-color`, NOT the `background` shorthand. The shorthand resets
+       background-clip to its initial border-box, so the active dot painted its
+       whole 25px hit area as a cyan blob while the inactive ones stayed 9px. */
+    .sol-car__dot.on { background-color: #8ff8ff; transform: scale(1.2); }
 
     @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } .sol-car__card { transition: none !important; } }
   

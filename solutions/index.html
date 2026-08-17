@@ -616,9 +616,12 @@ class Component extends DCLogic {
     // The pill stays 8px tall; the padding is invisible hit area, because
     // `background-clip: content-box` paints only the content box. They were
     // 22x8 and 8x8 buttons — nowhere near a thumb.
+    // ⚠️ `background-color`, NOT `background`. The shorthand resets
+    // background-clip to border-box, and since it came after the clip in this
+    // string every dot painted its full 24x28 hit area instead of the pill.
     const dotStyle = (active) => "height:8px;border-radius:999px;border:0;cursor:pointer;transition:all 250ms;" +
       "box-sizing:content-box;padding:10px 8px;background-clip:content-box;" +
-      (active ? "background:#052975;width:22px" : "background:#cdd4e3;width:8px");
+      (active ? "background-color:#052975;width:22px" : "background-color:#cdd4e3;width:8px");
     const tDots = [0, 1, 2, 3, 4].map((i) => ({
       label: "Go to testimonial " + (i + 1),
       onClick: () => this.setState({ tIndex: i }),
