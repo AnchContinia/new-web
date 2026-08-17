@@ -39,6 +39,21 @@
       section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
       section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
     }
+    /* ---------- the mock's navy stroke ----------
+       On .cnt-popup itself, NOT a second absolutely-positioned box. The old
+       overlay hardcoded `border-radius: 16px` while the bundle clips the popup's
+       content at 14px, so its arc was rounder than the clip and the white body
+       poked out past the stroke in both bottom corners — invisible at the top,
+       where the navy title bar hides the same gap.
+       `outline` + a negative offset draws the stroke 3px inside the border box
+       without touching layout (a real `border` would add 6px, since .cnt-popup
+       is content-box with an auto height), and the outline follows the element's
+       own border-radius — so the stroke and the clip can never drift apart
+       again, whatever the bundle changes the radius to.
+       ⚠️ Scoped to the hero: .cnt-popup is a bundle component, and the price
+       calculator further down this page uses it too. */
+    .sol-hero-grid .cnt-popup { outline: 3px solid #052975; outline-offset: -3px; }
+
     /* ================= Hero mock: three views behind one switch =================
        All three share ONE stage, so switching never moves the hero or the copy
        beside it. The min-height is on .sol-mock (the whole white body) rather
@@ -96,12 +111,20 @@
     .sol-cov__name { font-size: 16px; font-weight: 700; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     /* The product's own tagline, verbatim from `this.solutions` — the same
        sentence its card carries further down the page. */
-    .sol-cov__tag { font-size: 13px; line-height: 1.5; color: #3a4a6b; margin-top: 14px; }
-    .sol-cov__steps { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+    .sol-cov__tag { font-size: 13.5px; line-height: 1.5; color: #3a4a6b; margin-top: 14px; }
+    /* The three lines carry the view, so they get the room. Each is a real row
+       with its own padding and a hairline above it — that spends the slack the
+       shared 360px floor leaves over Coverage on structure instead of on air. */
+    .sol-cov__steps { display: flex; flex-direction: column; margin-top: 16px; }
     /* Each line fades up as the beat reaches it, so the card reveals rather than
        appearing whole. The dim state is still legible, not invisible. */
-    .sol-cov__step { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #687590; opacity: 0.38; transform: translateY(5px); transition: opacity 420ms ease, transform 420ms cubic-bezier(0.16,1,0.3,1), color 420ms ease; }
-    .sol-cov__step > i { font-size: 15px; width: 17px; text-align: center; flex: none; color: #cdd4e3; transition: color 420ms ease; }
+    .sol-cov__step { display: flex; align-items: center; gap: 12px; padding: 13px 0; font-size: 14.5px; color: #687590; opacity: 0.38; transform: translateY(5px); transition: opacity 420ms ease, transform 420ms cubic-bezier(0.16,1,0.3,1), color 420ms ease; }
+    /* ⚠️ NOT `.sol-cov__step + .sol-cov__step` — sc-for sometimes wraps each
+       iteration in a display:contents DIV, and then the steps are not siblings
+       and the divider silently never draws (trap 5). The modifier comes off the
+       loop index in renderVals, which works in both DOM shapes. */
+    .sol-cov__step--div { border-top: 1px solid #eef1f6; }
+    .sol-cov__step > i { font-size: 17px; width: 19px; text-align: center; flex: none; color: #cdd4e3; transition: color 420ms ease; }
     .sol-cov__step.on { opacity: 1; transform: none; color: #3a4a6b; }
     .sol-cov__step.on > i { color: #4c7e71; }
     /* `margin-top: auto` pins the bar to the base of the card. Coverage is the
@@ -289,7 +312,13 @@
       </div>
 
       <div style="position: relative; min-width: 0">
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" style="box-shadow: 0 30px 70px rgba(2,12,40,0.14), 0 10px 26px rgba(2,12,40,0.08); border-radius: 16px" hint-size="100%,440px">
+        <!-- ⚠️ A `style` attribute on an x-import never reaches the component:
+             the runtime gives the host `display: contents` and drops it. This
+             one asked for a box-shadow and `border-radius: 16px`, and neither
+             ever applied — the shadow you see is the bundle's own, and the
+             popup clips at 14px. Removed rather than left to mislead; it was
+             the 16px here that the old stroke overlay was copied from. -->
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" hint-size="100%,440px">
           <div class="sol-mock">
             <!-- 1 · QUEUE — the stage counters across the top -->
             <sc-if value="{{ mockQueue }}" hint-placeholder-val="{{ true }}">
@@ -376,7 +405,11 @@
             </div>
           </div>
         </x-import>
-        <div style="position: absolute; inset: 0; border: 3px solid #052975; border-radius: 16px; pointer-events: none; z-index: 10"></div>
+        <!-- The navy stroke used to be a separate absolutely-positioned div at
+             border-radius: 16px. `.cnt-popup` clips its content at 14px, so the
+             stroke's arc was rounder than the clip and the white body poked out
+             past it in both bottom corners. It lives on .cnt-popup itself now —
+             see .sol-hero-grid .cnt-popup in the <style> block. -->
       </div>
     </div>
   </section>
@@ -933,7 +966,7 @@ class Component extends DCLogic {
     const covProd = this.railDefs[covIdx], covData = this.covDefs[covIdx];
     const covSteps = covData.lines.map((text, i) => ({
       text,
-      cls: "sol-cov__step" + (i <= covStep ? " on" : ""),
+      cls: "sol-cov__step" + (i ? " sol-cov__step--div" : "") + (i <= covStep ? " on" : ""),
       icon: i <= covStep ? "fa-light fa-circle-check" : "fa-light fa-circle",
     }));
     const covBarStyle = "width:" + Math.round(((covStep + 1) / COV_BEATS) * 100) + "%";
