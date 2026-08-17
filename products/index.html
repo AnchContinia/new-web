@@ -39,6 +39,21 @@
       section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
       section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
     }
+    /* ---------- Hero mock: a queue that never finishes ---------- */
+    /* The old loop marched all five rows to Posted and then sat there for half
+       its cycle — the still frame is what made it look dead. Documents now
+       arrive and clear continuously, so there is always a mix on screen. */
+    .bc-row { position: relative; }
+    /* a fresh document dropping into the slot the posted one just left */
+    .bc-row.is-new { animation: bcIn 520ms cubic-bezier(0.16,1,0.3,1) both; }
+    @keyframes bcIn { from { opacity: 0; transform: translateY(-9px); } to { opacity: 1; transform: none; } }
+    /* the beat a document posts, its row washes green and settles */
+    .bc-row.is-posted { animation: bcPost 900ms ease-out both; }
+    @keyframes bcPost { 0% { background: #dcece6; } 100% { background: transparent; } }
+    @media (prefers-reduced-motion: reduce) {
+      .bc-row.is-new, .bc-row.is-posted { animation: none; }
+    }
+
     /* ---------- Hero: the pricing page's sky video, same treatment ---------- */
     /* Overlay is lifted verbatim from pricing's .pr3__ovl — darkest on the left
        where the copy sits, lightest on the right where the white mock does. */
@@ -185,7 +200,7 @@
               </div>
               <div style="flex: 1; display: flex; flex-direction: column; min-width: 0">
                 <sc-for list="{{ heroRows }}" as="r" hint-placeholder-count="5">
-                  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #eef1f6">
+                  <div class="{{ r.cls }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #eef1f6">
                     <i class="fa-light fa-file-invoice" style="color: #052975; font-size: 18px; flex: none"></i>
                     <div style="display: flex; flex-direction: column; gap: 1px; flex: 1 1 auto; min-width: 0; overflow: hidden">
                       <span style="font-size: 13px; font-weight: 600; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.doc }}</span>
@@ -197,7 +212,7 @@
                 </sc-for>
                 <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #f6f8fb; font-size: 12.5px; color: #3a4a6b; margin-top: auto">
                   <i class="fa-light fa-circle-check" style="color: #5f9e8d"></i>
-                  <span><strong style="font-variant-numeric: tabular-nums; color: #052975">{{ heroPosted }}</strong> of 5 posted automatically · 0 manual touches</span>
+                  <span><strong style="font-variant-numeric: tabular-nums; color: #052975">{{ heroPosted }}</strong> posted automatically · 0 manual touches</span>
                 </div>
               </div>
             </div>
@@ -491,12 +506,21 @@ class Component extends DCLogic {
   };
 
 
+  // Nine, not five: each slot pulls the next one off the pool as its current
+  // document clears, so vendors and amounts keep turning over instead of the
+  // same five rows cycling in place.
   heroDocs = [
     { doc: "Invoice 100482", vendor: "Northwind Traders", amt: "€ 4,820.00" },
     { doc: "Invoice 100483", vendor: "Fabrikam Inc.", amt: "€ 1,240.50" },
     { doc: "Credit memo 5521", vendor: "Contoso Ltd.", amt: "€ 612.00" },
     { doc: "Invoice 100484", vendor: "Adatum Corp.", amt: "€ 9,310.75" },
     { doc: "Invoice 100485", vendor: "Tailspin Toys", amt: "€ 2,054.20" },
+    { doc: "Invoice 100486", vendor: "Litware Inc.", amt: "€ 780.40" },
+    { doc: "Invoice 100487", vendor: "Proseware GmbH", amt: "€ 15,900.00" },
+    { doc: "Credit memo 5522", vendor: "Wide World Traders", amt: "€ 1,088.60" },
+    { doc: "Invoice 100488", vendor: "Fourth Coffee ApS", amt: "€ 342.75" },
+    { doc: "Invoice 100489", vendor: "Alpine Ski House", amt: "€ 6,415.00" },
+    { doc: "Invoice 100490", vendor: "Lucerne Publishing", amt: "€ 2,980.25" },
   ];
 
   stages = [
@@ -525,7 +549,14 @@ class Component extends DCLogic {
     { q: "The most beneficial thing about Document Capture has been reducing the paperwork and making our processes fully digital. The whole approval process is integrated within Business Central. From a user perspective, our approvers have saved so much time in decision-making. It's very easy to use.", ini: "TN", name: "Tristan Nardini", role: "Accountant · Hat Trick Productions", qsize: 17 },
   ];
 
-  get motionOn() { return this.props.motion !== false; }
+  // ⚠️ This only read the `motion` prop, so prefers-reduced-motion stopped the
+  // CSS animations but left the 900 ms timer running — the mock still churned.
+  // The media query gates the timer too now; renderVals falls back to a static
+  // tick that still shows all four stages at once.
+  get motionOn() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    return this.props.motion !== false;
+  }
 
   // Muted autoplay needs the PROPERTY set, not just the attribute, or Safari
   // refuses. ⚠️ The runtime also drops the bare `loop` attribute — autoplay,
@@ -549,9 +580,11 @@ class Component extends DCLogic {
 
     if (this.motionOn) {
       this.setState({ tick: 0 });
+      // Runs on, rather than resetting at 13 — the reset was a hard snap from
+      // all-Posted back to all-Imported, and the beats before it were static.
       this.heroTimer = setInterval(() => {
-        this.setState((s) => ({ tick: s.tick > 12 ? 0 : s.tick + 1 }));
-      }, 730);
+        this.setState((s) => ({ tick: s.tick + 1 }));
+      }, 900);
       this.tTimer = setInterval(() => {
         if (!this.tPaused) this.setState((s) => ({ tIndex: (s.tIndex + 1) % 5 }));
       }, 6500);
@@ -620,19 +653,34 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const tick = this.motionOn ? this.state.tick : 12;
-    const stageOf = (i) => Math.max(0, Math.min(3, tick - i));
+    // Five slots, each running its own document through the four stages one beat
+    // at a time. The +i offset staggers them into a wave down the table, so the
+    // counts are always a spread and no frame is ever the finished state.
+    const tick = this.motionOn ? this.state.tick : 1;
+    const SLOTS = 5, PHASES = this.stages.length;   // 4: imported → posted
+    const phaseOf = (i) => (tick + i) % PHASES;
 
-    const heroRows = this.heroDocs.map((r, i) => {
-      const st = this.stages[stageOf(i)];
+    const heroRows = Array.from({ length: SLOTS }, (_, i) => {
+      const ph = phaseOf(i);
+      const st = this.stages[ph];
+      // A slot takes the next document off the pool each time its current one
+      // clears. ⚠️ The pool is 11 — prime, and larger than SLOTS — on purpose:
+      // with 5 slots and 4 phases two slots always share a phase, and any
+      // shorter pool eventually handed both the same document. i + 5k (mod 11)
+      // can only repeat when i repeats, so two rows never show one invoice.
+      const doc = this.heroDocs[(i + SLOTS * Math.floor((tick + i) / PHASES)) % this.heroDocs.length];
       return {
-        ...r,
+        ...doc,
         label: st.label,
+        cls: "bc-row" + (ph === 0 ? " is-new" : ph === PHASES - 1 ? " is-posted" : ""),
         chipStyle: "font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;min-width:88px;text-align:center;flex:none;transition:background 300ms,color 300ms;background:" + st.bg + ";color:" + st.fg,
       };
     });
     const counts = [0, 0, 0, 0];
-    this.heroDocs.forEach((r, i) => { counts[stageOf(i)]++; });
+    for (let i = 0; i < SLOTS; i++) counts[phaseOf(i)]++;
+    // Counts what the visitor has actually watched clear: five slots complete a
+    // document every four beats between them.
+    const postedSoFar = Math.floor(((tick + 1) * SLOTS) / PHASES);
     const stageBar = this.stages.map((s, idx) => ({
       label: s.label,
       n: counts[idx],
@@ -687,7 +735,7 @@ class Component extends DCLogic {
       btnArrow: { iconRight: React.createElement("i", { className: "fa-light fa-arrow-right" }) },
       heroRows,
       stageBar,
-      heroPosted: counts[3],
+      heroPosted: postedSoFar,
       cardsShown,
       cardsGridStyle: "--cw:" + (this.state.solMore ? "calc(25% - 15px)" : "calc(33.333% - 14px)"),
       toggleSolMore: () => this.setState((s) => ({ solMore: !s.solMore })),
