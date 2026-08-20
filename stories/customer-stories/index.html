@@ -110,6 +110,19 @@
     @media (max-width: 640px) {
       section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
     }
+      /* CTA watermark, phones and tablets. Desktop keeps width-sizing: its band is
+       wide (aspect 2.72), so `width: 120%` covers 2.04x the band and the copy sits
+       over the middle of the artwork. Below 821px the band turns portrait (0.74 at
+       390px) and the same 120% collapsed coverage to 0.56x — only the artwork's top
+       edge peeked in at the bottom, reading as a stray rectangle. Sizing by HEIGHT
+       instead resolves against the same containing block at any width. 115% is
+       Andreas's Photoshop crop: the zoom at which the mark's two vertical strokes
+       are still inside the frame, which is what gives the band its structure.
+       ⚠️ `!important` is load-bearing — the value it overrides is inline on the
+       <img>, and inline beats any media query without it (trap 17). */
+    @media (max-width: 820px) {
+      section[data-screen-label$="CTA"] > img { width: auto !important; height: 115% !important; }
+    }
   </style>
 </helmet>
 
