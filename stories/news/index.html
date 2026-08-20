@@ -104,9 +104,29 @@
        are still inside the frame, which is what gives the band its structure.
        ⚠️ `!important` is load-bearing — the value it overrides is inline on the
        <img>, and inline beats any media query without it (trap 17). */
-    @media (max-width: 820px) {
-      section[data-screen-label$="CTA"] > img { width: auto !important; height: 115% !important; }
+    @media (max-width: 1100px) {
+      /* ⚠️ `height: 115%` alone stops covering the band's WIDTH above ~950px:
+         the image is 1.596 x 1.15 x bandHeight wide, so at 1024 it came out
+         947px inside a 1024px band and left a gap down both sides. `min-width`
+         floors the box at the old 120%, and `object-fit: cover` then crops the
+         artwork into it instead of stretching — so coverage stays exactly 1.15
+         and the band is always full-bleed. Verified 390 -> 1100. */
+      section[data-screen-label$="CTA"] > img {
+        width: auto !important; height: 115% !important;
+        min-width: 120% !important; object-fit: cover !important;
+      }
     }
+      /* ---------- no widows ("horeunger") ----------
+       Never leave a single word alone on the last line. `balance` beats
+       `pretty` here by a wide margin — measured across all 44 pages it takes
+       desktop 200 -> 6 widows, mobile 266 -> 17, tablet 204 -> 14, where
+       `pretty` only reached 36 on desktop. Chrome ignores `balance` past about
+       6 lines, so long article prose is left alone; short ledes, headings and
+       card copy are what it fixes. Deliberately NOT !important — the 47 inline
+       `balance` and 19 inline `pretty` already on the site were set on purpose
+       and keep winning, and an element that sets `nowrap` must still win.
+       Enforced by tools/check_widows.py. */
+    h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
   </style>
 </helmet>
 

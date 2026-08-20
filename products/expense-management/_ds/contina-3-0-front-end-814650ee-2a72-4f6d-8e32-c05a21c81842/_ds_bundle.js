@@ -1560,7 +1560,7 @@ const CSS = `
 .cnt-siteheader__inner { max-width: var(--layout-content-max, 1360px); margin: 0 auto; padding: 14px var(--layout-page-pad, 28px); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 28px; }
 .cnt-siteheader__logo { display: flex; flex: none; justify-self: start; }
 .cnt-siteheader__nav { display: flex; gap: 4px; justify-self: center; min-width: 0; }
-.cnt-siteheader__link { font-size: 15px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; padding: 8px 12px; display: inline-flex; align-items: center; gap: 7px; transition: color var(--dur-base) var(--ease-standard); }
+.cnt-siteheader__link { white-space: nowrap; font-size: 15px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; padding: 8px 12px; display: inline-flex; align-items: center; gap: 7px; transition: color var(--dur-base) var(--ease-standard); }
 .cnt-siteheader__link:hover { color: var(--c-tech-blue); }
 .cnt-siteheader__link i { font-size: 11px; opacity: 0.55; }
 /* No padding-bottom override here. The nav row stretches every link to the same height, so trimming the bottom padding never moved the underline (box-shadow: inset draws on the border box) — it only pushed the active label 2.5px down, which read as the current page sitting a notch lower. */
@@ -1574,13 +1574,13 @@ const CSS = `
 .cnt-siteheader__dropitem { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; white-space: nowrap; transition: background 150ms, color 150ms; }
 .cnt-siteheader__dropitem:hover { background: var(--c-light-blue); color: var(--c-tech-blue); }
 .cnt-siteheader__dropitem i { width: 22px; text-align: center; color: var(--c-tech-blue); font-size: 17px; }
-@media (max-width: 980px) { .cnt-siteheader__navitem { display: block; } .cnt-siteheader__mobile .cnt-siteheader__dropdown { position: static; transform: none; opacity: 1; visibility: visible; display: grid; min-width: 0; margin: 2px 0 10px; padding: 4px 0 4px 15px; background: transparent; border: none; border-left: 2px solid var(--color-border); border-radius: 0; box-shadow: none; } .cnt-siteheader__mobile .cnt-siteheader__dropdown::before { display: none; } .cnt-siteheader__mobile .cnt-siteheader__dropitem { white-space: normal; } .cnt-siteheader__macc { display: block; } .cnt-siteheader__macc-btn { width: 100%; background: none; border: 0; cursor: pointer; font-family: inherit; justify-content: flex-start; gap: 0; text-align: left; } .cnt-siteheader__macc-btn i { margin-left: auto; opacity: 0.6; transition: transform 200ms var(--ease-standard); } .cnt-siteheader__macc.open .cnt-siteheader__macc-btn i { transform: rotate(180deg); } }
+@media (max-width: 1100px) { .cnt-siteheader__navitem { display: block; } .cnt-siteheader__mobile .cnt-siteheader__dropdown { position: static; transform: none; opacity: 1; visibility: visible; display: grid; min-width: 0; margin: 2px 0 10px; padding: 4px 0 4px 15px; background: transparent; border: none; border-left: 2px solid var(--color-border); border-radius: 0; box-shadow: none; } .cnt-siteheader__mobile .cnt-siteheader__dropdown::before { display: none; } .cnt-siteheader__mobile .cnt-siteheader__dropitem { white-space: normal; } .cnt-siteheader__macc { display: block; } .cnt-siteheader__macc-btn { width: 100%; background: none; border: 0; cursor: pointer; font-family: inherit; justify-content: flex-start; gap: 0; text-align: left; } .cnt-siteheader__macc-btn i { margin-left: auto; opacity: 0.6; transition: transform 200ms var(--ease-standard); } .cnt-siteheader__macc.open .cnt-siteheader__macc-btn i { transform: rotate(180deg); } }
 .cnt-siteheader__actions { display: flex; align-items: center; gap: 14px; flex: none; justify-self: end; }
-.cnt-siteheader__find { font-size: 14px; }
+.cnt-siteheader__find { white-space: nowrap; font-size: 14px; }
 .cnt-siteheader__find i { font-size: 13px; opacity: 1; }
 .cnt-siteheader__burger { display: none; background: none; border: 0; font-size: 20px; color: var(--c-tech-blue); cursor: pointer; padding: 6px; }
 .cnt-siteheader__mobile { display: none; }
-@media (max-width: 980px) {
+@media (max-width: 1100px) {
   .cnt-siteheader__inner { display: flex; justify-content: space-between; }
   .cnt-siteheader__nav, .cnt-siteheader__find { display: none; }
   /* 44x44 minimum. It was 37x35 (20px glyph + 6px padding) — the one
