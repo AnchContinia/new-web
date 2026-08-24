@@ -256,10 +256,12 @@
     @media (max-width: 640px) {
       /* the active card is ~437px tall inside a 422px stage, so it bleeds ~7px
          past each end — these clearances are measured from the card, not the stage */
-      /* 116, was 88. The nav and dots hang off the bottom of .sol-car, so the
-         padding is what sets their clearance from the card — 23px read as
-         crowded against a 437px card. Now 51px. */
-      .sol-car { margin-top: 34px; padding-bottom: 116px; }
+      /* 96, was 88. The nav and dots hang off the bottom of .sol-car, so this
+         padding sets their clearance from the card — and the stage now sizes
+         itself to the TALLEST card, which adds slack of its own when the active
+         one is shorter. Together they land the gap at 43-60px across 320-430px,
+         against the 23px (and, at 320px, an 11px overlap) it used to be. */
+      .sol-car { margin-top: 34px; padding-bottom: 96px; }
       .sol-car__nav { top: auto; bottom: 14px; transform: none; width: 44px; height: 44px; }
       .sol-car__nav:hover { transform: scale(1.06); background: #def5ff; }
       .sol-car__nav--prev { left: 18px; right: auto; }
@@ -267,6 +269,19 @@
       /* 24px lines the dots up with the centre of the 44px arrows, now that each
          dot sits inside a 25px box (was 32px against a bare 9px dot) */
       .sol-car__dots { position: absolute; bottom: 24px; left: 0; right: 0; margin-top: 0; }
+    }
+    /* ⚠️ The stage is a fixed height but the CARD is not: the description wraps
+       more as the card narrows, so it grows from 437px at 370px wide to 471,
+       497, 533 and 560 as the viewport shrinks to 318 — five thresholds, none
+       of them round numbers. It bled out of the 422px stage, and since the
+       clearance below is measured from the CARD it silently collapsed: 51px at
+       375+, 20px at 360, and at 320 the card actually OVERLAPPED the arrows by
+       11px. A ladder of media queries chasing text-wrap thresholds is brittle,
+       so the dc-script measures the tallest card and publishes it here.
+       Must sit after the base .sol-car__stage rule — a media query adds no
+       specificity and would lose on source order up there (trap 18). */
+    @media (max-width: 640px) {
+      .sol-car__stage { height: var(--car-stage-h, 422px); }
     }
     /* The dot stays 9px; the button becomes 25x25. `background-clip: content-box`
        paints only the content box, so the padding is invisible hit area rather
@@ -653,11 +668,39 @@ class Component extends DCLogic {
     // bundle's own SiteHeader `--scrolled` modifier does it now that BODY is no
     // longer the scroll container.)
     // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
-    this._onResize = () => this.setState({});
+    this._onResize = () => { this.setState({}); this._syncCarStage(); };
     window.addEventListener("resize", this._onResize, { passive: true });
     this._setupSwipe();
+    this._syncCarStage();
     if (this.state.heroView !== 2) this._playHeroVideo();
     this._watchFooter();
+  }
+
+  // Size the carousel stage to its tallest card. The cards are absolutely
+  // positioned, so the stage cannot grow with them on its own, and the card
+  // grows unpredictably as its description rewraps on narrow phones.
+  // ⚠️ offsetHeight, NOT getBoundingClientRect().height — every inactive card
+  // carries a scale() and rotateY(), and a bounding rect measures the
+  // transformed box. offsetHeight is the layout height and ignores transforms.
+  // ⚠️ The value goes on documentElement, which is outside the dc render tree
+  // and therefore survives a re-render; an inline height set on the stage
+  // itself would be wiped by the next renderVals() pass (same reasoning as the
+  // `cnt-footer-in-view` body class).
+  _syncCarStage() {
+    const measure = () => {
+      const cards = [...document.querySelectorAll(".sol-car__card")];
+      if (!cards.length) return;
+      const tallest = Math.max(...cards.map((el) => el.offsetHeight));
+      document.documentElement.style.setProperty("--car-stage-h", Math.ceil(tallest + 10) + "px");
+    };
+    requestAnimationFrame(measure);
+    // ⚠️ Measure again once the webfont has swapped in. Alliance No.2 loads
+    // after first paint, the descriptions rewrap taller when it does, and a
+    // single rAF pass locked in the fallback font's shorter layout — at 430px
+    // that left the stage 20px SHORTER than the card it was meant to fit.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => requestAnimationFrame(measure)).catch(() => {});
+    }
   }
 
   // Swipe the solutions carousel on touch. ⚠️ Listeners go on `document` with
