@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modernize your purchase-to-pay process — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<!--
+THESIS: A purchase invoice's cost is its handovers, not its work. This page counts
+them, closes them one at a time, and refuses the product-grid arrangement every
+"solution" page in this category ships.
+OWN-WORLD: Continia's committed system — Tech Blue grounds, cyan as the signal that
+something now runs by itself, pill controls, blue-tinted shadows, wide-tracked caps
+only where the brand already uses them.
+STORY: The reader recognizes their own relay, sees which three handovers a machine
+absorbs, and learns the one that stays is not theirs.
+FIRST VIEWPORT: Navy band. Headline naming four handovers, lead beneath, then the
+five-actor chain full width with its four gaps marked. Primary action under the chain.
+FORM: The Relay — index 5 of 7, dealt lead. Seed key 82e45a17.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish
+review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
+-->
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+     overflow-y to auto, which made BODY the scroller: window.scrollY stuck at 0,
+     window never fired `scroll`, and the sticky header unstuck after ~840px.
+     `clip` clips the same way without creating a scroll box. (trap 6) */
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
+  a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
+  a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
+  ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
+
+  /* ============================================================
+     THE CHAIN — one component, two states.
+     The whole page rests on this: the hero states the debt, three
+     sections each close one gap, and the closing band redraws the
+     SAME component in its `after` state. Built as two components it
+     would stop being a redraw and start being a second picture, and
+     the argument dies with it.
+     ============================================================ */
+  .rl-chain { list-style: none; margin: 0; padding: 0; display: flex; align-items: flex-start; }
+  .rl-node { flex: 0 0 auto; width: 96px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  /* Every node is a 96px box with a 56px icon centred in it, which would inset
+     the chain 20px from the grid the headline, lead and buttons all start on.
+     The two end nodes align to the edge instead; the ones between stay centred. */
+  .rl-chain > .rl-node:first-child { align-items: flex-start; text-align: left; }
+  .rl-chain > .rl-node:last-child { align-items: flex-end; text-align: right; }
+  .rl-node__ico { width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; }
+  .rl-node__nm { font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+  .rl-link { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 9px; padding-top: 17px; }
+  /* The rail is the gap made visible. Dashed = a person carries it across;
+     solid = it carries itself. The cyan overlay wipes in on scaleX, so the
+     close costs no layout (a `transition: width` here is the flagged version
+     of this same idea). */
+  .rl-link__rail { position: relative; width: 100%; height: 2px; border-radius: 2px; }
+  .rl-link__rail::before { content: ""; position: absolute; inset: 0; border-radius: 2px; background-image: linear-gradient(to right, currentColor 0 7px, transparent 7px 14px); background-size: 14px 2px; transition: opacity 360ms cubic-bezier(0.16,1,0.3,1); }
+  .rl-link__rail::after { content: ""; position: absolute; inset: 0; border-radius: 2px; background-color: var(--c-innovation-blue); transform: scaleX(0); transform-origin: left center; transition: transform 360ms cubic-bezier(0.16,1,0.3,1); }
+  .rl-link__mark { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; margin-top: -13px; border-radius: 50%; font-size: 11px; transition: opacity 300ms cubic-bezier(0.4,0,0.2,1); }
+  .rl-link__lbls { position: relative; width: 100%; }
+  .rl-link__lbl { display: block; font-size: 12.5px; line-height: 1.35; text-align: center; transition: opacity 300ms cubic-bezier(0.4,0,0.2,1); }
+  .rl-link__lbl--after { position: absolute; inset: 0; opacity: 0; }
+  /* The three closable gaps stagger so the redraw reads left to right —
+     the same direction the invoice travels. */
+  .rl-link[data-gap="1"] .rl-link__rail::after { transition-delay: 0ms; }
+  .rl-link[data-gap="2"] .rl-link__rail::after { transition-delay: 140ms; }
+  .rl-link[data-gap="3"] .rl-link__rail::after { transition-delay: 280ms; }
+  .rl-link[data-gap="2"] .rl-link__lbl, .rl-link[data-gap="2"] .rl-link__mark { transition-delay: 140ms; }
+  .rl-link[data-gap="3"] .rl-link__lbl, .rl-link[data-gap="3"] .rl-link__mark { transition-delay: 280ms; }
+
+  /* --- chain on navy --- */
+  .rl-chain--dark .rl-node__ico { background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; }
+  .rl-chain--dark .rl-node__nm { color: #ffffff; }
+  .rl-chain--dark .rl-link__rail { color: #7f93c4; }
+  .rl-chain--dark .rl-link__mark { background: #123a8f; border: 1px solid #3f62aa; color: #cdd4e3; }
+  .rl-chain--dark .rl-link__lbl { color: #cdd4e3; }
+  .rl-chain--dark .rl-link--keep .rl-link__rail { color: #aab4c8; }
+
+  /* --- the redraw: same component, second state --- */
+  body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__rail::after { transform: scaleX(1); }
+  body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__rail::before { opacity: 0; }
+  body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__mark { opacity: 0; }
+  body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__lbl--before { opacity: 0; }
+  body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__lbl--after { opacity: 1; color: var(--c-innovation-blue); }
+
+  /* --- mini chain: the section header's position marker --- */
+  .rl-mini { list-style: none; margin: 0 0 20px; padding: 0; display: flex; align-items: center; width: min(320px,100%); }
+  .rl-mini__node { flex: 0 0 auto; width: 9px; height: 9px; border-radius: 50%; background: #cdd4e3; }
+  .rl-mini__link { flex: 1 1 0; height: 2px; border-radius: 2px; color: #cdd4e3; background-image: linear-gradient(to right, currentColor 0 5px, transparent 5px 10px); background-size: 10px 2px; }
+  .rl-mini__link.on { color: var(--c-tech-blue); height: 3px; background-image: none; background-color: var(--c-tech-blue); }
+  .rl-mini__node.on { background: var(--c-tech-blue); width: 11px; height: 11px; }
+  /* A gap this page has already closed reads solid and thin: no longer dashed,
+     not yet the current one. Cyan is the closed-gap signal on navy, but it
+     disappears on these light grounds, so weight carries it here instead. */
+  .rl-mini__link.done { color: var(--c-tech-blue); background-image: none; background-color: var(--c-tech-blue); }
+  .rl-mini__node.done { background: var(--c-tech-blue); }
+
+  /* ---------- Hero ---------- */
+  .rl-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,8vw,112px) clamp(20px,4vw,44px) clamp(64px,7vw,92px); }
+  .rl-hero::before { content: ""; position: absolute; right: -14%; top: -34%; width: 660px; height: 660px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(143,248,255,0.20), transparent 62%); pointer-events: none; }
+  .rl-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
+  .rl-hero h1 { margin: 0; max-width: 20ch; font-size: clamp(36px,4.3vw,60px); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; }
+  .rl-hero h1 .hl { color: var(--c-innovation-blue); }
+  .rl-hero__lead { margin: 24px 0 0; max-width: 56ch; font-size: 1.1875rem; line-height: 1.6; color: #dfe6f4; }
+  .rl-hero__chain { margin: clamp(44px,5vw,64px) 0 0; }
+  .rl-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: clamp(40px,4vw,52px); }
+  .rl-hero__proof { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 26px; font-size: 14.5px; color: #cdd4e3; }
+  .rl-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
+  .rl-hero__proof i { color: var(--c-innovation-blue); font-size: 15px; }
+
+  /* ---------- Handover sections ---------- */
+  .rl-ho { padding: clamp(72px,7vw,104px) clamp(20px,4vw,44px); }
+  .rl-ho--alt { background: #f6f8fb; }
+  .rl-ho__in { max-width: 1240px; margin: 0 auto; }
+  .rl-ho__head { max-width: 62ch; }
+  .rl-ho__route { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #3a4a6b; display: flex; align-items: center; gap: 9px; }
+  .rl-ho__route i { font-size: 11px; color: #8193b9; }
+  .rl-ho h2 { margin: 14px 0 0; font-size: clamp(28px,2.6vw,40px); font-weight: 700; line-height: 1.14; letter-spacing: -0.02em; color: var(--c-tech-blue); }
+  .rl-ho__cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,3.4vw,56px); margin-top: clamp(34px,3.6vw,48px); align-items: start; }
+  .rl-ho__col { min-width: 0; }
+  .rl-ho__lbl { margin: 0 0 16px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #3a4a6b; }
+  /* Today's column carries no icons on purpose: the absence is the point, and
+     the checkmarks opposite it are the only glyphs on the row. */
+  .rl-today { list-style: none; margin: 0; padding: 0; }
+  .rl-today li { padding: 15px 0; max-width: 64ch; border-top: 1px solid #dde3ee; font-size: 15.5px; line-height: 1.6; color: #3a4a6b; }
+  .rl-today li:first-child { border-top: 0; padding-top: 0; }
+  .rl-take { background: #ffffff; border: 1px solid #dde3ee; border-radius: 16px; box-shadow: 0 8px 24px rgba(5,41,117,0.10); padding: clamp(24px,2.4vw,32px); }
+  .rl-ho--alt .rl-take { box-shadow: 0 8px 24px rgba(5,41,117,0.08); }
+  .rl-take__who { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-tech-blue); }
+  .rl-take__what { margin: 12px 0 0; max-width: 64ch; font-size: 15.5px; line-height: 1.6; color: #3a4a6b; }
+  .rl-take__list { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 11px; }
+  .rl-take__list li { display: flex; gap: 11px; max-width: 66ch; font-size: 15px; line-height: 1.55; color: #0a1838; }
+  .rl-take__list i { flex: none; margin-top: 3px; font-size: 15px; color: #5f9e8d; }
+  .rl-take__mods { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding-top: 20px; border-top: 1px solid #dde3ee; }
+  .rl-take__mods span { font-size: 12.5px; font-weight: 600; line-height: 1; padding: 6px 12px; border-radius: 999px; background: var(--c-light-blue); color: var(--c-tech-blue); }
+
+  /* ---------- The redraw ---------- */
+  .rl-redraw { position: relative; overflow: hidden; background: #041e58; color: #fff; padding: clamp(80px,8vw,120px) clamp(20px,4vw,44px); }
+  .rl-redraw::before { content: ""; position: absolute; left: -10%; bottom: -46%; width: 720px; height: 720px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, rgba(143,248,255,0.14), transparent 64%); pointer-events: none; }
+  .rl-redraw__in { position: relative; max-width: 1240px; margin: 0 auto; }
+  .rl-redraw h2 { margin: 0; max-width: 18ch; font-size: clamp(30px,3.2vw,48px); font-weight: 700; line-height: 1.08; letter-spacing: -0.022em; }
+  .rl-redraw h2 .hl { color: var(--c-innovation-blue); }
+  .rl-redraw p { margin: 22px 0 0; max-width: 58ch; font-size: 1.0625rem; line-height: 1.65; color: #dfe6f4; }
+  .rl-redraw__chain { margin: clamp(48px,5vw,68px) 0 0; }
+
+  /* ---------- No new system ---------- */
+  .rl-inside { padding: clamp(64px,6vw,88px) clamp(20px,4vw,44px); background: #ffffff; }
+  .rl-inside__in { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(28px,3.4vw,56px); align-items: start; }
+  .rl-inside h2 { margin: 0; font-size: clamp(26px,2.3vw,34px); font-weight: 700; line-height: 1.16; letter-spacing: -0.02em; color: var(--c-tech-blue); }
+  .rl-inside__pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; min-width: 0; }
+  .rl-inside__pts li { display: flex; gap: 14px; }
+  .rl-inside__pts i { flex: none; margin-top: 2px; font-size: 19px; color: var(--c-tech-blue); }
+  .rl-inside__pts b { display: block; font-size: 16px; font-weight: 700; color: #0a1838; }
+  .rl-inside__pts span { display: block; margin-top: 4px; max-width: 66ch; font-size: 15px; line-height: 1.6; color: #3a4a6b; }
+
+  /* ---------- Responsive ----------
+     Mobile blocks sit AFTER the base rules for each component, never in one
+     block near the top: media queries add no specificity, so a rule placed
+     above the one it overrides loses on source order (trap 18). */
+  @media (max-width: 1000px) {
+    .rl-node { width: 78px; }
+    .rl-node__ico { width: 48px; height: 48px; font-size: 18px; }
+    .rl-node__nm { font-size: 12.5px; }
+    .rl-link__lbl { font-size: 11.5px; }
+  }
+  @media (max-width: 820px) {
+    /* The chain turns vertical. Same argument on its side — the gaps are still
+       the spans between the actors, and they still close from the top down. */
+    .rl-chain { flex-direction: column; align-items: stretch; }
+    .rl-node { flex-direction: row; width: auto; gap: 14px; text-align: left; }
+    .rl-chain > .rl-node:first-child, .rl-chain > .rl-node:last-child { align-items: center; text-align: left; }
+    .rl-node__ico { flex: none; }
+    .rl-node__nm { font-size: 15px; }
+    .rl-link { flex-direction: row; align-items: center; gap: 14px; padding: 10px 0 10px 24px; }
+    .rl-link__rail { width: 2px; height: 42px; flex: none; }
+    .rl-link__rail::before { background-image: linear-gradient(to bottom, currentColor 0 7px, transparent 7px 14px); background-size: 2px 14px; }
+    .rl-link__rail::after { transform: scaleY(0); transform-origin: center top; }
+    body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__rail::after { transform: scaleY(1); }
+    .rl-link__mark { margin: 0 0 0 -14px; }
+    .rl-link__lbls { width: auto; flex: 1 1 auto; min-width: 0; }
+    .rl-link__lbl { text-align: left; font-size: 13.5px; }
+    .rl-ho__cols { grid-template-columns: 1fr; }
+    .rl-inside__in { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 821px) {
+    /* The left column holds one short headline against three long points, so it
+       empties out well before the list does. Let the headline hold the column. */
+    .rl-inside h2 { position: sticky; top: 96px; }
+  }
+  @media (max-width: 640px) {
+    .rl-hero__proof { gap: 8px 18px; font-size: 13.5px; }
+    section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+  }
+  /* CTA watermark, phones and tablets. Desktop keeps width-sizing: its band is
+     wide (aspect 2.72), so `width: 120%` covers 2.04x the band and the copy sits
+     over the middle of the artwork. Below 821px the band turns portrait (0.74 at
+     390px) and the same 120% collapsed coverage to 0.56x — only the artwork's top
+     edge peeked in at the bottom, reading as a stray rectangle. Sizing by HEIGHT
+     instead resolves against the same containing block at any width. 115% is
+     Andreas's Photoshop crop.
+     ⚠️ `!important` is load-bearing — the value it overrides is inline on the
+     <img>, and inline beats any media query without it (trap 17). */
+  @media (max-width: 1100px) {
+    section[data-screen-label$="CTA"] > img {
+      width: auto !important; height: 115% !important;
+      min-width: 120% !important; object-fit: cover !important;
+    }
+  }
+  /* ---------- no widows ("horeunger") ----------
+     `balance` beats `pretty` here by a wide margin — measured across all 44
+     pages it takes desktop 200 -> 6 widows, mobile 266 -> 17, tablet 204 -> 14,
+     where `pretty` only reached 36 on desktop. Deliberately NOT !important.
+     Enforced by tools/check_widows.py. */
+  h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
+
+  /* The redraw is this page's one authored moment. With reduced motion the
+     class is set at mount and every transition is dropped, so the chain is
+     simply already closed — a sequence frozen a third of the way through
+     reads as broken, not as still. */
+  @media (prefers-reduced-motion: reduce) {
+    .rl-link__rail::before, .rl-link__rail::after, .rl-link__mark, .rl-link__lbl { transition: none !important; }
+  }
+</style>
+</helmet>
+<div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Solutions" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO — the debt ============ -->
+<section class="rl-hero" data-screen-label="Hero">
+  <div class="rl-hero__in">
+    <h1>Four handovers between the invoice and the ledger.<br><span class="hl">Three of them can&nbsp;go.</span></h1>
+    <p class="rl-hero__lead">Purchase-to-pay is rarely hard work. It is handover work — re-keying what a supplier already typed, chasing an approval, logging into the bank, matching a statement line by line. Continia removes the handovers. Your team keeps the decisions.</p>
+
+    <div class="rl-hero__chain">
+      <ol class="rl-chain rl-chain--dark" aria-label="A purchase invoice passes through five hands and four handovers">
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-paper-plane"></i></span><span class="rl-node__nm">Supplier</span></li>
+        <li class="rl-link rl-link--keep" data-gap="0">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Sends the invoice</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-inbox-in"></i></span><span class="rl-node__nm">AP team</span></li>
+        <li class="rl-link rl-link--work" data-gap="1">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Typed in, matched, chased</span><span class="rl-link__lbl rl-link__lbl--after">Captured and matched</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-user-check"></i></span><span class="rl-node__nm">Approver</span></li>
+        <li class="rl-link rl-link--work" data-gap="2">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Exported, uploaded, verified</span><span class="rl-link__lbl rl-link__lbl--after">Paid from Business Central</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-building-columns"></i></span><span class="rl-node__nm">Bank</span></li>
+        <li class="rl-link rl-link--work" data-gap="3">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Matched line by line</span><span class="rl-link__lbl rl-link__lbl--after">Reconciled automatically</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-list-check"></i></span><span class="rl-node__nm">Your ledger</span></li>
+      </ol>
+    </div>
+
+    <div class="rl-hero__cta">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" href="#handover-1" hint-size="auto,48px">Follow the invoice</x-import>
+    </div>
+
+    <div class="rl-hero__proof">
+      <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+      <span><i class="fa-light fa-circle-check"></i>21,000+ customers</span>
+      <span><i class="fa-light fa-circle-check"></i>1,500+ partners in 45+ countries</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HANDOVER 1 ============ -->
+<section class="rl-ho" id="handover-1" data-screen-label="Handover 1">
+  <div class="rl-ho__in">
+    <div class="rl-ho__head">
+      <ol class="rl-mini" aria-hidden="true">
+        <li class="rl-mini__node"></li><li class="rl-mini__link"></li>
+        <li class="rl-mini__node on"></li><li class="rl-mini__link on"></li>
+        <li class="rl-mini__node on"></li><li class="rl-mini__link"></li>
+        <li class="rl-mini__node"></li><li class="rl-mini__link"></li>
+        <li class="rl-mini__node"></li>
+      </ol>
+      <p class="rl-ho__route">AP team <i class="fa-light fa-arrow-right-arrow-left"></i> Approver</p>
+      <h2>Re-keying what your supplier already typed</h2>
+    </div>
+    <div class="rl-ho__cols">
+      <div class="rl-ho__col">
+        <p class="rl-ho__lbl">The handover today</p>
+        <ul class="rl-today">
+          <li>The invoice arrives as a PDF. Someone opens it and types the header, the lines and the VAT into Business Central.</li>
+          <li>Someone finds the purchase order, opens the receipt, and compares three documents on one screen.</li>
+          <li>The invoice is emailed to an approver who is travelling, and it waits there until they are back at a desk.</li>
+        </ul>
+      </div>
+      <div class="rl-ho__col">
+        <p class="rl-ho__lbl">What takes it over</p>
+        <div class="rl-take">
+          <p class="rl-take__who">Continia Document Capture</p>
+          <p class="rl-take__what">Reads the invoice and creates the purchase document in Business Central, with the lines already on it.</p>
+          <ul class="rl-take__list">
+            <li><i class="fa-light fa-circle-check"></i>Header, lines and VAT recognized from the PDF or the e-document — no typing.</li>
+            <li><i class="fa-light fa-circle-check"></i>Three-way matching against the order and the receipt, so variances are what your team looks at.</li>
+            <li><i class="fa-light fa-circle-check"></i>Approval happens in Business Central or on a phone, with the audit trail attached to the document.</li>
+          </ul>
+          <div class="rl-take__mods"><span>Data Capture</span><span>Order Matching</span><span>Approval Workflow</span><span>Secure Archive</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HANDOVER 2 ============ -->
+<section class="rl-ho rl-ho--alt" id="handover-2" data-screen-label="Handover 2">
+  <div class="rl-ho__in">
+    <div class="rl-ho__head">
+      <ol class="rl-mini" aria-hidden="true">
+        <li class="rl-mini__node"></li><li class="rl-mini__link"></li>
+        <li class="rl-mini__node done"></li><li class="rl-mini__link done"></li>
+        <li class="rl-mini__node on"></li><li class="rl-mini__link on"></li>
+        <li class="rl-mini__node on"></li><li class="rl-mini__link"></li>
+        <li class="rl-mini__node"></li>
+      </ol>
+      <p class="rl-ho__route">Approver <i class="fa-light fa-arrow-right-arrow-left"></i> Bank</p>
+      <h2>Walking the payment over to the bank</h2>
+    </div>
+    <div class="rl-ho__cols">
+      <div class="rl-ho__col">
+        <p class="rl-ho__lbl">The handover today</p>
+        <ul class="rl-today">
+          <li>Approved invoices are collected into a payment file, exported, and uploaded through the bank's portal.</li>
+          <li>Account details are checked against an email, or against a vendor record nobody has updated this year.</li>
+          <li>Two people log into two banks with two different tokens, and the file format is different in each.</li>
+        </ul>
+      </div>
+      <div class="rl-ho__col">
+        <p class="rl-ho__lbl">What takes it over</p>
+        <div class="rl-take">
+          <p class="rl-take__who">Payment Management &amp; Continia Banking</p>
+          <p class="rl-take__what">Builds the payment from the open entries already in Business Central and sends it to the bank over a direct connection.</p>
+          <ul class="rl-take__list">
+            <li><i class="fa-light fa-circle-check"></i>Payment proposals come from the ledger itself, not from a spreadsheet built beside it.</li>
+            <li><i class="fa-light fa-circle-check"></i>Vendor bank details are validated before the payment leaves.</li>
+            <li><i class="fa-light fa-circle-check"></i>One workflow across several banks, so no file is carried by hand to a portal.</li>
+          </ul>
+          <div class="rl-take__mods"><span>Payment Proposals</span><span>Vendor Validation</span><span>Direct Bank Connection</span><span>Multi-bank</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HANDOVER 3 ============ -->
+<section class="rl-ho" id="handover-3" data-screen-label="Handover 3">
+  <div class="rl-ho__in">
+    <div class="rl-ho__head">
+      <ol class="rl-mini" aria-hidden="true">
+        <li class="rl-mini__node"></li><li class="rl-mini__link"></li>
+        <li class="rl-mini__node done"></li><li class="rl-mini__link done"></li>
+        <li class="rl-mini__node done"></li><li class="rl-mini__link done"></li>
+        <li class="rl-mini__node on"></li><li class="rl-mini__link on"></li>
+        <li class="rl-mini__node on"></li>
+      </ol>
+      <p class="rl-ho__route">Bank <i class="fa-light fa-arrow-right-arrow-left"></i> Your ledger</p>
+      <h2>Matching the statement back to the ledger</h2>
+    </div>
+    <div class="rl-ho__cols">
+      <div class="rl-ho__col">
+        <p class="rl-ho__lbl">The handover today</p>
+        <ul class="rl-today">
+          <li>The statement is downloaded and read against open entries, one line at a time.</li>
+          <li>Partial payments, fees and currency differences are resolved by hand, at the end of the month.</li>
+          <li>The close starts late because reconciliation starts late, and the two are the same queue.</li>
+        </ul>
+      </div>
+      <div class="rl-ho__col">
+        <p class="rl-ho__lbl">What takes it over</p>
+        <div class="rl-take">
+          <p class="rl-take__who">Continia Banking</p>
+          <p class="rl-take__what">Brings the statement in on its own and reconciles it against the open entries it already knows about.</p>
+          <ul class="rl-take__list">
+            <li><i class="fa-light fa-circle-check"></i>Statements import automatically — nobody downloads a file to start the day.</li>
+            <li><i class="fa-light fa-circle-check"></i>What matches is posted; what does not is the short list a person actually reads.</li>
+            <li><i class="fa-light fa-circle-check"></i>Bank and Business Central stay in sync through the month, not on the last day of it.</li>
+          </ul>
+          <div class="rl-take__mods"><span>Statement Import</span><span>Automatic Reconciliation</span><span>Multi-bank</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE REDRAW — the focal moment ============ -->
+<section class="rl-redraw" data-screen-label="The chain redrawn">
+  <div class="rl-redraw__in">
+    <h2>One handover left.<br><span class="hl">And it isn't yours.</span></h2>
+    <p>Your supplier still has to send the invoice. Everything after that happens inside Business Central — the same client, the same posting routines, the same audit trail your auditor already accepts.</p>
+    <div class="rl-redraw__chain">
+      <ol class="rl-chain rl-chain--dark rl-chain--redraw" aria-label="The same chain with three handovers automated">
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-paper-plane"></i></span><span class="rl-node__nm">Supplier</span></li>
+        <li class="rl-link rl-link--keep" data-gap="0">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Sends the invoice</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-inbox-in"></i></span><span class="rl-node__nm">AP team</span></li>
+        <li class="rl-link rl-link--work" data-gap="1">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Typed in, matched, chased</span><span class="rl-link__lbl rl-link__lbl--after">Captured and matched</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-user-check"></i></span><span class="rl-node__nm">Approver</span></li>
+        <li class="rl-link rl-link--work" data-gap="2">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Exported, uploaded, verified</span><span class="rl-link__lbl rl-link__lbl--after">Paid from Business Central</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-building-columns"></i></span><span class="rl-node__nm">Bank</span></li>
+        <li class="rl-link rl-link--work" data-gap="3">
+          <span class="rl-link__rail"></span>
+          <span class="rl-link__mark"><i class="fa-light fa-arrow-right-arrow-left"></i></span>
+          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Matched line by line</span><span class="rl-link__lbl rl-link__lbl--after">Reconciled automatically</span></span>
+        </li>
+        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-list-check"></i></span><span class="rl-node__nm">Your ledger</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NO NEW SYSTEM ============ -->
+<section class="rl-inside" data-screen-label="No new system">
+  <div class="rl-inside__in">
+    <h2>Where this actually runs</h2>
+    <ul class="rl-inside__pts">
+      <li><i class="fa-light fa-shield-halved"></i><span><b>Inside Business Central</b><span>Every module here is an add-on to the client your finance team already opens each morning. Same posting routines, same permissions, same audit trail.</span></span></li>
+      <li><i class="fa-light fa-handshake"></i><span><b>Set up with a partner who knows your ledger</b><span>Continia is delivered through 1,500+ local partners. They scope the modules against how you actually run purchase-to-pay.</span></span></li>
+      <li><i class="fa-light fa-money-bill-transfer"></i><span><b>Priced by what you use</b><span>Usage-based billing with no upfront licence fee, and a free 30-day trial with every module included.</span></span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section data-screen-label="Free trial CTA" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%);">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div style="max-width: 820px; margin: 0 auto; padding: 110px 32px; text-align: center; position: relative;">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Microsoft AppSource</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">Start your free trial today</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">See Continia in action with a 30-day free trial directly from Microsoft Marketplace. Simply download one of our apps, follow the set-up, and get started in less than 15 minutes.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="220px,52px">Download free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="https://www.continia.com/partners/" hint-size="180px,52px">Find a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = {};
+
+  componentDidMount() {
+    this._watchFooter();
+    this._watchRedraw();
+  }
+
+  // The page's one authored moment: the chain redraws itself when the closing
+  // band comes into view, once, and never re-opens.
+  _watchRedraw() {
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { document.body.classList.add("rl-relayed"); return; }
+    let queued = false;
+    this._onRelayScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        // Re-query every time: the runtime replaces nodes on re-render, so a
+        // reference held from componentDidMount goes deaf (trap 6b).
+        const el = document.querySelector(".rl-chain--redraw");
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        // Fire when the chain is properly on screen, not at first pixel — the
+        // redraw is the payoff and it should not happen off in the corner.
+        if (r.top < window.innerHeight * 0.82 && r.bottom > 0) {
+          document.body.classList.add("rl-relayed");
+          document.removeEventListener("scroll", this._onRelayScroll, { capture: true });
+          window.removeEventListener("resize", this._onRelayScroll);
+        }
+      });
+    };
+    document.addEventListener("scroll", this._onRelayScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onRelayScroll, { passive: true });
+    this._onRelayScroll();
+  }
+
+  // Same footer fade the rest of the site uses.
+  _watchFooter() {
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
+  }
+
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
