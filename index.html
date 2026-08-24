@@ -219,7 +219,10 @@
 
     /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
     .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
-    .sol-car__stage { position: relative; height: clamp(422px,48vw,458px); perspective: 1700px; }
+    /* `pan-y` lets the browser keep vertical scrolling while horizontal drags
+       reach our pointer handlers as swipes. Without it a sideways drag on the
+       card is swallowed as a scroll attempt and never becomes a gesture. */
+    .sol-car__stage { position: relative; height: clamp(422px,48vw,458px); perspective: 1700px; touch-action: pan-y; }
     .sol-car__track { position: absolute; inset: 0; transform-style: preserve-3d; }
     .sol-car__card { box-sizing: border-box; min-height: 400px; padding: 34px 36px; border-radius: 22px; color: #fff;
       display: flex; flex-direction: column;
@@ -253,7 +256,10 @@
     @media (max-width: 640px) {
       /* the active card is ~437px tall inside a 422px stage, so it bleeds ~7px
          past each end — these clearances are measured from the card, not the stage */
-      .sol-car { margin-top: 34px; padding-bottom: 88px; }
+      /* 116, was 88. The nav and dots hang off the bottom of .sol-car, so the
+         padding is what sets their clearance from the card — 23px read as
+         crowded against a 437px card. Now 51px. */
+      .sol-car { margin-top: 34px; padding-bottom: 116px; }
       .sol-car__nav { top: auto; bottom: 14px; transform: none; width: 44px; height: 44px; }
       .sol-car__nav:hover { transform: scale(1.06); background: #def5ff; }
       .sol-car__nav--prev { left: 18px; right: auto; }
@@ -468,7 +474,7 @@
   <div class="sol-new__inner">
     <div style="text-align:center;margin:0 auto">
       <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our products</span>
-      <h2 style="margin:14px 0 0;font-size:clamp(32px,3.2vw,48px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#ffffff">Solutions designed for<br>your <span style="color:#8ff8ff">Business Central.</span></h2>
+      <h2 style="margin:14px 0 0;font-size:min(clamp(32px,3.2vw,48px),7vw);font-weight:700;line-height:1.12;letter-spacing:-0.015em;color:#ffffff">Solutions designed for<br>your <span style="color:#8ff8ff">Business Central.</span></h2>
       <p style="max-width:660px;margin:14px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team<br>keeps the interface they already know.</p>
     </div>
     <div class="sol-car">
@@ -649,8 +655,35 @@ class Component extends DCLogic {
     // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
     this._onResize = () => this.setState({});
     window.addEventListener("resize", this._onResize, { passive: true });
+    this._setupSwipe();
     if (this.state.heroView !== 2) this._playHeroVideo();
     this._watchFooter();
+  }
+
+  // Swipe the solutions carousel on touch. ⚠️ Listeners go on `document` with
+  // capture and re-match the target, NOT on .sol-car__stage: every card carries
+  // a {{ carStyle }} binding, so the runtime replaces nodes in that subtree on
+  // each render and a reference held from componentDidMount goes deaf (trap 6b).
+  _setupSwipe() {
+    const CN = 5, THRESH = 45;
+    let x0 = null, y0 = null, pid = null;
+    this._swDown = (e) => {
+      const inStage = e.target && e.target.closest && e.target.closest(".sol-car__stage");
+      if (!inStage) return;
+      x0 = e.clientX; y0 = e.clientY; pid = e.pointerId;
+    };
+    this._swUp = (e) => {
+      if (x0 === null || e.pointerId !== pid) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0;
+      x0 = null; pid = null;
+      // A tap must still reach "See more", and a vertical drag is a page scroll.
+      if (Math.abs(dx) < THRESH || Math.abs(dx) <= Math.abs(dy)) return;
+      this.setState((st) => ({ carIndex: (st.carIndex + (dx < 0 ? 1 : CN - 1)) % CN }));
+    };
+    this._swCancel = () => { x0 = null; pid = null; };
+    document.addEventListener("pointerdown", this._swDown, { passive: true, capture: true });
+    document.addEventListener("pointerup", this._swUp, { passive: true, capture: true });
+    document.addEventListener("pointercancel", this._swCancel, { passive: true, capture: true });
   }
 
   // Fade the fixed bottom-left toggles out once the footer legal bar reaches the
@@ -750,6 +783,11 @@ class Component extends DCLogic {
     if (this._onFootScroll) {
       document.removeEventListener("scroll", this._onFootScroll, { capture: true });
       window.removeEventListener("resize", this._onFootScroll);
+    }
+    if (this._swDown) {
+      document.removeEventListener("pointerdown", this._swDown, { capture: true });
+      document.removeEventListener("pointerup", this._swUp, { capture: true });
+      document.removeEventListener("pointercancel", this._swCancel, { capture: true });
     }
     document.body.classList.remove("cnt-footer-in-view");
   }
