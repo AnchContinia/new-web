@@ -93,6 +93,92 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__lbl--before { opacity: 0; }
   body.rl-relayed .rl-chain--redraw .rl-link--work .rl-link__lbl--after { opacity: 1; color: var(--c-innovation-blue); }
 
+  /* ============================================================
+     HEADER — this page only.
+     SiteHeader lives in the bundle and ships identically to all 45 pages,
+     so nothing here touches it: these are overrides from the page's own
+     <style>. They carry a `body ` prefix on purpose. The component calls
+     useStyle() at render time, which appends its <style data-cnt="site-header">
+     to <head> AFTER this block, so an equally specific rule of mine would
+     lose on source order. One extra element in the selector settles it.
+     Scope is deliberate — see the note to Andreas about rolling it out.
+     ============================================================ */
+  /* backdrop-filter does not composite in the headless captures — the plate reads
+     as flat white there, so the glass is the one thing on this page verified by
+     arithmetic rather than by pixel. Worst case is the plate over the navy hero:
+     0.72 white over #041e58 lands near rgb(185,192,208), and the navy nav text on
+     it computes to 7.28:1. saturate() was dropped for the same reason — its result
+     over navy is the one value that could not be predicted. */
+  /* The hairline is an inset shadow, not a border: every other page's header is
+     63px tall and a real border would make this one 64, which is the kind of
+     one-pixel drift nobody finds later. */
+  body .cnt-siteheader { background: rgba(255,255,255,0.72); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09); }
+  body .cnt-siteheader--scrolled { box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09), 0 10px 30px rgba(5,41,117,0.10); }
+
+  /* Nav links become pills, in the same language as every other control on
+     the site. Active reads heavier than hover, not the same weight. */
+  body .cnt-siteheader__link { border-radius: 999px; transition: background-color 200ms var(--ease-standard), color 200ms var(--ease-standard); }
+  body .cnt-siteheader__nav .cnt-siteheader__link:hover { background: rgba(5,41,117,0.06); color: var(--c-tech-blue); }
+  body .cnt-siteheader__link--active { box-shadow: none; background: var(--c-light-blue); color: var(--c-tech-blue); }
+  body .cnt-siteheader__nav .cnt-siteheader__link--active:hover { background: var(--c-light-blue); }
+
+  /* --- the dropdown opens item by item --- */
+  body .cnt-siteheader__dropdown { min-width: 288px; border-radius: 18px; padding: 10px; border-color: rgba(5,41,117,0.10); box-shadow: 0 24px 60px rgba(5,41,117,0.20); }
+  body .cnt-siteheader__dropitem { gap: 13px; padding: 9px 11px; border-radius: 12px; opacity: 0; transform: translateY(-8px); transition: opacity 260ms cubic-bezier(0.16,1,0.3,1), transform 260ms cubic-bezier(0.16,1,0.3,1), background 150ms, color 150ms; }
+  body .cnt-siteheader__dropitem i { width: 30px; height: 30px; flex: none; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; background: var(--c-light-blue); transition: background 150ms, color 150ms; }
+  body .cnt-siteheader__dropitem:hover i { background: var(--c-tech-blue); color: #ffffff; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem,
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem { opacity: 1; transform: none; }
+  /* The delay lives on the open state only, so the menu staggers in and
+     leaves all at once — a staggered close reads as lag, not as craft. */
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(1),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(1) { transition-delay: 30ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(2),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(2) { transition-delay: 60ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(3),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(3) { transition-delay: 90ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(4),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(4) { transition-delay: 120ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(5),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(5) { transition-delay: 150ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(6),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(6) { transition-delay: 180ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(7),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(7) { transition-delay: 210ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(n+8),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(n+8) { transition-delay: 240ms; }
+
+  /* --- the burger is drawn, and morphs into the cross ---
+     Markup comes from the bundle and cannot change, so the three bars are the
+     <i> itself plus its two pseudo-elements. React swaps fa-bars for fa-xmark
+     on the same node, which is the state the transition reads — no :has(),
+     and no dependence on the icon kit having loaded. */
+  body .cnt-siteheader__burger i { position: relative; display: block; width: 20px; height: 2px; border-radius: 2px; background-color: currentColor; font-size: 0; transition: background-color 200ms var(--ease-standard); }
+  body .cnt-siteheader__burger i::before,
+  body .cnt-siteheader__burger i::after { content: "" !important; position: absolute; left: 0; width: 20px; height: 2px; border-radius: 2px; background-color: currentColor; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); }
+  body .cnt-siteheader__burger i.fa-bars::before { transform: translateY(-6px); }
+  body .cnt-siteheader__burger i.fa-bars::after { transform: translateY(6px); }
+  body .cnt-siteheader__burger i.fa-xmark { background-color: transparent; }
+  body .cnt-siteheader__burger i.fa-xmark::before { transform: rotate(45deg); }
+  body .cnt-siteheader__burger i.fa-xmark::after { transform: rotate(-45deg); }
+
+  /* The mobile panel is mounted by React, not toggled, so its rows animate on
+     insert — a transition would have nothing to transition from. Closing is an
+     unmount and stays instant; a fade-out on close reads as the menu hesitating. */
+  body .cnt-siteheader__mobile { gap: 0; padding-top: 6px; animation: rl-mpanel 300ms cubic-bezier(0.16,1,0.3,1) both; }
+  body .cnt-siteheader__mobile > * { animation: rl-mrow 340ms cubic-bezier(0.16,1,0.3,1) both; }
+  body .cnt-siteheader__mobile > .cnt-siteheader__link,
+  body .cnt-siteheader__mobile .cnt-siteheader__macc-btn { padding: 13px 4px; border-radius: 12px; border-bottom: 1px solid rgba(5,41,117,0.07); }
+  body .cnt-siteheader__mobile > *:last-child { border-bottom: 0; }
+  body .cnt-siteheader__mobile > *:nth-child(1) { animation-delay: 30ms; }
+  body .cnt-siteheader__mobile > *:nth-child(2) { animation-delay: 66ms; }
+  body .cnt-siteheader__mobile > *:nth-child(3) { animation-delay: 102ms; }
+  body .cnt-siteheader__mobile > *:nth-child(4) { animation-delay: 138ms; }
+  body .cnt-siteheader__mobile > *:nth-child(5) { animation-delay: 174ms; }
+  body .cnt-siteheader__mobile > *:nth-child(n+6) { animation-delay: 210ms; }
+  @keyframes rl-mpanel { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes rl-mrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
   /* ---------- Hero ---------- */
   .rl-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,8vw,112px) clamp(20px,4vw,44px) clamp(64px,7vw,92px); }
   .rl-hero::before { content: ""; position: absolute; right: -14%; top: -34%; width: 660px; height: 660px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(143,248,255,0.20), transparent 62%); pointer-events: none; }
@@ -269,6 +355,10 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   @media (prefers-reduced-motion: reduce) {
     .rl-link__rail::before, .rl-link__rail::after, .rl-link__lbl { transition: none !important; }
     .rl-spine__dot { transition: none !important; }
+    body .cnt-siteheader__dropitem, body .cnt-siteheader__burger i,
+    body .cnt-siteheader__burger i::before, body .cnt-siteheader__burger i::after { transition: none !important; }
+    body .cnt-siteheader__dropitem { opacity: 1; transform: none; }
+    body .cnt-siteheader__mobile, body .cnt-siteheader__mobile > * { animation: none !important; }
   }
 </style>
 </helmet>
