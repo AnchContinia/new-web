@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Modernize your purchase-to-pay process — Continia</title>
 <script src="./support.js"></script>
+<script>
+  // Before first paint, so the stored hero never flashes the other one.
+  // Light is the default and carries no attribute; only "dark" is stored.
+  try { if (localStorage.getItem("rl-hero") === "dark") document.documentElement.setAttribute("data-hero", "dark"); } catch (e) {}
+</script>
 </head>
 <body>
 <!--
@@ -184,7 +189,39 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   /* Depth comes from a linear wash, never a circle. A big radial disc parked
      in a corner draws a visible arc across the band and pulls the eye off the
      content — house rule, no decorative circles in section backgrounds. */
-  .rl-hero { position: relative; overflow: hidden; background: linear-gradient(163deg, #03163f 0%, #051f56 48%, #06296b 100%); color: #fff; padding: clamp(68px,6.4vw,96px) clamp(20px,4vw,44px) clamp(68px,6.4vw,92px); }
+  /* ============================================================
+     TWO HEROES, ONE SET OF RULES.
+     Every colour in the hero is a token so the light and dark versions are the
+     same layout with a different palette, not two implementations that drift.
+     Light is the default: it needs no attribute, so it cannot flash the wrong
+     one on load. Dark is `:root[data-hero="dark"]`, set by the switch bottom-left.
+     Light follows the house palette rather than inventing one — Performance
+     Purple is already the accent in the home hero's payoff line, and light
+     ground means purple + secondary buttons (Two-Ground Rule).
+     ============================================================ */
+  .rl-hero {
+    --h-bg: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%);
+    --h-fg: var(--c-tech-blue); --h-hl: #983eae; --h-lead: #3a4a6b;
+    --h-proof: #3a4a6b; --h-proof-i: var(--c-tech-blue);
+    --h-rail: #aab4c8; --h-fill: var(--c-tech-blue); --h-fill-glow: rgba(5,41,117,0.20);
+    --h-ico-bg: #ffffff; --h-ico-bd: #dde3ee; --h-ico-fg: var(--c-tech-blue);
+    --h-nm: var(--c-tech-blue); --h-fric: #3a4a6b; --h-cap: #3a4a6b; --h-cap2: var(--c-tech-blue);
+    --h-doc-bg: #ffffff; --h-doc-bd: 1px solid #dde3ee; --h-doc-sh: 0 18px 40px rgba(5,41,117,0.16);
+    --h-doc-line: #e4e9f3; --h-doc-title: var(--c-tech-blue); --h-doc-accent: #983eae;
+    --h-drop-op: 0.3;
+  }
+  :root[data-hero="dark"] .rl-hero {
+    --h-bg: linear-gradient(163deg, #03163f 0%, #051f56 48%, #06296b 100%);
+    --h-fg: #ffffff; --h-hl: var(--c-innovation-blue); --h-lead: #dfe6f4;
+    --h-proof: #cdd4e3; --h-proof-i: var(--c-innovation-blue);
+    --h-rail: rgba(255,255,255,0.30); --h-fill: var(--c-innovation-blue); --h-fill-glow: rgba(143,248,255,0.5);
+    --h-ico-bg: #12275c; --h-ico-bd: rgba(255,255,255,0.22); --h-ico-fg: #ffffff;
+    --h-nm: #ffffff; --h-fric: #9fb0d6; --h-cap: #b9c5de; --h-cap2: var(--c-innovation-blue);
+    --h-doc-bg: #ffffff; --h-doc-bd: 0; --h-doc-sh: 0 20px 44px rgba(1,10,32,0.55);
+    --h-doc-line: #dde4f0; --h-doc-title: #052975; --h-doc-accent: var(--c-innovation-blue);
+    --h-drop-op: 0.2;
+  }
+  .rl-hero { position: relative; overflow: hidden; background: var(--h-bg); color: var(--h-fg); padding: clamp(68px,6.4vw,96px) clamp(20px,4vw,44px) clamp(68px,6.4vw,92px); }
 
   .rl-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
   /* 26ch, not 17: at 17ch the first sentence broke to three lines and pushed
@@ -194,12 +231,34 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   .rl-hero h1 .ln { display: block; }
   /* The one highlighted headline on this page. There is exactly one on
      purpose — see the house rule; three of them read as noise, not emphasis. */
-  .rl-hero h1 .hl { color: var(--c-innovation-blue); }
-  .rl-hero__lead { margin: 26px 0 0; max-width: 54ch; font-size: 1.1875rem; line-height: 1.6; color: #dfe6f4; }
+  .rl-hero h1 .hl { color: var(--h-hl); }
+  .rl-hero__lead { margin: 26px 0 0; max-width: 54ch; font-size: 1.1875rem; line-height: 1.6; color: var(--h-lead); }
   .rl-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: clamp(40px,4vw,52px); }
-  .rl-hero__proof { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 26px; font-size: 14.5px; color: #cdd4e3; }
+  .rl-hero__cta--dark { display: none; }
+  :root[data-hero="dark"] .rl-hero__cta--light { display: none; }
+  :root[data-hero="dark"] .rl-hero__cta--dark { display: flex; }
+
+  /* The switch. A preview control, not part of the page's own visual language.
+     It rests as a 42px disc and only spells itself out on hover: fixed to the
+     corner it would otherwise sit on top of the hero's own buttons, which on a
+     short viewport land in exactly that spot. */
+  .rl-heroswitch { position: fixed; left: 18px; bottom: 18px; z-index: 60; display: inline-flex; align-items: center; height: 42px; padding: 0 13px; border: 1px solid var(--c-border, #dde3ee); border-radius: 999px; background: rgba(255,255,255,0.92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 8px 26px rgba(5,41,117,0.16); color: var(--c-tech-blue); font: inherit; font-size: 13px; font-weight: 600; line-height: 1; cursor: pointer; transition: transform 200ms var(--ease-standard), box-shadow 200ms var(--ease-standard), background 200ms var(--ease-standard); }
+  .rl-heroswitch:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(5,41,117,0.22); background: #ffffff; }
+  .rl-heroswitch:active { transform: none; }
+  .rl-heroswitch i { font-size: 15px; opacity: 0.85; }
+  /* The label is generated, never written by JS — the button lives inside the dc
+     render tree and written text would not survive the next renderVals().
+     max-width, not display, so it can slide open instead of popping. */
+  .rl-heroswitch__lbl { display: inline-block; overflow: hidden; max-width: 0; white-space: nowrap; transition: max-width 260ms var(--ease-standard), margin-left 260ms var(--ease-standard); margin-left: 0; }
+  .rl-heroswitch:hover .rl-heroswitch__lbl,
+  .rl-heroswitch:focus-visible .rl-heroswitch__lbl { max-width: 130px; margin-left: 9px; }
+  .rl-heroswitch__lbl::after { content: "Light hero"; }
+  :root[data-hero="dark"] .rl-heroswitch__lbl::after { content: "Dark hero"; }
+  @media (max-width: 640px) { .rl-heroswitch { left: 12px; bottom: 12px; height: 38px; padding: 0 11px; font-size: 12.5px; } }
+  @media (prefers-reduced-motion: reduce) { .rl-heroswitch, .rl-heroswitch__lbl { transition: none; } .rl-heroswitch:hover { transform: none; } }
+  .rl-hero__proof { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 26px; font-size: 14.5px; color: var(--h-proof); }
   .rl-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
-  .rl-hero__proof i { color: var(--c-innovation-blue); font-size: 15px; }
+  .rl-hero__proof i { color: var(--h-proof-i); font-size: 15px; }
 
   /* --- entrance --- */
   @keyframes rl-rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
@@ -224,14 +283,14 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   .rl-flow { --rl-st: 132px; position: relative; margin: clamp(56px,5.6vw,78px) 0 0; padding-top: 104px; }
   .rl-flow__track { position: relative; }
   .rl-flow__rail { position: absolute; left: calc(var(--rl-st) / 2); right: calc(var(--rl-st) / 2); top: 27px; height: 2px; margin-top: -1px; }
-  .rl-flow__dash { position: absolute; inset: 0; border-radius: 2px; color: rgba(255,255,255,0.30); background-image: linear-gradient(to right, currentColor 0 7px, transparent 7px 15px); background-size: 15px 2px; animation: rl-dash 10s linear infinite; }
-  .rl-flow__fill { position: absolute; inset: 0; border-radius: 2px; background: var(--c-innovation-blue); box-shadow: 0 0 20px rgba(143,248,255,0.5); transform: scaleX(0); transform-origin: left center; animation: rl-fill 10s cubic-bezier(0.16,1,0.3,1) infinite; }
+  .rl-flow__dash { position: absolute; inset: 0; border-radius: 2px; color: var(--h-rail); background-image: linear-gradient(to right, currentColor 0 7px, transparent 7px 15px); background-size: 15px 2px; animation: rl-dash 10s linear infinite; }
+  .rl-flow__fill { position: absolute; inset: 0; border-radius: 2px; background: var(--h-fill); box-shadow: 0 0 20px var(--h-fill-glow); transform: scaleX(0); transform-origin: left center; animation: rl-fill 10s cubic-bezier(0.16,1,0.3,1) infinite; }
   .rl-flow__runner { position: absolute; left: 0; top: 0; width: 100%; height: 0; animation: rl-run 10s cubic-bezier(0.65,0,0.35,1) infinite; }
-  .rl-flow__pin { position: absolute; left: 0; top: -6px; width: 13px; height: 13px; margin-left: -6.5px; border-radius: 50%; background: var(--c-innovation-blue); box-shadow: 0 0 0 5px rgba(143,248,255,0.15); animation: rl-doc 10s linear infinite; }
-  .rl-flow__doc { position: absolute; left: 0; top: -100px; width: 64px; height: 80px; margin-left: -32px; box-sizing: border-box; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; border-radius: 10px; background: #fff; box-shadow: 0 20px 44px rgba(1,10,32,0.55); transform: rotate(-5deg); animation: rl-doc 10s linear infinite; }
-  .rl-flow__doc span { height: 4px; border-radius: 2px; background: #dde4f0; }
-  .rl-flow__doc span:first-child { width: 72%; height: 6px; background: #052975; }
-  .rl-flow__doc span.sh { width: 46%; margin-top: auto; background: var(--c-innovation-blue); }
+  .rl-flow__pin { position: absolute; left: 0; top: -6px; width: 13px; height: 13px; margin-left: -6.5px; border-radius: 50%; background: var(--h-fill); box-shadow: 0 0 0 5px var(--h-fill-glow); animation: rl-doc 10s linear infinite; }
+  .rl-flow__doc { position: absolute; left: 0; top: -100px; width: 64px; height: 80px; margin-left: -32px; box-sizing: border-box; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; border-radius: 10px; background: var(--h-doc-bg); border: var(--h-doc-bd); box-shadow: var(--h-doc-sh); transform: rotate(-5deg); animation: rl-doc 10s linear infinite; }
+  .rl-flow__doc span { height: 4px; border-radius: 2px; background: var(--h-doc-line); }
+  .rl-flow__doc span:first-child { width: 72%; height: 6px; background: var(--h-doc-title); }
+  .rl-flow__doc span.sh { width: 46%; margin-top: auto; background: var(--h-doc-accent); }
 
   .rl-flow__sts { position: relative; list-style: none; margin: 0; padding: 0; display: flex; justify-content: space-between; }
   .rl-flow__st { flex: 0 0 var(--rl-st); display: flex; flex-direction: column; align-items: center; text-align: center; }
@@ -239,12 +298,12 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   /* Opaque, not the translucent fill used elsewhere: the pin rides the rail
      straight through the middle of these circles, and through a see-through
      one it reads as a cyan blob stuck on the icon. Solid, it passes behind. */
-  .rl-flow__ico { position: relative; z-index: 1; width: 54px; height: 54px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; background: #12275c; border: 1px solid rgba(255,255,255,0.22); color: #fff; box-sizing: border-box; }
-  .rl-flow__nm { margin-top: 13px; font-size: 14px; font-weight: 600; line-height: 1.3; color: #fff; }
+  .rl-flow__ico { position: relative; z-index: 1; width: 54px; height: 54px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; background: var(--h-ico-bg); border: 1px solid var(--h-ico-bd); color: var(--h-ico-fg); box-sizing: border-box; }
+  .rl-flow__nm { margin-top: 13px; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--h-nm); }
   /* The slot is reserved, not sized to content: these labels fade in and out,
      and a box that grows with each one would walk the caption up and down the
      page. Reserve the tallest label at this width, verified per breakpoint. */
-  .rl-flow__fric { margin-top: 7px; min-height: 1.75em; font-size: 12.5px; line-height: 1.35; color: #9fb0d6; opacity: 0; }
+  .rl-flow__fric { margin-top: 7px; min-height: 1.75em; font-size: 12.5px; line-height: 1.35; color: var(--h-fric); opacity: 0; }
   .rl-flow__st:nth-child(1) .rl-flow__fric { animation: rl-fric1 10s linear infinite; }
   .rl-flow__st:nth-child(2) .rl-flow__fric { animation: rl-fric2 10s linear infinite; }
   .rl-flow__st:nth-child(3) .rl-flow__fric { animation: rl-fric3 10s linear infinite; }
@@ -253,8 +312,8 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
 
   .rl-flow__cap { position: relative; margin: 22px 0 0; min-height: 1.6em; font-size: 15px; line-height: 1.6; }
   .rl-flow__cap span { position: absolute; left: 0; top: 0; opacity: 0; }
-  .rl-flow__cap--now { color: #b9c5de; animation: rl-capnow 10s linear infinite; }
-  .rl-flow__cap--new { color: var(--c-innovation-blue); font-weight: 600; animation: rl-capnew 10s linear infinite; }
+  .rl-flow__cap--now { color: var(--h-cap); animation: rl-capnow 10s linear infinite; }
+  .rl-flow__cap--new { color: var(--h-cap2); font-weight: 600; animation: rl-capnew 10s linear infinite; }
 
   @keyframes rl-run {
     0%, 5% { transform: translateX(0); }
@@ -269,7 +328,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   @keyframes rl-doc { 0%, 2% { opacity: 0; } 5%, 66% { opacity: 1; } 69%, 74% { opacity: 0; } 80%, 97% { opacity: 1; } 100% { opacity: 0; } }
   @keyframes rl-fill { 0%, 68% { transform: scaleX(0); } 76%, 97% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
   @keyframes rl-dash { 0%, 66% { opacity: 1; } 74%, 97% { opacity: 0; } 100% { opacity: 1; } }
-  @keyframes rl-drop { 0%, 66% { opacity: 1; transform: none; } 76%, 97% { opacity: 0.2; transform: scale(0.84); } 100% { opacity: 1; transform: none; } }
+  @keyframes rl-drop { 0%, 66% { opacity: 1; transform: none; } 76%, 97% { opacity: var(--h-drop-op); transform: scale(0.84); } 100% { opacity: 1; transform: none; } }
   @keyframes rl-fric1 { 0%, 1% { opacity: 0; transform: translateY(5px); } 5%, 11% { opacity: 1; transform: none; } 16%, 100% { opacity: 0; transform: none; } }
   @keyframes rl-fric2 { 0%, 10% { opacity: 0; transform: translateY(5px); } 15%, 21% { opacity: 1; transform: none; } 26%, 100% { opacity: 0; transform: none; } }
   @keyframes rl-fric3 { 0%, 26% { opacity: 0; transform: translateY(5px); } 31%, 37% { opacity: 1; transform: none; } 42%, 100% { opacity: 0; transform: none; } }
@@ -526,7 +585,15 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
       <p class="rl-flow__cap"><span class="rl-flow__cap--now">Today — four handovers on every invoice.</span><span class="rl-flow__cap--new">With Continia — one.</span></p>
     </div>
 
-    <div class="rl-hero__cta">
+    <!-- Two rows, one shown at a time. The button variant is a markup attribute
+         the design system reads at render, not something CSS can retheme, so a
+         light ground needs its own pair: purple + secondary per the Two-Ground
+         Rule, exactly as the home hero pairs them. -->
+    <div class="rl-hero__cta rl-hero__cta--light">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" href="#handover-1" hint-size="auto,48px">Follow the invoice</x-import>
+    </div>
+    <div class="rl-hero__cta rl-hero__cta--dark">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" href="#handover-1" hint-size="auto,48px">Follow the invoice</x-import>
     </div>
@@ -538,6 +605,12 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     </div>
   </div>
 </section>
+
+<!-- A build-time switch between the two heroes, not a site feature: it sits
+     bottom-left, out of the reading path, and is skipped by the tab order. -->
+<button type="button" class="rl-heroswitch" data-hero-toggle tabindex="-1">
+  <i class="fa-light fa-circle-half-stroke" aria-hidden="true"></i><span class="rl-heroswitch__lbl"></span>
+</button>
 
 <!-- ============ THE SPINE — one rail, three stations ============ -->
 <section class="rl-spine" data-screen-label="The three handovers">
@@ -713,11 +786,27 @@ class Component extends DCLogic {
     this._watchRedraw();
     this._watchSpine();
     this._watchFlow();
+    this._watchHeroSwitch();
   }
 
   // The hero loop runs for as long as someone is looking at it and not a
   // moment longer. The class goes on body, not on the section: the section is
   // inside the dc render tree and the next renderVals() would wipe it.
+  // Delegated on document because the button itself is inside the render tree
+  // and gets replaced; a listener bound to the node would die with it.
+  _watchHeroSwitch() {
+    if (this._heroSwitchBound) return;
+    this._heroSwitchBound = true;
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("[data-hero-toggle]")) return;
+      const root = document.documentElement;
+      const dark = root.getAttribute("data-hero") !== "dark";
+      if (dark) root.setAttribute("data-hero", "dark");
+      else root.removeAttribute("data-hero");
+      try { localStorage.setItem("rl-hero", dark ? "dark" : "light"); } catch (err) {}
+    });
+  }
+
   _watchFlow() {
     if (!("IntersectionObserver" in window)) return;
     const el = document.querySelector(".rl-flow");
