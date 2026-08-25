@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Built inside — Continia and Business Central</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<!--
+THESIS: Most finance software asks you to leave Business Central. Continia does not.
+This page never leaves the window either — one Business Central client is drawn in
+the hero and every section afterwards argues from inside that same frame.
+OWN-WORLD: Continia's committed system — light grounds and deep Tech Blue, nothing
+in between; Performance Purple as the one accent on light; cyan reserved for navy.
+STORY: The reader sees the client they already open, watches Continia appear inside
+it and disappear again, and learns what the alternative would have cost them.
+FIRST VIEWPORT: White band. Headline, lead, then a live Business Central window
+that switches Continia on and off by itself — and can be switched by hand.
+HOUSE RULES: one highlighted headline (the hero's second line), no decorative
+circles, buttons centred below 1100 and stacked below 640, check marks above the
+buttons on phone and portrait tablet.
+-->
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  /* BODY must not become a scroll container. `overflow-x: hidden` here coerces
+     overflow-y to auto, which makes BODY the scroller: window.scrollY sticks at
+     0, window never fires `scroll`, and the sticky header comes unstuck.
+     `clip` clips the same way without creating a scroll box. (trap 6) */
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
+  a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
+  a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
+  ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
+  h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
+
+  /* ============================================================
+     HEADER — same overrides as the purchase-to-pay page.
+     SiteHeader lives in the bundle and ships identically to all 46 pages, so
+     nothing here touches it. The `body ` prefix is deliberate: the component
+     calls useStyle() at render time and appends its own <style> to <head>
+     AFTER this block, so an equally specific rule would lose on source order.
+     The hairline is an inset shadow, not a border — a real border would make
+     this header 64px where every other page's is 63.
+     ============================================================ */
+  body .cnt-siteheader { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09); }
+  body .cnt-siteheader--scrolled { box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09), 0 10px 30px rgba(5,41,117,0.10); }
+  body .cnt-siteheader__link { border-radius: 999px; transition: background-color 200ms var(--ease-standard), color 200ms var(--ease-standard); }
+  body .cnt-siteheader__nav .cnt-siteheader__link:hover { background: rgba(5,41,117,0.06); color: var(--c-tech-blue); }
+  body .cnt-siteheader__link--active,
+  body .cnt-siteheader__link--active:hover { background: none; border-radius: 0; }
+  body .cnt-siteheader__dropdown { min-width: 288px; border-radius: 18px; padding: 10px; border-color: rgba(5,41,117,0.10); box-shadow: 0 24px 60px rgba(5,41,117,0.20); }
+  body .cnt-siteheader__dropitem { gap: 13px; padding: 9px 11px; border-radius: 12px; opacity: 0; transform: translateY(-8px); transition: opacity 260ms cubic-bezier(0.16,1,0.3,1), transform 260ms cubic-bezier(0.16,1,0.3,1), background 150ms, color 150ms; }
+  body .cnt-siteheader__dropitem i { width: 30px; height: 30px; flex: none; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; background: var(--c-light-blue); transition: background 150ms, color 150ms; }
+  body .cnt-siteheader__dropitem:hover i { background: var(--c-tech-blue); color: #ffffff; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem,
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem { opacity: 1; transform: none; }
+  /* The delay lives on the open state only — a staggered close reads as lag. */
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(1),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(1) { transition-delay: 30ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(2),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(2) { transition-delay: 60ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(3),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(3) { transition-delay: 90ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(4),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(4) { transition-delay: 120ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(5),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(5) { transition-delay: 150ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(6),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(6) { transition-delay: 180ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(7),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(7) { transition-delay: 210ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(n+8),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(n+8) { transition-delay: 240ms; }
+  /* The three bars are the <i> itself plus its two pseudo-elements: the bundle
+     swaps fa-bars for fa-xmark on the same node, so that class is the state. */
+  body .cnt-siteheader__burger i { position: relative; display: block; width: 20px; height: 2px; border-radius: 2px; background-color: currentColor; font-size: 0; transition: background-color 200ms var(--ease-standard); }
+  body .cnt-siteheader__burger i::before,
+  body .cnt-siteheader__burger i::after { content: "" !important; position: absolute; left: 0; width: 20px; height: 2px; border-radius: 2px; background-color: currentColor; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); }
+  body .cnt-siteheader__burger i.fa-bars::before { transform: translateY(-6px); }
+  body .cnt-siteheader__burger i.fa-bars::after { transform: translateY(6px); }
+  body .cnt-siteheader__burger i.fa-xmark { background-color: transparent; }
+  body .cnt-siteheader__burger i.fa-xmark::before { transform: rotate(45deg); }
+  body .cnt-siteheader__burger i.fa-xmark::after { transform: rotate(-45deg); }
+  body .cnt-siteheader__mobile { gap: 0; padding-top: 6px; animation: bi-mpanel 300ms cubic-bezier(0.16,1,0.3,1) both; }
+  body .cnt-siteheader__mobile > * { animation: bi-mrow 340ms cubic-bezier(0.16,1,0.3,1) both; }
+  body .cnt-siteheader__mobile > .cnt-siteheader__link,
+  body .cnt-siteheader__mobile .cnt-siteheader__macc-btn { padding: 13px 4px; border-radius: 12px; border-bottom: 1px solid rgba(5,41,117,0.07); }
+  body .cnt-siteheader__mobile > *:last-child { border-bottom: 0; }
+  body .cnt-siteheader__mobile > *:nth-child(1) { animation-delay: 30ms; }
+  body .cnt-siteheader__mobile > *:nth-child(2) { animation-delay: 66ms; }
+  body .cnt-siteheader__mobile > *:nth-child(3) { animation-delay: 102ms; }
+  body .cnt-siteheader__mobile > *:nth-child(4) { animation-delay: 138ms; }
+  body .cnt-siteheader__mobile > *:nth-child(5) { animation-delay: 174ms; }
+  body .cnt-siteheader__mobile > *:nth-child(n+6) { animation-delay: 210ms; }
+  @keyframes bi-mpanel { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes bi-mrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+  /* ============================================================
+     HERO — light ground, because the band under it is deep Tech Blue and
+     the seam between them should be an edge, not a blur. Depth comes from a
+     linear wash; no decorative circles anywhere on this page.
+     ============================================================ */
+  .bi-hero { position: relative; overflow: hidden; background: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%); color: var(--c-tech-blue); padding: clamp(56px,5.4vw,84px) clamp(20px,4vw,44px) clamp(64px,6vw,92px); }
+  .bi-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
+  .bi-hero__kick { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; padding: 7px 14px 7px 9px; border-radius: 999px; background: var(--c-light-blue); color: var(--c-tech-blue); font-size: 12px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+  .bi-hero__kick i { font-size: 13px; }
+  .bi-hero h1 { margin: 0; max-width: 20ch; font-size: clamp(38px,4.4vw,64px); font-weight: 700; line-height: 1.03; letter-spacing: -0.028em; }
+  .bi-hero h1 .ln { display: block; }
+  /* The one highlighted headline on this page. Exactly one, on purpose. */
+  .bi-hero h1 .hl { color: #983eae; }
+  .bi-hero__lead { margin: 24px 0 0; max-width: 56ch; font-size: 1.1875rem; line-height: 1.6; color: #3a4a6b; }
+  .bi-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: clamp(30px,3vw,40px); }
+  .bi-hero__proof { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 24px; font-size: 14.5px; color: #3a4a6b; }
+  .bi-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
+  .bi-hero__proof i { color: var(--c-tech-blue); font-size: 15px; }
+
+  @keyframes bi-rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  .bi-hero__kick, .bi-hero h1 .ln, .bi-hero__lead, .bi-hero .bi-stage, .bi-hero__cta, .bi-hero__proof { animation: bi-rise 800ms cubic-bezier(0.16,1,0.3,1) both; }
+  .bi-hero__kick { animation-delay: 40ms; }
+  .bi-hero h1 .ln:nth-child(1) { animation-delay: 110ms; }
+  .bi-hero h1 .ln:nth-child(2) { animation-delay: 210ms; }
+  .bi-hero__lead { animation-delay: 320ms; }
+  .bi-hero .bi-stage { animation-delay: 430ms; }
+  .bi-hero__cta { animation-delay: 560ms; }
+  .bi-hero__proof { animation-delay: 640ms; }
+
+  /* ============================================================
+     THE WINDOW — the page's argument, drawn once.
+     A Business Central client that switches Continia on and off by itself,
+     and can be switched by hand. Everything Continia adds carries .bi-c and
+     shares one 9s timeline, so "with" and "without" are the same window in
+     two states rather than two pictures — the moment it becomes two pictures
+     the claim ("you do not leave this window") stops being demonstrated.
+     ============================================================ */
+  .bi-stage { position: relative; }
+  .bi-win { position: relative; max-width: 1080px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 34px 80px rgba(5,41,117,0.17), 0 3px 10px rgba(5,41,117,0.06); }
+
+  /* browser chrome */
+  .bi-win__chrome { display: flex; align-items: center; gap: 13px; padding: 11px 16px; background: #eef1f6; border-bottom: 1px solid #dde3ee; }
+  .bi-win__dots { display: flex; gap: 6px; flex: none; }
+  .bi-win__dots span { width: 10px; height: 10px; border-radius: 50%; background: #cfd7e6; }
+  .bi-win__url { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 8px; height: 27px; padding: 0 13px; border-radius: 999px; background: #ffffff; border: 1px solid #dde3ee; color: #5a6884; font-size: 12px; }
+  .bi-win__url b { font-weight: 600; color: #3a4a6b; }
+  .bi-win__url em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bi-win__url i { font-size: 11px; color: #aab4c8; flex: none; }
+
+  /* the app's own top strip */
+  .bi-win__nav { display: flex; align-items: center; gap: 11px; padding: 11px 16px; background: #ffffff; border-bottom: 1px solid #dde3ee; }
+  .bi-win__brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; color: var(--c-tech-blue); white-space: nowrap; }
+  .bi-win__brand i { font-size: 14px; }
+  .bi-win__navico { margin-left: auto; display: inline-flex; gap: 14px; color: #aab4c8; font-size: 13px; }
+
+  /* action bar */
+  .bi-win__ribbon { display: flex; align-items: center; gap: 8px; padding: 11px 16px; background: #f6f8fb; border-bottom: 1px solid #dde3ee; }
+  .bi-chip { display: inline-flex; align-items: center; gap: 7px; height: 29px; padding: 0 12px; border-radius: 8px; background: #ffffff; border: 1px solid #dde3ee; color: #3a4a6b; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .bi-chip i { font-size: 12px; color: #5a6884; }
+  /* Continia's actions read as Continia's — same shape, page accent. */
+  .bi-chip--c { border-color: #dcc0e6; background: #faf4fc; color: #983eae; }
+  .bi-chip--c i { color: #983eae; }
+
+  /* the record */
+  .bi-win__body { position: relative; display: grid; grid-template-columns: minmax(0,1fr) 43%; }
+  .bi-win__card { padding: 17px 20px 20px; min-width: 0; }
+  .bi-win__fact { padding: 17px 18px 20px; background: #f6f8fb; border-left: 1px solid #dde3ee; min-width: 0; }
+  .bi-fact__h { font-size: 12.5px; font-weight: 700; color: var(--c-tech-blue); }
+  .bi-fact__r { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 11px; padding-bottom: 7px; border-bottom: 1px solid #e4e9f3; font-size: 12.5px; color: #5a6884; }
+  .bi-fact__r b { font-weight: 600; color: #0a1838; }
+  .bi-win__title { display: flex; align-items: baseline; gap: 10px; font-size: 15.5px; font-weight: 700; color: var(--c-ink, #0a1838); }
+  .bi-win__title span { font-size: 12.5px; font-weight: 500; color: #5a6884; }
+  .bi-tab { display: flex; align-items: center; gap: 9px; margin-top: 14px; padding-bottom: 8px; border-bottom: 1px solid #e4e9f3; font-size: 12.5px; font-weight: 700; color: var(--c-tech-blue); }
+  .bi-tab i { font-size: 10px; color: #aab4c8; }
+  .bi-tab--c { color: #983eae; }
+  .bi-tab--c i { color: #983eae; }
+  .bi-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px 24px; padding: 13px 0 2px; }
+  .bi-f { min-width: 0; }
+  .bi-f b { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #5a6884; }
+  .bi-f span { display: block; margin-top: 4px; padding-bottom: 5px; border-bottom: 1px solid #e4e9f3; font-size: 13px; color: #0a1838; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bi-f--c span { color: #983eae; font-weight: 600; border-bottom-color: #e7d3ee; }
+  .bi-fold { overflow: hidden; }
+  .bi-rows { margin-top: 4px; }
+  .bi-row { display: grid; grid-template-columns: minmax(0, 1fr) 72px 92px; gap: 12px; padding: 9px 0; border-bottom: 1px solid #eef1f6; font-size: 12.5px; color: #3a4a6b; }
+  .bi-row b { min-width: 0; font-weight: 600; color: #0a1838; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bi-row span:last-child { text-align: right; }
+
+  /* Continia's document viewer. An overlay, not a grid column: as a column its
+     absence would leave a hole in the "without" state and its arrival would
+     resize the window — and a window that resizes is exactly the thing this
+     page says does not happen. */
+  .bi-win__doc { position: absolute; top: 0; right: 0; bottom: 0; width: 43%; z-index: 1; box-sizing: border-box; padding: 15px 16px; background: #f6f8fb; border-left: 1px solid #dde3ee; box-shadow: -20px 0 44px rgba(5,41,117,0.10); }
+  .bi-doc__head { display: flex; align-items: center; gap: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #983eae; }
+  .bi-doc__page { margin-top: 11px; padding: 15px 15px 17px; border-radius: 9px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 8px 20px rgba(5,41,117,0.07); }
+  .bi-doc__l { height: 6px; border-radius: 3px; background: #e4e9f3; margin-top: 9px; }
+  .bi-doc__l--t { width: 54%; height: 10px; margin-top: 0; background: var(--c-tech-blue); }
+  .bi-doc__l--s { width: 36%; background: #983eae; }
+  .bi-doc__box { margin-top: 13px; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 11px; border: 1px dashed #cf9fe0; border-radius: 7px; background: #faf4fc; font-size: 11.5px; font-weight: 600; color: #983eae; }
+
+  /* status bar, and the switch that lives in it */
+  .bi-win__status { display: flex; align-items: center; gap: 16px; padding: 9px 16px; background: #ffffff; border-top: 1px solid #dde3ee; font-size: 11.5px; color: #5a6884; }
+  .bi-win__status i { color: #aab4c8; margin-right: 6px; }
+  .bi-switch { display: inline-flex; align-items: center; gap: 10px; margin-left: auto; padding: 5px 12px 5px 7px; border: 1px solid #dde3ee; border-radius: 999px; background: #ffffff; color: var(--c-tech-blue); font: inherit; font-size: 11.5px; font-weight: 700; line-height: 1; cursor: pointer; transition: border-color 200ms var(--ease-standard), box-shadow 200ms var(--ease-standard); }
+  .bi-switch:hover { border-color: #983eae; box-shadow: 0 3px 12px rgba(152,62,174,0.16); }
+  .bi-switch__track { position: relative; flex: none; width: 34px; height: 18px; border-radius: 999px; background-color: #dde3ee; }
+  .bi-switch__knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #ffffff; box-shadow: 0 1px 3px rgba(5,41,117,0.35); }
+  /* Generated, never written by JS: the button is inside the dc render tree and
+     written text would not survive the next renderVals(). */
+  .bi-switch__lbl::after { content: "Continia"; }
+
+  /* the caption below the window */
+  .bi-stage__cap { position: relative; max-width: 1080px; margin: 20px auto 0; min-height: 1.7em; font-size: 19px; line-height: 1.6; }
+  .bi-stage__cap span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
+  .bi-cap--off { color: #3a4a6b; }
+  .bi-cap--on { color: #983eae; font-weight: 600; }
+
+  /* --- the 9s timeline --- */
+  @keyframes bi-cy     { 0%, 5% { opacity: 0; transform: translateY(-7px); } 13%, 60% { opacity: 1; transform: none; } 68%, 100% { opacity: 0; transform: translateY(-7px); } }
+  @keyframes bi-cydoc  { 0%, 7% { opacity: 0; transform: translateX(28px); } 18%, 60% { opacity: 1; transform: none; } 68%, 100% { opacity: 0; transform: translateX(28px); } }
+  @keyframes bi-cyfold { 0%, 5% { opacity: 0; max-height: 0; } 13%, 60% { opacity: 1; max-height: var(--fold-h, 190px); } 68%, 100% { opacity: 0; max-height: 0; } }
+  @keyframes bi-capoff { 0%, 6% { opacity: 1; } 13%, 64% { opacity: 0; } 72%, 100% { opacity: 1; } }
+  @keyframes bi-capon  { 0%, 8% { opacity: 0; } 15%, 60% { opacity: 1; } 68%, 100% { opacity: 0; } }
+  @keyframes bi-knob   { 0%, 5% { transform: translateX(0); } 13%, 60% { transform: translateX(16px); } 68%, 100% { transform: translateX(0); } }
+  @keyframes bi-track  { 0%, 5% { background-color: #dde3ee; } 13%, 60% { background-color: #983eae; } 68%, 100% { background-color: #dde3ee; } }
+
+  .bi-c { animation: bi-cy 9s cubic-bezier(0.16,1,0.3,1) infinite both; transition: opacity 420ms cubic-bezier(0.16,1,0.3,1), transform 420ms cubic-bezier(0.16,1,0.3,1); }
+  .bi-c--2 { animation-delay: 130ms; }
+  .bi-c--3 { animation-delay: 260ms; }
+  .bi-c--4 { animation-delay: 390ms; }
+  .bi-win__doc.bi-c { animation-name: bi-cydoc; }
+  .bi-fold.bi-c { animation-name: bi-cyfold; transition: opacity 420ms cubic-bezier(0.16,1,0.3,1), max-height 420ms cubic-bezier(0.16,1,0.3,1); }
+  .bi-cap--off { animation: bi-capoff 9s linear infinite both; }
+  .bi-cap--on { animation: bi-capon 9s linear infinite both; }
+  .bi-switch__knob { animation: bi-knob 9s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .bi-switch__track { animation: bi-track 9s linear infinite both; }
+
+  /* Off-screen it stops: a 9s loop nobody is looking at is just heat. The class
+     goes on body, which sits outside the dc render tree. */
+  body.bi-win-paused .bi-c,
+  body.bi-win-paused .bi-stage__cap span,
+  body.bi-win-paused .bi-switch__knob,
+  body.bi-win-paused .bi-switch__track { animation-play-state: paused; }
+
+  /* Once someone presses the switch, the loop hands over to them for good —
+     resuming it under their hands would read as the page arguing back. */
+  body.bi-manual .bi-c,
+  body.bi-manual .bi-stage__cap span,
+  body.bi-manual .bi-switch__knob,
+  body.bi-manual .bi-switch__track { animation: none !important; }
+  body.bi-manual .bi-switch__knob,
+  body.bi-manual .bi-switch__track { transition: transform 300ms cubic-bezier(0.16,1,0.3,1), background-color 300ms var(--ease-standard); }
+  body.bi-manual .bi-stage__cap span { transition: opacity 300ms var(--ease-standard); }
+  body.bi-manual.bi-on .bi-c { opacity: 1; transform: none; }
+  body.bi-manual.bi-off .bi-c { opacity: 0; transform: translateY(-7px); }
+  body.bi-manual.bi-on .bi-fold.bi-c { max-height: var(--fold-h, 190px); transform: none; }
+  body.bi-manual.bi-off .bi-fold.bi-c { max-height: 0; transform: none; }
+  body.bi-manual.bi-off .bi-win__doc.bi-c { transform: translateX(28px); }
+  body.bi-manual.bi-on .bi-switch__knob { transform: translateX(16px); }
+  body.bi-manual.bi-on .bi-switch__track { background-color: #983eae; }
+  body.bi-manual.bi-on .bi-cap--on,
+  body.bi-manual.bi-off .bi-cap--off { opacity: 1; }
+  body.bi-manual.bi-on .bi-cap--off,
+  body.bi-manual.bi-off .bi-cap--on { opacity: 0; }
+
+  /* ============================================================
+     SECTIONS — light, navy, light, navy, light. Two grounds only, per the
+     Two-Ground Rule; nothing in between, so every seam is an edge.
+     ============================================================ */
+  .bi-sec { padding: clamp(72px,7vw,112px) clamp(20px,4vw,44px); }
+  .bi-sec--navy { background: linear-gradient(168deg, #03163f 0%, #051f56 52%, #06296b 100%); color: #ffffff; }
+  .bi-sec--tint { background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 100%); }
+  .bi-sec__in { max-width: 1180px; margin: 0 auto; }
+  .bi-sec__eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #983eae; }
+  .bi-sec--navy .bi-sec__eyebrow { color: var(--c-innovation-blue); }
+  .bi-sec h2 { margin: 14px 0 0; max-width: 20ch; font-size: clamp(28px,3vw,44px); font-weight: 700; line-height: 1.08; letter-spacing: -0.022em; }
+  .bi-sec--navy h2 { color: #ffffff; }
+  .bi-sec__lead { margin: 18px 0 0; max-width: 60ch; font-size: 1.0625rem; line-height: 1.65; color: #3a4a6b; }
+  .bi-sec--navy .bi-sec__lead { color: #cdd4e3; }
+
+  /* ============================================================
+     THE MERGE — four windows become one.
+     The alternative is not an argument on this page, it is a picture of what
+     the reader would otherwise be holding open: a portal, an export, a second
+     inbox, a sync job. On scroll they fly into the client and stop existing.
+     ============================================================ */
+  .bi-merge { position: relative; margin: clamp(44px,4.5vw,64px) auto 0; max-width: 900px; height: clamp(330px,32vw,420px); }
+  .bi-mwin { box-sizing: border-box; border-radius: 12px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 20px 50px rgba(1,10,32,0.35); overflow: hidden; }
+  .bi-mwin__bar { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: #eef1f6; border-bottom: 1px solid #dde3ee; }
+  .bi-mwin__bar span { width: 7px; height: 7px; border-radius: 50%; background: #cfd7e6; }
+  .bi-mwin__bar b { margin-left: 5px; font-size: 10.5px; font-weight: 600; color: #5a6884; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* the one that stays */
+  .bi-merge__main { position: absolute; left: 50%; top: 50%; width: min(420px, 74%); transform: translate(-50%,-50%); z-index: 2; }
+  .bi-merge__main .bi-mwin__body { padding: 14px 15px 16px; }
+  .bi-merge__row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #eef1f6; font-size: 12px; color: #3a4a6b; }
+  .bi-merge__row:last-child { border-bottom: 0; }
+  .bi-merge__row i { color: #983eae; font-size: 12px; }
+  .bi-merge__row b { margin-left: auto; font-weight: 600; color: #0a1838; }
+  .bi-merge__tag { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 6px 11px; border-radius: 999px; background: var(--c-light-blue); color: var(--c-tech-blue); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* the four that do not */
+  .bi-merge__sat { position: absolute; left: 50%; top: 50%; width: min(212px, 44%); margin: -54px 0 0 -106px; transform: translate(var(--x), var(--y)) rotate(var(--r)); opacity: 1; transition: transform 900ms cubic-bezier(0.65,0,0.35,1), opacity 700ms var(--ease-standard); }
+  .bi-merge__sat .bi-mwin__body { padding: 12px 13px 14px; }
+  .bi-merge__lock { display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: #5a6884; }
+  .bi-merge__lock i { color: #aab4c8; }
+  .bi-merge__l { height: 6px; border-radius: 3px; background: #e4e9f3; margin-top: 8px; }
+  .bi-merge__l--s { width: 58%; }
+  .bi-merge__cap { position: absolute; left: 0; right: 0; bottom: -6px; text-align: center; font-size: 13px; font-weight: 600; color: #9fb0d6; transition: opacity 500ms var(--ease-standard); }
+  /* Landing: they collapse into the middle and are gone. The delay is per
+     window so it reads as four separate things being absorbed, not a wipe. */
+  body.bi-merged .bi-merge__sat { transform: translate(0,0) scale(0.36); opacity: 0; }
+  body.bi-merged .bi-merge__sat--1 { transition-delay: 0ms; }
+  body.bi-merged .bi-merge__sat--2 { transition-delay: 110ms; }
+  body.bi-merged .bi-merge__sat--3 { transition-delay: 220ms; }
+  body.bi-merged .bi-merge__sat--4 { transition-delay: 330ms; }
+  body.bi-merged .bi-merge__cap { opacity: 0; }
+  .bi-merge__main { transition: transform 700ms cubic-bezier(0.16,1,0.3,1), box-shadow 700ms var(--ease-standard); }
+  body.bi-merged .bi-merge__main { transform: translate(-50%,-50%) scale(1.06); box-shadow: 0 30px 70px rgba(1,10,32,0.45), 0 0 0 1px rgba(143,248,255,0.35); }
+  .bi-merge__after { margin: clamp(26px,2.6vw,34px) 0 0; min-height: 1.7em; text-align: center; font-size: 19px; font-weight: 600; color: var(--c-innovation-blue); opacity: 0; transform: translateY(8px); transition: opacity 600ms var(--ease-standard) 520ms, transform 600ms cubic-bezier(0.16,1,0.3,1) 520ms; }
+  body.bi-merged .bi-merge__after { opacity: 1; transform: none; }
+
+  /* ============================================================
+     THE STACK — Continia is a layer, not a floor above.
+     Scroll drives one number, --bi-p, and the deck closes from exploded to
+     assembled as the reader travels the section. The Continia plate arrives
+     from the side and lands BETWEEN the others, because that is the claim.
+     ============================================================ */
+  .bi-layers__deck { margin: clamp(44px,4.4vw,62px) auto 0; max-width: 760px; perspective: 1100px; padding-bottom: calc(46px * 4 * (1 - var(--bi-p, 0))); }
+  .bi-layers__plates { transform-style: preserve-3d; transform: rotateX(calc(30deg - 14deg * var(--bi-p, 0))); }
+  .bi-plate { box-sizing: border-box; display: flex; align-items: center; gap: 15px; margin-top: 13px; padding: 15px 20px; border-radius: 13px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 14px 34px rgba(5,41,117,0.11); transform: translateY(calc(var(--i) * 46px * (1 - var(--bi-p, 0)))); }
+  .bi-plate:first-child { margin-top: 0; }
+  .bi-plate__ico { flex: none; width: 38px; height: 38px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; background: #eef1f6; color: var(--c-tech-blue); }
+  .bi-plate__nm { min-width: 0; font-size: 15px; font-weight: 700; color: #0a1838; }
+  .bi-plate__nt { margin-left: auto; font-size: 12.5px; color: #5a6884; text-align: right; }
+  /* The Continia layer: same plate, page accent, and it slides in from the
+     right as the deck closes. */
+  .bi-plate--c { border-color: #dcc0e6; background: #faf4fc; box-shadow: 0 16px 40px rgba(152,62,174,0.16); transform: translateY(calc(var(--i) * 46px * (1 - var(--bi-p, 0)))) translateX(calc(150px * (1 - var(--bi-p, 0)))); }
+  .bi-plate--c .bi-plate__ico { background: #983eae; color: #ffffff; }
+  .bi-plate--c .bi-plate__nm { color: #983eae; }
+  .bi-plate--c .bi-plate__nt { color: #a86bbb; }
+
+  /* ============================================================
+     NEVER — the four things that do not happen. Each line strikes itself out
+     as it arrives; the rule is the point, so it is drawn, not described.
+     ============================================================ */
+  .bi-never { list-style: none; margin: clamp(38px,3.8vw,54px) 0 0; padding: 0; }
+  .bi-never li { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.13); opacity: 0; transform: translateY(14px); transition: opacity 520ms var(--ease-standard), transform 520ms cubic-bezier(0.16,1,0.3,1); }
+  .bi-never li:last-child { border-bottom: 0; }
+  .bi-never i { flex: none; margin-top: 4px; font-size: 17px; color: var(--c-innovation-blue); }
+  .bi-never b { position: relative; display: inline; font-size: clamp(18px,1.9vw,25px); font-weight: 600; line-height: 1.35; color: #ffffff; }
+  .bi-never b::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; border-radius: 2px; background: var(--c-innovation-blue); transform: scaleX(0); transform-origin: left center; transition: transform 700ms cubic-bezier(0.65,0,0.35,1); }
+  .bi-never small { display: block; margin-top: 7px; font-size: 14.5px; font-weight: 400; line-height: 1.55; color: #9fb0d6; }
+  body.bi-never-in .bi-never li { opacity: 1; transform: none; }
+  body.bi-never-in .bi-never b::after { transform: scaleX(1); }
+  .bi-never li:nth-child(1) { transition-delay: 0ms; }
+  .bi-never li:nth-child(2) { transition-delay: 120ms; }
+  .bi-never li:nth-child(3) { transition-delay: 240ms; }
+  .bi-never li:nth-child(4) { transition-delay: 360ms; }
+  .bi-never li:nth-child(1) b::after { transition-delay: 300ms; }
+  .bi-never li:nth-child(2) b::after { transition-delay: 420ms; }
+  .bi-never li:nth-child(3) b::after { transition-delay: 540ms; }
+  .bi-never li:nth-child(4) b::after { transition-delay: 660ms; }
+
+  /* ============================================================
+     THE APPS — the extensions list, inside the same client.
+     ============================================================ */
+  .bi-apps__list { margin: clamp(38px,3.8vw,52px) 0 0; border: 1px solid #dde3ee; border-radius: 16px; overflow: hidden; background: #ffffff; box-shadow: 0 20px 48px rgba(5,41,117,0.09); }
+  .bi-app { display: grid; grid-template-columns: 46px minmax(0,1fr) auto; align-items: center; gap: 17px; padding: 16px 20px; border-bottom: 1px solid #eef1f6; color: inherit; opacity: 0; transform: translateY(12px); transition: opacity 460ms var(--ease-standard), transform 460ms cubic-bezier(0.16,1,0.3,1), background-color 180ms var(--ease-standard); }
+  .bi-app:last-child { border-bottom: 0; }
+  .bi-app:hover { background-color: #f6f8fb; }
+  .bi-app:hover .bi-app__go { transform: translateX(3px); }
+  .bi-app__ico { width: 46px; height: 46px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; background: var(--c-light-blue); color: var(--c-tech-blue); }
+  .bi-app__tx { min-width: 0; }
+  .bi-app__nm { display: block; font-size: 15.5px; font-weight: 700; color: #0a1838; }
+  .bi-app__tg { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.5; color: #3a4a6b; }
+  .bi-app__go { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #983eae; white-space: nowrap; transition: transform 200ms var(--ease-standard); }
+  body.bi-apps-in .bi-app { opacity: 1; transform: none; }
+  .bi-app:nth-child(1) { transition-delay: 0ms; }
+  .bi-app:nth-child(2) { transition-delay: 60ms; }
+  .bi-app:nth-child(3) { transition-delay: 120ms; }
+  .bi-app:nth-child(4) { transition-delay: 180ms; }
+  .bi-app:nth-child(5) { transition-delay: 240ms; }
+  .bi-app:nth-child(6) { transition-delay: 300ms; }
+  .bi-app:nth-child(7) { transition-delay: 360ms; }
+  .bi-app:nth-child(8) { transition-delay: 420ms; }
+  .bi-apps__foot { margin: 22px 0 0; font-size: 14.5px; color: #5a6884; }
+
+  /* The satellites' resting offsets live here, not in a style attribute: an
+     inline style beats every media query and these have to move on a phone. */
+  .bi-merge__sat--1 { --x: -250px; --y: -128px; --r: -5deg; }
+  .bi-merge__sat--2 { --x: 250px; --y: -112px; --r: 4.5deg; }
+  .bi-merge__sat--3 { --x: -232px; --y: 108px; --r: 3.5deg; }
+  .bi-merge__sat--4 { --x: 246px; --y: 124px; --r: -4deg; }
+
+  /* ============================================================
+     RESPONSIVE — after the base rules on purpose: media queries add no
+     specificity, so a block above the rule it means to override loses.
+     ============================================================ */
+  @media (max-width: 1100px) {
+    .bi-merge__sat--1 { --x: -196px; --y: -116px; }
+    .bi-merge__sat--2 { --x: 196px; --y: -102px; }
+    .bi-merge__sat--3 { --x: -184px; --y: 100px; }
+    .bi-merge__sat--4 { --x: 190px; --y: 114px; }
+    /* Buttons centre below the desktop line, so they stop floating left. */
+    .bi-hero__cta { justify-content: center; }
+  }
+
+  /* CTA watermark, phones and tablets. Desktop keeps width-sizing: its band is
+     wide, so `width: 120%` covers about 2x the band and the copy sits over the
+     middle of the artwork. Below the 1100px line the band turns portrait and the
+     same 120% collapses coverage — only the artwork's top edge peeks in at the
+     bottom, reading as a stray rectangle. Sizing by HEIGHT resolves against the
+     same containing block at any width. 115% is Andreas's Photoshop crop.
+     ⚠️ `!important` is load-bearing — the value it overrides is inline on the
+     <img>, and inline beats any media query without it (trap 17). */
+  @media (max-width: 1100px) {
+    section[data-screen-label$="CTA"] > img {
+      width: auto !important; height: 115% !important;
+      min-width: 120% !important; object-fit: cover !important;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .bi-win__url b { display: none; }
+    .bi-chip { height: 27px; padding: 0 10px; font-size: 12px; }
+    .bi-win__doc { width: 46%; }
+    .bi-stage__cap { font-size: 17px; }
+    .bi-merge { max-width: 640px; }
+    .bi-merge__sat { width: min(190px, 46%); margin-left: -95px; }
+    .bi-merge__sat--1 { --x: -150px; --y: -108px; }
+    .bi-merge__sat--2 { --x: 150px; --y: -96px; }
+    .bi-merge__sat--3 { --x: -142px; --y: 96px; }
+    .bi-merge__sat--4 { --x: 146px; --y: 108px; }
+  }
+
+  /* Phone and portrait tablet: the check marks move above the buttons. Stacked,
+     the buttons are the last thing before the fold and the proof was landing
+     underneath them, unread. Reordered in CSS, not in the markup — on a wide
+     screen the proof still belongs after the call to action. */
+  @media (max-width: 900px) {
+    .bi-hero__in { display: flex; flex-direction: column; }
+    .bi-hero__cta { order: 1; margin-top: 22px; justify-content: center; }
+    .bi-hero__proof { justify-content: center; margin-top: clamp(24px,3vw,32px); animation-delay: 560ms; }
+    .bi-hero__cta { animation-delay: 640ms; }
+    .bi-hero__kick { align-self: flex-start; }
+  }
+
+  @media (max-width: 820px) {
+    .bi-win__nav { gap: 9px; }
+    .bi-win__brand { font-size: 12px; }
+    .bi-win__ribbon { gap: 6px; padding: 10px 12px; overflow: hidden; }
+    .bi-win__card { padding: 14px 15px 16px; }
+    .bi-win__doc { width: 50%; padding: 13px 13px; }
+    .bi-doc__page { padding: 12px 12px 14px; }
+    .bi-row { grid-template-columns: minmax(0,1fr) 60px 78px; font-size: 12px; }
+    .bi-plate { gap: 12px; padding: 13px 15px; }
+    .bi-plate__nt { display: none; }
+    .bi-merge { max-width: 520px; height: clamp(310px,44vw,360px); }
+    .bi-merge__sat--1 { --x: -118px; --y: -104px; }
+    .bi-merge__sat--2 { --x: 118px; --y: -92px; }
+    .bi-merge__sat--3 { --x: -112px; --y: 92px; }
+    .bi-merge__sat--4 { --x: 116px; --y: 104px; }
+  }
+
+  @media (max-width: 640px) {
+    .bi-hero h1 { max-width: none; }
+    .bi-hero__cta { flex-direction: column; align-items: center; }
+    /* Section heads centre on phone — left-aligned they fly too far left. */
+    .bi-sec__eyebrow, .bi-sec h2, .bi-sec__lead { text-align: center; }
+    .bi-sec h2, .bi-sec__lead { margin-left: auto; margin-right: auto; }
+    .bi-win__url em { font-size: 11px; }
+    /* A ribbon cut mid-word at the window edge reads as a broken layout rather
+       than as a client with more actions than fit, so a base action steps aside
+       to leave room for the two Continia adds. */
+    .bi-win__ribbon { padding: 9px 12px; gap: 5px; }
+    .bi-chip { height: 25px; padding: 0 8px; font-size: 11px; gap: 5px; }
+    .bi-chip i { font-size: 10px; }
+    .bi-chip--drop { display: none; }
+    .bi-wide { display: none; }
+    .bi-win__navico { display: none; }
+    .bi-win__body { grid-template-columns: minmax(0,1fr); }
+    .bi-win__fact { border-left: 0; border-top: 1px solid #dde3ee; padding: 14px 16px 16px; }
+    .bi-fields { grid-template-columns: minmax(0,1fr); gap: 9px; }
+    .bi-row { grid-template-columns: minmax(0,1fr) 76px; }
+    .bi-row span:nth-child(2) { display: none; }
+    /* On a phone the viewer cannot be a side pane, so it stops being one: it
+       joins the record's own flow as the last block and folds open with the
+       rest of Continia's additions. */
+    .bi-win__doc { position: static; width: auto; height: auto; overflow: hidden; border-left: 0; border-top: 1px solid #dde3ee; box-shadow: none; --fold-h: 300px; }
+    .bi-win__doc.bi-c { animation-name: bi-cyfold; }
+    body.bi-manual.bi-on .bi-win__doc.bi-c { max-height: var(--fold-h); transform: none; }
+    body.bi-manual.bi-off .bi-win__doc.bi-c { max-height: 0; transform: none; }
+    .bi-stage__cap { min-height: 1.75em; font-size: 15.5px; }
+    .bi-win__status { font-size: 11px; gap: 10px; }
+    .bi-win__status .bi-hidesm { display: none; }
+    .bi-merge { max-width: none; height: 356px; }
+    .bi-merge__main { width: 78%; }
+    .bi-merge__sat { width: 168px; margin-left: -84px; }
+    .bi-merge__sat--1 { --x: -78px; --y: -112px; }
+    .bi-merge__sat--2 { --x: 78px; --y: -96px; }
+    .bi-merge__sat--3 { --x: -74px; --y: 98px; }
+    .bi-merge__sat--4 { --x: 76px; --y: 114px; }
+    .bi-merge__cap { font-size: 12px; }
+    .bi-layers__plates { transform: none; }
+    .bi-layers__deck { perspective: none; }
+    .bi-app { grid-template-columns: 40px minmax(0,1fr); gap: 13px; padding: 14px 16px; }
+    .bi-app__ico { width: 40px; height: 40px; font-size: 17px; }
+    .bi-app__go { grid-column: 2; margin-top: 6px; }
+    .bi-never b { font-size: 18px; }
+    section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+  }
+
+  @media (max-width: 380px) {
+    .bi-chip--drop2 { display: none; }
+    /* Both captions fit one line down to a ~350px box; below that the longer
+       one breaks, and only there is the two-line reserve worth its dead air. */
+    .bi-stage__cap { min-height: 3.4em; }
+  }
+
+  /* Nothing here needs motion to be understood: every state the loops travel
+     through is also a resting state, so reduced motion gets the finished one. */
+  @media (prefers-reduced-motion: reduce) {
+    .bi-hero__kick, .bi-hero h1 .ln, .bi-hero__lead, .bi-hero .bi-stage, .bi-hero__cta, .bi-hero__proof,
+    .bi-c, .bi-stage__cap span, .bi-switch__knob, .bi-switch__track { animation: none !important; }
+    .bi-hero__kick, .bi-hero h1 .ln, .bi-hero__lead, .bi-hero .bi-stage, .bi-hero__cta, .bi-hero__proof { opacity: 1; transform: none; }
+    .bi-c { opacity: 1; transform: none; }
+    .bi-switch__knob { transform: translateX(16px); }
+    .bi-switch__track { background-color: #983eae; }
+    /* `.bi-stage__cap span` is 0,1,1 and would beat a bare `.bi-cap--on` at
+       0,1,0 — which would leave the caption blank rather than merely still. */
+    .bi-stage__cap .bi-cap--on { opacity: 1; }
+    .bi-merge__sat, .bi-merge__main, .bi-merge__after, .bi-never li, .bi-never b::after, .bi-app { transition: none !important; }
+  }
+</style>
+</helmet>
+<div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Solutions" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO — the window ============ -->
+<section class="bi-hero" data-screen-label="Hero">
+  <div class="bi-hero__in">
+    <p class="bi-hero__kick"><i class="fa-light fa-cube"></i>Inside Business Central</p>
+    <h1><span class="ln">Not another window.</span><span class="ln hl">The one you already have.</span></h1>
+    <p class="bi-hero__lead">Continia's apps are extensions to Microsoft Dynamics 365 Business Central. They install into the client your finance team already opens, and they use its data, its permissions and its posting routines. There is no portal to sign into and nothing to keep in sync.</p>
+
+    <div class="bi-stage">
+      <div class="bi-win">
+        <div class="bi-win__chrome">
+          <div class="bi-win__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="bi-win__url"><i class="fa-light fa-lock"></i><b>businesscentral.dynamics.com</b><em>/Purchase Invoice 108021</em></div>
+        </div>
+        <div class="bi-win__nav">
+          <span class="bi-win__brand"><i class="fa-light fa-grid-2"></i>Dynamics 365 Business Central</span>
+          <span class="bi-win__navico" aria-hidden="true"><i class="fa-light fa-magnifying-glass"></i><i class="fa-light fa-gear"></i><i class="fa-light fa-circle-user"></i></span>
+        </div>
+        <div class="bi-win__ribbon">
+          <span class="bi-chip"><i class="fa-light fa-plus"></i>New</span>
+          <span class="bi-chip bi-chip--drop2"><i class="fa-light fa-check"></i>Post</span>
+          <span class="bi-chip bi-chip--drop"><i class="fa-light fa-paper-plane"></i>Release</span>
+          <span class="bi-chip bi-chip--c bi-c bi-c--2"><i class="fa-light fa-file-invoice"></i><span class="bi-wide">Document </span>Capture</span>
+          <span class="bi-chip bi-chip--c bi-c bi-c--3"><i class="fa-light fa-user-check"></i>Approvals</span>
+        </div>
+        <div class="bi-win__body">
+          <div class="bi-win__card">
+            <div class="bi-win__title">Purchase Invoice <span>108021</span></div>
+            <div class="bi-tab"><i class="fa-light fa-chevron-down"></i>General</div>
+            <div class="bi-fields">
+              <div class="bi-f"><b>Vendor No.</b><span>10000</span></div>
+              <div class="bi-f"><b>Vendor Name</b><span>Fabrikam, Inc.</span></div>
+              <div class="bi-f"><b>Document Date</b><span>03-08-2026</span></div>
+              <div class="bi-f"><b>Due Date</b><span>02-09-2026</span></div>
+            </div>
+            <div class="bi-fold bi-c bi-c--2">
+              <div class="bi-tab bi-tab--c"><i class="fa-light fa-chevron-down"></i>Continia</div>
+              <div class="bi-fields">
+                <div class="bi-f bi-f--c"><b>Document Category</b><span>Purchase invoice</span></div>
+                <div class="bi-f bi-f--c"><b>Approval Status</b><span>Pending</span></div>
+              </div>
+            </div>
+            <div class="bi-tab"><i class="fa-light fa-chevron-down"></i>Lines</div>
+            <div class="bi-rows">
+              <div class="bi-row"><b>Consulting hours</b><span>12</span><span>9,600.00</span></div>
+              <div class="bi-row"><b>Software licences</b><span>4</span><span>2,880.00</span></div>
+            </div>
+          </div>
+          <div class="bi-win__fact">
+            <div class="bi-fact__h">Vendor Details</div>
+            <div class="bi-fact__r">Vendor No.<b>10000</b></div>
+            <div class="bi-fact__r">Balance<b>12,480.00</b></div>
+            <div class="bi-fact__r">Ongoing invoices<b>3</b></div>
+          </div>
+          <div class="bi-win__doc bi-c bi-c--4">
+            <div class="bi-doc__head"><i class="fa-light fa-file-lines"></i>Document</div>
+            <div class="bi-doc__page" aria-hidden="true">
+              <div class="bi-doc__l bi-doc__l--t"></div>
+              <div class="bi-doc__l"></div>
+              <div class="bi-doc__l"></div>
+              <div class="bi-doc__l bi-doc__l--s"></div>
+              <div class="bi-doc__box"><span>Matched to this invoice</span><i class="fa-light fa-circle-check"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="bi-win__status">
+          <span><i class="fa-light fa-lock"></i>Same permissions</span>
+          <span class="bi-hidesm"><i class="fa-light fa-clock-rotate-left"></i>Same audit trail</span>
+          <button type="button" class="bi-switch" data-bi-switch aria-pressed="true">
+            <span class="bi-switch__track"><span class="bi-switch__knob"></span></span>
+            <span class="bi-switch__lbl"></span>
+          </button>
+        </div>
+      </div>
+      <p class="bi-stage__cap">
+        <span class="bi-cap--off">Business Central, as your team opens it today.</span>
+        <span class="bi-cap--on">The same window, with Continia inside it.</span>
+      </p>
+    </div>
+
+    <div class="bi-hero__cta">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" href="#inside" hint-size="auto,48px">See what runs inside</x-import>
+    </div>
+
+    <div class="bi-hero__proof">
+      <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+      <span><i class="fa-light fa-circle-check"></i>21,000+ customers</span>
+      <span><i class="fa-light fa-circle-check"></i>1,500+ partners in 45+ countries</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE ALTERNATIVE — four windows become one ============ -->
+<section class="bi-sec bi-sec--navy" data-screen-label="The alternative">
+  <div class="bi-sec__in">
+    <p class="bi-sec__eyebrow">The alternative</p>
+    <h2>Every other way costs you a window.</h2>
+    <p class="bi-sec__lead">Software that sits beside Business Central brings its own front door: a portal to sign into, a file to export, an inbox to watch, a job that keeps the two sides in step. Continia does not add a window. It adds to the one you have.</p>
+
+    <div class="bi-merge" aria-hidden="true">
+      <div class="bi-mwin bi-merge__sat bi-merge__sat--1">
+        <div class="bi-mwin__bar"><span></span><span></span><b>Portal login</b></div>
+        <div class="bi-mwin__body"><div class="bi-merge__lock"><i class="fa-light fa-lock"></i>Sign in</div><div class="bi-merge__l"></div><div class="bi-merge__l bi-merge__l--s"></div></div>
+      </div>
+      <div class="bi-mwin bi-merge__sat bi-merge__sat--2">
+        <div class="bi-mwin__bar"><span></span><span></span><b>Export file</b></div>
+        <div class="bi-mwin__body"><div class="bi-merge__lock"><i class="fa-light fa-file-export"></i>invoices.csv</div><div class="bi-merge__l"></div><div class="bi-merge__l bi-merge__l--s"></div></div>
+      </div>
+      <div class="bi-mwin bi-merge__sat bi-merge__sat--3">
+        <div class="bi-mwin__bar"><span></span><span></span><b>Second inbox</b></div>
+        <div class="bi-mwin__body"><div class="bi-merge__lock"><i class="fa-light fa-inbox"></i>Unread</div><div class="bi-merge__l"></div><div class="bi-merge__l bi-merge__l--s"></div></div>
+      </div>
+      <div class="bi-mwin bi-merge__sat bi-merge__sat--4">
+        <div class="bi-mwin__bar"><span></span><span></span><b>Sync job</b></div>
+        <div class="bi-mwin__body"><div class="bi-merge__lock"><i class="fa-light fa-arrows-rotate"></i>Last run 04:00</div><div class="bi-merge__l"></div><div class="bi-merge__l bi-merge__l--s"></div></div>
+      </div>
+
+      <div class="bi-mwin bi-merge__main">
+        <div class="bi-mwin__bar"><span></span><span></span><b>Dynamics 365 Business Central</b></div>
+        <div class="bi-mwin__body">
+          <div class="bi-merge__row"><i class="fa-light fa-file-invoice"></i>Purchase Invoice 108021<b>12,480.00</b></div>
+          <div class="bi-merge__row"><i class="fa-light fa-user-check"></i>Approvals<b>1</b></div>
+          <div class="bi-merge__row"><i class="fa-light fa-file-lines"></i>Document<b>1</b></div>
+          <span class="bi-merge__tag"><i class="fa-light fa-cube"></i>One window</span>
+        </div>
+      </div>
+      <p class="bi-merge__cap">Four more things to keep open.</p>
+    </div>
+    <p class="bi-merge__after">None of them exist here.</p>
+  </div>
+</section>
+
+<!-- ============ THE STACK — a layer, not a floor above ============ -->
+<section class="bi-sec bi-sec--tint bi-layers" data-screen-label="The stack">
+  <div class="bi-sec__in">
+    <p class="bi-sec__eyebrow">The stack</p>
+    <h2>A layer, not a floor above.</h2>
+    <p class="bi-sec__lead">Continia installs as an extension, which means it sits inside Business Central's own stack rather than on top of it. Your data stays where it is. Your permissions still decide who sees what. Your posting routines still post.</p>
+
+    <div class="bi-layers__deck">
+      <div class="bi-layers__plates">
+        <div class="bi-plate" style="--i: 0"><span class="bi-plate__ico"><i class="fa-light fa-database"></i></span><span class="bi-plate__nm">Your data</span><span class="bi-plate__nt">Stays in Business Central</span></div>
+        <div class="bi-plate" style="--i: 1"><span class="bi-plate__ico"><i class="fa-light fa-lock"></i></span><span class="bi-plate__nm">Your permissions</span><span class="bi-plate__nt">Decide who sees what</span></div>
+        <div class="bi-plate bi-plate--c" style="--i: 2"><span class="bi-plate__ico"><i class="fa-light fa-cube"></i></span><span class="bi-plate__nm">Continia</span><span class="bi-plate__nt">Installed as an extension</span></div>
+        <div class="bi-plate" style="--i: 3"><span class="bi-plate__ico"><i class="fa-light fa-list-check"></i></span><span class="bi-plate__nm">Your posting routines</span><span class="bi-plate__nt">Post the same way</span></div>
+        <div class="bi-plate" style="--i: 4"><span class="bi-plate__ico"><i class="fa-light fa-clock-rotate-left"></i></span><span class="bi-plate__nm">Your audit trail</span><span class="bi-plate__nt">One trail, not two</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT NEVER HAPPENS ============ -->
+<section class="bi-sec bi-sec--navy bi-neversec" data-screen-label="What never happens">
+  <div class="bi-sec__in">
+    <p class="bi-sec__eyebrow">What never happens</p>
+    <h2>Four things you will not be doing.</h2>
+    <ul class="bi-never">
+      <li><i class="fa-light fa-circle-xmark"></i><span><b>Signing into a second system.</b><small>Continia opens where Business Central opens — same sign-in, same session, same user.</small></span></li>
+      <li><i class="fa-light fa-circle-xmark"></i><span><b>Exporting a file so another system can read it.</b><small>The data is already in the tables the rest of your finance work uses.</small></span></li>
+      <li><i class="fa-light fa-circle-xmark"></i><span><b>Reconciling two sets of records.</b><small>There is one record. Continia reads from it and writes to it.</small></span></li>
+      <li><i class="fa-light fa-circle-xmark"></i><span><b>Running an integration project.</b><small>Installation is an extension from Microsoft AppSource, set up with your partner.</small></span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ THE APPS ============ -->
+<section class="bi-sec bi-apps" id="inside" data-screen-label="The apps inside">
+  <div class="bi-sec__in">
+    <p class="bi-sec__eyebrow">Inside the same client</p>
+    <h2>Eight apps. One window.</h2>
+    <p class="bi-sec__lead">Every Continia product is an extension to Business Central. Install the ones you need and they appear in the client you already use — in the same lists, under the same permissions.</p>
+
+    <div class="bi-apps__list">
+      <a class="bi-app" href="../../products/document-capture/"><span class="bi-app__ico"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></span><span class="bi-app__tx"><span class="bi-app__nm">Document Capture</span><span class="bi-app__tg">Streamline your invoice processing with end-to-end AP automation.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+      <a class="bi-app" href="../../products/expense-management/"><span class="bi-app__ico"><i class="fa-kit fa-expense-management-solution-em-icon"></i></span><span class="bi-app__tx"><span class="bi-app__nm">Expense Management</span><span class="bi-app__tg">Get a real-time overview of employee spending.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+      <a class="bi-app" href="../../products/continia-banking/"><span class="bi-app__ico"><i class="fa-kit fa-banking-solution-cb-icon"></i></span><span class="bi-app__tx"><span class="bi-app__nm">Continia Banking</span><span class="bi-app__tg">Speed up and secure your payment processes.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+      <a class="bi-app" href="../../products/document-output/"><span class="bi-app__ico"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></span><span class="bi-app__tx"><span class="bi-app__nm">Document Output</span><span class="bi-app__tg">Automate your document delivery and customize your emails.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+      <a class="bi-app" href="../../products/continia-finance/"><span class="bi-app__ico"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></span><span class="bi-app__tx"><span class="bi-app__nm">Continia Finance</span><span class="bi-app__tg">Optimize your advanced financial processes with 7 specialized modules.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+      <a class="bi-app" href="../../products/payment-management/"><span class="bi-app__ico"><i class="fa-light fa-money-bill-transfer"></i></span><span class="bi-app__tx"><span class="bi-app__nm">Payment Management</span><span class="bi-app__tg">Automate your vendor payments and bank reconciliations.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+      <a class="bi-app" href="../../products/opplus/"><span class="bi-app__ico"><i class="fa-light fa-arrows-rotate"></i></span><span class="bi-app__tx"><span class="bi-app__nm">OPplus</span><span class="bi-app__tg">An all-in-one payment product for the DACH region.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+      <a class="bi-app" href="../../products/collection-management/"><span class="bi-app__ico"><i class="fa-light fa-hand-holding-dollar"></i></span><span class="bi-app__tx"><span class="bi-app__nm">Collection Management</span><span class="bi-app__tg">Optimize your collection process for the Danish market.</span></span><span class="bi-app__go">Open <i class="fa-light fa-arrow-right"></i></span></a>
+    </div>
+    <p class="bi-apps__foot">Usage-based billing with no upfront licence fee, and a free 30-day trial with every module included.</p>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section data-screen-label="Free trial CTA" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%);">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div style="max-width: 820px; margin: 0 auto; padding: 110px 32px; text-align: center; position: relative;">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Microsoft AppSource</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">Start your free trial today</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">See Continia in action with a 30-day free trial directly from Microsoft Marketplace. Simply download one of our apps, follow the set-up, and get started in less than 15 minutes.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="220px,52px">Download free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="https://www.continia.com/partners/" hint-size="180px,52px">Find a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = {};
+
+  componentDidMount() {
+    this._watchFooter();
+    this._watchWindow();
+    this._watchSwitch();
+    this._watchScenes();
+    this._watchLayers();
+  }
+
+  // The hero loop runs for as long as someone is looking at it and not a moment
+  // longer. The class goes on body, not on the section: the section is inside
+  // the dc render tree and the next renderVals() would wipe it.
+  _watchWindow() {
+    if (!("IntersectionObserver" in window)) return;
+    const el = document.querySelector(".bi-win");
+    if (!el) return;
+    if (this._winObs) this._winObs.disconnect();
+    this._winObs = new IntersectionObserver(
+      ([e]) => document.body.classList.toggle("bi-win-paused", !e.isIntersecting),
+      { rootMargin: "80px" },
+    );
+    this._winObs.observe(el);
+  }
+
+  // The switch in the window's status bar is real. Once it is pressed the loop
+  // hands over for good — resuming it under the reader's hands would read as
+  // the page arguing back. Delegated on document because the button is inside
+  // the render tree and gets replaced; a bound listener would die with it.
+  _watchSwitch() {
+    if (this._switchBound) return;
+    this._switchBound = true;
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-bi-switch]");
+      if (!btn) return;
+      const body = document.body;
+      // First press: freeze whatever the loop is showing right now, so the
+      // press reads as taking the wheel rather than as a jump cut.
+      if (!body.classList.contains("bi-manual")) {
+        const on = this._continiaVisible();
+        body.classList.add("bi-manual");
+        body.classList.toggle("bi-on", !on);
+        body.classList.toggle("bi-off", on);
+      } else {
+        const on = body.classList.contains("bi-on");
+        body.classList.toggle("bi-on", !on);
+        body.classList.toggle("bi-off", on);
+      }
+      const nowOn = body.classList.contains("bi-on");
+      document.querySelectorAll("[data-bi-switch]").forEach((b) => b.setAttribute("aria-pressed", nowOn ? "true" : "false"));
+    });
+  }
+
+  // Read the running animation rather than guessing at the phase: the loop is
+  // paused off-screen, so a clock-based guess would drift out of step with it.
+  _continiaVisible() {
+    const el = document.querySelector(".bi-win__doc");
+    if (!el) return true;
+    return parseFloat(getComputedStyle(el).opacity) > 0.5;
+  }
+
+  // Two scenes that fire once, when they are properly on screen rather than at
+  // the first pixel: both are payoffs and should not happen off in the corner.
+  _watchScenes() {
+    const scenes = [
+      { sel: ".bi-merge", cls: "bi-merged" },
+      { sel: ".bi-never", cls: "bi-never-in" },
+      { sel: ".bi-apps__list", cls: "bi-apps-in" },
+    ];
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { scenes.forEach((s) => document.body.classList.add(s.cls)); return; }
+    let queued = false;
+    this._onSceneScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        let left = 0;
+        scenes.forEach((s) => {
+          if (document.body.classList.contains(s.cls)) return;
+          // Re-queried every frame: the runtime replaces nodes on re-render, so
+          // a reference held from componentDidMount goes deaf (trap 6b).
+          const el = document.querySelector(s.sel);
+          if (!el) { left++; return; }
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight * 0.82 && r.bottom > 0) document.body.classList.add(s.cls);
+          else left++;
+        });
+        if (!left) {
+          document.removeEventListener("scroll", this._onSceneScroll, { capture: true });
+          window.removeEventListener("resize", this._onSceneScroll);
+        }
+      });
+    };
+    document.addEventListener("scroll", this._onSceneScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onSceneScroll, { passive: true });
+    this._onSceneScroll();
+  }
+
+  // The deck closes as the reader travels the section: one number, read off
+  // scroll position every frame, drives every plate's offset in CSS.
+  _watchLayers() {
+    const root = document.documentElement;
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { root.style.setProperty("--bi-p", "1"); return; }
+    let queued = false;
+    this._onLayerScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const deck = document.querySelector(".bi-layers__deck");
+        if (!deck) return;
+        const r = deck.getBoundingClientRect();
+        if (!r.height) return;
+        // Measured against the reader's eye line, not the viewport top: the
+        // deck should be closed where they are looking, not where it ends.
+        const eye = window.innerHeight * 0.68;
+        const p = Math.max(0, Math.min(1, (eye - r.top) / (r.height * 0.8)));
+        // Written to documentElement, which sits outside the dc render tree —
+        // an inline style on anything inside it is wiped by the next render.
+        root.style.setProperty("--bi-p", p.toFixed(4));
+      });
+    };
+    document.addEventListener("scroll", this._onLayerScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onLayerScroll, { passive: true });
+    this._onLayerScroll();
+  }
+
+  // Same footer fade the rest of the site uses.
+  _watchFooter() {
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
+  }
+
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
