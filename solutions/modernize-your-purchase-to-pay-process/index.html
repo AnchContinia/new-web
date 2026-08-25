@@ -119,8 +119,10 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      the site. Active reads heavier than hover, not the same weight. */
   body .cnt-siteheader__link { border-radius: 999px; transition: background-color 200ms var(--ease-standard), color 200ms var(--ease-standard); }
   body .cnt-siteheader__nav .cnt-siteheader__link:hover { background: rgba(5,41,117,0.06); color: var(--c-tech-blue); }
-  body .cnt-siteheader__link--active { box-shadow: none; background: var(--c-light-blue); color: var(--c-tech-blue); }
-  body .cnt-siteheader__nav .cnt-siteheader__link--active:hover { background: var(--c-light-blue); }
+  /* Active stays the bundle's underline. Every other page marks the current
+     section that way and this one must not be the odd one out. */
+  body .cnt-siteheader__link--active,
+  body .cnt-siteheader__link--active:hover { background: none; border-radius: 0; }
 
   /* --- the dropdown opens item by item --- */
   body .cnt-siteheader__dropdown { min-width: 288px; border-radius: 18px; padding: 10px; border-color: rgba(5,41,117,0.10); box-shadow: 0 24px 60px rgba(5,41,117,0.20); }
@@ -180,17 +182,113 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   @keyframes rl-mrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
 
   /* ---------- Hero ---------- */
-  .rl-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,8vw,112px) clamp(20px,4vw,44px) clamp(64px,7vw,92px); }
-  .rl-hero::before { content: ""; position: absolute; right: -14%; top: -34%; width: 660px; height: 660px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(143,248,255,0.20), transparent 62%); pointer-events: none; }
+  .rl-hero { position: relative; overflow: hidden; background: #041b4d; color: #fff; padding: clamp(68px,6.4vw,96px) clamp(20px,4vw,44px) clamp(68px,6.4vw,92px); }
+
+  /* Two slow lights. They are the only thing here that moves without being
+     asked to, so they move slowly enough to read as depth rather than motion. */
+  .rl-hero__sky { position: absolute; inset: -22% -12%; pointer-events: none; }
+  .rl-hero__sky::before, .rl-hero__sky::after { content: ""; position: absolute; border-radius: 50%; }
+  .rl-hero__sky::before { width: 800px; height: 800px; right: 1%; top: -16%; background: radial-gradient(circle at 34% 34%, rgba(143,248,255,0.22), transparent 62%); animation: rl-drift-a 26s ease-in-out infinite; }
+  .rl-hero__sky::after { width: 640px; height: 640px; left: -9%; bottom: -28%; background: radial-gradient(circle at 60% 40%, rgba(96,124,255,0.22), transparent 64%); animation: rl-drift-b 33s ease-in-out infinite; }
+  @keyframes rl-drift-a { 0%, 100% { transform: none; } 50% { transform: translate3d(-54px,42px,0) scale(1.09); } }
+  @keyframes rl-drift-b { 0%, 100% { transform: none; } 50% { transform: translate3d(48px,-36px,0) scale(1.07); } }
+
   .rl-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
-  .rl-hero h1 { margin: 0; max-width: 20ch; font-size: clamp(36px,4.3vw,60px); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; }
+  /* 26ch, not 17: at 17ch the first sentence broke to three lines and pushed
+     the flow — the thing worth looking at — clean out of the first viewport.
+     26ch holds it to two, and the payoff line to one. */
+  .rl-hero h1 { margin: 0; max-width: 26ch; font-size: clamp(38px,4.3vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.028em; }
+  .rl-hero h1 .ln { display: block; }
   .rl-hero h1 .hl { color: var(--c-innovation-blue); }
-  .rl-hero__lead { margin: 24px 0 0; max-width: 56ch; font-size: 1.1875rem; line-height: 1.6; color: #dfe6f4; }
-  .rl-hero__chain { margin: clamp(44px,5vw,64px) 0 0; }
+  .rl-hero__lead { margin: 26px 0 0; max-width: 54ch; font-size: 1.1875rem; line-height: 1.6; color: #dfe6f4; }
   .rl-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: clamp(40px,4vw,52px); }
   .rl-hero__proof { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 26px; font-size: 14.5px; color: #cdd4e3; }
   .rl-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
   .rl-hero__proof i { color: var(--c-innovation-blue); font-size: 15px; }
+
+  /* --- entrance --- */
+  @keyframes rl-rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  .rl-hero h1 .ln, .rl-hero__lead, .rl-hero .rl-flow, .rl-hero__cta, .rl-hero__proof { animation: rl-rise 800ms cubic-bezier(0.16,1,0.3,1) both; }
+  .rl-hero h1 .ln:nth-child(1) { animation-delay: 60ms; }
+  .rl-hero h1 .ln:nth-child(2) { animation-delay: 170ms; }
+  .rl-hero__lead { animation-delay: 290ms; }
+  .rl-hero .rl-flow { animation-delay: 410ms; }
+  .rl-hero__cta { animation-delay: 530ms; }
+  .rl-hero__proof { animation-delay: 620ms; }
+
+  /* ============================================================
+     THE FLOW — the invoice actually makes the trip.
+     One 10s cycle: four laboured hops with the friction named at each stop,
+     then the three middle hands drop out and the same trip happens in one
+     pass. It is the argument of the whole page in a single movement, which
+     is why it repeats rather than playing once and going quiet.
+     Station centres sit at 0/25/50/75/100% of the rail, so the runner — a
+     full-width child of the rail — lands on each one with a plain
+     translateX percentage of its own width. No measuring, no JS.
+     ============================================================ */
+  .rl-flow { --rl-st: 132px; position: relative; margin: clamp(56px,5.6vw,78px) 0 0; padding-top: 104px; }
+  .rl-flow__track { position: relative; }
+  .rl-flow__rail { position: absolute; left: calc(var(--rl-st) / 2); right: calc(var(--rl-st) / 2); top: 27px; height: 2px; margin-top: -1px; }
+  .rl-flow__dash { position: absolute; inset: 0; border-radius: 2px; color: rgba(255,255,255,0.30); background-image: linear-gradient(to right, currentColor 0 7px, transparent 7px 15px); background-size: 15px 2px; animation: rl-dash 10s linear infinite; }
+  .rl-flow__fill { position: absolute; inset: 0; border-radius: 2px; background: var(--c-innovation-blue); box-shadow: 0 0 20px rgba(143,248,255,0.5); transform: scaleX(0); transform-origin: left center; animation: rl-fill 10s cubic-bezier(0.16,1,0.3,1) infinite; }
+  .rl-flow__runner { position: absolute; left: 0; top: 0; width: 100%; height: 0; animation: rl-run 10s cubic-bezier(0.65,0,0.35,1) infinite; }
+  .rl-flow__pin { position: absolute; left: 0; top: -6px; width: 13px; height: 13px; margin-left: -6.5px; border-radius: 50%; background: var(--c-innovation-blue); box-shadow: 0 0 0 5px rgba(143,248,255,0.15); animation: rl-doc 10s linear infinite; }
+  .rl-flow__doc { position: absolute; left: 0; top: -100px; width: 64px; height: 80px; margin-left: -32px; box-sizing: border-box; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; border-radius: 10px; background: #fff; box-shadow: 0 20px 44px rgba(1,10,32,0.55); transform: rotate(-5deg); animation: rl-doc 10s linear infinite; }
+  .rl-flow__doc span { height: 4px; border-radius: 2px; background: #dde4f0; }
+  .rl-flow__doc span:first-child { width: 72%; height: 6px; background: #052975; }
+  .rl-flow__doc span.sh { width: 46%; margin-top: auto; background: var(--c-innovation-blue); }
+
+  .rl-flow__sts { position: relative; list-style: none; margin: 0; padding: 0; display: flex; justify-content: space-between; }
+  .rl-flow__st { flex: 0 0 var(--rl-st); display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .rl-flow__st--drop { animation: rl-drop 10s cubic-bezier(0.16,1,0.3,1) infinite; }
+  /* Opaque, not the translucent fill used elsewhere: the pin rides the rail
+     straight through the middle of these circles, and through a see-through
+     one it reads as a cyan blob stuck on the icon. Solid, it passes behind. */
+  .rl-flow__ico { position: relative; z-index: 1; width: 54px; height: 54px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; background: #12275c; border: 1px solid rgba(255,255,255,0.22); color: #fff; box-sizing: border-box; }
+  .rl-flow__nm { margin-top: 13px; font-size: 14px; font-weight: 600; line-height: 1.3; color: #fff; }
+  /* The slot is reserved, not sized to content: these labels fade in and out,
+     and a box that grows with each one would walk the caption up and down the
+     page. Reserve the tallest label at this width, verified per breakpoint. */
+  .rl-flow__fric { margin-top: 7px; min-height: 1.75em; font-size: 12.5px; line-height: 1.35; color: #9fb0d6; opacity: 0; }
+  .rl-flow__st:nth-child(1) .rl-flow__fric { animation: rl-fric1 10s linear infinite; }
+  .rl-flow__st:nth-child(2) .rl-flow__fric { animation: rl-fric2 10s linear infinite; }
+  .rl-flow__st:nth-child(3) .rl-flow__fric { animation: rl-fric3 10s linear infinite; }
+  .rl-flow__st:nth-child(4) .rl-flow__fric { animation: rl-fric4 10s linear infinite; }
+  .rl-flow__st:nth-child(5) .rl-flow__fric { animation: rl-fric5 10s linear infinite; }
+
+  .rl-flow__cap { position: relative; margin: 22px 0 0; min-height: 1.6em; font-size: 15px; line-height: 1.6; }
+  .rl-flow__cap span { position: absolute; left: 0; top: 0; opacity: 0; }
+  .rl-flow__cap--now { color: #b9c5de; animation: rl-capnow 10s linear infinite; }
+  .rl-flow__cap--new { color: var(--c-innovation-blue); font-weight: 600; animation: rl-capnew 10s linear infinite; }
+
+  @keyframes rl-run {
+    0%, 5% { transform: translateX(0); }
+    13%, 21% { transform: translateX(25%); }
+    29%, 37% { transform: translateX(50%); }
+    45%, 53% { transform: translateX(75%); }
+    61%, 69% { transform: translateX(100%); }
+    74%, 80% { transform: translateX(0); }
+    92%, 97% { transform: translateX(100%); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes rl-doc { 0%, 2% { opacity: 0; } 5%, 66% { opacity: 1; } 69%, 74% { opacity: 0; } 80%, 97% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes rl-fill { 0%, 68% { transform: scaleX(0); } 76%, 97% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+  @keyframes rl-dash { 0%, 66% { opacity: 1; } 74%, 97% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes rl-drop { 0%, 66% { opacity: 1; transform: none; } 76%, 97% { opacity: 0.2; transform: scale(0.84); } 100% { opacity: 1; transform: none; } }
+  @keyframes rl-fric1 { 0%, 1% { opacity: 0; transform: translateY(5px); } 5%, 11% { opacity: 1; transform: none; } 16%, 100% { opacity: 0; transform: none; } }
+  @keyframes rl-fric2 { 0%, 10% { opacity: 0; transform: translateY(5px); } 15%, 21% { opacity: 1; transform: none; } 26%, 100% { opacity: 0; transform: none; } }
+  @keyframes rl-fric3 { 0%, 26% { opacity: 0; transform: translateY(5px); } 31%, 37% { opacity: 1; transform: none; } 42%, 100% { opacity: 0; transform: none; } }
+  @keyframes rl-fric4 { 0%, 42% { opacity: 0; transform: translateY(5px); } 47%, 53% { opacity: 1; transform: none; } 58%, 100% { opacity: 0; transform: none; } }
+  @keyframes rl-fric5 { 0%, 58% { opacity: 0; transform: translateY(5px); } 63%, 69% { opacity: 1; transform: none; } 74%, 100% { opacity: 0; transform: none; } }
+  @keyframes rl-capnow { 0%, 64% { opacity: 1; } 70%, 100% { opacity: 0; } }
+  @keyframes rl-capnew { 0%, 72% { opacity: 0; } 80%, 97% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* Off-screen it stops. A 10s loop nobody is looking at is just heat.
+     The class goes on body — it has to survive a dc re-render. */
+  body.rl-flow-paused .rl-flow__dash, body.rl-flow-paused .rl-flow__fill,
+  body.rl-flow-paused .rl-flow__runner, body.rl-flow-paused .rl-flow__doc,
+  body.rl-flow-paused .rl-flow__pin, body.rl-flow-paused .rl-flow__st--drop,
+  body.rl-flow-paused .rl-flow__fric, body.rl-flow-paused .rl-flow__cap span { animation-play-state: paused; }
 
   /* ---------- The spine ----------
      The journey used to restart above every headline: three separate
@@ -287,6 +385,9 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      block near the top: media queries add no specificity, so a rule placed
      above the one it overrides loses on source order (trap 18). */
   @media (max-width: 1000px) {
+    .rl-flow { --rl-st: 104px; padding-top: 96px; }
+    .rl-flow__nm { font-size: 13px; }
+    .rl-flow__fric { font-size: 11.5px; min-height: 3.1em; }
     .rl-node { width: 78px; }
     .rl-node__ico { width: 48px; height: 48px; font-size: 18px; }
     .rl-link { padding-top: 23px; }
@@ -294,6 +395,18 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     .rl-link__lbl { font-size: 11.5px; }
   }
   @media (max-width: 820px) {
+    /* The stations stay horizontal — the trip only reads as a trip if it runs
+       left to right. What goes is the per-station friction text: below this
+       width it has nowhere to sit without wrapping into a column of its own. */
+    .rl-flow { --rl-st: 86px; padding-top: 84px; }
+    .rl-flow__rail { top: 23px; }
+    .rl-flow__ico { width: 46px; height: 46px; font-size: 18px; }
+    .rl-flow__nm { margin-top: 11px; font-size: 12px; }
+    .rl-flow__fric { display: none; }
+    .rl-flow__doc { top: -86px; width: 54px; height: 68px; margin-left: -27px; padding: 10px 8px; gap: 5px; border-radius: 9px; }
+    .rl-flow__doc span { height: 3px; }
+    .rl-flow__doc span:first-child { height: 5px; }
+    .rl-flow__cap { font-size: 14px; }
     /* The chain turns vertical. Same argument on its side — the gaps are still
        the spans between the actors, and they still close from the top down. */
     .rl-chain { flex-direction: column; align-items: stretch; }
@@ -323,6 +436,13 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     .rl-inside__pts span { padding-top: 8px; }
   }
   @media (max-width: 640px) {
+    .rl-flow { --rl-st: 64px; padding-top: 74px; margin-top: 40px; }
+    .rl-flow__rail { top: 19px; }
+    .rl-flow__ico { width: 38px; height: 38px; font-size: 15px; }
+    .rl-flow__nm { margin-top: 9px; font-size: 10.5px; }
+    .rl-flow__doc { top: -74px; width: 46px; height: 58px; margin-left: -23px; padding: 9px 7px; }
+    .rl-flow__pin { width: 11px; height: 11px; top: -5px; margin-left: -5.5px; }
+    .rl-flow__cap { font-size: 13.5px; min-height: 3.2em; }
     .rl-hero__proof { gap: 8px 18px; font-size: 13.5px; }
     section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
   }
@@ -359,6 +479,15 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     body .cnt-siteheader__burger i::before, body .cnt-siteheader__burger i::after { transition: none !important; }
     body .cnt-siteheader__dropitem { opacity: 1; transform: none; }
     body .cnt-siteheader__mobile, body .cnt-siteheader__mobile > * { animation: none !important; }
+    .rl-hero__sky::before, .rl-hero__sky::after,
+    .rl-hero h1 .ln, .rl-hero__lead, .rl-hero .rl-flow, .rl-hero__cta, .rl-hero__proof,
+    .rl-flow__dash, .rl-flow__fill, .rl-flow__runner, .rl-flow__doc, .rl-flow__pin,
+    .rl-flow__st--drop, .rl-flow__fric, .rl-flow__cap span { animation: none !important; }
+    .rl-hero h1 .ln, .rl-hero__lead, .rl-hero .rl-flow, .rl-hero__cta, .rl-hero__proof { opacity: 1; transform: none; }
+    .rl-flow__doc, .rl-flow__pin, .rl-flow__fric { opacity: 1; }
+    /* `.rl-flow__cap span` is 0,1,1 and would beat a bare `.rl-flow__cap--now`
+       at 0,1,0 — which left the caption blank here rather than merely still. */
+    .rl-flow__cap .rl-flow__cap--now { opacity: 1; }
   }
 </style>
 </helmet>
@@ -368,34 +497,30 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
 
 <!-- ============ HERO — the debt ============ -->
 <section class="rl-hero" data-screen-label="Hero">
+  <div class="rl-hero__sky" aria-hidden="true"></div>
   <div class="rl-hero__in">
-    <h1>Four handovers between the invoice and the ledger.<br><span class="hl">Three of them can&nbsp;go.</span></h1>
+    <h1><span class="ln">Four handovers between the invoice and the&nbsp;ledger.</span><span class="ln hl">Three of them can&nbsp;go.</span></h1>
     <p class="rl-hero__lead">Purchase-to-pay is rarely hard work. It is handover work — re-keying what a supplier already typed, chasing an approval, logging into the bank, matching a statement line by line. Continia removes the handovers. Your team keeps the decisions.</p>
 
-    <div class="rl-hero__chain">
-      <ol class="rl-chain rl-chain--dark" aria-label="A purchase invoice passes through five hands and four handovers">
-        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-paper-plane"></i></span><span class="rl-node__nm">Supplier</span></li>
-        <li class="rl-link rl-link--keep" data-gap="0">
-          <span class="rl-link__rail"></span>
-          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Sends the invoice</span></span>
-        </li>
-        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-inbox-in"></i></span><span class="rl-node__nm">AP team</span></li>
-        <li class="rl-link rl-link--work" data-gap="1">
-          <span class="rl-link__rail"></span>
-          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Typed in, matched, chased</span><span class="rl-link__lbl rl-link__lbl--after">Captured and matched</span></span>
-        </li>
-        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-user-check"></i></span><span class="rl-node__nm">Approver</span></li>
-        <li class="rl-link rl-link--work" data-gap="2">
-          <span class="rl-link__rail"></span>
-          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Exported, uploaded, verified</span><span class="rl-link__lbl rl-link__lbl--after">Paid from Business Central</span></span>
-        </li>
-        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-building-columns"></i></span><span class="rl-node__nm">Bank</span></li>
-        <li class="rl-link rl-link--work" data-gap="3">
-          <span class="rl-link__rail"></span>
-          <span class="rl-link__lbls"><span class="rl-link__lbl rl-link__lbl--before">Matched line by line</span><span class="rl-link__lbl rl-link__lbl--after">Reconciled automatically</span></span>
-        </li>
-        <li class="rl-node"><span class="rl-node__ico"><i class="fa-light fa-list-check"></i></span><span class="rl-node__nm">Your ledger</span></li>
-      </ol>
+    <div class="rl-flow">
+      <div class="rl-flow__track">
+        <div class="rl-flow__rail" aria-hidden="true">
+          <span class="rl-flow__dash"></span>
+          <span class="rl-flow__fill"></span>
+          <div class="rl-flow__runner">
+            <div class="rl-flow__doc"><span></span><span></span><span></span><span class="sh"></span></div>
+            <span class="rl-flow__pin"></span>
+          </div>
+        </div>
+        <ol class="rl-flow__sts" aria-label="A purchase invoice passes through five hands and four handovers">
+          <li class="rl-flow__st"><span class="rl-flow__ico"><i class="fa-light fa-paper-plane"></i></span><span class="rl-flow__nm">Supplier</span><span class="rl-flow__fric">Sends the invoice</span></li>
+          <li class="rl-flow__st rl-flow__st--drop"><span class="rl-flow__ico"><i class="fa-light fa-inbox-in"></i></span><span class="rl-flow__nm">AP team</span><span class="rl-flow__fric">Typed in by hand</span></li>
+          <li class="rl-flow__st rl-flow__st--drop"><span class="rl-flow__ico"><i class="fa-light fa-user-check"></i></span><span class="rl-flow__nm">Approver</span><span class="rl-flow__fric">Chased for approval</span></li>
+          <li class="rl-flow__st rl-flow__st--drop"><span class="rl-flow__ico"><i class="fa-light fa-building-columns"></i></span><span class="rl-flow__nm">Bank</span><span class="rl-flow__fric">Uploaded by hand</span></li>
+          <li class="rl-flow__st"><span class="rl-flow__ico"><i class="fa-light fa-list-check"></i></span><span class="rl-flow__nm">Your ledger</span><span class="rl-flow__fric">Matched line by line</span></li>
+        </ol>
+      </div>
+      <p class="rl-flow__cap"><span class="rl-flow__cap--now">Today — four handovers on every invoice.</span><span class="rl-flow__cap--new">With Continia — one.</span></p>
     </div>
 
     <div class="rl-hero__cta">
@@ -584,6 +709,22 @@ class Component extends DCLogic {
     this._watchFooter();
     this._watchRedraw();
     this._watchSpine();
+    this._watchFlow();
+  }
+
+  // The hero loop runs for as long as someone is looking at it and not a
+  // moment longer. The class goes on body, not on the section: the section is
+  // inside the dc render tree and the next renderVals() would wipe it.
+  _watchFlow() {
+    if (!("IntersectionObserver" in window)) return;
+    const el = document.querySelector(".rl-flow");
+    if (!el) return;
+    if (this._flowObs) this._flowObs.disconnect();
+    this._flowObs = new IntersectionObserver(
+      ([e]) => document.body.classList.toggle("rl-flow-paused", !e.isIntersecting),
+      { rootMargin: "80px" },
+    );
+    this._flowObs.observe(el);
   }
 
   // The page's one authored moment: the chain redraws itself when the closing
