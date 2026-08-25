@@ -489,6 +489,22 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   @media (min-width: 641px) and (max-width: 1100px) {
     .rl-hero__cta { justify-content: center; }
   }
+  /* Phone and portrait tablet: the proof line moves above the buttons. 900px is
+     the top of that range — the widest portrait tablet is 834 and the narrowest
+     landscape one 1024. Stacked, the buttons are the last thing before the fold
+     and the proof was landing under them, off screen and unread; above them it
+     reads as the reason to press. Reordered in CSS, not in the markup: on
+     desktop the proof still belongs after the call to action.
+     Flex is what makes order possible — every child keeps its own margins, and
+     nothing here relies on margin collapsing. */
+  @media (max-width: 900px) {
+    .rl-hero__in { display: flex; flex-direction: column; }
+    .rl-hero__cta { order: 1; margin-top: 24px; }
+    .rl-hero__proof { justify-content: center; margin-top: clamp(26px,3.4vw,34px); }
+    /* The entrance follows the eye, so the two swap delays with the order. */
+    .rl-hero__proof { animation-delay: 530ms; }
+    .rl-hero__cta { animation-delay: 620ms; }
+  }
   @media (max-width: 640px) {
     /* On a phone they also stack: side by side at this width either wraps
        anyway or squeezes both labels. */
