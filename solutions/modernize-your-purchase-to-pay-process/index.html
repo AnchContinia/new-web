@@ -310,7 +310,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   .rl-flow__st:nth-child(4) .rl-flow__fric { animation: rl-fric4 10s linear infinite; }
   .rl-flow__st:nth-child(5) .rl-flow__fric { animation: rl-fric5 10s linear infinite; }
 
-  .rl-flow__cap { position: relative; margin: 22px 0 0; min-height: 1.6em; font-size: 15px; line-height: 1.6; }
+  .rl-flow__cap { position: relative; margin: 22px 0 0; min-height: 1.6em; font-size: 19px; line-height: 1.6; }
   .rl-flow__cap span { position: absolute; left: 0; top: 0; opacity: 0; }
   .rl-flow__cap--now { color: var(--h-cap); animation: rl-capnow 10s linear infinite; }
   .rl-flow__cap--new { color: var(--h-cap2); font-weight: 600; animation: rl-capnew 10s linear infinite; }
@@ -455,7 +455,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     .rl-flow__doc { top: -86px; width: 54px; height: 68px; margin-left: -27px; padding: 10px 8px; gap: 5px; border-radius: 9px; }
     .rl-flow__doc span { height: 3px; }
     .rl-flow__doc span:first-child { height: 5px; }
-    .rl-flow__cap { font-size: 14px; }
+    .rl-flow__cap { font-size: 17px; }
     /* The chain turns vertical. Same argument on its side — the gaps are still
        the spans between the actors, and they still close from the top down. */
     .rl-chain { flex-direction: column; align-items: stretch; }
@@ -522,7 +522,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     .rl-flow__nm { margin-top: 9px; font-size: 10.5px; }
     .rl-flow__doc { top: -74px; width: 46px; height: 58px; margin-left: -23px; padding: 9px 7px; }
     .rl-flow__pin { width: 11px; height: 11px; top: -5px; margin-left: -5.5px; }
-    .rl-flow__cap { font-size: 13.5px; min-height: 3.2em; }
+    .rl-flow__cap { font-size: 15.5px; min-height: 1.7em; }
     .rl-hero__proof { gap: 8px 18px; font-size: 13.5px; }
     section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
   }
@@ -552,6 +552,10 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      class is set at mount and every transition is dropped, so the chain is
      simply already closed — a sequence frozen a third of the way through
      reads as broken, not as still. */
+  @media (max-width: 359px) {
+    .rl-flow__cap { min-height: 3.3em; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .rl-link__rail::before, .rl-link__rail::after, .rl-link__lbl { transition: none !important; }
     .rl-spine__dot { transition: none !important; }
