@@ -104,15 +104,14 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      Scope is deliberate — see the note to Andreas about rolling it out.
      ============================================================ */
   /* backdrop-filter does not composite in the headless captures — the plate reads
-     as flat white there, so the glass is the one thing on this page verified by
-     arithmetic rather than by pixel. Worst case is the plate over the navy hero:
-     0.72 white over #041e58 lands near rgb(185,192,208), and the navy nav text on
-     it computes to 7.28:1. saturate() was dropped for the same reason — its result
-     over navy is the one value that could not be predicted. */
+     as flat white there, so what the plate really looks like over the navy hero
+     could not be checked from here. At 0.72 it read as a grey-blue bar rather
+     than a light one, which is the whole reason it is 0.95 now: still glass,
+     but it stays light over dark ground instead of picking the ground up. */
   /* The hairline is an inset shadow, not a border: every other page's header is
      63px tall and a real border would make this one 64, which is the kind of
      one-pixel drift nobody finds later. */
-  body .cnt-siteheader { background: rgba(255,255,255,0.72); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09); }
+  body .cnt-siteheader { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09); }
   body .cnt-siteheader--scrolled { box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09), 0 10px 30px rgba(5,41,117,0.10); }
 
   /* Nav links become pills, in the same language as every other control on
@@ -182,16 +181,10 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   @keyframes rl-mrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
 
   /* ---------- Hero ---------- */
-  .rl-hero { position: relative; overflow: hidden; background: #041b4d; color: #fff; padding: clamp(68px,6.4vw,96px) clamp(20px,4vw,44px) clamp(68px,6.4vw,92px); }
-
-  /* Two slow lights. They are the only thing here that moves without being
-     asked to, so they move slowly enough to read as depth rather than motion. */
-  .rl-hero__sky { position: absolute; inset: -22% -12%; pointer-events: none; }
-  .rl-hero__sky::before, .rl-hero__sky::after { content: ""; position: absolute; border-radius: 50%; }
-  .rl-hero__sky::before { width: 800px; height: 800px; right: 1%; top: -16%; background: radial-gradient(circle at 34% 34%, rgba(143,248,255,0.22), transparent 62%); animation: rl-drift-a 26s ease-in-out infinite; }
-  .rl-hero__sky::after { width: 640px; height: 640px; left: -9%; bottom: -28%; background: radial-gradient(circle at 60% 40%, rgba(96,124,255,0.22), transparent 64%); animation: rl-drift-b 33s ease-in-out infinite; }
-  @keyframes rl-drift-a { 0%, 100% { transform: none; } 50% { transform: translate3d(-54px,42px,0) scale(1.09); } }
-  @keyframes rl-drift-b { 0%, 100% { transform: none; } 50% { transform: translate3d(48px,-36px,0) scale(1.07); } }
+  /* Depth comes from a linear wash, never a circle. A big radial disc parked
+     in a corner draws a visible arc across the band and pulls the eye off the
+     content — house rule, no decorative circles in section backgrounds. */
+  .rl-hero { position: relative; overflow: hidden; background: linear-gradient(163deg, #03163f 0%, #051f56 48%, #06296b 100%); color: #fff; padding: clamp(68px,6.4vw,96px) clamp(20px,4vw,44px) clamp(68px,6.4vw,92px); }
 
   .rl-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
   /* 26ch, not 17: at 17ch the first sentence broke to three lines and pushed
@@ -199,6 +192,8 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      26ch holds it to two, and the payoff line to one. */
   .rl-hero h1 { margin: 0; max-width: 26ch; font-size: clamp(38px,4.3vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.028em; }
   .rl-hero h1 .ln { display: block; }
+  /* The one highlighted headline on this page. There is exactly one on
+     purpose — see the house rule; three of them read as noise, not emphasis. */
   .rl-hero h1 .hl { color: var(--c-innovation-blue); }
   .rl-hero__lead { margin: 26px 0 0; max-width: 54ch; font-size: 1.1875rem; line-height: 1.6; color: #dfe6f4; }
   .rl-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: clamp(40px,4vw,52px); }
@@ -297,11 +292,9 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      left-aligned on one axis. The rail fills as the reader scrolls, so
      moving down the page and moving through the argument are the same
      movement rather than two that have to be reconciled. */
-  .rl-spine { position: relative; overflow: hidden; background: #041e58; color: #ffffff; padding: clamp(76px,7.5vw,120px) clamp(20px,4vw,44px) clamp(84px,8vw,128px); }
-  .rl-spine::before { content: ""; position: absolute; right: -20%; top: 4%; width: 860px; height: 860px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, rgba(143,248,255,0.10), transparent 62%); pointer-events: none; }
+  .rl-spine { position: relative; overflow: hidden; background: linear-gradient(178deg, #041e58 0%, #052461 100%); color: #ffffff; padding: clamp(76px,7.5vw,120px) clamp(20px,4vw,44px) clamp(84px,8vw,128px); }
   .rl-spine__in { position: relative; max-width: 1240px; margin: 0 auto; }
   .rl-spine__intro { margin: 0 0 clamp(46px,4.6vw,70px); max-width: 22ch; font-size: clamp(30px,3.4vw,50px); font-weight: 700; line-height: 1.08; letter-spacing: -0.024em; }
-  .rl-spine__intro .hl { color: var(--c-innovation-blue); }
 
   .rl-spine__list { position: relative; list-style: none; margin: 0; padding: 0; }
   /* No global border-box on this page: without this the dot's 2px border lands
@@ -353,12 +346,10 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      where the light comes up. It shares the spine's ground at the seam and
      lifts through it, so the two read as one room rather than two panels. */
   .rl-redraw { position: relative; overflow: hidden; color: #fff; padding: clamp(88px,8.5vw,132px) clamp(20px,4vw,44px) clamp(96px,9vw,140px); background: linear-gradient(172deg, #041e58 0%, #06308a 54%, #0a41a8 100%); }
-  .rl-redraw::before { content: ""; position: absolute; left: 50%; bottom: -34%; width: 1180px; height: 1180px; margin-left: -590px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, rgba(143,248,255,0.16), transparent 60%); pointer-events: none; }
   /* A single lit line at the seam: the spine's rail arriving. */
   .rl-redraw::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(143,248,255,0.55) 22%, rgba(143,248,255,0.55) 78%, transparent); pointer-events: none; }
   .rl-redraw__in { position: relative; max-width: 1240px; margin: 0 auto; }
   .rl-redraw h2 { margin: 0; max-width: 17ch; font-size: clamp(34px,4.2vw,62px); font-weight: 700; line-height: 1.02; letter-spacing: -0.028em; }
-  .rl-redraw h2 .hl { color: var(--c-innovation-blue); }
   .rl-redraw p { margin: 26px 0 0; max-width: 58ch; font-size: 1.125rem; line-height: 1.62; color: #e6ecf8; }
   .rl-redraw__chain { margin: clamp(52px,5.4vw,76px) 0 0; }
 
@@ -366,10 +357,9 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   /* Coming out of the dark passage into daylight — this is the arrival, so it
      gets a ground of its own rather than bare white. */
   .rl-inside { position: relative; overflow: hidden; padding: clamp(76px,7vw,110px) clamp(20px,4vw,44px); background: #f6f8fb; }
-  .rl-inside::before { content: ""; position: absolute; left: -14%; top: -46%; width: 720px; height: 720px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, rgba(5,41,117,0.05), transparent 64%); pointer-events: none; }
   .rl-inside__in { position: relative; max-width: 1240px; margin: 0 auto; }
   .rl-inside__head { margin: 0 0 clamp(38px,3.8vw,54px); }
-  .rl-inside h2 { margin: 0; max-width: 16ch; font-size: clamp(28px,2.9vw,42px); font-weight: 700; line-height: 1.1; letter-spacing: -0.022em; color: var(--c-tech-blue); }
+  .rl-inside h2 { margin: 0; font-size: clamp(28px,2.9vw,42px); font-weight: 700; line-height: 1.1; letter-spacing: -0.022em; color: var(--c-tech-blue); }
   .rl-inside__lead { margin: 16px 0 0; max-width: 58ch; font-size: 1.0625rem; line-height: 1.6; color: #3a4a6b; }
   /* Full-width rows on one hairline rhythm, not three equal boxes: the three
      facts are not siblings competing for a glance, they are read in order. */
@@ -435,7 +425,22 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     .rl-inside__pts b { padding-top: 18px; }
     .rl-inside__pts span { padding-top: 8px; }
   }
+  /* Buttons centre below the desktop line. Left-aligned in a narrow column
+     they drift to one edge and read as stranded rather than placed. */
+  @media (min-width: 641px) and (max-width: 1100px) {
+    .rl-hero__cta { justify-content: center; }
+  }
   @media (max-width: 640px) {
+    /* On a phone they also stack: side by side at this width either wraps
+       anyway or squeezes both labels. */
+    .rl-hero__cta { flex-direction: column; align-items: center; }
+    /* The section heads centre with them. Left-aligned, short headline lines
+       hug the left edge and the whole band looks pushed off to one side.
+       The diagrams and the point list stay left — an icon row centred on a
+       phone reads as broken, not as centred. */
+    .rl-redraw__in > h2, .rl-redraw__in > p { text-align: center; margin-left: auto; margin-right: auto; }
+    .rl-inside__head { text-align: center; }
+    .rl-inside h2, .rl-inside__lead { margin-left: auto; margin-right: auto; }
     .rl-flow { --rl-st: 64px; padding-top: 74px; margin-top: 40px; }
     .rl-flow__rail { top: 19px; }
     .rl-flow__ico { width: 38px; height: 38px; font-size: 15px; }
@@ -479,7 +484,6 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     body .cnt-siteheader__burger i::before, body .cnt-siteheader__burger i::after { transition: none !important; }
     body .cnt-siteheader__dropitem { opacity: 1; transform: none; }
     body .cnt-siteheader__mobile, body .cnt-siteheader__mobile > * { animation: none !important; }
-    .rl-hero__sky::before, .rl-hero__sky::after,
     .rl-hero h1 .ln, .rl-hero__lead, .rl-hero .rl-flow, .rl-hero__cta, .rl-hero__proof,
     .rl-flow__dash, .rl-flow__fill, .rl-flow__runner, .rl-flow__doc, .rl-flow__pin,
     .rl-flow__st--drop, .rl-flow__fric, .rl-flow__cap span { animation: none !important; }
@@ -497,7 +501,6 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
 
 <!-- ============ HERO — the debt ============ -->
 <section class="rl-hero" data-screen-label="Hero">
-  <div class="rl-hero__sky" aria-hidden="true"></div>
   <div class="rl-hero__in">
     <h1><span class="ln">Four handovers between the invoice and the&nbsp;ledger.</span><span class="ln hl">Three of them can&nbsp;go.</span></h1>
     <p class="rl-hero__lead">Purchase-to-pay is rarely hard work. It is handover work — re-keying what a supplier already typed, chasing an approval, logging into the bank, matching a statement line by line. Continia removes the handovers. Your team keeps the decisions.</p>
@@ -539,7 +542,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
 <!-- ============ THE SPINE — one rail, three stations ============ -->
 <section class="rl-spine" data-screen-label="The three handovers">
   <div class="rl-spine__in">
-    <h2 class="rl-spine__intro">Three of them close.<br><span class="hl">Here is each one.</span></h2>
+    <h2 class="rl-spine__intro">Three of them close.<br>Here is each one.</h2>
 
     <ol class="rl-spine__list">
       <div class="rl-spine__rail" aria-hidden="true"><div class="rl-spine__fill"></div></div>
@@ -637,7 +640,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
 <!-- ============ THE REDRAW — the focal moment ============ -->
 <section class="rl-redraw" data-screen-label="The chain redrawn">
   <div class="rl-redraw__in">
-    <h2>One handover left.<br><span class="hl">And it isn't yours.</span></h2>
+    <h2>One handover left.<br>And it isn't yours.</h2>
     <p>Your supplier still has to send the invoice. Everything after that happens inside Business Central — the same client, the same posting routines, the same audit trail your auditor already accepts.</p>
     <div class="rl-redraw__chain">
       <ol class="rl-chain rl-chain--dark rl-chain--redraw" aria-label="The same chain with three handovers automated">
