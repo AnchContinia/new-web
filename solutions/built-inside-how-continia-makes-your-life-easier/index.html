@@ -144,7 +144,7 @@ buttons on phone and portrait tablet.
      the claim ("you do not leave this window") stops being demonstrated.
      ============================================================ */
   .bi-stage { position: relative; }
-  .bi-hero .bi-stage { margin-top: clamp(48px,4.8vw,72px); }
+  .bi-hero .bi-stage { margin-top: clamp(34px,3.2vw,48px); }
   .bi-win { position: relative; max-width: 1080px; margin: 0; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 34px 80px rgba(5,41,117,0.17), 0 3px 10px rgba(5,41,117,0.06); }
 
   /* browser chrome */
@@ -277,7 +277,7 @@ buttons on phone and portrait tablet.
      ============================================================ */
   .bi-sec { padding: clamp(72px,7vw,112px) clamp(20px,4vw,44px); }
   .bi-sec--navy { background: linear-gradient(168deg, #03163f 0%, #051f56 52%, #06296b 100%); color: #ffffff; }
-  .bi-neversec { background: linear-gradient(168deg, #03231f 0%, #063a33 52%, #0a5348 100%); }
+  .bi-neversec { background: linear-gradient(168deg, #0a5346 0%, #0f6a5a 52%, #14806c 100%); }
   .bi-sec--tint { background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 100%); }
   .bi-sec__in { max-width: 1180px; margin: 0 auto; }
   .bi-sec__eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #983eae; }
@@ -300,6 +300,14 @@ buttons on phone and portrait tablet.
      Pull the floor up to the window so the line beneath reads as its caption
      rather than as something stranded further down the section. */
   body.bi-merged .bi-merge { margin-bottom: calc(-1 * var(--bi-mgbon, 96px)); }
+  /* Copy left, scene right. The split collapses at 1100 — the site's one
+     tablet line — because below it the stage needs the whole width for the
+     satellites' orbit. */
+  .bi-alt { display: grid; grid-template-columns: minmax(0,40fr) minmax(0,60fr); gap: clamp(28px,3.4vw,56px); align-items: center; }
+  .bi-alt__copy { min-width: 0; }
+  .bi-alt__copy .bi-sec__lead { max-width: none; }
+  .bi-alt__scene { min-width: 0; }
+  .bi-alt .bi-merge { margin-top: 0; }
   .bi-mwin { box-sizing: border-box; border-radius: 12px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 20px 50px rgba(1,10,32,0.35); overflow: hidden; }
   .bi-mwin__bar { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: #eef1f6; border-bottom: 1px solid #dde3ee; }
   .bi-mwin__bar span { width: 7px; height: 7px; border-radius: 50%; background: #cfd7e6; }
@@ -367,7 +375,7 @@ buttons on phone and portrait tablet.
   .bi-never i { flex: none; margin-top: 4px; font-size: 17px; color: #7fc6ad; }
   .bi-never b { position: relative; display: inline; font-size: clamp(18px,1.9vw,25px); font-weight: 600; line-height: 1.35; color: #ffffff; }
   .bi-never b::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; border-radius: 2px; background: #7fc6ad; transform: scaleX(0); transform-origin: left center; transition: transform 700ms cubic-bezier(0.65,0,0.35,1); }
-  .bi-never small { display: block; margin-top: 7px; font-size: 14.5px; font-weight: 400; line-height: 1.55; color: #b3ccc5; }
+  .bi-never small { display: block; margin-top: 7px; font-size: 14.5px; font-weight: 400; line-height: 1.55; color: #eaf5f1; }
   body.bi-never-in .bi-never li { opacity: 1; transform: none; }
   body.bi-never-in .bi-never b::after { transform: scaleX(1); }
   .bi-never li:nth-child(1) { transition-delay: 0ms; }
@@ -405,16 +413,20 @@ buttons on phone and portrait tablet.
 
   /* The satellites' resting offsets live here, not in a style attribute: an
      inline style beats every media query and these have to move on a phone. */
-  .bi-merge__sat--1 { --x: -250px; --y: -128px; --r: -5deg; }
-  .bi-merge__sat--2 { --x: 250px; --y: -112px; --r: 4.5deg; }
-  .bi-merge__sat--3 { --x: -232px; --y: 108px; --r: 3.5deg; }
-  .bi-merge__sat--4 { --x: 246px; --y: 124px; --r: -4deg; }
+  .bi-merge__sat--1 { --x: -180px; --y: -122px; --r: -5deg; }
+  .bi-merge__sat--2 { --x: 180px; --y: -108px; --r: 4.5deg; }
+  .bi-merge__sat--3 { --x: -168px; --y: 104px; --r: 3.5deg; }
+  .bi-merge__sat--4 { --x: 176px; --y: 120px; --r: -4deg; }
 
   /* ============================================================
      RESPONSIVE — after the base rules on purpose: media queries add no
      specificity, so a block above the rule it means to override loses.
      ============================================================ */
   @media (max-width: 1100px) {
+    /* Single column again: the stage gets the full width back, so the orbit
+       widens with it. */
+    .bi-alt { grid-template-columns: minmax(0,1fr); }
+    .bi-alt .bi-merge { margin-top: clamp(44px,4.5vw,64px); }
     .bi-merge__sat--1 { --x: -196px; --y: -116px; }
     .bi-merge__sat--2 { --x: 196px; --y: -102px; }
     .bi-merge__sat--3 { --x: -184px; --y: 100px; }
@@ -649,11 +661,14 @@ buttons on phone and portrait tablet.
 
 <!-- ============ THE ALTERNATIVE — four windows become one ============ -->
 <section class="bi-sec bi-sec--navy" data-screen-label="The alternative">
-  <div class="bi-sec__in">
+  <div class="bi-sec__in bi-alt">
+   <div class="bi-alt__copy">
     <p class="bi-sec__eyebrow">The alternative</p>
     <h2>Every other way costs you a window.</h2>
     <p class="bi-sec__lead">Software that sits beside Business Central brings its own front door: a portal to sign into, a file to export, an inbox to watch, a job that keeps the two sides in step. Continia does not add a window. It adds to the one you have.</p>
+   </div>
 
+   <div class="bi-alt__scene">
     <div class="bi-merge" aria-hidden="true">
       <div class="bi-mwin bi-merge__sat bi-merge__sat--1">
         <div class="bi-mwin__bar"><span></span><span></span><b>Portal login</b></div>
@@ -684,6 +699,7 @@ buttons on phone and portrait tablet.
       <p class="bi-merge__cap">Four more things to keep open.</p>
     </div>
     <p class="bi-merge__after">None of them exist here.</p>
+   </div>
   </div>
 </section>
 
@@ -850,16 +866,17 @@ class Component extends DCLogic {
     };
     const cycle = () => {
       body.classList.add("bi-merged");
-      // Out at 4.1s, so the satellites (900ms, no delay on the way back) have
-      // landed again a hair before the next cycle starts them moving.
-      this._mergeReset = setTimeout(() => body.classList.remove("bi-merged"), 4100);
+      // The satellites take ~1.25s to land (900ms plus the last one's 330ms
+      // delay). Five seconds of stillness on top of that, then they unwind —
+      // 900ms back out, and a beat of rest before the next cycle.
+      this._mergeReset = setTimeout(() => body.classList.remove("bi-merged"), 6250);
     };
     if (this._mergeObs) this._mergeObs.disconnect();
     this._mergeObs = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) { stop(); return; }
       if (this._mergeTimer) return;
       cycle();
-      this._mergeTimer = setInterval(cycle, 5000);
+      this._mergeTimer = setInterval(cycle, 7800);
     }, { threshold: 0.3 });
     this._mergeObs.observe(el);
   }
