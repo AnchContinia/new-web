@@ -201,7 +201,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      ============================================================ */
   .rl-hero {
     --h-bg: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%);
-    --h-fg: var(--c-tech-blue); --h-hl: #983eae; --h-lead: #3a4a6b;
+    --h-fg: var(--c-tech-blue); --h-h1: #111318; --h-hl: #983eae; --h-lead: #3a4a6b;
     --h-proof: #3a4a6b; --h-proof-i: var(--c-tech-blue);
     --h-rail: #aab4c8; --h-fill: var(--c-tech-blue); --h-fill-glow: rgba(5,41,117,0.20);
     --h-ico-bg: #ffffff; --h-ico-bd: #dde3ee; --h-ico-fg: var(--c-tech-blue);
@@ -212,7 +212,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   }
   :root[data-hero="dark"] .rl-hero {
     --h-bg: linear-gradient(163deg, #03163f 0%, #051f56 48%, #06296b 100%);
-    --h-fg: #ffffff; --h-hl: var(--c-innovation-blue); --h-lead: #dfe6f4;
+    --h-fg: #ffffff; --h-h1: #ffffff; --h-hl: var(--c-innovation-blue); --h-lead: #dfe6f4;
     --h-proof: #cdd4e3; --h-proof-i: var(--c-innovation-blue);
     --h-rail: rgba(255,255,255,0.30); --h-fill: var(--c-innovation-blue); --h-fill-glow: rgba(143,248,255,0.5);
     --h-ico-bg: #12275c; --h-ico-bd: rgba(255,255,255,0.22); --h-ico-fg: #ffffff;
@@ -227,7 +227,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   /* 26ch, not 17: at 17ch the first sentence broke to three lines and pushed
      the flow — the thing worth looking at — clean out of the first viewport.
      26ch holds it to two, and the payoff line to one. */
-  .rl-hero h1 { margin: 0; max-width: 26ch; font-size: clamp(38px,4.3vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.028em; }
+  .rl-hero h1 { margin: 0; color: var(--h-h1, var(--h-fg)); max-width: 26ch; font-size: clamp(38px,4.3vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.028em; }
   .rl-hero h1 .ln { display: block; }
   /* The one highlighted headline on this page. There is exactly one on
      purpose — see the house rule; three of them read as noise, not emphasis. */
@@ -280,7 +280,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      full-width child of the rail — lands on each one with a plain
      translateX percentage of its own width. No measuring, no JS.
      ============================================================ */
-  .rl-flow { --rl-st: 132px; position: relative; margin: clamp(32px,3.2vw,46px) 0 0; padding-top: 104px; }
+  .rl-flow { --rl-st: 132px; --rl-cap: 54px; position: relative; margin: clamp(32px,3.2vw,46px) 0 0; padding-top: calc(var(--rl-cap) + 104px); }
   .rl-flow__track { position: relative; }
   .rl-flow__rail { position: absolute; left: calc(var(--rl-st) / 2); right: calc(var(--rl-st) / 2); top: 27px; height: 2px; margin-top: -1px; }
   .rl-flow__dash { position: absolute; inset: 0; border-radius: 2px; color: var(--h-rail); background-image: linear-gradient(to right, currentColor 0 7px, transparent 7px 15px); background-size: 15px 2px; animation: rl-dash 10s linear infinite; }
@@ -310,7 +310,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
   .rl-flow__st:nth-child(4) .rl-flow__fric { animation: rl-fric4 10s linear infinite; }
   .rl-flow__st:nth-child(5) .rl-flow__fric { animation: rl-fric5 10s linear infinite; }
 
-  .rl-flow__cap { position: relative; margin: 22px 0 0; min-height: 1.6em; font-size: 19px; line-height: 1.6; }
+  .rl-flow__cap { position: absolute; left: 0; right: 0; top: 0; margin: 0; min-height: 1.6em; font-size: 19px; line-height: 1.6; }
   .rl-flow__cap span { position: absolute; left: 0; top: 0; opacity: 0; }
   .rl-flow__cap--now { color: var(--h-cap); animation: rl-capnow 10s linear infinite; }
   .rl-flow__cap--new { color: var(--h-cap2); font-weight: 600; animation: rl-capnew 10s linear infinite; }
@@ -434,7 +434,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      block near the top: media queries add no specificity, so a rule placed
      above the one it overrides loses on source order (trap 18). */
   @media (max-width: 1000px) {
-    .rl-flow { --rl-st: 104px; padding-top: 96px; }
+    .rl-flow { --rl-st: 104px; --rl-cap: 50px; padding-top: calc(var(--rl-cap) + 96px); }
     .rl-flow__nm { font-size: 13px; }
     .rl-flow__fric { font-size: 11.5px; min-height: 3.1em; }
     .rl-node { width: 78px; }
@@ -447,7 +447,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     /* The stations stay horizontal — the trip only reads as a trip if it runs
        left to right. What goes is the per-station friction text: below this
        width it has nowhere to sit without wrapping into a column of its own. */
-    .rl-flow { --rl-st: 86px; padding-top: 84px; }
+    .rl-flow { --rl-st: 86px; --rl-cap: 50px; padding-top: calc(var(--rl-cap) + 84px); }
     .rl-flow__rail { top: 23px; }
     .rl-flow__ico { width: 46px; height: 46px; font-size: 18px; }
     .rl-flow__nm { margin-top: 11px; font-size: 12px; }
@@ -516,7 +516,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     .rl-redraw__in > h2, .rl-redraw__in > p { text-align: center; margin-left: auto; margin-right: auto; }
     .rl-inside__head { text-align: center; }
     .rl-inside h2, .rl-inside__lead { margin-left: auto; margin-right: auto; }
-    .rl-flow { --rl-st: 64px; padding-top: 74px; margin-top: 26px; }
+    .rl-flow { --rl-st: 64px; --rl-cap: 48px; padding-top: calc(var(--rl-cap) + 74px); margin-top: 26px; }
     .rl-flow__rail { top: 19px; }
     .rl-flow__ico { width: 38px; height: 38px; font-size: 15px; }
     .rl-flow__nm { margin-top: 9px; font-size: 10.5px; }
@@ -553,6 +553,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
      simply already closed — a sequence frozen a third of the way through
      reads as broken, not as still. */
   @media (max-width: 359px) {
+    .rl-flow { --rl-cap: 74px; }
     .rl-flow__cap { min-height: 3.3em; }
   }
 
@@ -585,6 +586,7 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
     <p class="rl-hero__lead">Purchase-to-pay is rarely hard work. It is handover work — re-keying what a supplier already typed, chasing an approval, logging into the bank, matching a statement line by line. Continia removes the handovers. Your team keeps the decisions.</p>
 
     <div class="rl-flow">
+      <p class="rl-flow__cap"><span class="rl-flow__cap--now">Today — four handovers on every invoice.</span><span class="rl-flow__cap--new">With Continia — one.</span></p>
       <div class="rl-flow__track">
         <div class="rl-flow__rail" aria-hidden="true">
           <span class="rl-flow__dash"></span>
@@ -602,7 +604,6 @@ review, the verdict, DESIGN.md, and every shipping raster carrying its provenanc
           <li class="rl-flow__st"><span class="rl-flow__ico"><i class="fa-light fa-list-check"></i></span><span class="rl-flow__nm">Your ledger</span><span class="rl-flow__fric">Matched line by line</span></li>
         </ol>
       </div>
-      <p class="rl-flow__cap"><span class="rl-flow__cap--now">Today — four handovers on every invoice.</span><span class="rl-flow__cap--new">With Continia — one.</span></p>
     </div>
 
     <!-- Two rows, one shown at a time. The button variant is a markup attribute
