@@ -866,9 +866,10 @@ class Component extends DCLogic {
     };
     const cycle = () => {
       body.classList.add("bi-merged");
-      // The satellites take ~1.25s to land (900ms plus the last one's 330ms
-      // delay). Five seconds of stillness on top of that, then they unwind —
-      // 900ms back out, and a beat of rest before the next cycle.
+      // Both ends of the cycle rest for five seconds. In: the satellites take
+      // ~1.25s to land (900ms plus the last one's 330ms delay), then five still
+      // seconds, so they unwind at 6.25s. Out: 900ms back to their orbit, then
+      // five more still seconds — 12.15s round trip.
       this._mergeReset = setTimeout(() => body.classList.remove("bi-merged"), 6250);
     };
     if (this._mergeObs) this._mergeObs.disconnect();
@@ -876,7 +877,7 @@ class Component extends DCLogic {
       if (!e.isIntersecting) { stop(); return; }
       if (this._mergeTimer) return;
       cycle();
-      this._mergeTimer = setInterval(cycle, 7800);
+      this._mergeTimer = setInterval(cycle, 12150);
     }, { threshold: 0.3 });
     this._mergeObs.observe(el);
   }
