@@ -144,7 +144,8 @@ buttons on phone and portrait tablet.
      the claim ("you do not leave this window") stops being demonstrated.
      ============================================================ */
   .bi-stage { position: relative; }
-  .bi-win { position: relative; max-width: 1080px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 34px 80px rgba(5,41,117,0.17), 0 3px 10px rgba(5,41,117,0.06); }
+  .bi-hero .bi-stage { margin-top: clamp(48px,4.8vw,72px); }
+  .bi-win { position: relative; max-width: 1080px; margin: 0; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 34px 80px rgba(5,41,117,0.17), 0 3px 10px rgba(5,41,117,0.06); }
 
   /* browser chrome */
   .bi-win__chrome { display: flex; align-items: center; gap: 13px; padding: 11px 16px; background: #eef1f6; border-bottom: 1px solid #dde3ee; }
@@ -217,7 +218,7 @@ buttons on phone and portrait tablet.
   .bi-switch__lbl::after { content: "Continia"; }
 
   /* the caption below the window */
-  .bi-stage__cap { position: relative; max-width: 1080px; margin: 20px auto 0; min-height: 1.7em; font-size: 19px; line-height: 1.6; }
+  .bi-stage__cap { position: relative; max-width: 1080px; margin: 20px 0 0; min-height: 1.7em; font-size: 19px; line-height: 1.6; }
   .bi-stage__cap span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
   .bi-cap--off { color: #3a4a6b; }
   .bi-cap--on { color: #983eae; font-weight: 600; }
@@ -276,14 +277,17 @@ buttons on phone and portrait tablet.
      ============================================================ */
   .bi-sec { padding: clamp(72px,7vw,112px) clamp(20px,4vw,44px); }
   .bi-sec--navy { background: linear-gradient(168deg, #03163f 0%, #051f56 52%, #06296b 100%); color: #ffffff; }
+  .bi-neversec { background: linear-gradient(168deg, #03231f 0%, #063a33 52%, #0a5348 100%); }
   .bi-sec--tint { background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 100%); }
   .bi-sec__in { max-width: 1180px; margin: 0 auto; }
   .bi-sec__eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #983eae; }
   .bi-sec--navy .bi-sec__eyebrow { color: var(--c-innovation-blue); }
+  .bi-neversec .bi-sec__eyebrow { color: #8ccfb7; }
   .bi-sec h2 { margin: 14px 0 0; max-width: 20ch; font-size: clamp(28px,3vw,44px); font-weight: 700; line-height: 1.08; letter-spacing: -0.022em; }
   .bi-sec--navy h2 { color: #ffffff; }
   .bi-sec__lead { margin: 18px 0 0; max-width: 60ch; font-size: 1.0625rem; line-height: 1.65; color: #3a4a6b; }
   .bi-sec--navy .bi-sec__lead { color: #cdd4e3; }
+  .bi-neversec .bi-sec__lead { color: #cfe0da; }
 
   /* ============================================================
      THE MERGE — four windows become one.
@@ -291,7 +295,11 @@ buttons on phone and portrait tablet.
      the reader would otherwise be holding open: a portal, an export, a second
      inbox, a sync job. On scroll they fly into the client and stop existing.
      ============================================================ */
-  .bi-merge { position: relative; margin: clamp(44px,4.5vw,64px) auto 0; max-width: 900px; height: clamp(330px,32vw,420px); }
+  .bi-merge { position: relative; margin: clamp(44px,4.5vw,64px) auto calc(-1 * var(--bi-mgb, 0px)); max-width: 900px; height: clamp(330px,32vw,420px); transition: margin-bottom 700ms cubic-bezier(0.16,1,0.3,1); }
+  /* Merged, the stage is a single window with an orbit of empty air under it.
+     Pull the floor up to the window so the line beneath reads as its caption
+     rather than as something stranded further down the section. */
+  body.bi-merged .bi-merge { margin-bottom: calc(-1 * var(--bi-mgbon, 96px)); }
   .bi-mwin { box-sizing: border-box; border-radius: 12px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 20px 50px rgba(1,10,32,0.35); overflow: hidden; }
   .bi-mwin__bar { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: #eef1f6; border-bottom: 1px solid #dde3ee; }
   .bi-mwin__bar span { width: 7px; height: 7px; border-radius: 50%; background: #cfd7e6; }
@@ -313,7 +321,7 @@ buttons on phone and portrait tablet.
   .bi-merge__lock i { color: #aab4c8; }
   .bi-merge__l { height: 6px; border-radius: 3px; background: #e4e9f3; margin-top: 8px; }
   .bi-merge__l--s { width: 58%; }
-  .bi-merge__cap { position: absolute; left: 0; right: 0; bottom: -6px; text-align: center; font-size: 13px; font-weight: 600; color: #9fb0d6; transition: opacity 500ms var(--ease-standard); }
+  .bi-merge__cap { position: absolute; left: 0; right: 0; top: var(--bi-capt, 350px); bottom: auto; z-index: 3; text-align: center; font-size: 13px; font-weight: 600; color: #9fb0d6; transition: opacity 500ms var(--ease-standard); }
   /* Landing: they collapse into the middle and are gone. The delay is per
      window so it reads as four separate things being absorbed, not a wipe. */
   body.bi-merged .bi-merge__sat { transform: translate(0,0) scale(0.36); opacity: 0; }
@@ -333,6 +341,8 @@ buttons on phone and portrait tablet.
      assembled as the reader travels the section. The Continia plate arrives
      from the side and lands BETWEEN the others, because that is the claim.
      ============================================================ */
+  .bi-layers .bi-sec__eyebrow, .bi-layers h2, .bi-layers .bi-sec__lead { text-align: center; }
+  .bi-layers h2, .bi-layers .bi-sec__lead { margin-left: auto; margin-right: auto; }
   .bi-layers__deck { margin: clamp(44px,4.4vw,62px) auto 0; max-width: 760px; perspective: 1100px; padding-bottom: calc(46px * 4 * (1 - var(--bi-p, 0))); }
   .bi-layers__plates { transform-style: preserve-3d; transform: rotateX(calc(30deg - 14deg * var(--bi-p, 0))); }
   .bi-plate { box-sizing: border-box; display: flex; align-items: center; gap: 15px; margin-top: 13px; padding: 15px 20px; border-radius: 13px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 14px 34px rgba(5,41,117,0.11); transform: translateY(calc(var(--i) * 46px * (1 - var(--bi-p, 0)))); }
@@ -354,10 +364,10 @@ buttons on phone and portrait tablet.
   .bi-never { list-style: none; margin: clamp(38px,3.8vw,54px) 0 0; padding: 0; }
   .bi-never li { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.13); opacity: 0; transform: translateY(14px); transition: opacity 520ms var(--ease-standard), transform 520ms cubic-bezier(0.16,1,0.3,1); }
   .bi-never li:last-child { border-bottom: 0; }
-  .bi-never i { flex: none; margin-top: 4px; font-size: 17px; color: var(--c-innovation-blue); }
+  .bi-never i { flex: none; margin-top: 4px; font-size: 17px; color: #7fc6ad; }
   .bi-never b { position: relative; display: inline; font-size: clamp(18px,1.9vw,25px); font-weight: 600; line-height: 1.35; color: #ffffff; }
-  .bi-never b::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; border-radius: 2px; background: var(--c-innovation-blue); transform: scaleX(0); transform-origin: left center; transition: transform 700ms cubic-bezier(0.65,0,0.35,1); }
-  .bi-never small { display: block; margin-top: 7px; font-size: 14.5px; font-weight: 400; line-height: 1.55; color: #9fb0d6; }
+  .bi-never b::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; border-radius: 2px; background: #7fc6ad; transform: scaleX(0); transform-origin: left center; transition: transform 700ms cubic-bezier(0.65,0,0.35,1); }
+  .bi-never small { display: block; margin-top: 7px; font-size: 14.5px; font-weight: 400; line-height: 1.55; color: #b3ccc5; }
   body.bi-never-in .bi-never li { opacity: 1; transform: none; }
   body.bi-never-in .bi-never b::after { transform: scaleX(1); }
   .bi-never li:nth-child(1) { transition-delay: 0ms; }
@@ -537,7 +547,7 @@ buttons on phone and portrait tablet.
     /* `.bi-stage__cap span` is 0,1,1 and would beat a bare `.bi-cap--on` at
        0,1,0 — which would leave the caption blank rather than merely still. */
     .bi-stage__cap .bi-cap--on { opacity: 1; }
-    .bi-merge__sat, .bi-merge__main, .bi-merge__after, .bi-never li, .bi-never b::after, .bi-app { transition: none !important; }
+    .bi-merge, .bi-merge__sat, .bi-merge__main, .bi-merge__after, .bi-never li, .bi-never b::after, .bi-app { transition: none !important; }
   }
 </style>
 </helmet>
@@ -759,6 +769,7 @@ class Component extends DCLogic {
     this._watchWindow();
     this._watchSwitch();
     this._watchScenes();
+    this._watchMerge();
     this._watchLayers();
   }
 
@@ -815,9 +826,76 @@ class Component extends DCLogic {
 
   // Two scenes that fire once, when they are properly on screen rather than at
   // the first pixel: both are payoffs and should not happen off in the corner.
+  // The alternative replays itself. The four windows are the section's whole
+  // argument, and an argument made once, above the fold of the reader's
+  // attention, is an argument most people never see. It runs on a 5s cycle for
+  // as long as the section is on screen and stops the moment it leaves.
+  // The line beneath swaps with the caption: apart, the caption counts the
+  // windows; merged, the line answers it. Same slot, one voice at a time.
+  _watchMerge() {
+    const body = document.body;
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { body.classList.add("bi-merged"); return; }
+    const el = document.querySelector(".bi-merge");
+    if (!el || !("IntersectionObserver" in window)) { body.classList.add("bi-merged"); return; }
+    this._measureMerge();
+    if (!this._mergeResize) {
+      this._mergeResize = () => this._measureMerge();
+      window.addEventListener("resize", this._mergeResize, { passive: true });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => this._measureMerge());
+    }
+    const stop = () => {
+      clearInterval(this._mergeTimer); clearTimeout(this._mergeReset);
+      this._mergeTimer = null; this._mergeReset = null;
+    };
+    const cycle = () => {
+      body.classList.add("bi-merged");
+      // Out at 4.1s, so the satellites (900ms, no delay on the way back) have
+      // landed again a hair before the next cycle starts them moving.
+      this._mergeReset = setTimeout(() => body.classList.remove("bi-merged"), 4100);
+    };
+    if (this._mergeObs) this._mergeObs.disconnect();
+    this._mergeObs = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) { stop(); return; }
+      if (this._mergeTimer) return;
+      cycle();
+      this._mergeTimer = setInterval(cycle, 5000);
+    }, { threshold: 0.3 });
+    this._mergeObs.observe(el);
+  }
+
+  // The caption sits under the window it describes, not at the floor of the
+  // stage — the stage is only as tall as the satellites' orbit needs. Measured,
+  // because the window's height is content, and parked on documentElement so a
+  // re-render cannot wipe it (the stage itself is inside the render tree).
+  _measureMerge() {
+    const stage = document.querySelector(".bi-merge");
+    // Only meaningful while the windows are apart: mid-merge every satellite is
+    // collapsed onto the centre and the measurement would read as a tiny scene.
+    if (!stage || document.body.classList.contains("bi-merged")) return;
+    const sr = stage.getBoundingClientRect();
+    if (!sr.height) return;
+    let deep = 0;
+    // getBoundingClientRect() here on purpose: the satellites are rotated, and
+    // it is the painted corner the caption has to clear, not the layout box.
+    stage.querySelectorAll(".bi-merge__sat, .bi-merge__main").forEach((el) => {
+      deep = Math.max(deep, el.getBoundingClientRect().bottom - sr.top);
+    });
+    if (!deep) return;
+    const top = Math.round(deep + 18);
+    const root = document.documentElement;
+    root.style.setProperty("--bi-capt", top + "px");
+    // Pull the section's floor up to the caption. A margin cannot move anything
+    // inside the stage, so this cannot feed back into the measurement above.
+    root.style.setProperty("--bi-mgb", Math.max(0, Math.round(sr.height - top - 24)) + "px");
+    const main = stage.querySelector(".bi-merge__main");
+    // offsetHeight, not the rect: the window is centred with a transform, and
+    // merged it also scales — 1.06 is that scale, read back as height.
+    if (main) root.style.setProperty("--bi-mgbon", Math.max(0, Math.round(sr.height / 2 - main.offsetHeight * 0.53)) + "px");
+  }
+
   _watchScenes() {
     const scenes = [
-      { sel: ".bi-merge", cls: "bi-merged" },
       { sel: ".bi-never", cls: "bi-never-in" },
       { sel: ".bi-apps__list", cls: "bi-apps-in" },
     ];
