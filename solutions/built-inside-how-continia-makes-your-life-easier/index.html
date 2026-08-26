@@ -423,6 +423,23 @@ buttons on phone and portrait tablet.
   .bi-merge__sat--4 { --x: 176px; --y: 120px; --r: -4deg; }
 
   /* ============================================================
+     ONE AXIS — the page reads down the middle. Containers centre their
+     own text; the mocks reset to left, because a Business Central window
+     with centred field labels stops being a Business Central window.
+     Placed after the base rules on purpose — same specificity, later wins.
+     ============================================================ */
+  .bi-hero__in, .bi-sec__in { text-align: center; }
+  .bi-hero h1, .bi-hero__lead { margin-left: auto; margin-right: auto; }
+  .bi-hero__cta, .bi-hero__proof { justify-content: center; }
+  .bi-stage__cap { margin-left: auto; margin-right: auto; }
+  .bi-sec h2, .bi-sec__lead { margin-left: auto; margin-right: auto; }
+  /* The two long lists narrow to the same column, so the page has one
+     measure rather than three. */
+  .bi-never, .bi-apps__list { margin-left: auto; margin-right: auto; max-width: 920px; }
+  .bi-win { margin-left: auto; margin-right: auto; }
+  .bi-win, .bi-mwin, .bi-plate, .bi-never li, .bi-app { text-align: left; }
+
+  /* ============================================================
      RESPONSIVE — after the base rules on purpose: media queries add no
      specificity, so a block above the rule it means to override loses.
      ============================================================ */
