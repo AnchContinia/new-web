@@ -111,6 +111,15 @@ buttons on phone and portrait tablet.
      the seam between them should be an edge, not a blur. Depth comes from a
      linear wash; no decorative circles anywhere on this page.
      ============================================================ */
+  /* The clouds clip from the front page, scrim and all. The gradient stays as
+     the ground the video paints over — it is what shows before the first
+     frame decodes and if the file never arrives. */
+  .bi-hero__vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  /* Same scrim as the front page: the darkest frame measures luma 37/255, and
+     0.74 white on top of that lands around #c6c6c6. */
+  .bi-hero__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.74) 42%, rgba(222,245,255,0.88) 100%); }
+  .bi-hero__in { z-index: 2; }
   .bi-hero { position: relative; overflow: hidden; background: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%); color: var(--c-tech-blue); padding: clamp(56px,5.4vw,84px) clamp(20px,4vw,44px) clamp(64px,6vw,92px); }
   .bi-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
   .bi-hero__kick { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; padding: 7px 14px 7px 9px; border-radius: 999px; background: var(--c-light-blue); color: var(--c-tech-blue); font-size: 12px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
@@ -571,6 +580,7 @@ buttons on phone and portrait tablet.
   /* Nothing here needs motion to be understood: every state the loops travel
      through is also a resting state, so reduced motion gets the finished one. */
   @media (prefers-reduced-motion: reduce) {
+    .bi-hero__vid { display: none; }
     .bi-hero__kick, .bi-hero h1 .ln, .bi-hero__lead, .bi-hero .bi-stage, .bi-hero__cta, .bi-hero__proof,
     .bi-c, .bi-stage__cap span, .bi-switch__knob, .bi-switch__track { animation: none !important; }
     .bi-hero__kick, .bi-hero h1 .ln, .bi-hero__lead, .bi-hero .bi-stage, .bi-hero__cta, .bi-hero__proof { opacity: 1; transform: none; }
@@ -590,6 +600,11 @@ buttons on phone and portrait tablet.
 
 <!-- ============ HERO — the window ============ -->
 <section class="bi-hero" data-screen-label="Hero">
+  <video class="bi-hero__vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="../../assets/video/brand-clouds.webm" type="video/webm">
+    <source src="../../assets/video/brand-clouds.mp4" type="video/mp4">
+  </video>
+  <div class="bi-hero__scrim" aria-hidden="true"></div>
   <div class="bi-hero__in">
     <p class="bi-hero__kick"><i class="fa-light fa-cube"></i>Inside Business Central</p>
     <h1><span class="ln">Not another window.</span><span class="ln hl">The one you already have.</span></h1>
@@ -807,6 +822,7 @@ class Component extends DCLogic {
     this._watchSwitch();
     this._watchScenes();
     this._watchMerge();
+    this._playHeroVideo();
     this._watchLayers();
   }
 
@@ -863,6 +879,22 @@ class Component extends DCLogic {
 
   // Two scenes that fire once, when they are properly on screen rather than at
   // the first pixel: both are payoffs and should not happen off in the corner.
+  // The runtime drops boolean attributes on its way through the render, so
+  // `muted`/`loop`/`autoplay` never reach the element and the clip sits on frame
+  // zero. Set them as properties and call play() — muted autoplay is allowed
+  // everywhere, and the <source> order (webm → mp4) lets each browser pick.
+  _playHeroVideo() {
+    requestAnimationFrame(() => {
+      const v = document.querySelector(".bi-hero__vid");
+      if (!v) return;
+      v.loop = true;
+      v.muted = true;
+      v.setAttribute("muted", "");
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {});
+    });
+  }
+
   // The alternative replays itself. The four windows are the section's whole
   // argument, and an argument made once, above the fold of the reader's
   // attention, is an argument most people never see. It runs on a 5s cycle for
