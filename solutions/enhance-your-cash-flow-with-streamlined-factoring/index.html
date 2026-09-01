@@ -113,11 +113,22 @@ animation, and the loop rests three seconds at each end.
   @keyframes fx-mrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
 
   /* ============================================================
-     HERO — light ground. Depth from a linear wash; no decorative circles
-     anywhere on this page.
+     HERO — four variants, one on screen at a time. The switch is the fixed
+     pill bottom-left. Which one is live is a class on BODY: body sits
+     outside the dc render tree, so renderVals() cannot wipe it, and the
+     hidden variants are display:none, which means their animations do not
+     run and their photos are never fetched.
      ============================================================ */
+  .fx-hv { display: none; }
+  body.fx-v0 .fx-hv--ledger,
+  body.fx-v1 .fx-hv--desk,
+  body.fx-v2 .fx-hv--moves,
+  body.fx-v3 .fx-hv--stack { display: block; }
+  /* Before the script has run, variant one is the one on screen. */
+  body:not(.fx-v0):not(.fx-v1):not(.fx-v2):not(.fx-v3) .fx-hv--ledger { display: block; }
+
   .fx-hero { position: relative; overflow: hidden; background: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%); color: var(--c-tech-blue); padding: clamp(56px,5.4vw,84px) clamp(20px,4vw,44px) clamp(64px,6vw,92px); }
-  .fx-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
+  .fx-hero__in { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; }
   .fx-hero__kick { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; padding: 7px 14px 7px 9px; border-radius: 999px; background: var(--c-light-blue); color: var(--c-tech-blue); font-size: 12px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
   .fx-hero__kick i { font-size: 13px; }
   /* Black into purple, not Tech Blue into purple: Tech Blue and Performance
@@ -132,59 +143,76 @@ animation, and the loop rests three seconds at each end.
   .fx-hero__proof i { color: var(--c-tech-blue); font-size: 15px; }
 
   @keyframes fx-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-  .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero__cta, .fx-hero__proof { animation: fx-rise 800ms cubic-bezier(0.16,1,0.3,1) both; }
+  .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero__cta, .fx-hero__proof, .fx-hero .fx-scene { animation: fx-rise 800ms cubic-bezier(0.16,1,0.3,1) both; }
   .fx-hero__kick { animation-delay: 40ms; }
   .fx-hero h1 .ln:nth-child(1) { animation-delay: 110ms; }
   .fx-hero h1 .ln:nth-child(2) { animation-delay: 210ms; }
   .fx-hero__lead { animation-delay: 320ms; }
-  .fx-hero .fx-stage { animation-delay: 430ms; }
+  .fx-hero .fx-stage, .fx-hero .fx-scene { animation-delay: 430ms; }
   .fx-hero__cta { animation-delay: 560ms; }
   .fx-hero__proof { animation-delay: 640ms; }
 
+  /* ---- the split layouts. minmax(0,Nfr), never percentages: two percentage
+     tracks plus a gap overflow the row by exactly the gap width. ---- */
+  .fx-split { display: grid; align-items: center; gap: clamp(30px,3.6vw,64px); }
+  .fx-split--5050 { grid-template-columns: minmax(0,50fr) minmax(0,50fr); }
+  .fx-split--4060 { grid-template-columns: minmax(0,40fr) minmax(0,60fr); }
+  .fx-split--6040 { grid-template-columns: minmax(0,60fr) minmax(0,40fr); }
+  .fx-copy, .fx-scene { min-width: 0; }
+  .fx-copy .fx-hero__lead { max-width: 46ch; }
+  .fx-copy h1 { max-width: 19ch; }
+
   /* ============================================================
-     THE RUN — a Business Central window where the factoring run assembles
-     itself. The caption sits ABOVE it: it introduces the run rather than
-     explaining it after the fact.
+     VARIANT 1 — THE LEDGER. The design system's own PopupWindow, and the
+     factoring run assembling itself inside it. The caption sits ABOVE the
+     window: it introduces the run rather than explaining it after the fact.
      ============================================================ */
   .fx-stage { position: relative; margin-top: clamp(34px,3.2vw,48px); }
   /* The slot is reserved, not sized to content: the two lines swap, and a box
      that grows with each one would walk the window up and down the page. */
-  .fx-stage__cap { position: relative; max-width: 1040px; margin: 0 auto 20px; min-height: 1.6em; font-size: 19px; line-height: 1.6; }
+  .fx-stage__cap { position: relative; max-width: 1080px; margin: 0 auto 20px; min-height: 1.6em; font-size: 19px; line-height: 1.6; }
   .fx-stage__cap span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
   .fx-stage__cap .fx-cap--hand { color: #3a4a6b; }
   .fx-stage__cap .fx-cap--auto { color: var(--c-tech-blue); font-weight: 600; }
 
-  .fx-win { position: relative; max-width: 1040px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 34px 80px rgba(5,41,117,0.17), 0 3px 10px rgba(5,41,117,0.06); }
-  .fx-win__chrome { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: #eef1f6; border-bottom: 1px solid #dde3ee; }
-  .fx-win__dots { display: inline-flex; gap: 6px; }
-  .fx-win__dots span { width: 9px; height: 9px; border-radius: 50%; background: #cfd7e6; }
-  .fx-win__url { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: #ffffff; border: 1px solid #e2e7f1; font-size: 12px; color: #5a6884; overflow: hidden; }
-  .fx-win__url i { font-size: 11px; color: #8f9cb5; }
-  .fx-win__url b { font-weight: 600; color: #0a1838; }
-  .fx-win__url em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .fx-win__nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 16px; border-bottom: 1px solid #eef1f6; }
-  .fx-win__brand { display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 700; color: var(--c-tech-blue); }
-  .fx-win__navico { display: inline-flex; gap: 14px; font-size: 13px; color: #8f9cb5; }
-  .fx-win__ribbon { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid #eef1f6; background: #fbfcfe; }
-  .fx-chip { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e7f1; background: #ffffff; font-size: 12px; font-weight: 600; color: #3a4a6b; white-space: nowrap; }
-  .fx-chip i { font-size: 11px; color: #8f9cb5; }
-  /* The Continia action is the one purple thing in the window. */
-  .fx-chip--c { border-color: #e6cfee; background: #fdf7ff; color: #983eae; }
-  .fx-chip--c i { color: #983eae; }
+  /* The window is the design system's PopupWindow — Tech Blue bar, white
+     continia logo, divider, name, three window dots. Trap 4b: a style
+     attribute on <x-import> never reaches the component, so every override
+     is scoped from this stylesheet, with the `body ` prefix that also beats
+     the component's own useStyle() block on source order. */
+  .fx-win { position: relative; max-width: 1080px; margin: 0 auto; }
+  body .fx-win .cnt-popup { border-radius: 16px; box-shadow: 0 34px 80px rgba(5,41,117,0.19), 0 3px 10px rgba(5,41,117,0.06); }
+  body .fx-win .cnt-popup__bar { padding: 15px 20px; }
+  body .fx-win .cnt-popup__body { background: #ffffff; }
 
-  .fx-win__body { padding: 18px 20px 20px; }
-  .fx-win__title { font-size: 17px; font-weight: 700; color: #0a1838; }
-  .fx-win__title span { margin-left: 8px; font-size: 13px; font-weight: 400; color: #5a6884; }
-  .fx-tab { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--c-tech-blue); }
-  .fx-tab i { font-size: 11px; }
+  .fx-bc { display: flex; background: #ffffff; }
+  .fx-bc__nav { flex: none; width: 214px; border-right: 1px solid #eef1f6; padding: 15px 10px; display: flex; flex-direction: column; gap: 2px; }
+  .fx-bc__nav b { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; font-size: 12.5px; font-weight: 600; color: #3a4a6b; white-space: nowrap; }
+  .fx-bc__nav b i { flex: none; width: 18px; text-align: center; font-size: 14px; }
+  .fx-bc__nav b.on { background: var(--c-light-blue); color: var(--c-tech-blue); }
+  .fx-bc__main { flex: 1; min-width: 0; padding: 15px 18px 17px; }
+
+  /* The four states of the run, as Business Central's own status strip. A
+     state that has been reached stays filled — the strip is a record of the
+     run so far, not a spotlight on one step. */
+  .fx-bc__steps { display: flex; gap: 8px; }
+  .fx-sp { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 4px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: #eef1f6; color: #5a6884; }
+  .fx-sp i { font-size: 11px; }
+  .fx-sp--1 { background: var(--c-tech-blue); color: #ffffff; }
+
+  .fx-bc__hd { display: flex; align-items: center; gap: 12px; margin-top: 15px; }
+  .fx-bc__ttl { font-size: 16px; font-weight: 700; color: #0a1838; }
+  .fx-bc__ttl span { margin-left: 8px; font-size: 13px; font-weight: 400; color: #5a6884; }
+  .fx-act { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 8px; border: 1px solid #e6cfee; background: #fdf7ff; font-size: 12px; font-weight: 700; color: #983eae; white-space: nowrap; }
+  .fx-act i { font-size: 11px; }
 
   .fx-tbl { margin-top: 10px; }
-  .fx-tbl__hd, .fx-row { display: grid; grid-template-columns: minmax(0,1fr) 116px 128px 136px; align-items: center; gap: 14px; }
+  .fx-tbl__hd, .fx-row { display: grid; grid-template-columns: minmax(0,1fr) 112px 124px 132px; align-items: center; gap: 14px; }
   .fx-tbl__hd { padding: 0 0 8px; border-bottom: 1px solid #e4e9f3; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #5a6884; }
   .fx-tbl__hd span:nth-child(3), .fx-tbl__hd span:nth-child(4) { text-align: right; }
-  .fx-row { padding: 12px 0; border-bottom: 1px solid #eef1f6; font-size: 13.5px; color: #0a1838; }
+  .fx-row { padding: 11px 0; border-bottom: 1px solid #eef1f6; font-size: 13.5px; color: #0a1838; }
   .fx-row__cu { min-width: 0; display: flex; align-items: center; gap: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .fx-row__cu i { flex: none; font-size: 13px; color: #8f9cb5; }
+  .fx-row__cu i { flex: none; font-size: 13px; color: var(--c-tech-blue); }
   .fx-row__no { font-variant-numeric: tabular-nums; color: #5a6884; }
   .fx-row__am { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
   /* One reserved slot, three pills stacked in it — the row must not resize as
@@ -196,25 +224,45 @@ animation, and the loop rests three seconds at each end.
   .fx-pill--prop { background: #fdf7ff; color: #983eae; }
   .fx-pill--alloc { background: #e8f3ef; color: #2f6455; }
 
-  .fx-sum { display: flex; align-items: center; justify-content: flex-end; gap: 14px; margin-top: 14px; font-size: 13.5px; color: #5a6884; }
-  .fx-sum b { font-size: 16px; font-weight: 700; color: #0a1838; font-variant-numeric: tabular-nums; }
-  .fx-out { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 12px 14px; border-radius: 12px; border: 1px dashed #cfa8dd; background: #fdf7ff; }
-  .fx-out__ico { flex: none; width: 34px; height: 34px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; background: #983eae; color: #ffffff; }
+  .fx-bc__foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #eef1f6; font-size: 12.5px; color: #5a6884; }
+  .fx-bc__foot b { font-weight: 700; color: var(--c-tech-blue); font-variant-numeric: tabular-nums; }
+  /* The total and its resting line share one slot and swap. Reserving the slot
+     and leaving it blank for three seconds of every ten reads as a bug. */
+  .fx-bc__tot { position: relative; min-width: 244px; min-height: 1.5em; }
+  .fx-bc__tot > span { position: absolute; right: 0; top: 0; white-space: nowrap; opacity: 0; }
+  .fx-idle { color: #63718c; }
+  .fx-sum { display: inline-flex; align-items: baseline; gap: 10px; }
+  .fx-sum b { font-size: 15px; }
+  /* The data file row is one box in two states, not a box that appears. */
+  .fx-out { position: relative; display: flex; align-items: center; margin-top: 12px; padding: 11px 13px; border-radius: 12px; min-height: 34px; border: 1px dashed #dde3ee; background: #fbfcfe; transition: none; }
+  .fx-out__st { position: absolute; left: 13px; right: 13px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 12px; opacity: 0; }
+  .fx-out__ico { flex: none; width: 32px; height: 32px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; background: #e2e7f1; color: #63718c; }
+  .fx-out__st--on .fx-out__ico { background: #983eae; color: #ffffff; }
   .fx-out__tx { min-width: 0; }
-  .fx-out__nm { display: block; font-size: 13px; font-weight: 700; color: #983eae; font-variant-numeric: tabular-nums; }
-  .fx-out__nt { display: block; margin-top: 2px; font-size: 12px; color: #5a6884; }
+  .fx-out__nm { display: block; font-size: 12.5px; font-weight: 700; color: #3a4a6b; font-variant-numeric: tabular-nums; }
+  .fx-out__st--on .fx-out__nm { color: #983eae; }
+  .fx-out__nt { display: block; margin-top: 2px; font-size: 11.5px; color: #63718c; }
   .fx-out__ok { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 700; color: #2f6455; white-space: nowrap; }
 
   /* ---- the 10s run. 0-30% open (3s still), 36-44% into the proposal,
-     50-92% allocated (4.2s still), 98% back to open. The pills carry a
-     per-row delay so the rows fall in one after another. ---- */
+     50-92% allocated and filed (4.2s still), 98% back to open. The pills
+     carry a per-row delay so the rows fall in one after another. ---- */
   @keyframes fx-open  { 0%, 30% { opacity: 1; } 36%, 94% { opacity: 0; } 100% { opacity: 1; } }
   @keyframes fx-prop  { 0%, 30% { opacity: 0; } 36%, 44% { opacity: 1; } 50%, 100% { opacity: 0; } }
   @keyframes fx-alloc { 0%, 44% { opacity: 0; } 50%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
-  @keyframes fx-lit   { 0%, 33% { background-color: #ffffff; border-color: #e2e7f1; } 39%, 92% { background-color: #f6f9fc; border-color: #dde3ee; } 98%, 100% { background-color: #ffffff; border-color: #e2e7f1; } }
-  @keyframes fx-ring  { 0%, 27% { box-shadow: 0 0 0 0 rgba(152,62,174,0); } 33% { box-shadow: 0 0 0 7px rgba(152,62,174,0.18); } 42%, 100% { box-shadow: 0 0 0 0 rgba(152,62,174,0); } }
+  @keyframes fx-lit   { 0%, 33% { background-color: #ffffff; } 39%, 92% { background-color: #f7fafd; } 98%, 100% { background-color: #ffffff; } }
+  @keyframes fx-ring  { 0%, 27% { box-shadow: 0 0 0 0 rgba(152,62,174,0); } 33% { box-shadow: 0 0 0 8px rgba(152,62,174,0.20); } 42%, 100% { box-shadow: 0 0 0 0 rgba(152,62,174,0); } }
+  @keyframes fx-sp2   { 0%, 33% { background-color: #eef1f6; color: #5a6884; } 39%, 92% { background-color: #052975; color: #ffffff; } 98%, 100% { background-color: #eef1f6; color: #5a6884; } }
+  @keyframes fx-sp3   { 0%, 46% { background-color: #eef1f6; color: #5a6884; } 52%, 92% { background-color: #052975; color: #ffffff; } 98%, 100% { background-color: #eef1f6; color: #5a6884; } }
+  @keyframes fx-sp4   { 0%, 58% { background-color: #eef1f6; color: #5a6884; } 64%, 92% { background-color: #052975; color: #ffffff; } 98%, 100% { background-color: #eef1f6; color: #5a6884; } }
   @keyframes fx-slide { 0%, 42% { opacity: 0; transform: translateY(6px); } 50%, 92% { opacity: 1; transform: none; } 98%, 100% { opacity: 0; transform: translateY(6px); } }
-  @keyframes fx-drop  { 0%, 52% { opacity: 0; transform: translateY(12px); } 60%, 92% { opacity: 1; transform: none; } 98%, 100% { opacity: 0; transform: translateY(12px); } }
+  @keyframes fx-idle  { 0%, 42% { opacity: 1; } 50%, 94% { opacity: 0; } 100% { opacity: 1; } }
+  /* The target is absolutely positioned with translateY(-50%). A keyframe that
+     says `transform: none` throws that centring away and drops the block half
+     its own height, straight through the box's bottom border. */
+  @keyframes fx-drop  { 0%, 52% { opacity: 0; transform: translateY(calc(-50% + 4px)); } 60%, 92% { opacity: 1; transform: translateY(-50%); } 98%, 100% { opacity: 0; transform: translateY(calc(-50% + 4px)); } }
+  @keyframes fx-dropo { 0%, 52% { opacity: 1; } 60%, 94% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes fx-outbd { 0%, 52% { border-color: #dde3ee; background-color: #fbfcfe; } 60%, 92% { border-color: #cfa8dd; background-color: #fdf7ff; } 98%, 100% { border-color: #dde3ee; background-color: #fbfcfe; } }
   @keyframes fx-caph  { 0%, 34% { opacity: 1; } 41%, 94% { opacity: 0; } 100% { opacity: 1; } }
   @keyframes fx-capa  { 0%, 40% { opacity: 0; } 47%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
 
@@ -226,15 +274,216 @@ animation, and the loop rests three seconds at each end.
   .fx-row--2 .fx-c, .fx-row--2 { animation-delay: 140ms; }
   .fx-row--3 .fx-c, .fx-row--3 { animation-delay: 280ms; }
   .fx-row--4 .fx-c, .fx-row--4 { animation-delay: 420ms; }
-  .fx-chip--c { animation-name: fx-ring; animation-timing-function: cubic-bezier(0.65,0,0.35,1); }
+  .fx-act { animation-name: fx-ring; animation-timing-function: cubic-bezier(0.65,0,0.35,1); }
+  .fx-sp--2 { animation-name: fx-sp2; animation-timing-function: linear; }
+  .fx-sp--3 { animation-name: fx-sp3; animation-timing-function: linear; }
+  .fx-sp--4 { animation-name: fx-sp4; animation-timing-function: linear; }
   .fx-sum { animation-name: fx-slide; }
-  .fx-out { animation-name: fx-drop; }
+  .fx-idle { animation-name: fx-idle; animation-timing-function: linear; }
+  .fx-out { animation-name: fx-outbd; animation-timing-function: linear; }
+  .fx-out__st--off { animation-name: fx-dropo; animation-timing-function: linear; }
+  .fx-out__st--on { animation-name: fx-drop; }
   .fx-cap--hand { animation-name: fx-caph; animation-timing-function: linear; }
   .fx-cap--auto { animation-name: fx-capa; animation-timing-function: linear; }
   /* Paused when nobody is looking. The class goes on BODY, not on the section:
      the section is inside the dc render tree and the next renderVals() would
      wipe an attribute set on it. */
   body.fx-win-paused .fx-c { animation-play-state: paused; }
+
+  /* ============================================================
+     VARIANT 2 — THE DESK. 50/50, copy left. A photograph with the window
+     lifted off its lower edge, the proposal folding down to one line and a
+     seal landing on it.
+     ============================================================ */
+  .fx-desk { position: relative; padding: 0 0 clamp(46px,5vw,74px) clamp(22px,2.6vw,42px); }
+  .fx-desk__ph { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
+  .fx-desk__ph img { display: block; width: 100%; height: clamp(300px,29vw,404px); object-fit: cover; object-position: 50% 34%; animation: fx-kb 22s ease-in-out infinite alternate; }
+  @keyframes fx-kb { from { transform: scale(1) translate3d(0,0,0); } to { transform: scale(1.07) translate3d(-1.4%,-1.2%,0); } }
+  /* A quarter circle anchored to the frame's corner is brand shape, not an
+     ambient background blob — the thing the house rules forbid. */
+  .fx-desk__arc { position: absolute; right: -1px; top: -1px; width: clamp(86px,9vw,132px); aspect-ratio: 1; border-bottom-left-radius: 100%; background: linear-gradient(135deg, #983eae, #c07fd6); z-index: 2; }
+  .fx-desk__arc i { position: absolute; right: 20%; top: 17%; font-size: clamp(17px,1.7vw,24px); color: #ffffff; }
+
+  .fx-desk__win { position: absolute; left: 0; bottom: 0; z-index: 3; width: clamp(268px,30vw,392px); }
+  body .fx-desk__win .cnt-popup { border-radius: 14px; box-shadow: 0 26px 60px rgba(5,41,117,0.30); }
+  body .fx-desk__win .cnt-popup__bar { padding: 11px 15px; }
+  body .fx-desk__win .cnt-popup__logo svg { height: 17px; }
+  body .fx-desk__win .cnt-popup__name { font-size: 12px; }
+  body .fx-desk__win .cnt-popup__dots i { width: 7px; height: 7px; }
+  .fx-dbody { padding: 13px 15px 14px; }
+  .fx-drow { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid #eef1f6; font-size: 12px; color: #0a1838; }
+  .fx-drow i { flex: none; font-size: 11px; color: var(--c-tech-blue); }
+  .fx-drow span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fx-drow em { font-style: normal; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .fx-dsum { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 11px; font-size: 11.5px; color: #5a6884; }
+  .fx-dsum b { font-size: clamp(17px,1.7vw,22px); font-weight: 700; color: #983eae; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .fx-dseal { position: absolute; right: clamp(-4px,0.4vw,10px); bottom: clamp(52px,6vw,88px); z-index: 4; display: inline-flex; align-items: center; gap: 9px; padding: 11px 17px; border-radius: 999px; background: #ffffff; box-shadow: 0 16px 40px rgba(5,41,117,0.24); font-size: 13px; font-weight: 700; color: #2f6455; white-space: nowrap; }
+  .fx-dseal i { font-size: 15px; }
+
+  /* 11s: the four lines rest 3s, fold to one, the total lands, the seal
+     stamps, and the whole thing rests another 3.3s before it reopens. */
+  @keyframes fx-dfold { 0%, 27% { opacity: 1; max-height: 34px; padding-top: 7px; padding-bottom: 7px; } 40%, 92% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; } 99%, 100% { opacity: 1; max-height: 34px; padding-top: 7px; padding-bottom: 7px; } }
+  @keyframes fx-dkeep { 0%, 27% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; } 42%, 92% { opacity: 1; max-height: 34px; padding-top: 7px; padding-bottom: 7px; } 99%, 100% { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; } }
+  /* The money overshoots and settles — a number that just fades in reads as a
+     label, a number that lands reads as a result. */
+  @keyframes fx-dmoney { 0%, 33% { opacity: 0; transform: translateY(10px) scale(0.9); filter: blur(6px); } 44% { opacity: 1; transform: translateY(0) scale(1.07); filter: blur(0); } 50%, 92% { opacity: 1; transform: none; filter: blur(0); } 99%, 100% { opacity: 0; transform: translateY(10px) scale(0.9); filter: blur(6px); } }
+  @keyframes fx-dseal { 0%, 50% { opacity: 0; transform: scale(1.9) rotate(-11deg); } 59% { opacity: 1; transform: scale(0.94) rotate(2deg); } 64%, 92% { opacity: 1; transform: none; } 98%, 100% { opacity: 0; transform: scale(1.9) rotate(-11deg); } }
+  /* One pass of light across the window bar, at the moment the run closes. */
+  @keyframes fx-shine { 0%, 52% { background-position: -160% 0; } 66%, 100% { background-position: 260% 0; } }
+  .fx-d { animation-duration: 11s; animation-iteration-count: infinite; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16,1,0.3,1); }
+  .fx-drow--fold { overflow: hidden; animation-name: fx-dfold; }
+  .fx-drow--keep { overflow: hidden; border-bottom: 0; animation-name: fx-dkeep; }
+  .fx-drow--fold:nth-of-type(2) { animation-delay: 90ms; }
+  .fx-drow--fold:nth-of-type(3) { animation-delay: 180ms; }
+  .fx-drow--fold:nth-of-type(4) { animation-delay: 270ms; }
+  .fx-dsum b { animation: fx-dmoney 11s cubic-bezier(0.16,1,0.3,1) infinite both; display: inline-block; }
+  .fx-dseal { animation: fx-dseal 11s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  .fx-desk__win::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 40px; z-index: 4; pointer-events: none; border-radius: 14px 14px 0 0;
+    background: linear-gradient(100deg, transparent 38%, rgba(255,255,255,0.30) 50%, transparent 62%); background-size: 260% 100%; background-repeat: no-repeat;
+    animation: fx-shine 11s linear infinite; }
+  body.fx-win-paused .fx-d, body.fx-win-paused .fx-dsum b, body.fx-win-paused .fx-desk__win::after, body.fx-win-paused .fx-desk__ph img { animation-play-state: paused; }
+
+  /* ============================================================
+     VARIANT 3 — THREE MOVES. 40/60, the portrait on the short side. The
+     numeral is the artwork: it counts the module's three real capabilities,
+     with a ring that draws around it and a rail that fills in thirds.
+     ============================================================ */
+  .fx-portrait { position: relative; }
+  .fx-portrait__ph { position: relative; border-radius: 22px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
+  .fx-portrait__ph img { display: block; width: 100%; height: clamp(360px,38vw,530px); object-fit: cover; object-position: 50% 22%; animation: fx-kb 24s ease-in-out infinite alternate; }
+  .fx-portrait__arc { position: absolute; left: -1px; bottom: -1px; width: clamp(92px,9.5vw,140px); aspect-ratio: 1; border-top-right-radius: 100%; background: linear-gradient(45deg, var(--c-tech-blue), #2f6bd4); z-index: 2; }
+  .fx-portrait__tag { position: absolute; right: clamp(-14px,-1vw,0px); top: clamp(26px,3vw,46px); z-index: 3; display: inline-flex; align-items: center; gap: 9px; padding: 11px 16px; border-radius: 999px; background: #ffffff; box-shadow: 0 16px 40px rgba(5,41,117,0.22); font-size: 12.5px; font-weight: 700; color: var(--c-tech-blue); white-space: nowrap; }
+  .fx-portrait__tag i { font-size: 14px; color: #983eae; }
+
+  .fx-moves__box { position: relative; margin-top: clamp(26px,2.8vw,38px); display: grid; grid-template-columns: clamp(96px,9vw,128px) minmax(0,1fr); align-items: center; gap: clamp(18px,2vw,30px); }
+  .fx-moves__dial { position: relative; width: clamp(96px,9vw,128px); aspect-ratio: 1; }
+  .fx-moves__dial svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .fx-moves__dial circle { fill: none; stroke-width: 4; }
+  .fx-moves__trk { stroke: #e2e7f1; }
+  .fx-moves__arc { stroke: #983eae; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; animation: fx-arc 12s cubic-bezier(0.65,0,0.35,1) infinite both; }
+  @keyframes fx-arc { 0%, 20% { stroke-dashoffset: 193; } 26%, 46% { stroke-dashoffset: 96; } 52%, 92% { stroke-dashoffset: 0; } 99%, 100% { stroke-dashoffset: 193; } }
+  .fx-moves__n { position: absolute; inset: 0; display: grid; place-items: center; }
+  .fx-moves__n span { grid-area: 1 / 1; font-size: clamp(44px,4.4vw,62px); font-weight: 700; letter-spacing: -0.04em; color: #983eae; opacity: 0; }
+  /* Each numeral arrives blurred and leaves blurred, so the change reads as a
+     dial turning rather than as two labels crossfading. */
+  @keyframes fx-n1 { 0%, 20% { opacity: 1; transform: none; filter: blur(0); } 26%, 94% { opacity: 0; transform: translateY(-26px) scale(0.8); filter: blur(9px); } 100% { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes fx-n2 { 0%, 20% { opacity: 0; transform: translateY(26px) scale(0.8); filter: blur(9px); } 26%, 46% { opacity: 1; transform: none; filter: blur(0); } 52%, 100% { opacity: 0; transform: translateY(-26px) scale(0.8); filter: blur(9px); } }
+  @keyframes fx-n3 { 0%, 46% { opacity: 0; transform: translateY(26px) scale(0.8); filter: blur(9px); } 52%, 92% { opacity: 1; transform: none; filter: blur(0); } 99%, 100% { opacity: 0; transform: translateY(26px) scale(0.8); filter: blur(9px); } }
+  .fx-moves__n span:nth-child(1) { animation: fx-n1 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-moves__n span:nth-child(2) { animation: fx-n2 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-moves__n span:nth-child(3) { animation: fx-n3 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+
+  .fx-moves__tx { position: relative; min-height: 5.4em; }
+  .fx-moves__tx > span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
+  .fx-moves__tx b { display: block; font-size: clamp(19px,1.9vw,26px); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #0a1838; }
+  .fx-moves__tx small { display: block; margin-top: 8px; font-size: 15px; line-height: 1.6; color: #3a4a6b; }
+  @keyframes fx-t1 { 0%, 20% { opacity: 1; transform: none; } 26%, 94% { opacity: 0; transform: translateY(-14px); } 100% { opacity: 1; transform: none; } }
+  @keyframes fx-t2 { 0%, 20% { opacity: 0; transform: translateY(14px); } 26%, 46% { opacity: 1; transform: none; } 52%, 100% { opacity: 0; transform: translateY(-14px); } }
+  @keyframes fx-t3 { 0%, 46% { opacity: 0; transform: translateY(14px); } 52%, 92% { opacity: 1; transform: none; } 99%, 100% { opacity: 0; transform: translateY(14px); } }
+  .fx-moves__tx > span:nth-child(1) { animation: fx-t1 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-moves__tx > span:nth-child(2) { animation: fx-t2 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-moves__tx > span:nth-child(3) { animation: fx-t3 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-moves__rail { grid-column: 1 / -1; height: 4px; border-radius: 4px; background: #e2e7f1; overflow: hidden; }
+  .fx-moves__rail i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--c-tech-blue), #983eae); transform-origin: left center; transform: scaleX(0.333); animation: fx-rail 12s cubic-bezier(0.65,0,0.35,1) infinite both; }
+  @keyframes fx-rail { 0%, 20% { transform: scaleX(0.333); } 26%, 46% { transform: scaleX(0.667); } 52%, 92% { transform: scaleX(1); } 99%, 100% { transform: scaleX(0.333); } }
+  body.fx-win-paused .fx-moves__arc, body.fx-win-paused .fx-moves__n span,
+  body.fx-win-paused .fx-moves__tx > span, body.fx-win-paused .fx-moves__rail i,
+  body.fx-win-paused .fx-portrait__ph img { animation-play-state: paused; }
+
+  /* ============================================================
+     VARIANT 4 — THE STACK. 60/40 on a photograph, so this one goes navy: on
+     a dark ground the highlight is Innovation Blue, not purple. Four
+     invoices leave the stack one at a time and land in the provider's tray.
+     ============================================================ */
+  .fx-hv--stack { background: #03163f; }
+  .fx-hv--stack .fx-stack__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 42%; z-index: 0; }
+  .fx-hv--stack .fx-stack__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(96deg, rgba(3,22,63,0.96) 0%, rgba(4,26,72,0.93) 42%, rgba(5,31,86,0.74) 74%, rgba(6,41,107,0.62) 100%); }
+  .fx-hv--stack .fx-hero__kick { background: rgba(255,255,255,0.10); color: var(--c-innovation-blue); }
+  .fx-hv--stack h1 { color: #ffffff; }
+  .fx-hv--stack h1 .hl { color: var(--c-innovation-blue); }
+  .fx-hv--stack .fx-hero__lead { color: #cdd4e3; }
+  .fx-hv--stack .fx-hero__proof { color: #cdd4e3; }
+  .fx-hv--stack .fx-hero__proof i { color: var(--c-innovation-blue); }
+
+  /* The scene sits on its own pane of glass. Four white cards against a
+     photograph of two faces is unreadable at any scrim strength; a blurred
+     panel gives the cards a surface and keeps the photograph in the frame. */
+  .fx-stack { position: relative; height: clamp(352px,26vw,378px); padding: 18px; box-sizing: border-box; border-radius: 22px; border: 1px solid rgba(143,248,255,0.22); background: rgba(3,20,58,0.62); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 30px 70px rgba(0,0,0,0.34); }
+  .fx-stack__deck { position: absolute; left: 18px; right: 18px; top: 18px; height: 184px; }
+  .fx-inv { position: absolute; left: 0; right: 0; display: flex; align-items: center; gap: 11px; padding: 13px 15px; border-radius: 13px; background: #ffffff; box-shadow: 0 16px 38px rgba(0,0,0,0.30); font-size: 12.5px; color: #0a1838; }
+  .fx-inv i { flex: none; font-size: 14px; color: var(--c-tech-blue); }
+  .fx-inv span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+  .fx-inv em { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .fx-bin { position: absolute; left: 18px; right: 18px; bottom: 18px; padding: 16px 18px; border-radius: 16px; border: 1.5px dashed rgba(143,248,255,0.45); background: rgba(255,255,255,0.07); }
+  .fx-bin__hd { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--c-innovation-blue); }
+  .fx-bin__hd i { font-size: 13px; }
+  .fx-bin__n { margin-left: auto; position: relative; min-width: 3.4em; height: 1.4em; }
+  .fx-bin__n b { position: absolute; right: 0; top: 0; font-size: 13px; font-weight: 700; letter-spacing: 0; text-transform: none; color: #ffffff; font-variant-numeric: tabular-nums; opacity: 0; }
+  .fx-bin__sum { position: relative; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 13px; min-height: 1.9em; font-size: 12.5px; color: #b9c5de; }
+  /* Same rule as the ledger variant: the total and its resting line share the
+     slot rather than one of them leaving it empty. */
+  .fx-bin__sum > i { position: absolute; right: 0; bottom: 0; font-style: normal; font-size: 12.5px; color: #a6b3cd; white-space: nowrap; }
+  .fx-bin__sum b { font-size: clamp(19px,1.9vw,26px); font-weight: 700; color: #ffffff; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  /* Same rule as every other reserved slot on this page: the deck holds two
+     states that swap. The pile leaves, the allocation stays — which is the
+     sentence the headline makes. */
+  .fx-stack__keep { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; opacity: 0; }
+  .fx-stack__keep i { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; background: rgba(143,248,255,0.14); color: var(--c-innovation-blue); font-size: 16px; }
+  .fx-stack__keep b { display: block; margin-top: 11px; font-size: clamp(15px,1.4vw,18px); font-weight: 700; letter-spacing: -0.01em; color: #ffffff; }
+  .fx-stack__keep small { display: block; margin-top: 5px; font-size: 12.5px; line-height: 1.5; color: #b9c5de; }
+  .fx-stack__seal { position: absolute; left: 50%; bottom: 128px; z-index: 5; display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: var(--c-innovation-blue); color: var(--c-tech-blue); box-shadow: 0 18px 44px rgba(0,0,0,0.34); font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .fx-stack__seal i { font-size: 14px; }
+
+  /* 12s. The deck rests 2.6s, the four cards fly across 4.4s, the tray holds
+     the full run for 3.4s, then everything springs back. */
+  @keyframes fx-fly1 { 0%, 22% { transform: translate3d(0,0,0) rotate(-1.4deg); opacity: 1; } 32% { transform: translate3d(7%,118px,0) rotate(7deg) scale(0.95); opacity: 1; } 40%, 92% { transform: translate3d(0,214px,0) rotate(0deg) scale(0.84); opacity: 0; } 99%, 100% { transform: translate3d(0,0,0) rotate(-1.4deg); opacity: 1; } }
+  @keyframes fx-fly2 { 0%, 30% { transform: translate3d(0,46px,0) rotate(1.1deg); opacity: 1; } 40% { transform: translate3d(-7%,140px,0) rotate(-7deg) scale(0.95); opacity: 1; } 48%, 92% { transform: translate3d(0,214px,0) rotate(0deg) scale(0.84); opacity: 0; } 99%, 100% { transform: translate3d(0,46px,0) rotate(1.1deg); opacity: 1; } }
+  @keyframes fx-fly3 { 0%, 38% { transform: translate3d(0,92px,0) rotate(-0.9deg); opacity: 1; } 48% { transform: translate3d(8%,158px,0) rotate(8deg) scale(0.95); opacity: 1; } 56%, 92% { transform: translate3d(0,214px,0) rotate(0deg) scale(0.84); opacity: 0; } 99%, 100% { transform: translate3d(0,92px,0) rotate(-0.9deg); opacity: 1; } }
+  @keyframes fx-fly4 { 0%, 46% { transform: translate3d(0,138px,0) rotate(1.6deg); opacity: 1; } 56% { transform: translate3d(-8%,176px,0) rotate(-8deg) scale(0.95); opacity: 1; } 64%, 92% { transform: translate3d(0,214px,0) rotate(0deg) scale(0.84); opacity: 0; } 99%, 100% { transform: translate3d(0,138px,0) rotate(1.6deg); opacity: 1; } }
+  @keyframes fx-cnt0 { 0%, 32% { opacity: 1; } 36%, 96% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes fx-cnt1 { 0%, 32% { opacity: 0; } 36%, 44% { opacity: 1; } 48%, 100% { opacity: 0; } }
+  @keyframes fx-cnt2 { 0%, 44% { opacity: 0; } 48%, 52% { opacity: 1; } 56%, 100% { opacity: 0; } }
+  @keyframes fx-cnt3 { 0%, 52% { opacity: 0; } 56%, 60% { opacity: 1; } 64%, 100% { opacity: 0; } }
+  @keyframes fx-cnt4 { 0%, 60% { opacity: 0; } 64%, 92% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  @keyframes fx-btot { 0%, 60% { opacity: 0; transform: translateY(9px) scale(0.92); filter: blur(5px); } 70% { opacity: 1; transform: translateY(0) scale(1.06); filter: blur(0); } 75%, 92% { opacity: 1; transform: none; filter: blur(0); } 98%, 100% { opacity: 0; transform: translateY(9px) scale(0.92); filter: blur(5px); } }
+  @keyframes fx-bidle { 0%, 60% { opacity: 1; } 68%, 94% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes fx-sseal { 0%, 66% { opacity: 0; transform: translateX(-50%) scale(1.8) rotate(-9deg); } 74% { opacity: 1; transform: translateX(-50%) scale(0.95) rotate(2deg); } 78%, 92% { opacity: 1; transform: translateX(-50%) scale(1) rotate(0deg); } 97%, 100% { opacity: 0; transform: translateX(-50%) scale(1.8) rotate(-9deg); } }
+  @keyframes fx-glow { 0%, 60% { box-shadow: 0 0 0 0 rgba(143,248,255,0); } 70% { box-shadow: 0 0 0 12px rgba(143,248,255,0.14); } 82%, 100% { box-shadow: 0 0 0 0 rgba(143,248,255,0); } }
+  .fx-s { animation-duration: 12s; animation-iteration-count: infinite; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16,1,0.3,1); }
+  @keyframes fx-keep { 0%, 40% { opacity: 0; transform: translateY(calc(-50% + 12px)); } 50%, 92% { opacity: 1; transform: translateY(-50%); } 97%, 100% { opacity: 0; transform: translateY(calc(-50% + 12px)); } }
+  .fx-stack__keep { animation: fx-keep 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-inv--1 { z-index: 4; animation-name: fx-fly1; }
+  .fx-inv--2 { z-index: 3; animation-name: fx-fly2; }
+  .fx-inv--3 { z-index: 2; animation-name: fx-fly3; }
+  .fx-inv--4 { z-index: 1; animation-name: fx-fly4; }
+  .fx-bin__n b:nth-child(1) { animation: fx-cnt0 12s linear infinite both; }
+  .fx-bin__n b:nth-child(2) { animation: fx-cnt1 12s linear infinite both; }
+  .fx-bin__n b:nth-child(3) { animation: fx-cnt2 12s linear infinite both; }
+  .fx-bin__n b:nth-child(4) { animation: fx-cnt3 12s linear infinite both; }
+  .fx-bin__n b:nth-child(5) { animation: fx-cnt4 12s linear infinite both; }
+  .fx-bin__sum b { display: inline-block; animation: fx-btot 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-bin__sum > i { animation: fx-bidle 12s linear infinite both; }
+  .fx-bin { animation: fx-glow 12s cubic-bezier(0.65,0,0.35,1) infinite both; }
+  .fx-stack__seal { animation: fx-sseal 12s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  body.fx-win-paused .fx-s, body.fx-win-paused .fx-bin, body.fx-win-paused .fx-bin__n b,
+  body.fx-win-paused .fx-bin__sum b, body.fx-win-paused .fx-bin__sum > i,
+  body.fx-win-paused .fx-stack__seal, body.fx-win-paused .fx-stack__keep { animation-play-state: paused; }
+
+  /* ============================================================
+     THE SWITCH — fixed bottom-left, the same pill the front page uses for
+     its own view toggles. It steps out of the way over the footer's legal
+     bar, which an IntersectionObserver flags on BODY.
+     ============================================================ */
+  .fx-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+    padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
+    font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer;
+    transition: transform 200ms, border-color 200ms, opacity 220ms var(--ease-standard, ease-out); }
+  .fx-toggle:hover { border-color: #052975; transform: translateY(-2px); }
+  .fx-toggle b { font-weight: 700; }
+  .fx-toggle u { text-decoration: none; opacity: 0.55; font-weight: 600; }
+  body.cnt-footer-in-view .fx-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
+  @media (prefers-reduced-motion: reduce) { .fx-toggle { transition: none; } }
 
   /* ============================================================
      SECTIONS
@@ -330,6 +579,12 @@ animation, and the loop rests three seconds at each end.
   .fx-sec h2, .fx-sec__lead, .fx-steps__foot, .fx-where__foot { margin-left: auto; margin-right: auto; }
   .fx-win, .fx-tbl__hd, .fx-row, .fx-hand li, .fx-never li, .fx-step, .fx-card { text-align: left; }
   .fx-tbl__hd span:nth-child(3), .fx-tbl__hd span:nth-child(4) { text-align: right; }
+  /* The split variants are the exception the layout asks for: their copy
+     column keeps its own left axis, and the scene beside it shares that axis
+     rather than the page's centre line. */
+  .fx-hv--split .fx-hero__in { text-align: left; }
+  .fx-hv--split h1, .fx-hv--split .fx-hero__lead { margin-left: 0; margin-right: 0; }
+  .fx-hv--split .fx-hero__cta, .fx-hv--split .fx-hero__proof { justify-content: flex-start; }
 
 
   /* ============================================================
@@ -364,13 +619,40 @@ animation, and the loop rests three seconds at each end.
     .fx-step { padding: 18px 16px 20px; }
   }
 
+  /* The splits stop being splits before the phone line: a 40% column of body
+     copy is unreadable long before 640px. Below 980 they stack, the scene goes
+     under the copy, and the whole variant returns to the page's centre axis. */
+  @media (max-width: 980px) {
+    .fx-split--5050, .fx-split--4060, .fx-split--6040 { grid-template-columns: minmax(0,1fr); }
+    /* The portrait leads its own variant, so it stays first when it stacks;
+       the other two scenes follow the copy they illustrate. */
+    .fx-hv--desk .fx-scene, .fx-hv--moves .fx-scene, .fx-hv--stack .fx-scene { order: 2; }
+    .fx-hv--split .fx-hero__in { text-align: center; }
+    .fx-hv--split h1, .fx-hv--split .fx-hero__lead { margin-left: auto; margin-right: auto; }
+    .fx-hv--split .fx-hero__cta, .fx-hv--split .fx-hero__proof { justify-content: center; }
+    .fx-copy h1 { max-width: 24ch; }
+    .fx-copy .fx-hero__lead { max-width: 62ch; }
+    .fx-desk { padding-left: 0; width: 100%; max-width: 620px; justify-self: center; }
+    .fx-portrait { width: 100%; max-width: 520px; justify-self: center; }
+    .fx-portrait__ph img { height: clamp(320px,46vw,430px); }
+    .fx-stack { width: 100%; max-width: 560px; justify-self: center; height: clamp(352px,50vw,392px); }
+    /* Centred copy with a left-aligned dial beside it reads as a mistake, so
+       the dial block keeps its own left axis inside the centred column. */
+    .fx-moves__box { width: 100%; max-width: 560px; align-self: center; text-align: left; }
+    .fx-hv--stack .fx-stack__bg { object-position: 62% 30%; }
+    .fx-hv--stack .fx-stack__scrim { background: linear-gradient(178deg, rgba(3,22,63,0.93) 0%, rgba(4,26,72,0.90) 55%, rgba(6,41,107,0.86) 100%); }
+  }
+
   /* Check marks above the buttons on phone and portrait tablet. */
   @media (max-width: 900px) {
-    .fx-hero__in { display: flex; flex-direction: column; }
+    .fx-hero__in, .fx-copy { display: flex; flex-direction: column; }
     .fx-hero__cta { order: 1; margin-top: 24px; }
     .fx-hero__proof { justify-content: center; margin-top: clamp(26px,3.4vw,34px); }
     .fx-hero__proof { animation-delay: 530ms; }
     .fx-hero__cta { animation-delay: 620ms; }
+    /* .fx-copy is a flex column now, so the scene cannot be its sibling's
+       order-mate; the grid above already put it under the copy. */
+    .fx-copy .fx-hero__proof { order: 0; }
   }
 
   @media (max-width: 860px) {
@@ -384,8 +666,28 @@ animation, and the loop rests three seconds at each end.
 
   @media (max-width: 640px) {
     .fx-sec__eyebrow, .fx-sec h2, .fx-sec__lead { text-align: center; }
-    .fx-win__body { padding: 15px 14px 16px; }
-    .fx-win__ribbon { padding: 9px 12px; overflow: hidden; }
+    /* The module rail is the first thing to go: it is context, and 214px of
+       context in a 350px window leaves no room for the run itself. */
+    .fx-bc__nav { display: none; }
+    .fx-bc__main { padding: 13px 13px 15px; }
+    .fx-bc__steps { gap: 5px; }
+    .fx-sp { padding: 8px 3px; font-size: 10px; }
+    .fx-sp i { display: none; }
+    .fx-bc__hd { flex-wrap: wrap; gap: 8px; }
+    .fx-act { margin-left: 0; }
+    .fx-bc__foot { flex-direction: column; align-items: flex-start; gap: 7px; }
+    .fx-desk { padding-bottom: clamp(58px,13vw,74px); }
+    .fx-desk__win { width: 100%; }
+    .fx-desk__arc { width: 66px; }
+    .fx-desk__arc i { font-size: 15px; right: 18%; top: 15%; }
+    .fx-dseal { right: auto; left: 50%; transform: translateX(-50%); bottom: auto; top: -18px; }
+    @keyframes fx-dseal { 0%, 50% { opacity: 0; transform: translateX(-50%) scale(1.9) rotate(-11deg); } 59% { opacity: 1; transform: translateX(-50%) scale(0.94) rotate(2deg); } 64%, 92% { opacity: 1; transform: translateX(-50%); } 98%, 100% { opacity: 0; transform: translateX(-50%) scale(1.9) rotate(-11deg); } }
+    .fx-moves__box { grid-template-columns: 74px minmax(0,1fr); gap: 14px; }
+    .fx-moves__dial { width: 74px; }
+    .fx-moves__n span { font-size: 34px; }
+    .fx-moves__tx { min-height: 7.2em; }
+    .fx-portrait__tag { right: auto; left: 50%; transform: translateX(-50%); top: auto; bottom: -20px; font-size: 11.5px; padding: 9px 14px; }
+    .fx-portrait { margin-bottom: 26px; }
     /* The row turns into two lines: who and how much on top, the state under
        it. Four columns in 350px would cut every customer name mid-word. */
     .fx-tbl__hd { display: none; }
@@ -401,7 +703,7 @@ animation, and the loop rests three seconds at each end.
     .fx-stage__cap { min-height: 3.5em; font-size: 15.5px; }
     .fx-hand li { grid-template-columns: 38px minmax(0,1fr); gap: 14px; }
     .fx-hand__n { width: 38px; height: 38px; font-size: 13.5px; }
-    .fx-out { flex-wrap: wrap; }
+    .fx-out { flex-wrap: wrap; min-height: 74px; }
     .fx-out__ok { margin-left: 0; }
     /* The ribbon keeps only New and the Continia action: the third chip is what
        the section is about, and a clipped label reads as a bug, not as a
@@ -418,9 +720,12 @@ animation, and the loop rests three seconds at each end.
   /* Reduced motion: every loop resolves to its FINISHED state — the run done,
      not the run about to start. */
   @media (prefers-reduced-motion: reduce) {
-    .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero__cta, .fx-hero__proof,
-    .fx-c, .fx-row { animation: none !important; }
-    .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero__cta, .fx-hero__proof { opacity: 1; transform: none; }
+    .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero .fx-scene, .fx-hero__cta, .fx-hero__proof,
+    .fx-c, .fx-d, .fx-s, .fx-row, .fx-desk__ph img, .fx-portrait__ph img,
+    .fx-desk__win::after, .fx-dsum b, .fx-dseal, .fx-moves__arc, .fx-moves__n span,
+    .fx-moves__tx > span, .fx-moves__rail i, .fx-bin, .fx-bin__n b, .fx-bin__sum b,
+    .fx-stack__seal, .fx-stack__keep { animation: none !important; }
+    .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero .fx-scene, .fx-hero__cta, .fx-hero__proof { opacity: 1; transform: none; }
     .fx-hand li, .fx-never li, .fx-step { transition: none !important; opacity: 1; transform: none; }
     .fx-never b::after, .fx-steps__wire { transition: none !important; transform: scaleX(1); }
     /* `.fx-stage__cap span` and `.fx-st .fx-pill` are 0,2,0 and would beat a
@@ -430,6 +735,34 @@ animation, and the loop rests three seconds at each end.
     .fx-st .fx-pill--open, .fx-st .fx-pill--prop { opacity: 0; }
     .fx-st .fx-pill--alloc { opacity: 1; }
     .fx-sum, .fx-out { opacity: 1; transform: none; }
+    .fx-bc__tot .fx-idle { opacity: 0; }
+    .fx-bc__tot .fx-sum { opacity: 1; }
+    .fx-out .fx-out__st--off { opacity: 0; }
+    .fx-out .fx-out__st--on { opacity: 1; }
+    .fx-out { border-color: #cfa8dd; background: #fdf7ff; }
+    .fx-bin__sum > i { opacity: 0; }
+    /* Variant 1's status strip resolves to every state reached. */
+    .fx-bc__steps .fx-sp { background: var(--c-tech-blue); color: #ffffff; }
+    /* Variant 2 resolves to the file, not to the four lines it replaced. */
+    .fx-dbody .fx-drow--fold { display: none; }
+    .fx-dbody .fx-drow--keep { opacity: 1; max-height: none; }
+    .fx-dsum b, .fx-dseal { opacity: 1; transform: none; }
+    .fx-desk__win::after { display: none; }
+    /* Variant 3 resolves to the third move. */
+    .fx-moves__arc { stroke-dashoffset: 0; }
+    .fx-moves__n span:nth-child(1), .fx-moves__n span:nth-child(2) { opacity: 0; }
+    .fx-moves__n span:nth-child(3) { opacity: 1; transform: none; filter: none; }
+    .fx-moves__tx > span:nth-child(1), .fx-moves__tx > span:nth-child(2) { opacity: 0; }
+    .fx-moves__tx > span:nth-child(3) { opacity: 1; transform: none; }
+    .fx-moves__rail i { transform: scaleX(1); }
+    /* Variant 4 resolves to an empty deck and a full tray. */
+    .fx-stack__deck .fx-inv { opacity: 0; }
+    .fx-bin__n b { opacity: 0; }
+    .fx-bin__n b:nth-child(5) { opacity: 1; }
+    .fx-bin__sum b, .fx-stack__seal { opacity: 1; }
+    .fx-stack__keep { opacity: 1; transform: translateY(-50%); }
+    .fx-idle, .fx-out__st--off, .fx-bin__sum > i { animation: none !important; }
+    .fx-stack__seal { transform: translateX(-50%); }
   }
 </style>
 </helmet>
@@ -438,8 +771,8 @@ animation, and the loop rests three seconds at each end.
 
 <x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Solutions" hint-size="100%,66px"></x-import>
 
-<!-- ============ HERO — the run assembles itself ============ -->
-<section class="fx-hero" data-screen-label="Hero">
+<!-- ============ HERO 1 — THE LEDGER — the run assembles itself ============ -->
+<section class="fx-hero fx-hv fx-hv--ledger" data-screen-label="Hero">
   <div class="fx-hero__in">
     <p class="fx-hero__kick"><i class="fa-light fa-file-invoice-dollar"></i>Continia Finance · Factoring</p>
     <h1><span class="ln">Factoring is fast.</span><span class="ln hl">The paperwork is not.</span></h1>
@@ -451,27 +784,30 @@ animation, and the loop rests three seconds at each end.
         <span class="fx-cap--auto fx-c">With Continia — a proposal, an allocation, a file.</span>
       </p>
       <div class="fx-win">
-        <div class="fx-win__chrome">
-          <div class="fx-win__dots" aria-hidden="true"><span></span><span></span><span></span></div>
-          <div class="fx-win__url"><i class="fa-light fa-lock"></i><b>businesscentral.dynamics.com</b><em>/Factoring Proposal</em></div>
-        </div>
-        <div class="fx-win__nav">
-          <span class="fx-win__brand"><i class="fa-light fa-grid-2"></i>Dynamics 365 Business Central</span>
-          <span class="fx-win__navico" aria-hidden="true"><i class="fa-light fa-magnifying-glass"></i><i class="fa-light fa-gear"></i><i class="fa-light fa-circle-user"></i></span>
-        </div>
-        <div class="fx-win__ribbon">
-          <span class="fx-chip"><i class="fa-light fa-plus"></i>New</span>
-          <span class="fx-chip fx-chip--drop2"><i class="fa-light fa-filter"></i>Filter</span>
-          <span class="fx-chip fx-chip--drop"><i class="fa-light fa-print"></i>Report</span>
-          <span class="fx-chip fx-chip--c fx-c"><i class="fa-light fa-wand-magic-sparkles"></i>Create factoring proposal</span>
-        </div>
-        <div class="fx-win__body">
-          <div class="fx-win__title">Factoring Proposal <span>FP-000142</span></div>
-          <div class="fx-tab"><i class="fa-light fa-chevron-down"></i>Open sales invoices</div>
-          <div class="fx-tbl">
-            <div class="fx-tbl__hd" aria-hidden="true"><span>Customer</span><span>Document No.</span><span>Amount</span><span>Status</span></div>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" hint-size="100%,470px">
+        <div class="fx-bc">
+          <div class="fx-bc__nav" aria-hidden="true">
+            <b><i class="fa-kit fa-document-capture-solution-dc-icon"></i>Document Capture</b>
+            <b><i class="fa-kit fa-expense-management-solution-em-icon"></i>Expenses</b>
+            <b><i class="fa-kit fa-banking-solution-cb-icon"></i>Banking</b>
+            <b class="on"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i>Finance</b>
+            <b><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i>Document Output</b>
+          </div>
+          <div class="fx-bc__main">
+            <div class="fx-bc__steps" aria-hidden="true">
+              <span class="fx-sp fx-sp--1"><i class="fa-light fa-circle"></i>Open</span>
+              <span class="fx-sp fx-sp--2 fx-c"><i class="fa-light fa-list-check"></i>In proposal</span>
+              <span class="fx-sp fx-sp--3 fx-c"><i class="fa-light fa-diagram-project"></i>Allocated</span>
+              <span class="fx-sp fx-sp--4 fx-c"><i class="fa-light fa-file-export"></i>Data file</span>
+            </div>
+            <div class="fx-bc__hd">
+              <span class="fx-bc__ttl">Factoring Proposal <span>FP-000142</span></span>
+              <span class="fx-act fx-c"><i class="fa-light fa-wand-magic-sparkles"></i>Create proposal</span>
+            </div>
+            <div class="fx-tbl">
+              <div class="fx-tbl__hd" aria-hidden="true"><span>Customer</span><span>Document No.</span><span>Amount</span><span>Status</span></div>
             <div class="fx-row fx-row--1">
-              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Fabrikam, Inc.</span>
+              <span class="fx-row__cu"><i class="fa-light fa-file-invoice"></i>Fabrikam, Inc.</span>
               <span class="fx-row__no">108021</span>
               <span class="fx-row__am">12,480.00</span>
               <span class="fx-st">
@@ -481,7 +817,7 @@ animation, and the loop rests three seconds at each end.
               </span>
             </div>
             <div class="fx-row fx-row--2">
-              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Adatum Corporation</span>
+              <span class="fx-row__cu"><i class="fa-light fa-file-invoice"></i>Adatum Corporation</span>
               <span class="fx-row__no">108022</span>
               <span class="fx-row__am">6,240.00</span>
               <span class="fx-st">
@@ -491,7 +827,7 @@ animation, and the loop rests three seconds at each end.
               </span>
             </div>
             <div class="fx-row fx-row--3">
-              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Trey Research</span>
+              <span class="fx-row__cu"><i class="fa-light fa-file-invoice"></i>Trey Research</span>
               <span class="fx-row__no">108023</span>
               <span class="fx-row__am">18,900.00</span>
               <span class="fx-st">
@@ -501,7 +837,7 @@ animation, and the loop rests three seconds at each end.
               </span>
             </div>
             <div class="fx-row fx-row--4">
-              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Northwind Traders</span>
+              <span class="fx-row__cu"><i class="fa-light fa-file-invoice"></i>Northwind Traders</span>
               <span class="fx-row__no">108024</span>
               <span class="fx-row__am">4,375.00</span>
               <span class="fx-st">
@@ -510,17 +846,34 @@ animation, and the loop rests three seconds at each end.
                 <span class="fx-pill fx-pill--alloc fx-c"><i class="fa-light fa-circle-check"></i>Allocated</span>
               </span>
             </div>
-          </div>
-          <div class="fx-sum fx-c">Proposed for factoring <b>41,995.00</b></div>
-          <div class="fx-out fx-c">
-            <span class="fx-out__ico" aria-hidden="true"><i class="fa-light fa-file-export"></i></span>
-            <span class="fx-out__tx">
-              <span class="fx-out__nm">FACTORING-FP000142.txt</span>
-              <span class="fx-out__nt">Data file, in your provider's layout</span>
-            </span>
-            <span class="fx-out__ok"><i class="fa-light fa-circle-check"></i>Ready to send</span>
+            </div>
+            <div class="fx-bc__foot">
+              <span><b>4</b> of 4 open invoices in the proposal</span>
+              <span class="fx-bc__tot">
+                <span class="fx-idle fx-c">Nothing proposed for factoring yet</span>
+                <span class="fx-sum fx-c">Proposed for factoring <b>41,995.00</b></span>
+              </span>
+            </div>
+            <div class="fx-out fx-c">
+              <span class="fx-out__st fx-out__st--off fx-c">
+                <span class="fx-out__ico" aria-hidden="true"><i class="fa-light fa-file-export"></i></span>
+                <span class="fx-out__tx">
+                  <span class="fx-out__nm">No data file yet</span>
+                  <span class="fx-out__nt">Generated from the proposal once it is allocated</span>
+                </span>
+              </span>
+              <span class="fx-out__st fx-out__st--on fx-c">
+                <span class="fx-out__ico" aria-hidden="true"><i class="fa-light fa-file-export"></i></span>
+                <span class="fx-out__tx">
+                  <span class="fx-out__nm">FACTORING-FP000142.txt</span>
+                  <span class="fx-out__nt">Data file, in your provider's layout</span>
+                </span>
+                <span class="fx-out__ok"><i class="fa-light fa-circle-check"></i>Ready to send</span>
+              </span>
+            </div>
           </div>
         </div>
+        </x-import>
       </div>
     </div>
 
@@ -529,13 +882,142 @@ animation, and the loop rests three seconds at each end.
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" href="#in-bc" hint-size="auto,48px">See how the run works</x-import>
     </div>
 
-    <div class="fx-hero__proof">
-      <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
-      <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
-      <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+      <div class="fx-hero__proof">
+        <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+        <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
+        <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+      </div>
+  </div>
+</section>
+
+<!-- ============ HERO 2 — THE DESK — 50/50, the run closing on a real desk ============ -->
+<section class="fx-hero fx-hv fx-hv--split fx-hv--desk" data-screen-label="Hero">
+  <div class="fx-hero__in">
+    <div class="fx-split fx-split--5050">
+      <div class="fx-copy">
+        <p class="fx-hero__kick"><i class="fa-light fa-file-invoice-dollar"></i>Continia Finance · Factoring</p>
+        <h1><span class="ln">Four invoices.</span><span class="ln hl">One file.</span></h1>
+        <p class="fx-hero__lead">The factoring run stops being an afternoon and becomes a record: open invoices gathered into a proposal, allocated to their customers, and handed over as the data file your provider expects — without leaving Business Central.</p>
+        <div class="fx-hero__cta">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" href="#in-bc" hint-size="auto,48px">See how the run works</x-import>
+        </div>
+      <div class="fx-hero__proof">
+        <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+        <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
+        <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+      </div>
+      </div>
+
+      <div class="fx-scene fx-desk">
+        <div class="fx-desk__ph">
+          <img src="../../assets/images/team-at-work.jpg" alt="Two colleagues working together at a laptop in Continia's office" loading="lazy" decoding="async">
+          <span class="fx-desk__arc" aria-hidden="true"><i class="fa-light fa-money-bill-transfer"></i></span>
+        </div>
+        <div class="fx-desk__win">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Factoring Proposal" hint-size="100%,214px">
+          <div class="fx-dbody">
+            <div class="fx-drow fx-drow--fold fx-d"><i class="fa-light fa-file-invoice"></i><span>Fabrikam, Inc.</span><em>12,480.00</em></div>
+            <div class="fx-drow fx-drow--fold fx-d"><i class="fa-light fa-file-invoice"></i><span>Adatum Corporation</span><em>6,240.00</em></div>
+            <div class="fx-drow fx-drow--fold fx-d"><i class="fa-light fa-file-invoice"></i><span>Trey Research</span><em>18,900.00</em></div>
+            <div class="fx-drow fx-drow--fold fx-d"><i class="fa-light fa-file-invoice"></i><span>Northwind Traders</span><em>4,375.00</em></div>
+            <div class="fx-drow fx-drow--keep fx-d"><i class="fa-light fa-file-export"></i><span>FACTORING-FP000142.txt</span><em>4 lines</em></div>
+            <div class="fx-dsum"><span>Proposal FP-000142</span><b>41,995.00</b></div>
+          </div>
+          </x-import>
+        </div>
+        <span class="fx-dseal"><i class="fa-light fa-circle-check"></i>Allocated and filed</span>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- ============ HERO 3 — THREE MOVES — 40/60, the numeral is the artwork ============ -->
+<section class="fx-hero fx-hv fx-hv--split fx-hv--moves" data-screen-label="Hero">
+  <div class="fx-hero__in">
+    <div class="fx-split fx-split--4060">
+      <div class="fx-scene fx-portrait">
+        <div class="fx-portrait__ph">
+          <img src="../../assets/images/silke-vertical.jpg" alt="A Continia colleague at her desk in the office" loading="lazy" decoding="async">
+          <span class="fx-portrait__arc" aria-hidden="true"></span>
+        </div>
+        <span class="fx-portrait__tag"><i class="fa-light fa-file-invoice-dollar"></i>Factoring, inside Business Central</span>
+      </div>
+
+      <div class="fx-copy">
+        <p class="fx-hero__kick"><i class="fa-light fa-list-check"></i>Continia Finance · Factoring</p>
+        <h1><span class="ln">Receivables factoring,</span><span class="ln hl">in three moves.</span></h1>
+        <p class="fx-hero__lead">Continia Finance simplifies receivables factoring from proposals through customer allocation and data files. That is the whole run — and all three moves happen against the ledger the invoices came from.</p>
+
+        <div class="fx-moves__box">
+          <div class="fx-moves__dial" aria-hidden="true">
+            <svg viewBox="0 0 100 100"><circle class="fx-moves__trk" cx="50" cy="50" r="46"></circle><circle class="fx-moves__arc" cx="50" cy="50" r="46"></circle></svg>
+            <div class="fx-moves__n"><span>1</span><span>2</span><span>3</span></div>
+          </div>
+          <div class="fx-moves__tx">
+            <span><b>The proposal</b><small>Open sales invoices are gathered into a factoring proposal on your own criteria, totalled where you can see them.</small></span>
+            <span><b>The customer allocation</b><small>Each invoice is allocated to the customer it belongs to, so the proposal reads the way your receivables do.</small></span>
+            <span><b>The data file</b><small>The run produces the file your provider expects — generated from the proposal, not rebuilt beside it.</small></span>
+          </div>
+          <div class="fx-moves__rail" aria-hidden="true"><i></i></div>
+        </div>
+
+        <div class="fx-hero__cta">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" href="#in-bc" hint-size="auto,48px">See how the run works</x-import>
+        </div>
+      <div class="fx-hero__proof">
+        <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+        <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
+        <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HERO 4 — THE STACK — 60/40 on navy, the pile empties ============ -->
+<section class="fx-hero fx-hv fx-hv--split fx-hv--stack" data-screen-label="Hero">
+  <img class="fx-stack__bg" src="../../assets/images/collaboration.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+  <span class="fx-stack__scrim" aria-hidden="true"></span>
+  <div class="fx-hero__in">
+    <div class="fx-split fx-split--6040">
+      <div class="fx-copy">
+        <p class="fx-hero__kick"><i class="fa-light fa-layer-group"></i>Continia Finance · Factoring</p>
+        <h1><span class="ln">Hand the pile over.</span><span class="ln hl">Keep the ledger.</span></h1>
+        <p class="fx-hero__lead">Every run, the same pile of open invoices goes to your factoring provider and the answer to "which of these are still ours?" goes missing. Continia Finance sends the file and leaves the allocation behind, in the ledger, next to the invoices it was built from.</p>
+        <div class="fx-hero__cta">
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+          <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" href="#in-bc" hint-size="auto,48px">See how the run works</x-import>
+        </div>
+      <div class="fx-hero__proof">
+        <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+        <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
+        <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+      </div>
+      </div>
+
+      <div class="fx-scene fx-stack">
+        <div class="fx-stack__deck" aria-hidden="true">
+          <div class="fx-inv fx-inv--1 fx-s"><i class="fa-light fa-file-invoice"></i><span>Fabrikam, Inc.</span><em>12,480.00</em></div>
+          <div class="fx-inv fx-inv--2 fx-s"><i class="fa-light fa-file-invoice"></i><span>Adatum Corporation</span><em>6,240.00</em></div>
+          <div class="fx-inv fx-inv--3 fx-s"><i class="fa-light fa-file-invoice"></i><span>Trey Research</span><em>18,900.00</em></div>
+          <div class="fx-inv fx-inv--4 fx-s"><i class="fa-light fa-file-invoice"></i><span>Northwind Traders</span><em>4,375.00</em></div>
+          <span class="fx-stack__keep" aria-hidden="true"><i class="fa-light fa-book-bookmark"></i><b>Allocated in your ledger</b><small>Four customer entries, still where the invoices were</small></span>
+        </div>
+        <span class="fx-stack__seal"><i class="fa-light fa-circle-check"></i>Data file ready to send</span>
+        <div class="fx-bin">
+          <div class="fx-bin__hd"><i class="fa-light fa-inbox-in"></i>To your provider
+            <span class="fx-bin__n" aria-hidden="true"><b>0 of 4</b><b>1 of 4</b><b>2 of 4</b><b>3 of 4</b><b>4 of 4</b></span>
+          </div>
+          <div class="fx-bin__sum"><span>Proposal FP-000142</span><i>Waiting for the run</i><b>41,995.00</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<button onClick="{{ switchHero }}" class="fx-toggle" title="Switch the hero layout"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i><b>{{ heroName }}</b><u>{{ heroCount }}</u></button>
 
 <!-- ============ THE RUN BY HAND ============ -->
 <section class="fx-sec fx-sec--navy" data-screen-label="The run by hand">
@@ -697,28 +1179,52 @@ animation, and the loop rests three seconds at each end.
 </x-dc>
 
 <script type="text/x-dc" data-dc-script data-props="{}">
+// The four hero layouts, in the order the switch steps through them.
+const HEROES = [
+  { key: "ledger", name: "The ledger" },
+  { key: "desk",   name: "The desk" },
+  { key: "moves",  name: "Three moves" },
+  { key: "stack",  name: "The stack" },
+];
+
 class Component extends DCLogic {
-  state = {};
+  state = { hero: 0 };
 
   componentDidMount() {
+    this._applyHero(this.state.hero);
     this._watchFooter();
     this._watchWindow();
     this._watchScenes();
   }
 
+  // Which hero is live is a class on BODY. Body is outside the dc render tree,
+  // so the class survives renderVals(); an attribute on the section itself
+  // would be wiped by the next render pass.
+  _applyHero(n) {
+    const b = document.body;
+    for (let i = 0; i < HEROES.length; i++) b.classList.toggle("fx-v" + i, i === n);
+    // The visible hero changed, so the observer is now watching a node that is
+    // display:none. Re-arm both watchers against the new one.
+    this._watchWindow();
+    this._watchScenes();
+  }
+
   // The run plays for as long as someone is looking at it and not a moment
-  // longer. The class goes on BODY, not on the section: the section is inside
-  // the dc render tree and the next renderVals() would wipe it.
+  // longer. Every hidden variant is display:none, so only the live one has an
+  // animation to pause in the first place.
   _watchWindow() {
     if (!("IntersectionObserver" in window)) return;
-    const el = document.querySelector(".fx-win");
-    if (!el) return;
+    const el = document.querySelector(".fx-hv:not([hidden]) .fx-scene, .fx-win");
+    const live = [...document.querySelectorAll(".fx-hero")].find((s) => s.getClientRects().length);
+    const target = live || el;
+    if (!target) return;
     if (this._winObs) this._winObs.disconnect();
     this._winObs = new IntersectionObserver(
       ([e]) => document.body.classList.toggle("fx-win-paused", !e.isIntersecting),
       { rootMargin: "80px" },
     );
-    this._winObs.observe(el);
+    this._winObs.observe(target);
+    document.body.classList.remove("fx-win-paused");
   }
 
   // Each scene arms once, when it is most of the way onto the screen. Nodes are
@@ -732,6 +1238,7 @@ class Component extends DCLogic {
     ];
     const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) { scenes.forEach((s) => document.body.classList.add(s.cls)); return; }
+    if (this._onSceneScroll) return;
     let queued = false;
     this._onSceneScroll = () => {
       if (queued) return;
@@ -759,6 +1266,7 @@ class Component extends DCLogic {
   }
 
   _watchFooter() {
+    if (this._onFootScroll) return;
     let queued = false;
     this._onFootScroll = () => {
       if (queued) return;
@@ -777,7 +1285,24 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    return {};
+    const n = this.state.hero;
+    return {
+      heroName: HEROES[n].name,
+      heroCount: (n + 1) + "/" + HEROES.length,
+      switchHero: () => {
+        const next = (this.state.hero + 1) % HEROES.length;
+        this.setState({ hero: next });
+        // Paint the class in the same tick as the state change, so the layout
+        // never shows two heroes or none between render passes.
+        this._applyHero(next);
+        // A new hero means new artwork above the fold: put the reader back at
+        // the top of it rather than halfway down a layout they have not seen.
+        const top = document.querySelector(".fx-hero");
+        if (top && top.getBoundingClientRect().top < -40) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      },
+    };
   }
 }
 </script>
