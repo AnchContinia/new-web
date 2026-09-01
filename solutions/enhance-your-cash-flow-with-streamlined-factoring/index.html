@@ -850,6 +850,14 @@ animation, and the loop rests three seconds at each end.
     }
   }
 
+  /* CTA band padding on phones — one treatment site-wide. This page shipped
+     without it, so its closing band kept the desktop 110px/32px at 390px and
+     stood taller and narrower than the same band on every other page.
+     ⚠️ `!important` again: the value is inline on the <div>. */
+  @media (max-width: 640px) {
+    section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+  }
+
   @media (max-width: 1000px) {
     .fx-stage__cap { font-size: 17px; }
     .fx-tbl__hd, .fx-row { grid-template-columns: minmax(0,1fr) 100px 110px 124px; gap: 10px; }
@@ -1446,9 +1454,8 @@ animation, and the loop rests three seconds at each end.
 <!-- ============ THE RUN IN BUSINESS CENTRAL ============ -->
 <section class="fx-sec fx-sec--tint" id="in-bc" data-screen-label="The run in Business Central">
   <div class="fx-sec__in">
-    <p class="fx-sec__eyebrow">The run in Business Central</p>
-    <h2>Proposal, allocation, file.</h2>
-    <p class="fx-sec__lead">Continia Finance's Factoring module simplifies receivables factoring from proposals through customer allocation and data files. Three steps, one chain, inside the client your finance team already opens.</p>
+    <h2>Proposal, allocation, file. Inside Business Central.</h2>
+    <p class="fx-sec__lead">Continia Finance's Factoring module simplifies receivables factoring from proposals through customer allocation and data files. Three steps, one chain, run against the invoices themselves.</p>
 
     <div class="fx-steps">
       <span class="fx-steps__wire" aria-hidden="true"></span>
