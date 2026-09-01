@@ -124,9 +124,10 @@ animation, and the loop rests three seconds at each end.
   body.fx-v1 .fx-hv--desk,
   body.fx-v2 .fx-hv--moves,
   body.fx-v3 .fx-hv--stack,
-  body.fx-v4 .fx-hv--line { display: block; }
+  body.fx-v4 .fx-hv--line,
+  body.fx-v5 .fx-hv--bound { display: block; }
   /* Before the script has run, variant one is the one on screen. */
-  body:not(.fx-v0):not(.fx-v1):not(.fx-v2):not(.fx-v3):not(.fx-v4) .fx-hv--ledger { display: block; }
+  body:not(.fx-v0):not(.fx-v1):not(.fx-v2):not(.fx-v3):not(.fx-v4):not(.fx-v5) .fx-hv--ledger { display: block; }
 
   .fx-hero { position: relative; overflow: hidden; background: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%); color: var(--c-tech-blue); padding: clamp(56px,5.4vw,84px) clamp(20px,4vw,44px) clamp(64px,6vw,92px); }
   .fx-hero__in { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; }
@@ -601,6 +602,105 @@ animation, and the loop rests three seconds at each end.
   body.fx-win-paused .fx-lr__a { animation-play-state: paused; }
 
   /* ============================================================
+     VARIANT 6 — THE BOUNDARY — 46/54, the one relation the other five
+     never draw: the edge between your ledger and your provider's format.
+     "Their columns are not your columns" is the page's own sentence; this
+     variant is that sentence as a diagram. The same record appears twice,
+     under Business Central's field names and under the provider's, and the
+     values change shape on the way across — 12,480.00 becomes 12480.00,
+     14-10-2026 becomes 20261014. That is what a mapping is.
+     Light ground on purpose: four of the six heroes are navy or photo, so
+     the switch has to land somewhere else to be worth pressing. It is also
+     the ground that lets the pop-up window earn its keep — the frame marks
+     what is ours, and the provider's card is deliberately unbranded: no
+     brand bar, no shadow, one hairline. Whose surface a thing sits on is
+     the argument.
+     ============================================================ */
+  .fx-hv--bound { background: linear-gradient(176deg, #ffffff 0%, #f4f7fc 58%, #eaf1fb 100%);
+    --bd-line: #dde3ee;
+    --bd-ink: #0a1838;
+    --bd-mute: #5c6a86;  /* slate-500 measures 4.43 on white — one step down
+                            so the captions, the provider's field names and the
+                            resting file pill all clear AA at 11-12px */
+    --bd-them: #3a4a6b;
+    --bd-lit: #f2f6ff;
+  }
+  .fx-hv--bound .fx-hero__in { display: grid; grid-template-columns: minmax(0,46fr) minmax(0,54fr); gap: clamp(30px,3.6vw,64px); align-items: center; }
+  .fx-bd__copy { min-width: 0; }
+  /* A 46% column cannot carry the page's 64px display size without breaking
+     "One run in between." across two lines mid-phrase, so this variant runs
+     its own smaller step. Three whole lines beat four broken ones. */
+  .fx-hv--bound h1 { max-width: 17ch; font-size: clamp(33px,3.5vw,50px); }
+  .fx-hv--bound .fx-hero__lead { max-width: 46ch; }
+
+  .fx-bd { min-width: 0; }
+  /* Both panels label themselves, because the whole point is which side of
+     the boundary a thing is on. */
+  .fx-bd__cap { display: flex; align-items: center; gap: 9px; margin: 0 0 11px; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--bd-mute); }
+  .fx-bd__cap i { font-size: 12px; }
+  .fx-bd__rows { display: grid; }
+  .fx-bd__r { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,auto); align-items: center; gap: 14px;
+    padding: 11px 12px; border-radius: 8px; font-size: 13.5px; }
+  .fx-bd__r + .fx-bd__r { margin-top: 2px; }
+  .fx-bd__f { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--bd-them); }
+  .fx-bd__v { font-weight: 700; color: var(--bd-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ours — inside the branded frame */
+  .fx-bd__win { border-radius: 14px; overflow: hidden; }
+  .fx-bd__ours { padding: 16px 14px; }
+  .fx-bd__ours .fx-bd__r { background-color: transparent; }
+
+  /* the boundary itself: a hairline with the file that crosses it sitting on
+     the line. One element, two colour states — no slot to leave empty. */
+  .fx-bd__seam { display: flex; align-items: center; gap: 14px; padding: clamp(15px,1.5vw,20px) 0; }
+  .fx-bd__wire { flex: 1; height: 1px; background: var(--bd-line); }
+  .fx-bd__file { flex: none; display: inline-flex; align-items: center; gap: 9px; padding: 8px 15px; border-radius: 999px;
+    border: 1.5px solid var(--bd-line); background: #ffffff; color: var(--bd-mute);
+    font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .fx-bd__file i { font-size: 12px; }
+
+  /* theirs — no brand bar, no shadow, one hairline. Not our surface. */
+  .fx-bd__theirs { padding: 18px 16px 16px; border-radius: 16px; border: 1px solid var(--bd-line); background: #ffffff; }
+  .fx-bd__theirs .fx-bd__f { font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 11.5px; color: var(--bd-mute); }
+  /* Reserved slot: the provider's column is never blank — it holds a dash
+     until the run puts a value in it. */
+  .fx-bd__slot { position: relative; display: inline-block; min-width: clamp(88px,9vw,124px); text-align: right; }
+  .fx-bd__slot > span { display: inline-block; }
+  .fx-bd__dash { color: var(--bd-mute); font-weight: 700; }
+  .fx-bd__val { position: absolute; right: 0; top: 0; font-weight: 700; color: var(--bd-ink); font-variant-numeric: tabular-nums; white-space: nowrap; opacity: 0; }
+
+  /* 12s. Rests 3.1s with the provider's column empty, maps the four fields
+     across on a 560ms cascade, holds 4.4s, unwinds in the same order. */
+  @keyframes fx-brow  { 0%, 26% { background-color: transparent; }
+                        34%, 89% { background-color: var(--bd-lit); }
+                        97%, 100% { background-color: transparent; } }
+  /* The dash and the value share one cell, so the handover is a step, not a
+     fade: 27% and 27.01% put a hard cut between them, and 89.99%/90% put the
+     same cut on the way back. Neither frame shows both, and no frame shows
+     neither. A 120ms cross-dissolve between a dash and a number is legible as
+     mush, which is exactly what a mapping must not look like. */
+  @keyframes fx-bdash { 0%, 27% { opacity: 1; } 27.01%, 89.99% { opacity: 0; } 90%, 100% { opacity: 1; } }
+  @keyframes fx-bval  { 0%, 27% { opacity: 0; transform: translateX(-12px); }
+                        36%, 89.99% { opacity: 1; transform: none; }
+                        90%, 100% { opacity: 0; transform: translateX(-12px); } }
+  @keyframes fx-bfile { 0%, 26% { border-color: var(--bd-line); background-color: #ffffff; color: var(--bd-mute); }
+                        38%, 91% { border-color: #983eae; background-color: #f7effa; color: #983eae; }
+                        99%, 100% { border-color: var(--bd-line); background-color: #ffffff; color: var(--bd-mute); } }
+  .fx-bd__ours .fx-bd__r { animation: fx-brow 12s cubic-bezier(0.4,0,0.2,1) infinite both; }
+  .fx-bd__dash { animation: fx-bdash 12s linear infinite both; }
+  .fx-bd__val { animation: fx-bval 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-bd__file { animation: fx-bfile 12s cubic-bezier(0.4,0,0.2,1) infinite both; }
+  /* The cascade is a delay, not four keyframe sets: 560ms is small enough
+     against a 12s cycle that every row still rests and holds together, and
+     the unwind inherits the same order for free. */
+  .fx-bd__r:nth-child(2), .fx-bd__r:nth-child(2) .fx-bd__dash, .fx-bd__r:nth-child(2) .fx-bd__val { animation-delay: 560ms; }
+  .fx-bd__r:nth-child(3), .fx-bd__r:nth-child(3) .fx-bd__dash, .fx-bd__r:nth-child(3) .fx-bd__val { animation-delay: 1120ms; }
+  .fx-bd__r:nth-child(4), .fx-bd__r:nth-child(4) .fx-bd__dash, .fx-bd__r:nth-child(4) .fx-bd__val { animation-delay: 1680ms; }
+  body.fx-win-paused .fx-bd__ours .fx-bd__r, body.fx-win-paused .fx-bd__dash,
+  body.fx-win-paused .fx-bd__val, body.fx-win-paused .fx-bd__file { animation-play-state: paused; }
+
+  /* ============================================================
      THE SWITCH — fixed bottom-left, the same pill the front page uses for
      its own view toggles. It steps out of the way over the footer's legal
      bar, which an IntersectionObserver flags on BODY.
@@ -725,6 +825,9 @@ animation, and the loop rests three seconds at each end.
   .fx-hv--line .fx-hero__in { text-align: left; }
   .fx-hv--line h1, .fx-hv--line .fx-hero__lead { margin-left: 0; margin-right: 0; }
   .fx-hv--line .fx-hero__cta, .fx-hv--line .fx-hero__proof { justify-content: flex-start; }
+  .fx-hv--bound .fx-hero__in { text-align: left; }
+  .fx-hv--bound h1, .fx-hv--bound .fx-hero__lead { margin-left: 0; margin-right: 0; }
+  .fx-hv--bound .fx-hero__cta, .fx-hv--bound .fx-hero__proof { justify-content: flex-start; }
 
 
   /* ============================================================
@@ -791,6 +894,16 @@ animation, and the loop rests three seconds at each end.
     .fx-hv--line h1 { max-width: 24ch; }
     .fx-ln { text-align: left; }
     .fx-hv--line .fx-line__bg { object-position: 52% 68%; }
+
+    /* Variant 6 folds the same way the four splits do — one column, copy
+       centred, the boundary underneath it. The boundary is already a vertical
+       stack, so nothing has to rotate. */
+    .fx-hv--bound .fx-hero__in { grid-template-columns: minmax(0,1fr); text-align: center; }
+    .fx-hv--bound h1, .fx-hv--bound .fx-hero__lead { margin-left: auto; margin-right: auto; }
+    .fx-hv--bound h1 { max-width: 20ch; }
+    .fx-hv--bound .fx-hero__lead { max-width: 58ch; }
+    .fx-hv--bound .fx-hero__cta, .fx-hv--bound .fx-hero__proof { justify-content: center; }
+    .fx-bd { width: 100%; max-width: 560px; justify-self: center; text-align: left; }
   }
 
   /* Check marks above the buttons on phone and portrait tablet. */
@@ -831,6 +944,11 @@ animation, and the loop rests three seconds at each end.
     .fx-ln__tag > * { white-space: normal; }
     .fx-lr { padding: 12px 14px; }
     .fx-lr__st { width: 88px; }
+    .fx-bd__r { padding: 10px 10px; font-size: 13px; gap: 10px; }
+    .fx-bd__theirs .fx-bd__f { font-size: 10.5px; letter-spacing: 0.05em; }
+    .fx-bd__slot { min-width: 82px; }
+    .fx-bd__file { font-size: 11px; padding: 7px 12px; }
+    .fx-bd__seam { gap: 10px; }
     /* The module rail is the first thing to go: it is context, and 214px of
        context in a 350px window leaves no room for the run itself. */
     .fx-bc__nav { display: none; }
@@ -891,7 +1009,8 @@ animation, and the loop rests three seconds at each end.
     .fx-moves__tx > span, .fx-moves__rail i, .fx-bin, .fx-bin__n b, .fx-bin__sum b,
     .fx-stack__seal, .fx-stack__keep,
     .fx-ln__am, .fx-ln__file, .fx-ln__wait, .fx-ln__kept, .fx-ln__big,
-    .fx-lr__o, .fx-lr__a { animation: none !important; }
+    .fx-lr__o, .fx-lr__a,
+    .fx-bd__ours .fx-bd__r, .fx-bd__dash, .fx-bd__val, .fx-bd__file { animation: none !important; }
     .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero .fx-scene, .fx-hero__cta, .fx-hero__proof { opacity: 1; transform: none; }
     .fx-hand li, .fx-never li, .fx-step { transition: none !important; opacity: 1; transform: none; }
     .fx-never b::after, .fx-steps__wire { transition: none !important; transform: scaleX(1); }
@@ -938,6 +1057,10 @@ animation, and the loop rests three seconds at each end.
     .fx-ln__big { border-bottom-color: rgba(var(--ln-lav-mid),0.82); }
     .fx-lr__st .fx-lr__o { opacity: 0; }
     .fx-lr__st .fx-lr__a { opacity: 1; transform: none; }
+    .fx-bd__ours .fx-bd__r { background-color: var(--bd-lit); }
+    .fx-bd__slot .fx-bd__dash { opacity: 0; }
+    .fx-bd__slot .fx-bd__val { opacity: 1; transform: none; }
+    .fx-bd__file { border-color: #983eae; background-color: #f7effa; color: #983eae; }
   }
 </style>
 </helmet>
@@ -1238,6 +1361,58 @@ animation, and the loop rests three seconds at each end.
   </div>
 </section>
 
+<!-- ============ HERO 6 — THE BOUNDARY — the same record on both sides of the edge ============ -->
+<section class="fx-hero fx-hv fx-hv--bound" data-screen-label="Hero">
+  <div class="fx-hero__in">
+    <div class="fx-bd__copy">
+      <p class="fx-hero__kick"><i class="fa-light fa-table-columns"></i>Continia Finance &middot; Factoring</p>
+      <h1><span class="ln">Your ledger.</span><span class="ln">Their format.</span><span class="ln hl">One run in between.</span></h1>
+      <p class="fx-hero__lead">Your provider wants its own field names, its own number format and its own file. Continia Finance writes that file from the proposal you already approved, so the mapping stops living in somebody's head and starts living in Business Central.</p>
+      <div class="fx-hero__cta">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" href="#in-bc" hint-size="auto,48px">See how the run works</x-import>
+      </div>
+      <div class="fx-hero__proof">
+        <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+        <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
+        <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+      </div>
+    </div>
+
+    <div class="fx-bd" aria-hidden="true">
+      <div class="fx-bd__win">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.PopupWindow" title="Business Central" hint-size="100%,232px">
+        <div class="fx-bd__ours">
+          <p class="fx-bd__cap"><i class="fa-light fa-file-invoice"></i>Factoring proposal FP-000142 &middot; line 1</p>
+          <div class="fx-bd__rows">
+            <div class="fx-bd__r"><span class="fx-bd__f">Customer No.</span><span class="fx-bd__v">C-10420</span></div>
+            <div class="fx-bd__r"><span class="fx-bd__f">Document No.</span><span class="fx-bd__v">108021</span></div>
+            <div class="fx-bd__r"><span class="fx-bd__f">Amount</span><span class="fx-bd__v">12,480.00</span></div>
+            <div class="fx-bd__r"><span class="fx-bd__f">Due Date</span><span class="fx-bd__v">14-10-2026</span></div>
+          </div>
+        </div>
+        </x-import>
+      </div>
+
+      <p class="fx-bd__seam">
+        <span class="fx-bd__wire"></span>
+        <span class="fx-bd__file"><i class="fa-light fa-file-export"></i>FACTORING-FP000142.txt</span>
+        <span class="fx-bd__wire"></span>
+      </p>
+
+      <div class="fx-bd__theirs">
+        <p class="fx-bd__cap"><i class="fa-light fa-file-lines"></i>Your provider's layout</p>
+        <div class="fx-bd__rows">
+          <div class="fx-bd__r"><span class="fx-bd__f">Debtor</span><span class="fx-bd__slot"><span class="fx-bd__dash">&mdash;</span><span class="fx-bd__val">C10420</span></span></div>
+          <div class="fx-bd__r"><span class="fx-bd__f">Invref</span><span class="fx-bd__slot"><span class="fx-bd__dash">&mdash;</span><span class="fx-bd__val">108021</span></span></div>
+          <div class="fx-bd__r"><span class="fx-bd__f">Value</span><span class="fx-bd__slot"><span class="fx-bd__dash">&mdash;</span><span class="fx-bd__val">12480.00</span></span></div>
+          <div class="fx-bd__r"><span class="fx-bd__f">Duedt</span><span class="fx-bd__slot"><span class="fx-bd__dash">&mdash;</span><span class="fx-bd__val">20261014</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <button onClick="{{ switchHero }}" class="fx-toggle" title="Switch the hero layout"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i><b>{{ heroName }}</b><u>{{ heroCount }}</u></button>
 
 <!-- ============ THE RUN BY HAND ============ -->
@@ -1407,6 +1582,7 @@ const HEROES = [
   { key: "moves",  name: "Three moves" },
   { key: "stack",  name: "The stack" },
   { key: "line",   name: "The line" },
+  { key: "bound",  name: "The boundary" },
 ];
 
 class Component extends DCLogic {
