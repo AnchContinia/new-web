@@ -135,7 +135,12 @@ animation, and the loop rests three seconds at each end.
   .fx-hero__kick i { font-size: 13px; }
   /* Black into purple, not Tech Blue into purple: Tech Blue and Performance
      Purple read as two shades of one idea. */
-  .fx-hero h1 { margin: 0; color: #111318; max-width: 24ch; font-size: clamp(38px,4.4vw,64px); font-weight: 700; line-height: 1.03; letter-spacing: -0.028em; }
+  /* Tech Blue, not the near-black #111318 the heroes shipped with: the page
+     carries five near-black headings below the fold (one h2 per light section
+     plus the three step-card h3s), and past two of those an ink-black h1 is
+     just the largest of a set rather than the page's own voice. The navy
+     variants override to white further down and are unaffected. */
+  .fx-hero h1 { margin: 0; color: var(--c-tech-blue); max-width: 24ch; font-size: clamp(38px,4.4vw,64px); font-weight: 700; line-height: 1.03; letter-spacing: -0.028em; }
   .fx-hero h1 .ln { display: block; }
   .fx-hero h1 .hl { color: #983eae; }
   .fx-hero__lead { margin: 24px 0 0; max-width: 62ch; font-size: 1.1875rem; line-height: 1.6; color: #3a4a6b; }
