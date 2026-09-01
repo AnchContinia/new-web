@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enhance your cash flow with streamlined factoring — Continia</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<!--
+THESIS: Factoring itself is fast. The run that feeds it is not — it is a
+spreadsheet somebody rebuilds every week out of open invoices. Continia Finance's
+Factoring module does the run where the invoices already live: proposal, customer
+allocation, data file.
+OWN-WORLD: Continia's committed system — light grounds and deep Tech Blue,
+nothing in between; Performance Purple as the one accent on light; cyan reserved
+for navy. The one green band is the section that argues from absence.
+STORY: The reader watches a factoring run assemble itself inside Business
+Central, then sees what the same run costs by hand, then what it looks like when
+the ledger does it.
+FIRST VIEWPORT: White band. Headline, lead, then a Business Central window where
+four open invoices walk from Open to In proposal to Allocated and drop out as a
+data file.
+HOUSE RULES: one highlighted headline (the hero's second line), black-to-purple,
+no decorative circles, one axis — the page is centred and only the mocks keep
+their own left alignment, buttons centred below 1100 and stacked below 640, check
+marks above the buttons on phone and portrait tablet, the caption above the
+animation, and the loop rests three seconds at each end.
+-->
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  /* BODY must not become a scroll container. `overflow-x: hidden` here coerces
+     overflow-y to auto, which makes BODY the scroller: window.scrollY sticks at
+     0, window never fires `scroll`, and the sticky header comes unstuck.
+     `clip` clips the same way without creating a scroll box. (trap 6) */
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; color: var(--color-text); }
+  a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
+  a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
+  ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
+  h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
+
+  /* ============================================================
+     HEADER — same overrides as every hand-built page here.
+     SiteHeader lives in the bundle and ships identically to all 46 pages, so
+     nothing here touches it. The `body ` prefix is deliberate: the component
+     calls useStyle() at render time and appends its own <style> to <head>
+     AFTER this block, so an equally specific rule would lose on source order.
+     The hairline is an inset shadow, not a border — a real border would make
+     this header 64px where every other page's is 63.
+     ============================================================ */
+  body .cnt-siteheader { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09); }
+  body .cnt-siteheader--scrolled { box-shadow: inset 0 -1px 0 rgba(5,41,117,0.09), 0 10px 30px rgba(5,41,117,0.10); }
+  body .cnt-siteheader__link { border-radius: 999px; transition: background-color 200ms var(--ease-standard), color 200ms var(--ease-standard); }
+  body .cnt-siteheader__nav .cnt-siteheader__link:hover { background: rgba(5,41,117,0.06); color: var(--c-tech-blue); }
+  body .cnt-siteheader__link--active,
+  body .cnt-siteheader__link--active:hover { background: none; border-radius: 0; }
+  body .cnt-siteheader__dropdown { min-width: 288px; border-radius: 18px; padding: 10px; border-color: rgba(5,41,117,0.10); box-shadow: 0 24px 60px rgba(5,41,117,0.20); }
+  body .cnt-siteheader__dropitem { gap: 13px; padding: 9px 11px; border-radius: 12px; opacity: 0; transform: translateY(-8px); transition: opacity 260ms cubic-bezier(0.16,1,0.3,1), transform 260ms cubic-bezier(0.16,1,0.3,1), background 150ms, color 150ms; }
+  body .cnt-siteheader__dropitem i { width: 30px; height: 30px; flex: none; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; background: var(--c-light-blue); transition: background 150ms, color 150ms; }
+  body .cnt-siteheader__dropitem:hover i { background: var(--c-tech-blue); color: #ffffff; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem,
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem { opacity: 1; transform: none; }
+  /* The delay lives on the open state only — a staggered close reads as lag. */
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(1),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(1) { transition-delay: 30ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(2),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(2) { transition-delay: 60ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(3),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(3) { transition-delay: 90ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(4),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(4) { transition-delay: 120ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(5),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(5) { transition-delay: 150ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(6),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(6) { transition-delay: 180ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(7),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(7) { transition-delay: 210ms; }
+  body .cnt-siteheader__navitem:hover .cnt-siteheader__dropitem:nth-child(n+8),
+  body .cnt-siteheader__navitem:focus-within .cnt-siteheader__dropitem:nth-child(n+8) { transition-delay: 240ms; }
+  /* The three bars are the <i> itself plus its two pseudo-elements: the bundle
+     swaps fa-bars for fa-xmark on the same node, so that class is the state. */
+  body .cnt-siteheader__burger i { position: relative; display: block; width: 20px; height: 2px; border-radius: 2px; background-color: currentColor; font-size: 0; transition: background-color 200ms var(--ease-standard); }
+  body .cnt-siteheader__burger i::before,
+  body .cnt-siteheader__burger i::after { content: "" !important; position: absolute; left: 0; width: 20px; height: 2px; border-radius: 2px; background-color: currentColor; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); }
+  body .cnt-siteheader__burger i.fa-bars::before { transform: translateY(-6px); }
+  body .cnt-siteheader__burger i.fa-bars::after { transform: translateY(6px); }
+  body .cnt-siteheader__burger i.fa-xmark { background-color: transparent; }
+  body .cnt-siteheader__burger i.fa-xmark::before { transform: rotate(45deg); }
+  body .cnt-siteheader__burger i.fa-xmark::after { transform: rotate(-45deg); }
+  body .cnt-siteheader__mobile { gap: 0; padding-top: 6px; animation: fx-mpanel 300ms cubic-bezier(0.16,1,0.3,1) both; }
+  body .cnt-siteheader__mobile > * { animation: fx-mrow 340ms cubic-bezier(0.16,1,0.3,1) both; }
+  body .cnt-siteheader__mobile > .cnt-siteheader__link,
+  body .cnt-siteheader__mobile .cnt-siteheader__macc-btn { padding: 13px 4px; border-radius: 12px; border-bottom: 1px solid rgba(5,41,117,0.07); }
+  body .cnt-siteheader__mobile > *:last-child { border-bottom: 0; }
+  body .cnt-siteheader__mobile > *:nth-child(1) { animation-delay: 30ms; }
+  body .cnt-siteheader__mobile > *:nth-child(2) { animation-delay: 66ms; }
+  body .cnt-siteheader__mobile > *:nth-child(3) { animation-delay: 102ms; }
+  body .cnt-siteheader__mobile > *:nth-child(4) { animation-delay: 138ms; }
+  body .cnt-siteheader__mobile > *:nth-child(5) { animation-delay: 174ms; }
+  body .cnt-siteheader__mobile > *:nth-child(n+6) { animation-delay: 210ms; }
+  @keyframes fx-mpanel { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fx-mrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+  /* ============================================================
+     HERO — light ground. Depth from a linear wash; no decorative circles
+     anywhere on this page.
+     ============================================================ */
+  .fx-hero { position: relative; overflow: hidden; background: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%); color: var(--c-tech-blue); padding: clamp(56px,5.4vw,84px) clamp(20px,4vw,44px) clamp(64px,6vw,92px); }
+  .fx-hero__in { position: relative; max-width: 1240px; margin: 0 auto; }
+  .fx-hero__kick { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; padding: 7px 14px 7px 9px; border-radius: 999px; background: var(--c-light-blue); color: var(--c-tech-blue); font-size: 12px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+  .fx-hero__kick i { font-size: 13px; }
+  /* Black into purple, not Tech Blue into purple: Tech Blue and Performance
+     Purple read as two shades of one idea. */
+  .fx-hero h1 { margin: 0; color: #111318; max-width: 24ch; font-size: clamp(38px,4.4vw,64px); font-weight: 700; line-height: 1.03; letter-spacing: -0.028em; }
+  .fx-hero h1 .ln { display: block; }
+  .fx-hero h1 .hl { color: #983eae; }
+  .fx-hero__lead { margin: 24px 0 0; max-width: 62ch; font-size: 1.1875rem; line-height: 1.6; color: #3a4a6b; }
+  .fx-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: clamp(30px,3vw,40px); }
+  .fx-hero__proof { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 24px; font-size: 14.5px; color: #3a4a6b; }
+  .fx-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
+  .fx-hero__proof i { color: var(--c-tech-blue); font-size: 15px; }
+
+  @keyframes fx-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero__cta, .fx-hero__proof { animation: fx-rise 800ms cubic-bezier(0.16,1,0.3,1) both; }
+  .fx-hero__kick { animation-delay: 40ms; }
+  .fx-hero h1 .ln:nth-child(1) { animation-delay: 110ms; }
+  .fx-hero h1 .ln:nth-child(2) { animation-delay: 210ms; }
+  .fx-hero__lead { animation-delay: 320ms; }
+  .fx-hero .fx-stage { animation-delay: 430ms; }
+  .fx-hero__cta { animation-delay: 560ms; }
+  .fx-hero__proof { animation-delay: 640ms; }
+
+  /* ============================================================
+     THE RUN — a Business Central window where the factoring run assembles
+     itself. The caption sits ABOVE it: it introduces the run rather than
+     explaining it after the fact.
+     ============================================================ */
+  .fx-stage { position: relative; margin-top: clamp(34px,3.2vw,48px); }
+  /* The slot is reserved, not sized to content: the two lines swap, and a box
+     that grows with each one would walk the window up and down the page. */
+  .fx-stage__cap { position: relative; max-width: 1040px; margin: 0 auto 20px; min-height: 1.6em; font-size: 19px; line-height: 1.6; }
+  .fx-stage__cap span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
+  .fx-stage__cap .fx-cap--hand { color: #3a4a6b; }
+  .fx-stage__cap .fx-cap--auto { color: var(--c-tech-blue); font-weight: 600; }
+
+  .fx-win { position: relative; max-width: 1040px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 34px 80px rgba(5,41,117,0.17), 0 3px 10px rgba(5,41,117,0.06); }
+  .fx-win__chrome { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: #eef1f6; border-bottom: 1px solid #dde3ee; }
+  .fx-win__dots { display: inline-flex; gap: 6px; }
+  .fx-win__dots span { width: 9px; height: 9px; border-radius: 50%; background: #cfd7e6; }
+  .fx-win__url { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: #ffffff; border: 1px solid #e2e7f1; font-size: 12px; color: #5a6884; overflow: hidden; }
+  .fx-win__url i { font-size: 11px; color: #8f9cb5; }
+  .fx-win__url b { font-weight: 600; color: #0a1838; }
+  .fx-win__url em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fx-win__nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 16px; border-bottom: 1px solid #eef1f6; }
+  .fx-win__brand { display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; font-weight: 700; color: var(--c-tech-blue); }
+  .fx-win__navico { display: inline-flex; gap: 14px; font-size: 13px; color: #8f9cb5; }
+  .fx-win__ribbon { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid #eef1f6; background: #fbfcfe; }
+  .fx-chip { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e7f1; background: #ffffff; font-size: 12px; font-weight: 600; color: #3a4a6b; white-space: nowrap; }
+  .fx-chip i { font-size: 11px; color: #8f9cb5; }
+  /* The Continia action is the one purple thing in the window. */
+  .fx-chip--c { border-color: #e6cfee; background: #fdf7ff; color: #983eae; }
+  .fx-chip--c i { color: #983eae; }
+
+  .fx-win__body { padding: 18px 20px 20px; }
+  .fx-win__title { font-size: 17px; font-weight: 700; color: #0a1838; }
+  .fx-win__title span { margin-left: 8px; font-size: 13px; font-weight: 400; color: #5a6884; }
+  .fx-tab { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--c-tech-blue); }
+  .fx-tab i { font-size: 11px; }
+
+  .fx-tbl { margin-top: 10px; }
+  .fx-tbl__hd, .fx-row { display: grid; grid-template-columns: minmax(0,1fr) 116px 128px 136px; align-items: center; gap: 14px; }
+  .fx-tbl__hd { padding: 0 0 8px; border-bottom: 1px solid #e4e9f3; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #5a6884; }
+  .fx-tbl__hd span:nth-child(3), .fx-tbl__hd span:nth-child(4) { text-align: right; }
+  .fx-row { padding: 12px 0; border-bottom: 1px solid #eef1f6; font-size: 13.5px; color: #0a1838; }
+  .fx-row__cu { min-width: 0; display: flex; align-items: center; gap: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fx-row__cu i { flex: none; font-size: 13px; color: #8f9cb5; }
+  .fx-row__no { font-variant-numeric: tabular-nums; color: #5a6884; }
+  .fx-row__am { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  /* One reserved slot, three pills stacked in it — the row must not resize as
+     the state changes or the whole table would shudder four times a loop. */
+  .fx-st { position: relative; min-height: 24px; }
+  .fx-pill { position: absolute; right: 0; top: 0; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; opacity: 0; }
+  .fx-pill i { font-size: 10px; }
+  .fx-pill--open { background: #eef1f6; color: #5a6884; }
+  .fx-pill--prop { background: #fdf7ff; color: #983eae; }
+  .fx-pill--alloc { background: #e8f3ef; color: #2f6455; }
+
+  .fx-sum { display: flex; align-items: center; justify-content: flex-end; gap: 14px; margin-top: 14px; font-size: 13.5px; color: #5a6884; }
+  .fx-sum b { font-size: 16px; font-weight: 700; color: #0a1838; font-variant-numeric: tabular-nums; }
+  .fx-out { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 12px 14px; border-radius: 12px; border: 1px dashed #cfa8dd; background: #fdf7ff; }
+  .fx-out__ico { flex: none; width: 34px; height: 34px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; background: #983eae; color: #ffffff; }
+  .fx-out__tx { min-width: 0; }
+  .fx-out__nm { display: block; font-size: 13px; font-weight: 700; color: #983eae; font-variant-numeric: tabular-nums; }
+  .fx-out__nt { display: block; margin-top: 2px; font-size: 12px; color: #5a6884; }
+  .fx-out__ok { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 700; color: #2f6455; white-space: nowrap; }
+
+  /* ---- the 10s run. 0-30% open (3s still), 36-44% into the proposal,
+     50-92% allocated (4.2s still), 98% back to open. The pills carry a
+     per-row delay so the rows fall in one after another. ---- */
+  @keyframes fx-open  { 0%, 30% { opacity: 1; } 36%, 94% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes fx-prop  { 0%, 30% { opacity: 0; } 36%, 44% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes fx-alloc { 0%, 44% { opacity: 0; } 50%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
+  @keyframes fx-lit   { 0%, 33% { background-color: #ffffff; border-color: #e2e7f1; } 39%, 92% { background-color: #f6f9fc; border-color: #dde3ee; } 98%, 100% { background-color: #ffffff; border-color: #e2e7f1; } }
+  @keyframes fx-ring  { 0%, 27% { box-shadow: 0 0 0 0 rgba(152,62,174,0); } 33% { box-shadow: 0 0 0 7px rgba(152,62,174,0.18); } 42%, 100% { box-shadow: 0 0 0 0 rgba(152,62,174,0); } }
+  @keyframes fx-slide { 0%, 42% { opacity: 0; transform: translateY(6px); } 50%, 92% { opacity: 1; transform: none; } 98%, 100% { opacity: 0; transform: translateY(6px); } }
+  @keyframes fx-drop  { 0%, 52% { opacity: 0; transform: translateY(12px); } 60%, 92% { opacity: 1; transform: none; } 98%, 100% { opacity: 0; transform: translateY(12px); } }
+  @keyframes fx-caph  { 0%, 34% { opacity: 1; } 41%, 94% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes fx-capa  { 0%, 40% { opacity: 0; } 47%, 92% { opacity: 1; } 98%, 100% { opacity: 0; } }
+
+  .fx-c { animation-duration: 10s; animation-iteration-count: infinite; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16,1,0.3,1); }
+  .fx-pill--open  { animation-name: fx-open; }
+  .fx-pill--prop  { animation-name: fx-prop; }
+  .fx-pill--alloc { animation-name: fx-alloc; }
+  .fx-row { animation-name: fx-lit; animation-timing-function: linear; }
+  .fx-row--2 .fx-c, .fx-row--2 { animation-delay: 140ms; }
+  .fx-row--3 .fx-c, .fx-row--3 { animation-delay: 280ms; }
+  .fx-row--4 .fx-c, .fx-row--4 { animation-delay: 420ms; }
+  .fx-chip--c { animation-name: fx-ring; animation-timing-function: cubic-bezier(0.65,0,0.35,1); }
+  .fx-sum { animation-name: fx-slide; }
+  .fx-out { animation-name: fx-drop; }
+  .fx-cap--hand { animation-name: fx-caph; animation-timing-function: linear; }
+  .fx-cap--auto { animation-name: fx-capa; animation-timing-function: linear; }
+  /* Paused when nobody is looking. The class goes on BODY, not on the section:
+     the section is inside the dc render tree and the next renderVals() would
+     wipe an attribute set on it. */
+  body.fx-win-paused .fx-c { animation-play-state: paused; }
+
+  /* ============================================================
+     SECTIONS
+     ============================================================ */
+  .fx-sec { padding: clamp(72px,7vw,112px) clamp(20px,4vw,44px); }
+  .fx-sec--navy { background: linear-gradient(168deg, #03163f 0%, #051f56 52%, #06296b 100%); color: #ffffff; }
+  .fx-sec--tint { background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 100%); }
+  .fx-sec__in { max-width: 1180px; margin: 0 auto; }
+  .fx-sec__eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #983eae; }
+  .fx-sec--navy .fx-sec__eyebrow { color: var(--c-innovation-blue); }
+  .fx-sec h2 { margin: 14px 0 0; max-width: 22ch; font-size: clamp(28px,3vw,44px); font-weight: 700; line-height: 1.08; letter-spacing: -0.022em; }
+  .fx-sec--navy h2 { color: #ffffff; }
+  .fx-sec__lead { margin: 18px 0 0; max-width: 62ch; font-size: 1.0625rem; line-height: 1.65; color: #3a4a6b; }
+  .fx-sec--navy .fx-sec__lead { color: #cdd4e3; }
+
+  /* ---- the run by hand: four steps, each with what it actually costs ---- */
+  .fx-hand { list-style: none; margin: clamp(38px,3.8vw,54px) auto 0; max-width: 920px; padding: 0; counter-reset: fxh; }
+  .fx-hand li { position: relative; display: grid; grid-template-columns: 46px minmax(0,1fr); gap: 18px; padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,0.13); opacity: 0; transform: translateY(14px); transition: opacity 520ms var(--ease-standard), transform 520ms cubic-bezier(0.16,1,0.3,1); }
+  .fx-hand li:last-child { border-bottom: 0; }
+  .fx-hand__n { counter-increment: fxh; align-self: start; width: 46px; height: 46px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--c-innovation-blue); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); }
+  .fx-hand__n::after { content: counter(fxh); }
+  .fx-hand b { display: block; font-size: clamp(17px,1.8vw,23px); font-weight: 600; line-height: 1.35; color: #ffffff; }
+  .fx-hand small { display: block; margin-top: 8px; font-size: 14.5px; font-weight: 400; line-height: 1.6; color: #b9c5de; }
+  body.fx-hand-in .fx-hand li { opacity: 1; transform: none; }
+  .fx-hand li:nth-child(1) { transition-delay: 0ms; }
+  .fx-hand li:nth-child(2) { transition-delay: 110ms; }
+  .fx-hand li:nth-child(3) { transition-delay: 220ms; }
+  .fx-hand li:nth-child(4) { transition-delay: 330ms; }
+
+  /* ---- the run in Business Central: three steps, drawn as a chain ---- */
+  .fx-steps { position: relative; margin: clamp(44px,4.4vw,62px) auto 0; max-width: 1040px; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: clamp(18px,2.2vw,30px); }
+  /* The connector is behind the cards and draws left to right as the section
+     arrives — the chain is the argument, so it should be seen to close. */
+  .fx-steps__wire { position: absolute; left: 12%; right: 12%; top: 44px; height: 2px; background: linear-gradient(90deg, #983eae, #c98fda); transform: scaleX(0); transform-origin: left center; transition: transform 900ms cubic-bezier(0.65,0,0.35,1) 120ms; }
+  body.fx-steps-in .fx-steps__wire { transform: scaleX(1); }
+  .fx-step { position: relative; z-index: 1; box-sizing: border-box; padding: 22px 22px 24px; border-radius: 16px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 18px 44px rgba(5,41,117,0.10); opacity: 0; transform: translateY(16px); transition: opacity 520ms var(--ease-standard), transform 520ms cubic-bezier(0.16,1,0.3,1); text-align: left; }
+  body.fx-steps-in .fx-step { opacity: 1; transform: none; }
+  .fx-step:nth-child(2) { transition-delay: 130ms; }
+  .fx-step:nth-child(3) { transition-delay: 260ms; }
+  .fx-step:nth-child(4) { transition-delay: 390ms; }
+  .fx-step__ico { width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; background: #983eae; color: #ffffff; }
+  /* Full Performance Purple, not a tint: #a86bbb measures 3.83 on the card's
+     white, and an 11px kicker needs 4.5. */
+  .fx-step__k { display: block; margin-top: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: #983eae; }
+  .fx-step h3 { margin: 8px 0 0; font-size: 19px; font-weight: 700; color: #0a1838; }
+  .fx-step p { margin: 9px 0 0; font-size: 14.5px; line-height: 1.6; color: #3a4a6b; }
+  .fx-steps__foot { margin: 26px auto 0; max-width: 62ch; font-size: 14.5px; line-height: 1.6; color: #5a6884; }
+
+  /* ---- what never happens: the one green band on the page, because it is the
+     one section that argues from absence rather than from a feature ---- */
+  .fx-never-sec { background: linear-gradient(168deg, #0a5346 0%, #0f6a5a 52%, #14806c 100%); color: #ffffff; }
+  .fx-never-sec .fx-sec__eyebrow { color: #a4dcc6; }
+  .fx-never-sec h2 { color: #ffffff; max-width: none; }
+  .fx-never { list-style: none; margin: clamp(38px,3.8vw,54px) auto 0; max-width: 920px; padding: 0; }
+  .fx-never li { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.15); opacity: 0; transform: translateY(14px); transition: opacity 520ms var(--ease-standard), transform 520ms cubic-bezier(0.16,1,0.3,1); }
+  .fx-never li:last-child { border-bottom: 0; }
+  .fx-never i { flex: none; margin-top: 4px; font-size: 17px; color: #dff3ea; }
+  .fx-never b { position: relative; display: inline; font-size: clamp(18px,1.9vw,25px); font-weight: 600; line-height: 1.35; color: #ffffff; }
+  .fx-never b::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; border-radius: 2px; background: #dff3ea; transform: scaleX(0); transform-origin: left center; transition: transform 700ms cubic-bezier(0.65,0,0.35,1); }
+  .fx-never small { display: block; margin-top: 7px; font-size: 14.5px; font-weight: 400; line-height: 1.55; color: #eaf5f1; }
+  body.fx-never-in .fx-never li { opacity: 1; transform: none; }
+  body.fx-never-in .fx-never b::after { transform: scaleX(1); }
+  .fx-never li:nth-child(1) { transition-delay: 0ms; }
+  .fx-never li:nth-child(2) { transition-delay: 120ms; }
+  .fx-never li:nth-child(3) { transition-delay: 240ms; }
+  .fx-never li:nth-child(4) { transition-delay: 360ms; }
+  .fx-never li:nth-child(1) b::after { transition-delay: 300ms; }
+  .fx-never li:nth-child(2) b::after { transition-delay: 420ms; }
+  .fx-never li:nth-child(3) b::after { transition-delay: 540ms; }
+  .fx-never li:nth-child(4) b::after { transition-delay: 660ms; }
+
+  /* ---- where it lives ---- */
+  .fx-where { margin: clamp(38px,3.8vw,52px) auto 0; max-width: 920px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(16px,2vw,24px); }
+  .fx-card { display: flex; align-items: center; gap: 16px; padding: 20px 22px; border-radius: 16px; background: #ffffff; border: 1px solid #dde3ee; box-shadow: 0 16px 40px rgba(5,41,117,0.09); color: inherit; text-align: left; transition: transform 220ms cubic-bezier(0.16,1,0.3,1), box-shadow 220ms var(--ease-standard), border-color 220ms var(--ease-standard); }
+  .fx-card:hover { transform: translateY(-3px); border-color: #c9d3e6; box-shadow: 0 24px 56px rgba(5,41,117,0.15); }
+  .fx-card__ico { flex: none; width: 46px; height: 46px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; background: var(--c-light-blue); color: var(--c-tech-blue); }
+  .fx-card__tx { min-width: 0; }
+  .fx-card__nm { display: block; font-size: 15.5px; font-weight: 700; color: #0a1838; }
+  .fx-card__tg { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.5; color: #3a4a6b; }
+  .fx-card__go { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #983eae; white-space: nowrap; transition: transform 200ms var(--ease-standard); }
+  .fx-card:hover .fx-card__go { transform: translateX(3px); }
+  .fx-where__foot { margin: 22px auto 0; max-width: 62ch; font-size: 14.5px; line-height: 1.6; color: #5a6884; }
+
+  /* ============================================================
+     ONE AXIS — the page reads down the middle. Containers centre their own
+     text; the mocks and the rows reset to left, because a Business Central
+     window with centred column headings stops being a Business Central window.
+     Placed after the base rules on purpose — same specificity, later wins.
+     ============================================================ */
+  .fx-hero__in, .fx-sec__in { text-align: center; }
+  .fx-hero h1, .fx-hero__lead { margin-left: auto; margin-right: auto; }
+  .fx-hero__cta, .fx-hero__proof { justify-content: center; }
+  .fx-sec h2, .fx-sec__lead, .fx-steps__foot, .fx-where__foot { margin-left: auto; margin-right: auto; }
+  .fx-win, .fx-tbl__hd, .fx-row, .fx-hand li, .fx-never li, .fx-step, .fx-card { text-align: left; }
+  .fx-tbl__hd span:nth-child(3), .fx-tbl__hd span:nth-child(4) { text-align: right; }
+
+
+  /* ============================================================
+     RESPONSIVE — after the base rules on purpose: media queries add no
+     specificity, so a block above the rule it means to override loses.
+     ============================================================ */
+  @media (max-width: 1100px) {
+    /* Buttons centre below the desktop line, so they stop floating left. */
+    .fx-hero__cta { justify-content: center; }
+  }
+
+  /* CTA watermark, phones and tablets. Desktop keeps width-sizing: its band is
+     wide, so `width: 120%` covers about 2x the band and the copy sits over the
+     middle of the artwork. Below the 1100px line the band turns portrait and the
+     same 120% collapses coverage — only the artwork's top edge peeks in at the
+     bottom, reading as a stray rectangle. Sizing by HEIGHT resolves against the
+     same containing block at any width. 115% is Andreas's Photoshop crop.
+     ⚠️ `!important` is load-bearing — the value it overrides is inline on the
+     <img>, and inline beats any media query without it (trap 17). */
+  @media (max-width: 1100px) {
+    section[data-screen-label$="CTA"] > img {
+      width: auto !important; height: 115% !important;
+      min-width: 120% !important; object-fit: cover !important;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .fx-stage__cap { font-size: 17px; }
+    .fx-tbl__hd, .fx-row { grid-template-columns: minmax(0,1fr) 100px 110px 124px; gap: 10px; }
+    .fx-steps { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+    .fx-steps__wire { left: 16%; right: 16%; }
+    .fx-step { padding: 18px 16px 20px; }
+  }
+
+  /* Check marks above the buttons on phone and portrait tablet. */
+  @media (max-width: 900px) {
+    .fx-hero__in { display: flex; flex-direction: column; }
+    .fx-hero__cta { order: 1; margin-top: 24px; }
+    .fx-hero__proof { justify-content: center; margin-top: clamp(26px,3.4vw,34px); }
+    .fx-hero__proof { animation-delay: 530ms; }
+    .fx-hero__cta { animation-delay: 620ms; }
+  }
+
+  @media (max-width: 860px) {
+    /* Three cards side by side stop being readable before the phone line. */
+    .fx-steps { grid-template-columns: minmax(0,1fr); max-width: 560px; }
+    .fx-steps__wire { display: none; }
+    .fx-step:nth-child(2), .fx-step:nth-child(3), .fx-step:nth-child(4) { transition-delay: 0ms; }
+    .fx-step { padding: 20px 20px 22px; }
+    .fx-where { grid-template-columns: minmax(0,1fr); max-width: 560px; }
+  }
+
+  @media (max-width: 640px) {
+    .fx-sec__eyebrow, .fx-sec h2, .fx-sec__lead { text-align: center; }
+    .fx-win__body { padding: 15px 14px 16px; }
+    .fx-win__ribbon { padding: 9px 12px; overflow: hidden; }
+    /* The row turns into two lines: who and how much on top, the state under
+       it. Four columns in 350px would cut every customer name mid-word. */
+    .fx-tbl__hd { display: none; }
+    /* Two lines: who and how much on top, the reference and the state under it.
+       Every cell gets an explicit grid area — auto-placement would push the
+       status pill onto a third row of its own. The pills stay absolute so the
+       three of them keep sharing one slot. */
+    .fx-row { grid-template-columns: minmax(0,1fr) 112px; gap: 5px 12px; padding: 13px 0; }
+    .fx-row__cu { grid-area: 1 / 1; font-size: 13px; }
+    .fx-row__am { grid-area: 1 / 2; }
+    .fx-row__no { grid-area: 2 / 1; font-size: 11.5px; }
+    .fx-st { grid-area: 2 / 2; min-height: 22px; }
+    .fx-stage__cap { min-height: 3.5em; font-size: 15.5px; }
+    .fx-hand li { grid-template-columns: 38px minmax(0,1fr); gap: 14px; }
+    .fx-hand__n { width: 38px; height: 38px; font-size: 13.5px; }
+    .fx-out { flex-wrap: wrap; }
+    .fx-out__ok { margin-left: 0; }
+    /* The ribbon keeps only New and the Continia action: the third chip is what
+       the section is about, and a clipped label reads as a bug, not as a
+       scrolled toolbar. */
+    .fx-chip--drop, .fx-chip--drop2 { display: none; }
+  }
+
+  @media (max-width: 380px) {
+    .fx-stage__cap { min-height: 5.25em; }
+    .fx-win__body { padding: 14px 12px 15px; }
+    .fx-row { grid-template-columns: minmax(0,1fr) 100px; }
+  }
+
+  /* Reduced motion: every loop resolves to its FINISHED state — the run done,
+     not the run about to start. */
+  @media (prefers-reduced-motion: reduce) {
+    .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero__cta, .fx-hero__proof,
+    .fx-c, .fx-row { animation: none !important; }
+    .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero__cta, .fx-hero__proof { opacity: 1; transform: none; }
+    .fx-hand li, .fx-never li, .fx-step { transition: none !important; opacity: 1; transform: none; }
+    .fx-never b::after, .fx-steps__wire { transition: none !important; transform: scaleX(1); }
+    /* `.fx-stage__cap span` and `.fx-st .fx-pill` are 0,2,0 and would beat a
+       bare single-class rule, so match their weight. */
+    .fx-stage__cap .fx-cap--hand { opacity: 0; }
+    .fx-stage__cap .fx-cap--auto { opacity: 1; }
+    .fx-st .fx-pill--open, .fx-st .fx-pill--prop { opacity: 0; }
+    .fx-st .fx-pill--alloc { opacity: 1; }
+    .fx-sum, .fx-out { opacity: 1; transform: none; }
+  }
+</style>
+</helmet>
+
+<div style="font-family:var(--font-sans); color:var(--color-text); background:var(--c-white); min-width:0;">
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" active-item="Solutions" hint-size="100%,66px"></x-import>
+
+<!-- ============ HERO — the run assembles itself ============ -->
+<section class="fx-hero" data-screen-label="Hero">
+  <div class="fx-hero__in">
+    <p class="fx-hero__kick"><i class="fa-light fa-file-invoice-dollar"></i>Continia Finance · Factoring</p>
+    <h1><span class="ln">Factoring is fast.</span><span class="ln hl">The paperwork is not.</span></h1>
+    <p class="fx-hero__lead">Factoring gets you paid before your customer does. Getting there usually means pulling open invoices out of Business Central, rebuilding them in your provider's template, sending the file, and then keeping track of which invoices are no longer yours to chase. Continia Finance does the run where the invoices already live — proposal, customer allocation, data file.</p>
+
+    <div class="fx-stage">
+      <p class="fx-stage__cap">
+        <span class="fx-cap--hand fx-c">By hand — copy the invoices into your provider's template.</span>
+        <span class="fx-cap--auto fx-c">With Continia — a proposal, an allocation, a file.</span>
+      </p>
+      <div class="fx-win">
+        <div class="fx-win__chrome">
+          <div class="fx-win__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="fx-win__url"><i class="fa-light fa-lock"></i><b>businesscentral.dynamics.com</b><em>/Factoring Proposal</em></div>
+        </div>
+        <div class="fx-win__nav">
+          <span class="fx-win__brand"><i class="fa-light fa-grid-2"></i>Dynamics 365 Business Central</span>
+          <span class="fx-win__navico" aria-hidden="true"><i class="fa-light fa-magnifying-glass"></i><i class="fa-light fa-gear"></i><i class="fa-light fa-circle-user"></i></span>
+        </div>
+        <div class="fx-win__ribbon">
+          <span class="fx-chip"><i class="fa-light fa-plus"></i>New</span>
+          <span class="fx-chip fx-chip--drop2"><i class="fa-light fa-filter"></i>Filter</span>
+          <span class="fx-chip fx-chip--drop"><i class="fa-light fa-print"></i>Report</span>
+          <span class="fx-chip fx-chip--c fx-c"><i class="fa-light fa-wand-magic-sparkles"></i>Create factoring proposal</span>
+        </div>
+        <div class="fx-win__body">
+          <div class="fx-win__title">Factoring Proposal <span>FP-000142</span></div>
+          <div class="fx-tab"><i class="fa-light fa-chevron-down"></i>Open sales invoices</div>
+          <div class="fx-tbl">
+            <div class="fx-tbl__hd" aria-hidden="true"><span>Customer</span><span>Document No.</span><span>Amount</span><span>Status</span></div>
+            <div class="fx-row fx-row--1">
+              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Fabrikam, Inc.</span>
+              <span class="fx-row__no">108021</span>
+              <span class="fx-row__am">12,480.00</span>
+              <span class="fx-st">
+                <span class="fx-pill fx-pill--open fx-c"><i class="fa-light fa-circle"></i>Open</span>
+                <span class="fx-pill fx-pill--prop fx-c"><i class="fa-light fa-arrow-right"></i>In proposal</span>
+                <span class="fx-pill fx-pill--alloc fx-c"><i class="fa-light fa-circle-check"></i>Allocated</span>
+              </span>
+            </div>
+            <div class="fx-row fx-row--2">
+              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Adatum Corporation</span>
+              <span class="fx-row__no">108022</span>
+              <span class="fx-row__am">6,240.00</span>
+              <span class="fx-st">
+                <span class="fx-pill fx-pill--open fx-c"><i class="fa-light fa-circle"></i>Open</span>
+                <span class="fx-pill fx-pill--prop fx-c"><i class="fa-light fa-arrow-right"></i>In proposal</span>
+                <span class="fx-pill fx-pill--alloc fx-c"><i class="fa-light fa-circle-check"></i>Allocated</span>
+              </span>
+            </div>
+            <div class="fx-row fx-row--3">
+              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Trey Research</span>
+              <span class="fx-row__no">108023</span>
+              <span class="fx-row__am">18,900.00</span>
+              <span class="fx-st">
+                <span class="fx-pill fx-pill--open fx-c"><i class="fa-light fa-circle"></i>Open</span>
+                <span class="fx-pill fx-pill--prop fx-c"><i class="fa-light fa-arrow-right"></i>In proposal</span>
+                <span class="fx-pill fx-pill--alloc fx-c"><i class="fa-light fa-circle-check"></i>Allocated</span>
+              </span>
+            </div>
+            <div class="fx-row fx-row--4">
+              <span class="fx-row__cu"><i class="fa-light fa-building"></i>Northwind Traders</span>
+              <span class="fx-row__no">108024</span>
+              <span class="fx-row__am">4,375.00</span>
+              <span class="fx-st">
+                <span class="fx-pill fx-pill--open fx-c"><i class="fa-light fa-circle"></i>Open</span>
+                <span class="fx-pill fx-pill--prop fx-c"><i class="fa-light fa-arrow-right"></i>In proposal</span>
+                <span class="fx-pill fx-pill--alloc fx-c"><i class="fa-light fa-circle-check"></i>Allocated</span>
+              </span>
+            </div>
+          </div>
+          <div class="fx-sum fx-c">Proposed for factoring <b>41,995.00</b></div>
+          <div class="fx-out fx-c">
+            <span class="fx-out__ico" aria-hidden="true"><i class="fa-light fa-file-export"></i></span>
+            <span class="fx-out__tx">
+              <span class="fx-out__nm">FACTORING-FP000142.txt</span>
+              <span class="fx-out__nt">Data file, in your provider's layout</span>
+            </span>
+            <span class="fx-out__ok"><i class="fa-light fa-circle-check"></i>Ready to send</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-hero__cta">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="secondary" size="lg" href="#in-bc" hint-size="auto,48px">See how the run works</x-import>
+    </div>
+
+    <div class="fx-hero__proof">
+      <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+      <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
+      <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE RUN BY HAND ============ -->
+<section class="fx-sec fx-sec--navy" data-screen-label="The run by hand">
+  <div class="fx-sec__in">
+    <p class="fx-sec__eyebrow">The run by hand</p>
+    <h2>Four jobs, every single run.</h2>
+    <p class="fx-sec__lead">None of them is hard. All of them are somebody's afternoon, repeated on whatever cycle your provider expects — and every one of them happens outside the ledger the invoices came from.</p>
+
+    <ol class="fx-hand">
+      <li>
+        <span class="fx-hand__n" aria-hidden="true"></span>
+        <span>
+          <b>Find the invoices.</b>
+          <small>Filter open sales invoices by customer, date and amount, decide which ones qualify, and copy them out.</small>
+        </span>
+      </li>
+      <li>
+        <span class="fx-hand__n" aria-hidden="true"></span>
+        <span>
+          <b>Rebuild them in the provider's template.</b>
+          <small>Their columns are not your columns. The mapping lives in somebody's head, and it is redone from scratch each time.</small>
+        </span>
+      </li>
+      <li>
+        <span class="fx-hand__n" aria-hidden="true"></span>
+        <span>
+          <b>Send the file and hope it lands.</b>
+          <small>Email or a portal upload. Nothing about it is recorded next to the invoices it was built from.</small>
+        </span>
+      </li>
+      <li>
+        <span class="fx-hand__n" aria-hidden="true"></span>
+        <span>
+          <b>Remember which invoices are theirs now.</b>
+          <small>Nothing in the ledger says an invoice has been factored — until someone puts it there, by hand, without missing one.</small>
+        </span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ THE RUN IN BUSINESS CENTRAL ============ -->
+<section class="fx-sec fx-sec--tint" id="in-bc" data-screen-label="The run in Business Central">
+  <div class="fx-sec__in">
+    <p class="fx-sec__eyebrow">The run in Business Central</p>
+    <h2>Proposal, allocation, file.</h2>
+    <p class="fx-sec__lead">Continia Finance's Factoring module simplifies receivables factoring from proposals through customer allocation and data files. Three steps, one chain, inside the client your finance team already opens.</p>
+
+    <div class="fx-steps">
+      <span class="fx-steps__wire" aria-hidden="true"></span>
+      <div class="fx-step">
+        <span class="fx-step__ico" aria-hidden="true"><i class="fa-light fa-list-check"></i></span>
+        <span class="fx-step__k">Step one</span>
+        <h3>The proposal</h3>
+        <p>Open sales invoices are gathered into a factoring proposal on your own criteria, with the amounts totalled where you can see them.</p>
+      </div>
+      <div class="fx-step">
+        <span class="fx-step__ico" aria-hidden="true"><i class="fa-light fa-diagram-project"></i></span>
+        <span class="fx-step__k">Step two</span>
+        <h3>The customer allocation</h3>
+        <p>Each invoice is allocated to the customer it belongs to, so the proposal reads the same way your receivables do.</p>
+      </div>
+      <div class="fx-step">
+        <span class="fx-step__ico" aria-hidden="true"><i class="fa-light fa-file-export"></i></span>
+        <span class="fx-step__k">Step three</span>
+        <h3>The data file</h3>
+        <p>The run produces the data file your factoring provider expects — generated from the proposal, not rebuilt beside it.</p>
+      </div>
+    </div>
+    <p class="fx-steps__foot">Factoring is one of the add-on modules in Continia Finance, which means it installs as part of an extension to Business Central rather than as a system next to it.</p>
+  </div>
+</section>
+
+<!-- ============ WHAT NEVER HAPPENS ============ -->
+<section class="fx-sec fx-never-sec" data-screen-label="What never happens">
+  <div class="fx-sec__in">
+    <p class="fx-sec__eyebrow">What never happens</p>
+    <h2>Four things you will not be doing.</h2>
+
+    <ul class="fx-never">
+      <li>
+        <i class="fa-light fa-circle-xmark"></i>
+        <span>
+          <b>Keeping a factoring spreadsheet.</b>
+          <small>The proposal is a record in Business Central, not a file on somebody's desktop.</small>
+        </span>
+      </li>
+      <li>
+        <i class="fa-light fa-circle-xmark"></i>
+        <span>
+          <b>Typing invoice lines a second time.</b>
+          <small>The lines are already in the ledger. The run reads them from there.</small>
+        </span>
+      </li>
+      <li>
+        <i class="fa-light fa-circle-xmark"></i>
+        <span>
+          <b>Keeping a separate list of what has been factored.</b>
+          <small>The allocation sits with the invoices, so there is one place to look instead of two.</small>
+        </span>
+      </li>
+      <li>
+        <i class="fa-light fa-circle-xmark"></i>
+        <span>
+          <b>Signing into somewhere else to do it.</b>
+          <small>Continia Finance is an extension to Business Central — same sign-in, same session, same user.</small>
+        </span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ WHERE IT LIVES ============ -->
+<section class="fx-sec" data-screen-label="Where it lives">
+  <div class="fx-sec__in">
+    <p class="fx-sec__eyebrow">Where it lives</p>
+    <h2>Part of Continia Finance.</h2>
+    <p class="fx-sec__lead">Factoring is not a product of its own. It is one of the modules inside Continia Finance, so it arrives with the rest of the financial tooling and under the same permissions.</p>
+
+    <div class="fx-where">
+      <a class="fx-card" href="../../products/continia-finance/">
+        <span class="fx-card__ico" aria-hidden="true"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></span>
+        <span class="fx-card__tx">
+          <span class="fx-card__nm">Continia Finance</span>
+          <span class="fx-card__tg">The financial tooling that Factoring ships as part of, inside Business Central.</span>
+        </span>
+        <span class="fx-card__go">Open <i class="fa-light fa-arrow-right"></i></span>
+      </a>
+      <a class="fx-card" href="../../products/continia-finance-features/">
+        <span class="fx-card__ico" aria-hidden="true"><i class="fa-light fa-list"></i></span>
+        <span class="fx-card__tx">
+          <span class="fx-card__nm">All 18 features</span>
+          <span class="fx-card__tg">Every Continia Finance feature, module by module — Factoring included.</span>
+        </span>
+        <span class="fx-card__go">Open <i class="fa-light fa-arrow-right"></i></span>
+      </a>
+    </div>
+    <p class="fx-where__foot">Continia's apps are used by more than 21,000 customers and supported by over 1,500 partners in 45+ countries.</p>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section data-screen-label="Free trial CTA" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%);">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" style="position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; opacity: 0.08; pointer-events: none;">
+  <div style="max-width: 820px; margin: 0 auto; padding: 110px 32px; text-align: center; position: relative;">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #8ff8ff;">Microsoft AppSource</span>
+    <h2 style="font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 0; color: #ffffff; text-wrap: balance;">Start your free trial today</h2>
+    <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 56ch;">See Continia in action with a 30-day free trial directly from Microsoft Marketplace. Simply download one of our apps, follow the set-up, and get started in less than 15 minutes.</p>
+    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px;">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia%20software&amp;page=1" hint-size="220px,52px">Download free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="https://www.continia.com/partners/" hint-size="180px,52px">Find a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = {};
+
+  componentDidMount() {
+    this._watchFooter();
+    this._watchWindow();
+    this._watchScenes();
+  }
+
+  // The run plays for as long as someone is looking at it and not a moment
+  // longer. The class goes on BODY, not on the section: the section is inside
+  // the dc render tree and the next renderVals() would wipe it.
+  _watchWindow() {
+    if (!("IntersectionObserver" in window)) return;
+    const el = document.querySelector(".fx-win");
+    if (!el) return;
+    if (this._winObs) this._winObs.disconnect();
+    this._winObs = new IntersectionObserver(
+      ([e]) => document.body.classList.toggle("fx-win-paused", !e.isIntersecting),
+      { rootMargin: "80px" },
+    );
+    this._winObs.observe(el);
+  }
+
+  // Each scene arms once, when it is most of the way onto the screen. Nodes are
+  // re-queried every frame: the runtime replaces them on re-render, so a
+  // reference held from componentDidMount goes deaf (trap 6b).
+  _watchScenes() {
+    const scenes = [
+      { sel: ".fx-hand", cls: "fx-hand-in" },
+      { sel: ".fx-steps", cls: "fx-steps-in" },
+      { sel: ".fx-never", cls: "fx-never-in" },
+    ];
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { scenes.forEach((s) => document.body.classList.add(s.cls)); return; }
+    let queued = false;
+    this._onSceneScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        let left = 0;
+        scenes.forEach((s) => {
+          if (document.body.classList.contains(s.cls)) return;
+          const el = document.querySelector(s.sel);
+          if (!el) { left++; return; }
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight * 0.82 && r.bottom > 0) document.body.classList.add(s.cls);
+          else left++;
+        });
+        if (!left) {
+          document.removeEventListener("scroll", this._onSceneScroll, { capture: true });
+          window.removeEventListener("resize", this._onSceneScroll);
+        }
+      });
+    };
+    document.addEventListener("scroll", this._onSceneScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onSceneScroll, { passive: true });
+    this._onSceneScroll();
+  }
+
+  _watchFooter() {
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
+  }
+
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
