@@ -113,7 +113,7 @@ animation, and the loop rests three seconds at each end.
   @keyframes fx-mrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
 
   /* ============================================================
-     HERO — four variants, one on screen at a time. The switch is the fixed
+     HERO — five variants, one on screen at a time. The switch is the fixed
      pill bottom-left. Which one is live is a class on BODY: body sits
      outside the dc render tree, so renderVals() cannot wipe it, and the
      hidden variants are display:none, which means their animations do not
@@ -123,9 +123,10 @@ animation, and the loop rests three seconds at each end.
   body.fx-v0 .fx-hv--ledger,
   body.fx-v1 .fx-hv--desk,
   body.fx-v2 .fx-hv--moves,
-  body.fx-v3 .fx-hv--stack { display: block; }
+  body.fx-v3 .fx-hv--stack,
+  body.fx-v4 .fx-hv--line { display: block; }
   /* Before the script has run, variant one is the one on screen. */
-  body:not(.fx-v0):not(.fx-v1):not(.fx-v2):not(.fx-v3) .fx-hv--ledger { display: block; }
+  body:not(.fx-v0):not(.fx-v1):not(.fx-v2):not(.fx-v3):not(.fx-v4) .fx-hv--ledger { display: block; }
 
   .fx-hero { position: relative; overflow: hidden; background: linear-gradient(178deg, #ffffff 0%, #f4f7fc 100%); color: var(--c-tech-blue); padding: clamp(56px,5.4vw,84px) clamp(20px,4vw,44px) clamp(64px,6vw,92px); }
   .fx-hero__in { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; }
@@ -471,6 +472,113 @@ animation, and the loop rests three seconds at each end.
   body.fx-win-paused .fx-stack__seal, body.fx-win-paused .fx-stack__keep { animation-play-state: paused; }
 
   /* ============================================================
+     VARIANT 5 — THE LINE. No columns at all: a full-bleed photograph of the
+     office with the copy floating over it, and the artwork is ONE ledger line
+     blown up to display scale, doing on screen exactly what the headline
+     claims. The amount leaves for the provider; the entry stays, and takes
+     the allocation with it. The other three lines of the run tick over
+     underneath at normal ledger scale, so the giant line reads as a zoom into
+     a real table rather than as a poster.
+     This is the only variant whose motion runs horizontally, and the only one
+     without a grid — its rhythm has to differ from the four splits or the
+     switch stops being worth pressing.
+     ============================================================ */
+  .fx-hv--line { background: #0b1030; padding-bottom: clamp(56px,5vw,78px); }
+  .fx-hv--line .fx-line__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 46% 62%; z-index: 0;
+    animation: fx-lbg 30s ease-in-out infinite alternate; }
+  @keyframes fx-lbg { from { transform: scale(1.04) translate3d(0,0,0); } to { transform: scale(1.12) translate3d(1.6%,-1.4%,0); } }
+  /* Two washes, not one: a vertical one so the giant line at the bottom keeps
+     its ground, and a diagonal one so the copy block at the top left keeps
+     its own. A single gradient cannot hold both ends. */
+  .fx-hv--line .fx-line__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(174deg, rgba(9,14,44,0.86) 0%, rgba(11,17,52,0.56) 34%, rgba(13,20,60,0.80) 70%, rgba(10,15,46,0.94) 100%),
+                linear-gradient(102deg, rgba(9,13,42,0.74) 0%, rgba(12,18,54,0.30) 48%, rgba(34,18,74,0.10) 100%); }
+  .fx-hv--line .fx-hero__kick { background: rgba(255,255,255,0.10); color: #e2bdf0; }
+  .fx-hv--line .fx-hero__kick i { color: #e2bdf0; }
+  .fx-hv--line h1 { color: #ffffff; }
+  .fx-hv--line h1 .hl { color: var(--c-innovation-blue); }
+  .fx-hv--line .fx-hero__lead { color: #cdd4e3; }
+  .fx-hv--line .fx-hero__proof { color: #cdd4e3; }
+  .fx-hv--line .fx-hero__proof i { color: var(--c-innovation-blue); }
+  .fx-line__copy { max-width: 660px; }
+  .fx-hv--line h1 { max-width: 660px; }
+  .fx-hv--line .fx-hero__lead { max-width: 52ch; }
+
+  /* --- the giant line --- */
+  .fx-ln { position: relative; margin-top: clamp(38px,4vw,60px); }
+  .fx-ln__lbl { display: flex; align-items: center; gap: 11px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: #a58fc4; }
+  .fx-ln__lbl i { font-size: 12px; }
+  .fx-ln__lbl span { margin-left: auto; font-weight: 600; letter-spacing: 0.04em; text-transform: none; font-size: 12px; color: #9aa6c2; }
+  .fx-ln__big { position: relative; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,auto); align-items: end; gap: clamp(14px,2vw,34px);
+    margin-top: 14px; padding-bottom: clamp(16px,1.6vw,22px); border-bottom: 1px solid rgba(255,255,255,0.16); }
+  .fx-ln__cu { min-width: 0; font-size: clamp(29px,4.7vw,66px); font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; color: #ffffff;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fx-ln__cu i { margin-right: clamp(10px,1.2vw,18px); font-size: 0.5em; vertical-align: 0.14em; color: #b98fd4; }
+  /* The amount and the file chip share this slot and swap. A slot that empties
+     for three seconds of every twelve reads as a rendering fault. */
+  .fx-ln__slot { position: relative; min-width: clamp(178px,22vw,330px); font-size: clamp(29px,4.7vw,66px); line-height: 1.02; min-height: 1.06em; }
+  .fx-ln__slot > * { position: absolute; right: 0; bottom: 0; white-space: nowrap; opacity: 0; }
+  .fx-ln__am { font-size: inherit; font-weight: 700; line-height: inherit; letter-spacing: -0.035em; color: #ffffff; font-variant-numeric: tabular-nums; }
+  .fx-ln__file { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px;
+    background: rgba(6,24,56,0.72); border: 1px solid rgba(143,248,255,0.48); color: var(--c-innovation-blue);
+    font-size: clamp(12px,1.15vw,14px); font-weight: 700; }
+  .fx-ln__file i { font-size: 1.05em; }
+  /* Underneath the giant line: the tag that stays behind, and the three other
+     lines of the same run at the scale they really have. */
+  .fx-ln__tag { position: relative; min-height: 40px; margin-top: 15px; }
+  .fx-ln__tag > * { position: absolute; left: 0; top: 0; display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 700; white-space: nowrap; opacity: 0; }
+  .fx-ln__tag i { font-size: 13px; }
+  .fx-ln__wait { background: rgba(9,15,44,0.60); border: 1px solid rgba(255,255,255,0.20); color: #c2cbe0; }
+  .fx-ln__kept { background: rgba(48,19,68,0.74); border: 1px solid rgba(216,163,235,0.58); color: #ecd0f7; }
+
+  .fx-ln__rest { margin-top: clamp(20px,2.2vw,30px); display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px;
+    border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.10); }
+  .fx-lr { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: rgba(9,14,44,0.55); -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px);
+    font-size: 13px; color: #dfe5f2; min-width: 0; }
+  .fx-lr > i { flex: none; font-size: 13px; color: #b98fd4; }
+  .fx-lr b { flex: 1; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Every row keeps its state pill in a reserved slot, so nothing in the strip
+     changes width when the run lands. */
+  .fx-lr__st { position: relative; flex: none; width: 96px; height: 22px; }
+  .fx-lr__st > span { position: absolute; right: 0; top: 0; display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 999px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; opacity: 0; }
+  .fx-lr__st i { font-size: 10px; }
+  .fx-lr__o { background: rgba(255,255,255,0.09); color: #aab6d0; }
+  .fx-lr__a { background: rgba(190,120,215,0.22); color: #e7c6f4; }
+
+  /* 12s. Rests 2.9s with the amounts on the line, hands them over across
+     1.4s, holds the allocation 5.3s, springs back. */
+  @keyframes fx-lam   { 0%, 24% { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); }
+                        34%, 92% { opacity: 0; transform: translate3d(30%,-16%,0) scale(0.86); filter: blur(7px); }
+                        99%, 100% { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); } }
+  @keyframes fx-lfile { 0%, 30% { opacity: 0; transform: translate3d(-26px,0,0) scale(0.9); }
+                        40%, 92% { opacity: 1; transform: none; }
+                        97%, 100% { opacity: 0; transform: translate3d(-26px,0,0) scale(0.9); } }
+  @keyframes fx-lwait { 0%, 30% { opacity: 1; } 38%, 94% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes fx-lkept { 0%, 36% { opacity: 0; transform: translateY(9px) scale(0.94); }
+                        46%, 92% { opacity: 1; transform: none; }
+                        98%, 100% { opacity: 0; transform: translateY(9px) scale(0.94); } }
+  @keyframes fx-lrule { 0%, 24% { border-bottom-color: rgba(255,255,255,0.16); }
+                        40%, 92% { border-bottom-color: rgba(222,168,240,0.82); }
+                        99%, 100% { border-bottom-color: rgba(255,255,255,0.16); } }
+  @keyframes fx-lro   { 0%, 40% { opacity: 1; } 50%, 94% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes fx-lra   { 0%, 44% { opacity: 0; transform: translateY(6px); } 54%, 92% { opacity: 1; transform: none; } 98%, 100% { opacity: 0; transform: translateY(6px); } }
+  .fx-l { animation-duration: 12s; animation-iteration-count: infinite; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16,1,0.3,1); }
+  .fx-ln__am { animation: fx-lam 12s cubic-bezier(0.65,0,0.35,1) infinite both; }
+  .fx-ln__file { animation: fx-lfile 12s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  .fx-ln__wait { animation: fx-lwait 12s linear infinite both; }
+  .fx-ln__kept { animation: fx-lkept 12s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  .fx-ln__big { animation: fx-lrule 12s linear infinite both; }
+  .fx-lr__o { animation: fx-lro 12s linear infinite both; }
+  .fx-lr__a { animation: fx-lra 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
+  .fx-lr:nth-child(2) .fx-lr__o, .fx-lr:nth-child(2) .fx-lr__a { animation-delay: 180ms; }
+  .fx-lr:nth-child(3) .fx-lr__o, .fx-lr:nth-child(3) .fx-lr__a { animation-delay: 360ms; }
+  body.fx-win-paused .fx-ln__am, body.fx-win-paused .fx-ln__file, body.fx-win-paused .fx-ln__wait,
+  body.fx-win-paused .fx-ln__kept, body.fx-win-paused .fx-ln__big, body.fx-win-paused .fx-lr__o,
+  body.fx-win-paused .fx-lr__a, body.fx-win-paused .fx-line__bg { animation-play-state: paused; }
+
+  /* ============================================================
      THE SWITCH — fixed bottom-left, the same pill the front page uses for
      its own view toggles. It steps out of the way over the footer's legal
      bar, which an IntersectionObserver flags on BODY.
@@ -585,6 +693,11 @@ animation, and the loop rests three seconds at each end.
   .fx-hv--split .fx-hero__in { text-align: left; }
   .fx-hv--split h1, .fx-hv--split .fx-hero__lead { margin-left: 0; margin-right: 0; }
   .fx-hv--split .fx-hero__cta, .fx-hv--split .fx-hero__proof { justify-content: flex-start; }
+  /* Variant 5 has no columns, but it is left-axis all the way down: the giant
+     line reads from the left edge, so the copy above it has to as well. */
+  .fx-hv--line .fx-hero__in { text-align: left; }
+  .fx-hv--line h1, .fx-hv--line .fx-hero__lead { margin-left: 0; margin-right: 0; }
+  .fx-hv--line .fx-hero__cta, .fx-hv--line .fx-hero__proof { justify-content: flex-start; }
 
 
   /* ============================================================
@@ -641,6 +754,16 @@ animation, and the loop rests three seconds at each end.
     .fx-moves__box { width: 100%; max-width: 560px; align-self: center; text-align: left; }
     .fx-hv--stack .fx-stack__bg { object-position: 62% 30%; }
     .fx-hv--stack .fx-stack__scrim { background: linear-gradient(178deg, rgba(3,22,63,0.93) 0%, rgba(4,26,72,0.90) 55%, rgba(6,41,107,0.86) 100%); }
+    /* Variant 5's copy joins the centre axis with the rest, but the giant
+       line and the row strip do not: a ledger read from the middle is not a
+       ledger. */
+    .fx-hv--line .fx-hero__in { text-align: center; }
+    .fx-hv--line h1, .fx-hv--line .fx-hero__lead { margin-left: auto; margin-right: auto; }
+    .fx-hv--line .fx-hero__cta, .fx-hv--line .fx-hero__proof { justify-content: center; }
+    .fx-line__copy { max-width: 62ch; margin-left: auto; margin-right: auto; }
+    .fx-hv--line h1 { max-width: 24ch; }
+    .fx-ln { text-align: left; }
+    .fx-hv--line .fx-line__bg { object-position: 52% 68%; }
   }
 
   /* Check marks above the buttons on phone and portrait tablet. */
@@ -662,10 +785,25 @@ animation, and the loop rests three seconds at each end.
     .fx-step:nth-child(2), .fx-step:nth-child(3), .fx-step:nth-child(4) { transition-delay: 0ms; }
     .fx-step { padding: 20px 20px 22px; }
     .fx-where { grid-template-columns: minmax(0,1fr); max-width: 560px; }
+    /* Three ledger rows in one strip need about 240px each before the state
+       pill starts fighting the customer name. */
+    .fx-ln__rest { grid-template-columns: minmax(0,1fr); }
   }
 
   @media (max-width: 640px) {
     .fx-sec__eyebrow, .fx-sec h2, .fx-sec__lead { text-align: center; }
+    /* The giant line stacks: the name on its own row, the amount under it and
+       left-aligned with it, because a right-aligned number under a truncated
+       name reads as two unrelated things. */
+    .fx-ln__lbl span { display: none; }
+    .fx-ln__big { grid-template-columns: minmax(0,1fr); gap: 8px; align-items: start; }
+    .fx-ln__slot { min-width: 0; min-height: 1.5em; }
+    .fx-ln__slot > * { right: auto; left: 0; }
+    .fx-ln__cu { white-space: normal; overflow: visible; line-height: 1.06; }
+    .fx-ln__tag { min-height: 58px; }
+    .fx-ln__tag > * { white-space: normal; }
+    .fx-lr { padding: 12px 14px; }
+    .fx-lr__st { width: 88px; }
     /* The module rail is the first thing to go: it is context, and 214px of
        context in a 350px window leaves no room for the run itself. */
     .fx-bc__nav { display: none; }
@@ -724,7 +862,9 @@ animation, and the loop rests three seconds at each end.
     .fx-c, .fx-d, .fx-s, .fx-row, .fx-desk__ph img, .fx-portrait__ph img,
     .fx-desk__win::after, .fx-dsum b, .fx-dseal, .fx-moves__arc, .fx-moves__n span,
     .fx-moves__tx > span, .fx-moves__rail i, .fx-bin, .fx-bin__n b, .fx-bin__sum b,
-    .fx-stack__seal, .fx-stack__keep { animation: none !important; }
+    .fx-stack__seal, .fx-stack__keep,
+    .fx-line__bg, .fx-ln__am, .fx-ln__file, .fx-ln__wait, .fx-ln__kept, .fx-ln__big,
+    .fx-lr__o, .fx-lr__a { animation: none !important; }
     .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero .fx-scene, .fx-hero__cta, .fx-hero__proof { opacity: 1; transform: none; }
     .fx-hand li, .fx-never li, .fx-step { transition: none !important; opacity: 1; transform: none; }
     .fx-never b::after, .fx-steps__wire { transition: none !important; transform: scaleX(1); }
@@ -763,6 +903,14 @@ animation, and the loop rests three seconds at each end.
     .fx-stack__keep { opacity: 1; transform: translateY(-50%); }
     .fx-idle, .fx-out__st--off, .fx-bin__sum > i { animation: none !important; }
     .fx-stack__seal { transform: translateX(-50%); }
+    /* Variant 5 resolves to the amount gone and the entry kept. */
+    .fx-ln__slot .fx-ln__am { opacity: 0; }
+    .fx-ln__slot .fx-ln__file { opacity: 1; transform: none; }
+    .fx-ln__tag .fx-ln__wait { opacity: 0; }
+    .fx-ln__tag .fx-ln__kept { opacity: 1; transform: none; }
+    .fx-ln__big { border-bottom-color: rgba(222,168,240,0.82); }
+    .fx-lr__st .fx-lr__o { opacity: 0; }
+    .fx-lr__st .fx-lr__a { opacity: 1; transform: none; }
   }
 </style>
 </helmet>
@@ -1017,6 +1165,52 @@ animation, and the loop rests three seconds at each end.
   </div>
 </section>
 
+
+<!-- ============ HERO 5 — THE LINE — full bleed, one ledger line at display scale ============ -->
+<section class="fx-hero fx-hv fx-hv--line" data-screen-label="Hero">
+  <img class="fx-line__bg" src="../../assets/images/office.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+  <span class="fx-line__scrim" aria-hidden="true"></span>
+  <div class="fx-hero__in">
+    <div class="fx-line__copy">
+      <p class="fx-hero__kick"><i class="fa-light fa-money-check-dollar-pen"></i>Continia Finance &middot; Factoring</p>
+      <h1><span class="ln">The amount goes out.</span><span class="ln hl">The entry stays in.</span></h1>
+      <p class="fx-hero__lead">Factoring should not cost you the record of who still owes you what. Continia Finance builds the proposal, allocates every invoice to its customer, and writes the file your provider expects &mdash; and the ledger it all came from is still the ledger afterwards.</p>
+      <div class="fx-hero__cta">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="innovation" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="ghost-dark" size="lg" href="#in-bc" hint-size="auto,48px">See how the run works</x-import>
+      </div>
+      <div class="fx-hero__proof">
+        <span><i class="fa-light fa-circle-check"></i>Runs inside Business Central</span>
+        <span><i class="fa-light fa-circle-check"></i>An add-on module in Continia Finance</span>
+        <span><i class="fa-light fa-circle-check"></i>30-day free trial</span>
+      </div>
+    </div>
+
+    <div class="fx-ln" aria-hidden="true">
+      <p class="fx-ln__lbl"><i class="fa-light fa-list-timeline"></i>Factoring proposal FP-000142<span>4 open invoices</span></p>
+      <div class="fx-ln__big">
+        <span class="fx-ln__cu"><i class="fa-light fa-file-invoice"></i>Fabrikam, Inc.</span>
+        <span class="fx-ln__slot">
+          <span class="fx-ln__am">12,480.00</span>
+          <span class="fx-ln__file"><i class="fa-light fa-file-export"></i>In FACTORING-FP000142.txt</span>
+        </span>
+      </div>
+      <p class="fx-ln__tag">
+        <span class="fx-ln__wait"><i class="fa-light fa-circle-dashed"></i>Open &middot; not yet proposed</span>
+        <span class="fx-ln__kept"><i class="fa-light fa-bookmark"></i>Allocated &middot; still your customer entry</span>
+      </p>
+      <div class="fx-ln__rest">
+        <div class="fx-lr"><i class="fa-light fa-file-invoice"></i><b>Adatum Corporation</b>
+          <span class="fx-lr__st"><span class="fx-lr__o"><i class="fa-light fa-circle-dashed"></i>Open</span><span class="fx-lr__a"><i class="fa-light fa-bookmark"></i>Allocated</span></span></div>
+        <div class="fx-lr"><i class="fa-light fa-file-invoice"></i><b>Trey Research</b>
+          <span class="fx-lr__st"><span class="fx-lr__o"><i class="fa-light fa-circle-dashed"></i>Open</span><span class="fx-lr__a"><i class="fa-light fa-bookmark"></i>Allocated</span></span></div>
+        <div class="fx-lr"><i class="fa-light fa-file-invoice"></i><b>Northwind Traders</b>
+          <span class="fx-lr__st"><span class="fx-lr__o"><i class="fa-light fa-circle-dashed"></i>Open</span><span class="fx-lr__a"><i class="fa-light fa-bookmark"></i>Allocated</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <button onClick="{{ switchHero }}" class="fx-toggle" title="Switch the hero layout"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i><b>{{ heroName }}</b><u>{{ heroCount }}</u></button>
 
 <!-- ============ THE RUN BY HAND ============ -->
@@ -1185,6 +1379,7 @@ const HEROES = [
   { key: "desk",   name: "The desk" },
   { key: "moves",  name: "Three moves" },
   { key: "stack",  name: "The stack" },
+  { key: "line",   name: "The line" },
 ];
 
 class Component extends DCLogic {
