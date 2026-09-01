@@ -338,7 +338,7 @@ animation, and the loop rests three seconds at each end.
   .fx-drow--fold:nth-of-type(3) { animation-delay: 180ms; }
   .fx-drow--fold:nth-of-type(4) { animation-delay: 270ms; }
   .fx-dsum b { animation: fx-dmoney 11s cubic-bezier(0.16,1,0.3,1) infinite both; display: inline-block; }
-  .fx-dseal { animation: fx-dseal 11s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  .fx-dseal { animation: fx-dseal 11s cubic-bezier(0.16,1,0.3,1) infinite both; }
   .fx-desk__win::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 40px; z-index: 4; pointer-events: none; border-radius: 14px 14px 0 0;
     background: linear-gradient(100deg, transparent 38%, rgba(255,255,255,0.30) 50%, transparent 62%); background-size: 260% 100%; background-repeat: no-repeat;
     animation: fx-shine 11s linear infinite; }
@@ -410,9 +410,9 @@ animation, and the loop rests three seconds at each end.
   /* The scene sits on its own pane of glass. Four white cards against a
      photograph of two faces is unreadable at any scrim strength; a blurred
      panel gives the cards a surface and keeps the photograph in the frame. */
-  .fx-stack { position: relative; height: clamp(352px,26vw,378px); padding: 18px; box-sizing: border-box; border-radius: 22px; border: 1px solid rgba(143,248,255,0.22); background: rgba(3,20,58,0.62); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 30px 70px rgba(0,0,0,0.34); }
+  .fx-stack { position: relative; height: clamp(352px,26vw,378px); padding: 18px; box-sizing: border-box; border-radius: 22px; border: 1px solid rgba(143,248,255,0.22); background: rgba(3,20,58,0.62); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 30px 70px rgba(4,20,58,0.52); }
   .fx-stack__deck { position: absolute; left: 18px; right: 18px; top: 18px; height: 184px; }
-  .fx-inv { position: absolute; left: 0; right: 0; display: flex; align-items: center; gap: 11px; padding: 13px 15px; border-radius: 13px; background: #ffffff; box-shadow: 0 16px 38px rgba(0,0,0,0.30); font-size: 12.5px; color: #0a1838; }
+  .fx-inv { position: absolute; left: 0; right: 0; display: flex; align-items: center; gap: 11px; padding: 13px 15px; border-radius: 13px; background: #ffffff; box-shadow: 0 16px 38px rgba(4,20,58,0.46); font-size: 12.5px; color: #0a1838; }
   .fx-inv i { flex: none; font-size: 14px; color: var(--c-tech-blue); }
   .fx-inv span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
   .fx-inv em { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -433,7 +433,7 @@ animation, and the loop rests three seconds at each end.
   .fx-stack__keep i { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; background: rgba(143,248,255,0.14); color: var(--c-innovation-blue); font-size: 16px; }
   .fx-stack__keep b { display: block; margin-top: 11px; font-size: clamp(15px,1.4vw,18px); font-weight: 700; letter-spacing: -0.01em; color: #ffffff; }
   .fx-stack__keep small { display: block; margin-top: 5px; font-size: 12.5px; line-height: 1.5; color: #b9c5de; }
-  .fx-stack__seal { position: absolute; left: 50%; bottom: 128px; z-index: 5; display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: var(--c-innovation-blue); color: var(--c-tech-blue); box-shadow: 0 18px 44px rgba(0,0,0,0.34); font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .fx-stack__seal { position: absolute; left: 50%; bottom: 128px; z-index: 5; display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: var(--c-innovation-blue); color: var(--c-tech-blue); box-shadow: 0 18px 44px rgba(4,20,58,0.50); font-size: 13px; font-weight: 700; white-space: nowrap; }
   .fx-stack__seal i { font-size: 14px; }
 
   /* 12s. The deck rests 2.6s, the four cards fly across 4.4s, the tray holds
@@ -466,7 +466,7 @@ animation, and the loop rests three seconds at each end.
   .fx-bin__sum b { display: inline-block; animation: fx-btot 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
   .fx-bin__sum > i { animation: fx-bidle 12s linear infinite both; }
   .fx-bin { animation: fx-glow 12s cubic-bezier(0.65,0,0.35,1) infinite both; }
-  .fx-stack__seal { animation: fx-sseal 12s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  .fx-stack__seal { animation: fx-sseal 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
   body.fx-win-paused .fx-s, body.fx-win-paused .fx-bin, body.fx-win-paused .fx-bin__n b,
   body.fx-win-paused .fx-bin__sum b, body.fx-win-paused .fx-bin__sum > i,
   body.fx-win-paused .fx-stack__seal, body.fx-win-paused .fx-stack__keep { animation-play-state: paused; }
@@ -483,22 +483,36 @@ animation, and the loop rests three seconds at each end.
      without a grid — its rhythm has to differ from the four splits or the
      switch stops being worth pressing.
      ============================================================ */
-  .fx-hv--line { background: #0b1030; padding-bottom: clamp(56px,5vw,78px); }
-  .fx-hv--line .fx-line__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 46% 62%; z-index: 0;
-    animation: fx-lbg 30s ease-in-out infinite alternate; }
-  @keyframes fx-lbg { from { transform: scale(1.04) translate3d(0,0,0); } to { transform: scale(1.12) translate3d(1.6%,-1.4%,0); } }
+  .fx-hv--line { background: #0b1030; padding-bottom: clamp(56px,5vw,78px);
+    /* One ramp for the whole variant instead of nine hand-picked hexes. Purple
+       carries "the entry stays" and cyan carries "the file goes out" — the two
+       halves of the headline, so they must not drift into each other. Every
+       value here is measured against the darkest pixel the scrim actually
+       leaves behind it. */
+    --ln-lav: #ecd0f7;        /* payoff type: the kept tag, the allocated chips */
+    --ln-lav-mid: 216,163,235; /* borders and the rule that warms up — a triplet,
+                                  because both of its uses need their own alpha */
+    --ln-lav-dim: #b98fd4;    /* icons and the run's label */
+    --ln-slate: #cdd4e3;      /* prose, row names, the resting tag */
+    --ln-slate-dim: #a9b4cc;  /* the counts and the resting chips */
+  }
+  /* The photo is mirrored: its one bright thing is a harbour window on the
+     left, and the left is where the copy lives. Flipped, the window lands in
+     the half that carries no text and the dark planting lands under the type. */
+  .fx-hv--line .fx-line__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    object-position: 44% 54%; transform: scaleX(-1); z-index: 0; }
   /* Two washes, not one: a vertical one so the giant line at the bottom keeps
      its ground, and a diagonal one so the copy block at the top left keeps
      its own. A single gradient cannot hold both ends. */
   .fx-hv--line .fx-line__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background: linear-gradient(174deg, rgba(9,14,44,0.86) 0%, rgba(11,17,52,0.56) 34%, rgba(13,20,60,0.80) 70%, rgba(10,15,46,0.94) 100%),
-                linear-gradient(102deg, rgba(9,13,42,0.74) 0%, rgba(12,18,54,0.30) 48%, rgba(34,18,74,0.10) 100%); }
-  .fx-hv--line .fx-hero__kick { background: rgba(255,255,255,0.10); color: #e2bdf0; }
-  .fx-hv--line .fx-hero__kick i { color: #e2bdf0; }
+                linear-gradient(102deg, rgba(9,13,42,0.80) 0%, rgba(12,18,54,0.34) 48%, rgba(34,18,74,0.10) 100%); }
+  .fx-hv--line .fx-hero__kick { background: rgba(255,255,255,0.10); color: var(--ln-lav); }
+  .fx-hv--line .fx-hero__kick i { color: var(--ln-lav); }
   .fx-hv--line h1 { color: #ffffff; }
   .fx-hv--line h1 .hl { color: var(--c-innovation-blue); }
-  .fx-hv--line .fx-hero__lead { color: #cdd4e3; }
-  .fx-hv--line .fx-hero__proof { color: #cdd4e3; }
+  .fx-hv--line .fx-hero__lead { color: var(--ln-slate); }
+  .fx-hv--line .fx-hero__proof { color: var(--ln-slate); }
   .fx-hv--line .fx-hero__proof i { color: var(--c-innovation-blue); }
   .fx-line__copy { max-width: 660px; }
   .fx-hv--line h1 { max-width: 660px; }
@@ -506,19 +520,19 @@ animation, and the loop rests three seconds at each end.
 
   /* --- the giant line --- */
   .fx-ln { position: relative; margin-top: clamp(38px,4vw,60px); }
-  .fx-ln__lbl { display: flex; align-items: center; gap: 11px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: #a58fc4; }
+  .fx-ln__lbl { display: flex; align-items: center; gap: 11px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ln-lav-dim); }
   .fx-ln__lbl i { font-size: 12px; }
-  .fx-ln__lbl span { margin-left: auto; font-weight: 600; letter-spacing: 0.04em; text-transform: none; font-size: 12px; color: #9aa6c2; }
+  .fx-ln__lbl span { margin-left: auto; font-weight: 600; letter-spacing: 0.04em; text-transform: none; font-size: 12px; color: var(--ln-slate-dim); }
   .fx-ln__big { position: relative; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,auto); align-items: end; gap: clamp(14px,2vw,34px);
     margin-top: 14px; padding-bottom: clamp(16px,1.6vw,22px); border-bottom: 1px solid rgba(255,255,255,0.16); }
-  .fx-ln__cu { min-width: 0; font-size: clamp(29px,4.7vw,66px); font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; color: #ffffff;
+  .fx-ln__cu { min-width: 0; font-size: clamp(29px,4.7vw,66px); font-weight: 700; line-height: 1.02; letter-spacing: -0.028em; color: #ffffff;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .fx-ln__cu i { margin-right: clamp(10px,1.2vw,18px); font-size: 0.5em; vertical-align: 0.14em; color: #b98fd4; }
+  .fx-ln__cu i { margin-right: clamp(10px,1.2vw,18px); font-size: 0.5em; vertical-align: 0.14em; color: var(--ln-lav-dim); }
   /* The amount and the file chip share this slot and swap. A slot that empties
      for three seconds of every twelve reads as a rendering fault. */
   .fx-ln__slot { position: relative; min-width: clamp(178px,22vw,330px); font-size: clamp(29px,4.7vw,66px); line-height: 1.02; min-height: 1.06em; }
   .fx-ln__slot > * { position: absolute; right: 0; bottom: 0; white-space: nowrap; opacity: 0; }
-  .fx-ln__am { font-size: inherit; font-weight: 700; line-height: inherit; letter-spacing: -0.035em; color: #ffffff; font-variant-numeric: tabular-nums; }
+  .fx-ln__am { font-size: inherit; font-weight: 700; line-height: inherit; letter-spacing: -0.028em; color: #ffffff; font-variant-numeric: tabular-nums; }
   .fx-ln__file { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px;
     background: rgba(6,24,56,0.72); border: 1px solid rgba(143,248,255,0.48); color: var(--c-innovation-blue);
     font-size: clamp(12px,1.15vw,14px); font-weight: 700; }
@@ -529,14 +543,14 @@ animation, and the loop rests three seconds at each end.
   .fx-ln__tag > * { position: absolute; left: 0; top: 0; display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px; border-radius: 999px;
     font-size: 12.5px; font-weight: 700; white-space: nowrap; opacity: 0; }
   .fx-ln__tag i { font-size: 13px; }
-  .fx-ln__wait { background: rgba(9,15,44,0.60); border: 1px solid rgba(255,255,255,0.20); color: #c2cbe0; }
-  .fx-ln__kept { background: rgba(48,19,68,0.74); border: 1px solid rgba(216,163,235,0.58); color: #ecd0f7; }
+  .fx-ln__wait { background: rgba(9,15,44,0.60); border: 1px solid rgba(255,255,255,0.20); color: var(--ln-slate); }
+  .fx-ln__kept { background: rgba(48,19,68,0.74); border: 1px solid rgba(var(--ln-lav-mid),0.58); color: var(--ln-lav); }
 
   .fx-ln__rest { margin-top: clamp(20px,2.2vw,30px); display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px;
     border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.10); }
   .fx-lr { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: rgba(9,14,44,0.55); -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px);
-    font-size: 13px; color: #dfe5f2; min-width: 0; }
-  .fx-lr > i { flex: none; font-size: 13px; color: #b98fd4; }
+    font-size: 13px; color: var(--ln-slate); min-width: 0; }
+  .fx-lr > i { flex: none; font-size: 13px; color: var(--ln-lav-dim); }
   .fx-lr b { flex: 1; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* Every row keeps its state pill in a reserved slot, so nothing in the strip
      changes width when the run lands. */
@@ -544,31 +558,39 @@ animation, and the loop rests three seconds at each end.
   .fx-lr__st > span { position: absolute; right: 0; top: 0; display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 999px;
     font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; opacity: 0; }
   .fx-lr__st i { font-size: 10px; }
-  .fx-lr__o { background: rgba(255,255,255,0.09); color: #aab6d0; }
-  .fx-lr__a { background: rgba(190,120,215,0.22); color: #e7c6f4; }
+  .fx-lr__o { background: rgba(255,255,255,0.09); color: var(--ln-slate-dim); }
+  .fx-lr__a { background: rgba(var(--ln-lav-mid),0.20); color: var(--ln-lav); }
 
   /* 12s. Rests 2.9s with the amounts on the line, hands them over across
      1.4s, holds the allocation 5.3s, springs back. */
   @keyframes fx-lam   { 0%, 24% { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); }
                         34%, 92% { opacity: 0; transform: translate3d(30%,-16%,0) scale(0.86); filter: blur(7px); }
                         99%, 100% { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); } }
-  @keyframes fx-lfile { 0%, 30% { opacity: 0; transform: translate3d(-26px,0,0) scale(0.9); }
-                        40%, 92% { opacity: 1; transform: none; }
+  @keyframes fx-lfile { 0%, 26% { opacity: 0; transform: translate3d(-26px,0,0) scale(0.9); }
+                        38%, 92% { opacity: 1; transform: none; }
                         97%, 100% { opacity: 0; transform: translate3d(-26px,0,0) scale(0.9); } }
-  @keyframes fx-lwait { 0%, 30% { opacity: 1; } 38%, 94% { opacity: 0; } 100% { opacity: 1; } }
-  @keyframes fx-lkept { 0%, 36% { opacity: 0; transform: translateY(9px) scale(0.94); }
-                        46%, 92% { opacity: 1; transform: none; }
-                        98%, 100% { opacity: 0; transform: translateY(9px) scale(0.94); } }
+  /* The two tags share one origin, so they can neither crossfade nor leave a
+     gap: overlapping opacity paints one label straight through the other, and
+     an empty slot reads as a fault. They hand over on a single frame instead —
+     the resting tag cuts, the kept tag springs up into the space. Both legs of
+     the loop are staged, because a symmetric fade back mushes just as badly on
+     the way home as it does on the way out. */
+  @keyframes fx-lwait { 0%, 32% { opacity: 1; } 33%, 95% { opacity: 0; } 97%, 100% { opacity: 1; } }
+  @keyframes fx-lkept { 0%, 33% { opacity: 0; transform: translateY(9px) scale(0.94); }
+                        44%, 92% { opacity: 1; transform: none; }
+                        96%, 100% { opacity: 0; transform: translateY(9px) scale(0.94); } }
   @keyframes fx-lrule { 0%, 24% { border-bottom-color: rgba(255,255,255,0.16); }
-                        40%, 92% { border-bottom-color: rgba(222,168,240,0.82); }
+                        40%, 92% { border-bottom-color: rgba(var(--ln-lav-mid),0.82); }
                         99%, 100% { border-bottom-color: rgba(255,255,255,0.16); } }
-  @keyframes fx-lro   { 0%, 40% { opacity: 1; } 50%, 94% { opacity: 0; } 100% { opacity: 1; } }
-  @keyframes fx-lra   { 0%, 44% { opacity: 0; transform: translateY(6px); } 54%, 92% { opacity: 1; transform: none; } 98%, 100% { opacity: 0; transform: translateY(6px); } }
-  .fx-l { animation-duration: 12s; animation-iteration-count: infinite; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16,1,0.3,1); }
+  /* Same handover, same reason, one tier down. */
+  @keyframes fx-lro   { 0%, 41% { opacity: 1; } 43%, 95% { opacity: 0; } 97%, 100% { opacity: 1; } }
+  @keyframes fx-lra   { 0%, 43% { opacity: 0; transform: translateY(6px); }
+                        54%, 92% { opacity: 1; transform: none; }
+                        96%, 100% { opacity: 0; transform: translateY(6px); } }
   .fx-ln__am { animation: fx-lam 12s cubic-bezier(0.65,0,0.35,1) infinite both; }
-  .fx-ln__file { animation: fx-lfile 12s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  .fx-ln__file { animation: fx-lfile 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
   .fx-ln__wait { animation: fx-lwait 12s linear infinite both; }
-  .fx-ln__kept { animation: fx-lkept 12s cubic-bezier(0.34,1.56,0.64,1) infinite both; }
+  .fx-ln__kept { animation: fx-lkept 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
   .fx-ln__big { animation: fx-lrule 12s linear infinite both; }
   .fx-lr__o { animation: fx-lro 12s linear infinite both; }
   .fx-lr__a { animation: fx-lra 12s cubic-bezier(0.16,1,0.3,1) infinite both; }
@@ -576,7 +598,7 @@ animation, and the loop rests three seconds at each end.
   .fx-lr:nth-child(3) .fx-lr__o, .fx-lr:nth-child(3) .fx-lr__a { animation-delay: 360ms; }
   body.fx-win-paused .fx-ln__am, body.fx-win-paused .fx-ln__file, body.fx-win-paused .fx-ln__wait,
   body.fx-win-paused .fx-ln__kept, body.fx-win-paused .fx-ln__big, body.fx-win-paused .fx-lr__o,
-  body.fx-win-paused .fx-lr__a, body.fx-win-paused .fx-line__bg { animation-play-state: paused; }
+  body.fx-win-paused .fx-lr__a { animation-play-state: paused; }
 
   /* ============================================================
      THE SWITCH — fixed bottom-left, the same pill the front page uses for
@@ -586,11 +608,16 @@ animation, and the loop rests three seconds at each end.
   .fx-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
     padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
     font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer;
-    transition: transform 200ms, border-color 200ms, opacity 220ms var(--ease-standard, ease-out); }
+    transition: transform 200ms, border-color 200ms, opacity 220ms var(--ease-standard, ease-out), visibility 0s; }
   .fx-toggle:hover { border-color: #052975; transform: translateY(-2px); }
+  .fx-toggle:active { transform: scale(0.975); }
+  .fx-toggle:focus-visible { outline: none; border-color: #052975; box-shadow: 0 8px 24px rgba(5,41,117,0.16), 0 0 0 3px rgba(143,248,255,0.55); }
   .fx-toggle b { font-weight: 700; }
   .fx-toggle u { text-decoration: none; opacity: 0.55; font-weight: 600; }
-  body.cnt-footer-in-view .fx-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
+  /* Over the footer it leaves — and it has to leave the tab order with itself.
+     opacity + pointer-events alone still hands a keyboard user an invisible
+     control; visibility takes it out, and the delay lets the fade finish first. */
+  body.cnt-footer-in-view .fx-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); visibility: hidden; transition-delay: 0s, 0s, 0s, 220ms; }
   @media (prefers-reduced-motion: reduce) { .fx-toggle { transition: none; } }
 
   /* ============================================================
@@ -863,7 +890,7 @@ animation, and the loop rests three seconds at each end.
     .fx-desk__win::after, .fx-dsum b, .fx-dseal, .fx-moves__arc, .fx-moves__n span,
     .fx-moves__tx > span, .fx-moves__rail i, .fx-bin, .fx-bin__n b, .fx-bin__sum b,
     .fx-stack__seal, .fx-stack__keep,
-    .fx-line__bg, .fx-ln__am, .fx-ln__file, .fx-ln__wait, .fx-ln__kept, .fx-ln__big,
+    .fx-ln__am, .fx-ln__file, .fx-ln__wait, .fx-ln__kept, .fx-ln__big,
     .fx-lr__o, .fx-lr__a { animation: none !important; }
     .fx-hero__kick, .fx-hero h1 .ln, .fx-hero__lead, .fx-hero .fx-stage, .fx-hero .fx-scene, .fx-hero__cta, .fx-hero__proof { opacity: 1; transform: none; }
     .fx-hand li, .fx-never li, .fx-step { transition: none !important; opacity: 1; transform: none; }
@@ -908,7 +935,7 @@ animation, and the loop rests three seconds at each end.
     .fx-ln__slot .fx-ln__file { opacity: 1; transform: none; }
     .fx-ln__tag .fx-ln__wait { opacity: 0; }
     .fx-ln__tag .fx-ln__kept { opacity: 1; transform: none; }
-    .fx-ln__big { border-bottom-color: rgba(222,168,240,0.82); }
+    .fx-ln__big { border-bottom-color: rgba(var(--ln-lav-mid),0.82); }
     .fx-lr__st .fx-lr__o { opacity: 0; }
     .fx-lr__st .fx-lr__a { opacity: 1; transform: none; }
   }
