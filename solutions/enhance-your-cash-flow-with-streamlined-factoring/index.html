@@ -304,8 +304,17 @@ animation, and the loop rests three seconds at each end.
      ============================================================ */
   .fx-desk { position: relative; padding: 0 0 clamp(46px,5vw,74px) clamp(22px,2.6vw,42px); }
   .fx-desk__ph { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
-  .fx-desk__ph img { display: block; width: 100%; height: clamp(300px,29vw,404px); object-fit: cover; object-position: 50% 34%; animation: fx-kb 22s ease-in-out infinite alternate; }
-  @keyframes fx-kb { from { transform: scale(1) translate3d(0,0,0); } to { transform: scale(1.07) translate3d(-1.4%,-1.2%,0); } }
+  .fx-desk__ph img { display: block; width: 100%; height: clamp(300px,29vw,404px); object-fit: cover; object-position: 50% 34%;
+    transform: scale(1.05); animation: fx-kb 22s ease-in-out infinite alternate; }
+  /* ⚠️ The pan NEVER starts at scale(1). At 1.0 the image exactly fills the box,
+     and the keyframe's -1.4% translate outruns the overhang the growing scale
+     provides (0.5% per 1% of scale), so for the first fifth of the cycle an edge
+     sat *inside* the frame and the ground showed through as a moving seam. A base
+     scale means the smallest overhang in the cycle is 2.5% a side — never less
+     than the 1.4% the pan asks for. The base rule repeats the scale so reduced
+     motion lands on the same framing instead of snapping back to 1.0. */
+  @keyframes fx-kb { from { transform: scale(1.05) translate3d(0,0,0); } to { transform: scale(1.12) translate3d(-1.4%,-1.2%,0); } }
+  @keyframes fx-kbz { from { transform: scale(1.13) translate3d(0,0,0); } to { transform: scale(1.21) translate3d(-1.4%,-1.2%,0); } }
   /* A quarter circle anchored to the frame's corner is brand shape, not an
      ambient background blob — the thing the house rules forbid. */
 
@@ -355,7 +364,14 @@ animation, and the loop rests three seconds at each end.
      ============================================================ */
   .fx-portrait { position: relative; }
   .fx-portrait__ph { position: relative; border-radius: 22px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
-  .fx-portrait__ph img { display: block; width: 100%; height: clamp(360px,38vw,530px); object-fit: cover; object-position: 50% 22%; animation: fx-kb 24s ease-in-out infinite alternate; }
+  /* 56% 24% + a 1.13 base scale. The source is 981x1200 and the frame is 0.90,
+     so `cover` crops only ~50px off a 1200px image — at 50% 22% you saw very
+     nearly the whole plate: the subject sat right of centre with a wide band of
+     empty curtain beside her and the laptop clipped at an odd angle. The scale
+     is what actually crops in; the position then puts her eyeline on the frame's
+     upper third and turns the laptop edge into a clean vertical. */
+  .fx-portrait__ph img { display: block; width: 100%; height: clamp(360px,38vw,530px); object-fit: cover; object-position: 56% 24%;
+    transform: scale(1.13); animation: fx-kbz 24s ease-in-out infinite alternate; }
 
   .fx-moves__box { position: relative; margin-top: clamp(26px,2.8vw,38px); display: grid; grid-template-columns: clamp(96px,9vw,128px) minmax(0,1fr); align-items: center; gap: clamp(18px,2vw,30px); }
   .fx-moves__dial { position: relative; width: clamp(96px,9vw,128px); aspect-ratio: 1; }
@@ -365,7 +381,24 @@ animation, and the loop rests three seconds at each end.
   .fx-moves__arc { stroke: #983eae; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; animation: fx-arc 12s cubic-bezier(0.65,0,0.35,1) infinite both; }
   @keyframes fx-arc { 0%, 20% { stroke-dashoffset: 193; } 26%, 46% { stroke-dashoffset: 96; } 52%, 92% { stroke-dashoffset: 0; } 99%, 100% { stroke-dashoffset: 193; } }
   .fx-moves__n { position: absolute; inset: 0; display: grid; place-items: center; }
-  .fx-moves__n span { grid-area: 1 / 1; font-size: clamp(44px,4.4vw,62px); font-weight: 700; letter-spacing: -0.04em; color: #983eae; opacity: 0; }
+  /* `place-items: center` centres the LINE BOX, and neither correction the ink
+     needs is in that box. Vertically the digit's ink sits in the cap-height band
+     above the box's middle — measured 4.8px high at 62px, so 0.154em of top
+     padding pushes the content down half of that. Horizontally `letter-spacing`
+     is added after the LAST glyph too, so the box is 0.04em wider than the ink on
+     the right; a negative right margin of the same size cancels it. Both are
+     padding/margin, never transform — the keyframes below reset transform to
+     `none` at every rest stop and would throw a transform away (trap 24). */
+  .fx-moves__n span { grid-area: 1 / 1; font-size: clamp(44px,4.4vw,62px); font-weight: 700; letter-spacing: -0.04em; color: #983eae; opacity: 0;
+    padding-top: 0.154em; }
+  /* Horizontal is per-digit and has to be: the three glyphs have different side
+     bearings, so no single correction centres all of them. `tabular-nums` does
+     not help — Alliance No.2's figures still measured 34.41 / 34.83 / 34.83.
+     A centred grid item moves right by HALF a negative right margin, so these
+     are twice the offset each glyph needs. Measured on the painted ink against
+     the ring's own centre; all three now land inside 0.2px. */
+  .fx-moves__n span:nth-child(1) { margin-right: -0.04em; }
+  .fx-moves__n span:nth-child(2), .fx-moves__n span:nth-child(3) { margin-right: 0.022em; }
   /* Each numeral arrives blurred and leaves blurred, so the change reads as a
      dial turning rather than as two labels crossfading. */
   @keyframes fx-n1 { 0%, 20% { opacity: 1; transform: none; filter: blur(0); } 26%, 94% { opacity: 0; transform: translateY(-26px) scale(0.8); filter: blur(9px); } 100% { opacity: 1; transform: none; filter: blur(0); } }
@@ -378,7 +411,13 @@ animation, and the loop rests three seconds at each end.
   .fx-moves__tx { position: relative; min-height: 5.4em; }
   .fx-moves__tx > span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
   .fx-moves__tx b { display: block; font-size: clamp(19px,1.9vw,26px); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: #0a1838; }
-  .fx-moves__tx small { display: block; margin-top: 8px; font-size: 15px; line-height: 1.6; color: #3a4a6b; }
+  /* ⚠️ Measures on this page are capped in `ch`, and in Alliance No.2 one `ch`
+     is 0.626em — the width of its zero, not of an average letter. So a `54ch`
+     cap admits ~68 characters of prose, not 54, and the first pass at these four
+     caps read a quarter too loose. All of them are now set from a measured
+     characters-per-line (widest painted line / half the font-size), which is
+     what actually governs whether a line is readable. Target: 55-58. */
+  .fx-moves__tx small { display: block; margin-top: 8px; max-width: 44ch; font-size: 15px; line-height: 1.6; color: #3a4a6b; }
   @keyframes fx-t1 { 0%, 20% { opacity: 1; transform: none; } 26%, 94% { opacity: 0; transform: translateY(-14px); } 100% { opacity: 1; transform: none; } }
   @keyframes fx-t2 { 0%, 20% { opacity: 0; transform: translateY(14px); } 26%, 46% { opacity: 1; transform: none; } 52%, 100% { opacity: 0; transform: translateY(-14px); } }
   @keyframes fx-t3 { 0%, 46% { opacity: 0; transform: translateY(14px); } 52%, 92% { opacity: 1; transform: none; } 99%, 100% { opacity: 0; transform: translateY(14px); } }
@@ -740,10 +779,19 @@ animation, and the loop rests three seconds at each end.
   .fx-hand { list-style: none; margin: clamp(38px,3.8vw,54px) auto 0; max-width: 920px; padding: 0; counter-reset: fxh; }
   .fx-hand li { position: relative; display: grid; grid-template-columns: 46px minmax(0,1fr); gap: 18px; padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,0.13); opacity: 0; transform: translateY(14px); transition: opacity 520ms var(--ease-standard), transform 520ms cubic-bezier(0.16,1,0.3,1); }
   .fx-hand li:last-child { border-bottom: 0; }
-  .fx-hand__n { counter-increment: fxh; align-self: start; width: 46px; height: 46px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--c-innovation-blue); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); }
+  .fx-hand__n { counter-increment: fxh; align-self: start; width: 46px; height: 46px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700; letter-spacing: -0.02em; color: var(--c-innovation-blue); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); }
   .fx-hand__n::after { content: counter(fxh); }
-  .fx-hand b { display: block; font-size: clamp(17px,1.8vw,23px); font-weight: 600; line-height: 1.35; color: #ffffff; }
-  .fx-hand small { display: block; margin-top: 8px; font-size: 14.5px; font-weight: 400; line-height: 1.6; color: #b9c5de; }
+  /* The list is 920px wide and its text column 856px, so uncapped this ran 97
+     characters of 14.5px prose on one line — roughly a third past readable.
+     Capped by measure rather than by narrowing the list, so the numbered rail
+     keeps its rhythm. See the note at `.fx-moves__tx small` for why the number
+     is 46 and not 66: `ch` is the zero's width, not an average letter's. */
+  /* 32ch, deliberately looser than the 46ch below it: at 30ch two of the four
+     titles broke to a second line while the prose under them ran wider, which
+     reads as an accident rather than a measure. 32ch is the first value where
+     all four hold one line on desktop — 39 characters at the widest. */
+  .fx-hand b { display: block; max-width: 32ch; font-size: clamp(17px,1.8vw,23px); font-weight: 600; line-height: 1.35; color: #ffffff; }
+  .fx-hand small { display: block; margin-top: 8px; max-width: 46ch; font-size: 14.5px; font-weight: 400; line-height: 1.6; color: #b9c5de; }
   body.fx-hand-in .fx-hand li { opacity: 1; transform: none; }
   .fx-hand li:nth-child(1) { transition-delay: 0ms; }
   .fx-hand li:nth-child(2) { transition-delay: 110ms; }
@@ -765,7 +813,7 @@ animation, and the loop rests three seconds at each end.
   /* The icon and the h3 are one group now that no kicker sits between them,
      so the h3 takes the gap the kicker used to hold (16px, not 39px). */
   .fx-step h3 { margin: 16px 0 0; font-size: 19px; font-weight: 700; color: #0a1838; }
-  .fx-step p { margin: 9px 0 0; font-size: 14.5px; line-height: 1.6; color: #3a4a6b; }
+  .fx-step p { margin: 9px 0 0; max-width: 44ch; font-size: 14.5px; line-height: 1.6; color: #3a4a6b; }
   .fx-steps__foot { margin: 26px auto 0; max-width: 62ch; font-size: 14.5px; line-height: 1.6; color: #5a6884; }
 
   /* ---- what never happens: the one green band on the page, because it is the
@@ -883,7 +931,10 @@ animation, and the loop rests three seconds at each end.
     .fx-hv--split h1, .fx-hv--split .fx-hero__lead { margin-left: auto; margin-right: auto; }
     .fx-hv--split .fx-hero__cta, .fx-hv--split .fx-hero__proof { justify-content: center; }
     .fx-copy h1 { max-width: 24ch; }
-    .fx-copy .fx-hero__lead { max-width: 62ch; }
+    /* Not back to the 62ch the base rule carries: at ≤1000 the hero is one
+       centred column, so a loosened cap is the widest measure on the page —
+       it read 66 characters at 900px, wider than the same paragraph on desktop. */
+    .fx-copy .fx-hero__lead { max-width: 48ch; }
     .fx-desk { padding-left: 0; width: 100%; max-width: 620px; justify-self: center; }
     .fx-portrait { width: 100%; max-width: 520px; justify-self: center; }
     .fx-portrait__ph img { height: clamp(320px,46vw,430px); }
@@ -990,7 +1041,7 @@ animation, and the loop rests three seconds at each end.
     .fx-st { grid-area: 2 / 2; min-height: 22px; }
     .fx-stage__cap { min-height: 3.5em; font-size: 15.5px; }
     .fx-hand li { grid-template-columns: 38px minmax(0,1fr); gap: 14px; }
-    .fx-hand__n { width: 38px; height: 38px; font-size: 13.5px; }
+    .fx-hand__n { width: 38px; height: 38px; font-size: 18px; }
     .fx-out { flex-wrap: wrap; min-height: 74px; }
     .fx-out__ok { margin-left: 0; }
     /* The ribbon keeps only New and the Continia action: the third chip is what
