@@ -725,6 +725,8 @@ animation, and the loop rests three seconds at each end.
   .fx-sec__eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #983eae; }
   .fx-sec--navy .fx-sec__eyebrow { color: var(--c-innovation-blue); }
   .fx-sec h2 { margin: 14px 0 0; max-width: 22ch; font-size: clamp(28px,3vw,44px); font-weight: 700; line-height: 1.08; letter-spacing: -0.022em; }
+  /* No eyebrow above it → the h2 opens the section and owns its own top edge. */
+  .fx-sec__in > h2:first-child { margin-top: 0; }
   .fx-sec--navy h2 { color: #ffffff; }
   .fx-sec__lead { margin: 18px 0 0; max-width: 62ch; font-size: 1.0625rem; line-height: 1.65; color: #3a4a6b; }
   .fx-sec--navy .fx-sec__lead { color: #cdd4e3; }
@@ -755,10 +757,9 @@ animation, and the loop rests three seconds at each end.
   .fx-step:nth-child(3) { transition-delay: 260ms; }
   .fx-step:nth-child(4) { transition-delay: 390ms; }
   .fx-step__ico { width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; background: #983eae; color: #ffffff; }
-  /* Full Performance Purple, not a tint: #a86bbb measures 3.83 on the card's
-     white, and an 11px kicker needs 4.5. */
-  .fx-step__k { display: block; margin-top: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: #983eae; }
-  .fx-step h3 { margin: 8px 0 0; font-size: 19px; font-weight: 700; color: #0a1838; }
+  /* The icon and the h3 are one group now that no kicker sits between them,
+     so the h3 takes the gap the kicker used to hold (16px, not 39px). */
+  .fx-step h3 { margin: 16px 0 0; font-size: 19px; font-weight: 700; color: #0a1838; }
   .fx-step p { margin: 9px 0 0; font-size: 14.5px; line-height: 1.6; color: #3a4a6b; }
   .fx-steps__foot { margin: 26px auto 0; max-width: 62ch; font-size: 14.5px; line-height: 1.6; color: #5a6884; }
 
@@ -1453,19 +1454,16 @@ animation, and the loop rests three seconds at each end.
       <span class="fx-steps__wire" aria-hidden="true"></span>
       <div class="fx-step">
         <span class="fx-step__ico" aria-hidden="true"><i class="fa-light fa-list-check"></i></span>
-        <span class="fx-step__k">Step one</span>
         <h3>The proposal</h3>
         <p>Open sales invoices are gathered into a factoring proposal on your own criteria, with the amounts totalled where you can see them.</p>
       </div>
       <div class="fx-step">
         <span class="fx-step__ico" aria-hidden="true"><i class="fa-light fa-diagram-project"></i></span>
-        <span class="fx-step__k">Step two</span>
         <h3>The customer allocation</h3>
         <p>Each invoice is allocated to the customer it belongs to, so the proposal reads the same way your receivables do.</p>
       </div>
       <div class="fx-step">
         <span class="fx-step__ico" aria-hidden="true"><i class="fa-light fa-file-export"></i></span>
-        <span class="fx-step__k">Step three</span>
         <h3>The data file</h3>
         <p>The run produces the data file your factoring provider expects — generated from the proposal, not rebuilt beside it.</p>
       </div>
@@ -1516,7 +1514,6 @@ animation, and the loop rests three seconds at each end.
 <!-- ============ WHERE IT LIVES ============ -->
 <section class="fx-sec" data-screen-label="Where it lives">
   <div class="fx-sec__in">
-    <p class="fx-sec__eyebrow">Where it lives</p>
     <h2>Part of Continia Finance.</h2>
     <p class="fx-sec__lead">Factoring is not a product of its own. It is one of the modules inside Continia Finance, so it arrives with the rest of the financial tooling and under the same permissions.</p>
 
