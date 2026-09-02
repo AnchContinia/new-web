@@ -61,11 +61,26 @@
   .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
   .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
   .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #52678f; }
-  .dc-mock__flow { display: flex; gap: 6px; margin: 16px 0 4px; }
-  .dc-mock__step { flex: 1; text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 7px 4px; border-radius: 8px; background: #f6f8fb; color: #8193b9; }
-  .dc-mock__step.on { background: #052975; color: #8ff8ff; }
-  .dc-mock__rows { margin-top: 14px; display: flex; flex-direction: column; gap: 2px; }
-  .dc-row { display: flex; align-items: center; gap: 12px; padding: 11px 6px; border-top: 1px solid #eef1f6; opacity: 0; animation: dcIn .5s cubic-bezier(0.16,1,0.3,1) forwards; }
+  /* The run reports its RESULT before it lists rows: the one number a finance
+     lead reads off this mock is "how much of it happened by itself", so it
+     leads at 58px in Tech Blue and the four stages drop to a rail beneath it.
+     This replaced a 4-up pill strip that lit all four stages at once — which
+     said the run was done but not that anything was gained. The old
+     `.dc-mock__flow` / `__step` rules and the separate `.dc-mock__foot` line
+     went with it; the footnote's two facts are now the figure's own label. */
+  .dc-mock__result { display: flex; align-items: baseline; gap: 16px; margin-top: 18px; }
+  .dc-mock__fig { font-size: 58px; font-weight: 700; line-height: 0.9; letter-spacing: -0.03em; color: var(--c-tech-blue); font-variant-numeric: tabular-nums; }
+  .dc-mock__of { font-size: 0.44em; font-weight: 700; letter-spacing: -0.01em; color: var(--c-slate-500); }
+  .dc-mock__lbl { display: block; font-size: 15px; line-height: 1.35; font-weight: 600; color: #3a4a6b; }
+  .dc-mock__lbl small { display: flex; align-items: center; gap: 7px; margin-top: 5px; font-size: 12.5px; font-weight: 400; color: #52678f; }
+  .dc-mock__lbl small i { color: #8a6516; font-size: 13px; }
+
+  .dc-mock__rail { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; margin-top: 18px; }
+  .dc-mock__seg { display: block; height: 4px; border-radius: 999px; background: var(--c-tech-blue); }
+  .dc-mock__cap { display: block; margin-top: 7px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #52678f; }
+
+  .dc-mock__rows { margin-top: 18px; display: flex; flex-direction: column; gap: 2px; }
+  .dc-row { display: flex; align-items: center; gap: 12px; padding: 11px 6px 11px 3px; border-top: 1px solid #eef1f6; border-left: 3px solid transparent; opacity: 0; animation: dcIn .5s cubic-bezier(0.16,1,0.3,1) forwards; }
   .dc-row i { color: #052975; font-size: 15px; width: 18px; text-align: center; }
   .dc-row .nm { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: #0a1838; }
   .dc-row .amt { font-size: 13px; font-weight: 700; color: #052975; }
@@ -76,31 +91,22 @@
      from the system's warning tokens (`--color-warning-bg` / `-fg`), matching
      the flag chip on products/document-capture/. 4.79 on white-amber. */
   .dc-row .chip.warn { background: #fff2d6; color: #8a6516; }
+  /* The one row a human still has to look at gets an amber gutter and the
+     palest wash of the same warning hue, so the chip is not the only thing
+     carrying the state. `--color-warning` for the edge, not the chip's fill:
+     an edge reads at a glance from across the card. */
+  .dc-row--held { border-left-color: var(--color-warning); background: #fffaf0; }
   @keyframes dcIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #52678f; }
-  .dc-mock__foot i { color: #5f9e8d; }
-
-  /* Same treatment the eight product pages got: four nowrap pills across
-     ~350px forced a sub-11px label. Two-up instead. Placed after the base
-     rules — equal specificity means source order decides.
-     ⚠️ `box-sizing: border-box` and the `- 3px` are both load-bearing, and the
-     rule failed silently without them: `flex-basis` sizes the CONTENT box, so
-     a 148px basis plus 4px of padding on each side painted 156px, two of those
-     plus the 6px gap came to 318 in a 306px flow, and every pill wrapped onto
-     its own line — four stacked bars, not the 2×2 this rule is for. Half the
-     gap is 3px; subtract exactly that. The same latent bug still stands on the
-     eight product pages, which subtract 5px from a 5px gap. */
-  @media (max-width: 640px) {
-    .dc-mock__flow { flex-wrap: wrap; }
-    .dc-mock__step { box-sizing: border-box; flex: 1 1 calc(50% - 3px); font-size: 11px; }
-  }
 
   /* On a 350px mock the 84px chip left the payee name 93px to work in and it
      broke to three lines, so one row stood 74px tall against its neighbours'
-     57. The chip only has to hold "Sent" / "Held". */
+     57. The chip only has to hold "Sent" / "Held". The figure steps down with
+     it: 58px and a 15px label side by side do not both fit a 306px card. */
   @media (max-width: 640px) {
     .dc-row .chip { min-width: 56px; }
     .dc-row .amt { white-space: nowrap; }
+    .dc-mock__result { gap: 12px; }
+    .dc-mock__fig { font-size: 46px; }
   }
 
 
@@ -250,18 +256,21 @@
     </div>
     <div class="dc-mock" aria-hidden="true">
       <div class="dc-mock__bar"><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__dot"></span><span class="dc-mock__title">Payment run · B-0142</span></div>
-      <div class="dc-mock__flow">
-        <div class="dc-mock__step on">Proposed</div>
-        <div class="dc-mock__step on">Validated</div>
-        <div class="dc-mock__step on">Approved</div>
-        <div class="dc-mock__step on">Sent</div>
+      <div class="dc-mock__result">
+        <b class="dc-mock__fig">11<span class="dc-mock__of">/12</span></b>
+        <span class="dc-mock__lbl">sent to bank automatically<small><i class="fa-light fa-shield-halved"></i>1 flagged for review</small></span>
+      </div>
+      <div class="dc-mock__rail">
+        <span><span class="dc-mock__seg"></span><span class="dc-mock__cap">Proposed</span></span>
+        <span><span class="dc-mock__seg"></span><span class="dc-mock__cap">Validated</span></span>
+        <span><span class="dc-mock__seg"></span><span class="dc-mock__cap">Approved</span></span>
+        <span><span class="dc-mock__seg"></span><span class="dc-mock__cap">Sent</span></span>
       </div>
       <div class="dc-mock__rows">
         <div class="dc-row" style="animation-delay:.15s"><i class="fa-light fa-building-columns"></i><span class="nm">Northwind Traders · DE89…3000</span><span class="amt">€ 4,820</span><span class="chip">Sent</span></div>
         <div class="dc-row" style="animation-delay:.35s"><i class="fa-light fa-building-columns"></i><span class="nm">Fabrikam Inc. · GB29…1234</span><span class="amt">€ 1,240</span><span class="chip">Sent</span></div>
-        <div class="dc-row" style="animation-delay:.55s"><i class="fa-light fa-shield-halved"></i><span class="nm">Contoso Ltd. · IBAN changed</span><span class="amt">€ 612</span><span class="chip warn">Held</span></div>
+        <div class="dc-row dc-row--held" style="animation-delay:.55s"><i class="fa-light fa-shield-halved"></i><span class="nm">Contoso Ltd. · IBAN changed</span><span class="amt">€ 612</span><span class="chip warn">Held</span></div>
       </div>
-      <div class="dc-mock__foot"><i class="fa-light fa-circle-check"></i>11 of 12 sent to bank automatically — 1 flagged for review</div>
     </div>
   </div>
 </section>
