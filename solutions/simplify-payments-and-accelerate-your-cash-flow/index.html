@@ -31,11 +31,19 @@
 
   /* ---------- Hero ---------- */
   .dc-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px) clamp(80px,9vw,116px); }
-  .dc-hero::before { content: ""; position: absolute; right: -12%; top: -30%; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(143,248,255,0.22), transparent 62%); pointer-events: none; }
+  /* ⚠️ No decorative disc here. A 620px cyan radial circle used to sit at
+     `right: -12%; top: -30%`; its edge drew a visible arc across the band and
+     pulled the eye off the headline. Andreas killed this pattern site-wide on
+     2026-08-25 — see DESIGN.md, "Don't put decorative circles in a section
+     background". The sibling hero on products/continia-banking/ is flat navy
+     for the same reason; depth comes from the mock's shadow, not the ground. */
   .dc-hero__grid { position: relative; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
-  .dc-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; letter-spacing: normal; color: var(--c-innovation-blue); }
-  .dc-eyebrow i { font-size: 18px; }
-  .dc-hero h1 { margin: 20px 0 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
+  /* ⚠️ No eyebrow pill above the h1. House rule (DESIGN.md): the hero opens on
+     the headline unless the page cannot land without naming its product context
+     first — and this one names it twice further down ("Powered by · Continia
+     Banking" and the Explore link). The removed pill was also 18px/600 with no
+     tracking, where the system's label is 11–12px tracked caps. */
+  .dc-hero h1 { margin: 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
   .dc-hero h1 .hl { color: var(--c-innovation-blue); }
   .dc-hero p { margin: 22px 0 0; max-width: 40rem; font-size: 1.1875rem; line-height: 1.6; color: rgba(255,255,255,0.84); }
   .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
@@ -44,11 +52,15 @@
   .dc-hero__proof i { color: var(--c-innovation-blue); font-size: 16px; }
 
   /* Hero invoice mock */
-  .dc-mock { position: relative; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
+  /* `box-sizing: border-box` is load-bearing: `width: min(460px,100%)` plus
+     22px of content-box padding measured 504px, so at 390px the mock ran 44px
+     past its 350px column and body's `overflow-x: clip` sliced the chips off.
+     Same declaration the sibling mock on products/continia-banking/ carries. */
+  .dc-mock { position: relative; box-sizing: border-box; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
   @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
   .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
   .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
-  .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8193b9; }
+  .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #52678f; }
   .dc-mock__flow { display: flex; gap: 6px; margin: 16px 0 4px; }
   .dc-mock__step { flex: 1; text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 7px 4px; border-radius: 8px; background: #f6f8fb; color: #8193b9; }
   .dc-mock__step.on { background: #052975; color: #8ff8ff; }
@@ -58,31 +70,56 @@
   .dc-row .nm { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: #0a1838; }
   .dc-row .amt { font-size: 13px; font-weight: 700; color: #052975; }
   .dc-row .chip { min-width: 84px; text-align: center; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: #cfe2dd; color: #2f6455; }
+  /* ⚠️ `.warn` was written in the markup but never defined, so the held payment
+     rendered in the same green as the two sent ones — the mock said "1 flagged
+     for review" while showing three identical success chips. Amber pair comes
+     from the system's warning tokens (`--color-warning-bg` / `-fg`), matching
+     the flag chip on products/document-capture/. 4.79 on white-amber. */
+  .dc-row .chip.warn { background: #fff2d6; color: #8a6516; }
   @keyframes dcIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6b7894; }
+  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #52678f; }
   .dc-mock__foot i { color: #5f9e8d; }
 
   /* Same treatment the eight product pages got: four nowrap pills across
      ~350px forced a sub-11px label. Two-up instead. Placed after the base
-     rules — equal specificity means source order decides. */
+     rules — equal specificity means source order decides.
+     ⚠️ `box-sizing: border-box` and the `- 3px` are both load-bearing, and the
+     rule failed silently without them: `flex-basis` sizes the CONTENT box, so
+     a 148px basis plus 4px of padding on each side painted 156px, two of those
+     plus the 6px gap came to 318 in a 306px flow, and every pill wrapped onto
+     its own line — four stacked bars, not the 2×2 this rule is for. Half the
+     gap is 3px; subtract exactly that. The same latent bug still stands on the
+     eight product pages, which subtract 5px from a 5px gap. */
   @media (max-width: 640px) {
     .dc-mock__flow { flex-wrap: wrap; }
-    .dc-mock__step { flex: 1 1 calc(50% - 5px); font-size: 11px; }
+    .dc-mock__step { box-sizing: border-box; flex: 1 1 calc(50% - 3px); font-size: 11px; }
+  }
+
+  /* On a 350px mock the 84px chip left the payee name 93px to work in and it
+     broke to three lines, so one row stood 74px tall against its neighbours'
+     57. The chip only has to hold "Sent" / "Held". */
+  @media (max-width: 640px) {
+    .dc-row .chip { min-width: 56px; }
+    .dc-row .amt { white-space: nowrap; }
   }
 
 
   /* ---------- shared section ---------- */
   .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
   .dc-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
-  .dc-head .eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
+  .eye { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
   .dc-head h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
-  .dc-head p { margin: 16px 0 0; font-size: 1.125rem; line-height: 1.6; color: var(--color-text-muted); }
+  /* ⚠️ Prose on a light ground is slate-700 #3a4a6b, not `--color-text-muted`.
+     That token is slate-500 #6b7894, which measures 4.43 on white and 3.93 on
+     Light Blue — both under the 4.5 AA floor for body text. Same substitution
+     the factoring page makes. Mock-UI chrome uses #52678f. */
+  .dc-head p { margin: 16px 0 0; font-size: 1.125rem; line-height: 1.6; color: #3a4a6b; }
 
   /* ---------- stats ---------- */
   .dc-stats { background: var(--c-light-blue); }
   .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(48px,6vw,72px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; text-align: center; }
   .dc-stat b { display: block; font-size: clamp(38px,3.4vw,54px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); line-height: 1; font-variant-numeric: tabular-nums; }
-  .dc-stat span { display: block; margin-top: 10px; font-size: 14.5px; color: var(--color-text-muted); }
+  .dc-stat span { display: block; margin-top: 10px; font-size: 14.5px; color: #3a4a6b; }
 
   /* ---------- feature grid ---------- */
   .dc-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
@@ -90,16 +127,17 @@
   .dc-feat:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); border-color: #cdd9ef; }
   .dc-feat__icon { width: 54px; height: 54px; border-radius: 14px; background: var(--c-light-blue); color: var(--c-tech-blue); display: flex; align-items: center; justify-content: center; font-size: 24px; }
   .dc-feat h3 { margin: 20px 0 0; font-size: 20px; font-weight: 700; color: var(--c-tech-blue); letter-spacing: -0.01em; }
-  .dc-feat p { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--color-text-muted); }
+  .dc-feat p { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: #3a4a6b; }
 
   /* ---------- how it works ---------- */
   .dc-how { background: var(--c-tech-blue); color: #fff; }
   .dc-how .dc-head h2 { color: #fff; }
-  .dc-how .dc-head .eye { color: var(--c-innovation-blue); }
   .dc-how .dc-head p { color: rgba(255,255,255,0.78); }
   .dc-steps { position: relative; display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; max-width: 1080px; margin: 0 auto; }
   .dc-steps--4 { grid-template-columns: repeat(4,1fr); }
-  .dc-steps::before { content: ""; position: absolute; top: 27px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, rgba(143,248,255,0.15), rgba(143,248,255,0.55), rgba(143,248,255,0.15)); }
+  /* 30px, not 27: `.dc-step__num` is 56px content-box plus a 2px border, so it
+     paints 60px tall and its centre is at 30. Optical, not mathematical. */
+  .dc-steps::before { content: ""; position: absolute; top: 30px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, rgba(143,248,255,0.15), rgba(143,248,255,0.55), rgba(143,248,255,0.15)); }
   .dc-step { position: relative; text-align: center; }
   .dc-step__num { position: relative; width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; background: #041e58; border: 2px solid rgba(143,248,255,0.45); color: var(--c-innovation-blue); display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1; }
   .dc-step h4 { margin: 18px 0 0; font-size: 16px; font-weight: 700; color: #fff; }
@@ -107,22 +145,27 @@
 
   /* ---------- built inside ---------- */
   .dc-inside__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px,5vw,64px); align-items: center; }
-  .dc-inside h2 { font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); margin: 12px 0 0; }
+  /* `.dc-inside` is not a class on this page — the section is `.dc-sec` and the
+     grid is `.dc-inside__grid`. The old `.dc-inside h2` selector matched nothing,
+     so "No new system." fell back to the UA default: 24px near-black with no
+     tracking, sitting in the page like a card title next to two 48px Tech Blue
+     section headings. Same dead selector still stands on the sibling page. */
+  .dc-inside__grid h2 { font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); margin: 12px 0 0; }
   .dc-inside__list { margin: 24px 0 0; display: flex; flex-direction: column; gap: 14px; }
   .dc-inside__list span { display: flex; align-items: center; gap: 12px; font-size: 16px; color: var(--color-text); }
   .dc-inside__list i { color: #5f9e8d; font-size: 18px; }
   .dc-inside__card { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; box-shadow: 0 24px 56px rgba(5,41,117,0.12); padding: 24px; }
   .dc-inside__app { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; }
   .dc-inside__app.active { background: var(--c-light-blue); color: var(--c-tech-blue); }
-  .dc-inside__app.dim { color: var(--c-slate-500); }
+  .dc-inside__app.dim { color: #3a4a6b; }
   .dc-inside__app i { font-size: 17px; width: 20px; text-align: center; }
-
-  /* ---------- final CTA ---------- */
-  .dc-cta { position: relative; overflow: hidden; background: linear-gradient(135deg,#041e58 0%,#052975 45%,#1d5aa8 90%,#8ff8ff 165%); color: #fff; text-align: center; }
-  .dc-cta__inner { max-width: 760px; margin: 0 auto; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px); }
-  .dc-cta h2 { margin: 0; font-size: clamp(34px,3.6vw,52px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; }
-  .dc-cta p { margin: 20px auto 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.82); }
-  .dc-cta__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+  /* ⚠️ This link carried `style-hover="text-decoration:underline;"`, which is not
+     an attribute anything reads — the runtime drops it (trap 4b) and the link had
+     no hover state at all. A real class, with a focus ring for keyboards. */
+  .dc-link { display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; }
+  .dc-link:hover { text-decoration: underline; }
+  .dc-link:focus-visible { outline: 2px solid var(--c-innovation-blue); outline-offset: 3px; border-radius: 4px; }
+  .dc-link i { font-size: 13px; }
 
   @media (max-width: 900px) {
     .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
@@ -139,6 +182,9 @@
     .dc-steps { grid-template-columns: 1fr 1fr; }
   }
   @media (prefers-reduced-motion: reduce) {
+    /* The hero CTA jumps to #how, so smooth scrolling is real motion here and
+       has to be switched off with the entrances. Same pair as stories/. */
+    html { scroll-behavior: auto !important; }
     .dc-mock, .dc-row { animation: none !important; opacity: 1 !important; }
   }
 
@@ -190,7 +236,6 @@
 <section class="dc-hero" data-screen-label="Hero">
   <div class="dc-hero__grid">
     <div>
-      <span class="dc-eyebrow"><i class="fa-light fa-money-bill-transfer"></i> Use case · Continia Banking</span>
       <h1>Simplify payments and <span class="hl">accelerate your cash flow</span>.</h1>
       <p>Run outgoing payments in seconds — proposed, validated, fraud-checked and reconciled automatically, straight from Microsoft Dynamics 365 Business Central. No portals, no re-keying, no waiting.</p>
       <div class="dc-hero__cta">
@@ -276,7 +321,6 @@
 <section class="dc-how" id="how" data-screen-label="How it works">
   <div class="dc-sec">
     <div class="dc-head">
-      <span class="eye">How it works</span>
       <h2>Four steps from proposal to reconciled.</h2>
       <p>Every payment run follows the same automated path — you only step in when a check needs a human decision.</p>
     </div>
@@ -296,7 +340,7 @@
 <section class="dc-sec" data-screen-label="Built inside">
   <div class="dc-inside__grid">
     <div>
-      <span class="eye" style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--c-tech-blue);">100% built inside</span>
+      <span class="eye">100% built inside</span>
       <h2>No new system.<br>No integration project.</h2>
       <div class="dc-inside__list">
         <span><i class="fa-light fa-circle-check"></i>Install straight from Microsoft AppSource</span>
@@ -306,11 +350,11 @@
       </div>
       <div style="margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;">
         <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" variant="purple" size="lg" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="auto,48px">Get a free trial</x-import>
-        <a href="../../products/continia-banking/" style="display:inline-flex;align-items:center;gap:9px;font-size:15px;font-weight:600;color:var(--c-tech-blue);text-decoration:none;" style-hover="text-decoration:underline;">Explore Continia Banking <i class="fa-light fa-arrow-right" style="font-size:13px;"></i></a>
+        <a class="dc-link" href="../../products/continia-banking/">Explore Continia Banking <i class="fa-light fa-arrow-right"></i></a>
       </div>
     </div>
     <div class="dc-inside__card">
-      <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8193b9;margin-bottom:14px;">Powered by</div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#52678f;margin-bottom:14px;">Powered by</div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <a class="dc-inside__app active" href="../../products/continia-banking/" style="text-decoration:none;"><i class="fa-kit fa-banking-solution-cb-icon"></i>Continia Banking</a>
         <a class="dc-inside__app dim" href="../../products/payment-management/" style="text-decoration:none;"><i class="fa-light fa-money-bill-transfer"></i>Payment Management</a>
