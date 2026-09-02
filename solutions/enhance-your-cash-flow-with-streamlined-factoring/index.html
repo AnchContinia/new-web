@@ -371,16 +371,20 @@ animation, and the loop rests three seconds at each end.
      pixels and no more, which is why the uncropped plate showed a full seated
      figure with a band of empty curtain beside her. The zoom therefore has to be
      a static `scale`, and `transform-origin` is what aims it: scale alone pulls
-     toward the element's centre and lands on her hands. Origin near the top
-     pulls toward the head instead. Four properties, one job each: `cover` keeps
-     the crop right, `object-position: 50% 0%` pins the element to the source's
-     top edge so the origin has the head to reach for, `scale` is how far in,
-     `transform-origin` is where. 1.58 / 58% 3% shows source x 24-82%, y 1-54% —
-     the whole head with headroom, shoulders and lanyard anchoring the bottom,
-     and the mug and laptop out of frame. Tighter (1.72) touched the hair to the
-     top edge and cut the shoulders, so the head floated. */
+     toward the element's centre and lands on her hands. Four properties, one job
+     each: `cover` keeps the crop right, `object-position: 50% 0%` pins the
+     element to the source's top edge so the origin has something to reach for,
+     `scale` is how far in, `transform-origin` is where.
+     ⚠️ The zoom is deliberately SHALLOW. 1.58 was a head-and-shoulders crop and
+     Andreas called it too tight ("jeg ville gerne ha' at der kommer mere af
+     personen på"). 1.08 keeps the whole upper body — head with headroom,
+     shoulders, both arms, her hands on the mug, the laptop edge — so the frame
+     reads as a person at a desk rather than as a portrait headshot. It still
+     crops: it drops a band of empty curtain off each side and lifts her eyeline
+     toward the upper third, which scale 1.0 does not. Do not creep this number
+     back up. */
   .fx-portrait__ph img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%;
-    transform: scale(1.58); transform-origin: 58% 3%; }
+    transform: scale(1.08); transform-origin: 58% 12%; }
 
   .fx-moves__box { position: relative; margin-top: clamp(26px,2.8vw,38px); display: grid; grid-template-columns: clamp(96px,9vw,128px) minmax(0,1fr); align-items: center; gap: clamp(18px,2vw,30px); }
   .fx-moves__dial { position: relative; width: clamp(96px,9vw,128px); aspect-ratio: 1; }
