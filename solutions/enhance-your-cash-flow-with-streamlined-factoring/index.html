@@ -775,7 +775,13 @@ animation, and the loop rests three seconds at each end.
      SECTIONS
      ============================================================ */
   .fx-sec { padding: clamp(72px,7vw,112px) clamp(20px,4vw,44px); }
-  .fx-sec--navy { background: linear-gradient(168deg, #03163f 0%, #051f56 52%, #06296b 100%); color: #ffffff; }
+  /* Flat Tech Blue, not a gradient. Andreas, 2026-09-02: "Ville jeg gerne ha' en
+     ren tech blue baggrund". The 168deg gradient it replaces ran #03163f →
+     #06296b, so the section's own ground was darker than the brand navy at the
+     top and lighter at the bottom, and the colour under the text depended on
+     where in the section the text sat. One flat value means every contrast
+     figure below holds at every scroll position and every viewport height. */
+  .fx-sec--navy { background: var(--c-tech-blue); color: #ffffff; }
   .fx-sec--tint { background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 100%); }
   .fx-sec__in { max-width: 1180px; margin: 0 auto; }
   .fx-sec__eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #983eae; }
