@@ -55,7 +55,10 @@ a { text-decoration: none; }
 .dt-kv i { font-size: clamp(52px, 6vw, 86px); color: #fff; opacity: 0.94; }
 /* a photo KV gets more height than a gradient one: the source portraits are
    square, so a 4:1 band crops them down to a pair of eyes. */
-.dt-kv--photo { height: clamp(250px, 31vw, 430px); }
+/* ⚠️ 15px — house rule: every frame whose visible edge is a photograph carries
+   exactly this value (Andreas 2026-09-02). The gradient-and-icon flavour of the
+   same key visual is not a photograph and keeps `.dt-kv`'s own 20px. */
+.dt-kv--photo { height: clamp(250px, 31vw, 430px); border-radius: 15px; }
 .dt-kv img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 
 /* ---------- body layout: sticky TOC + prose ---------- */

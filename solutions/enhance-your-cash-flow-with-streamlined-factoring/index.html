@@ -303,7 +303,13 @@ animation, and the loop rests three seconds at each end.
      seal landing on it.
      ============================================================ */
   .fx-desk { position: relative; padding: 0 0 clamp(46px,5vw,74px) clamp(22px,2.6vw,42px); }
-  .fx-desk__ph { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
+/* ⚠️ 15px. House rule, Andreas 2026-09-02: "border radius på billeder skal
+     være 15px". Every frame whose visible edge IS a photograph carries exactly
+     this value — no per-component taste. 22px read "for voldsomt" on the
+     factoring portrait, and the site had five different values (16/18/20/22).
+     Mock-UI chrome inside a photo frame keeps its own radius; a card whose top
+     region happens to be a photo keeps the CARD's radius. */
+  .fx-desk__ph { position: relative; border-radius: 15px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
   /* ⚠️ NO ken-burns, and nothing else that drifts, breathes or pans a
      photograph. Both photos on this page carried a 22s/24s slow zoom; Andreas
      killed it on sight ("det bevæger sig på en eller anden underlig måde") and
@@ -365,7 +371,7 @@ animation, and the loop rests three seconds at each end.
      no single crop could serve both shapes — one width showed her whole torso,
      the next cut her chin at the bottom edge. A fixed aspect-ratio means the
      crop below is one pair of values for the whole site. */
-  .fx-portrait__ph { position: relative; aspect-ratio: 0.9; border-radius: 22px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
+  .fx-portrait__ph { position: relative; aspect-ratio: 0.9; border-radius: 15px; overflow: hidden; box-shadow: 0 30px 70px rgba(5,41,117,0.20); }
   /* The source is 981x1200 and the frame is 0.90, so `cover` crops only ~50px
      off a 1200px image — `object-position` alone can move the crop by 24 source
      pixels and no more, which is why the uncropped plate showed a full seated
@@ -462,7 +468,7 @@ animation, and the loop rests three seconds at each end.
   /* The scene sits on its own pane of glass. Four white cards against a
      photograph of two faces is unreadable at any scrim strength; a blurred
      panel gives the cards a surface and keeps the photograph in the frame. */
-  .fx-stack { position: relative; height: clamp(352px,26vw,378px); padding: 18px; box-sizing: border-box; border-radius: 22px; border: 1px solid rgba(143,248,255,0.22); background: rgba(3,20,58,0.62); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 30px 70px rgba(4,20,58,0.52); }
+  .fx-stack { position: relative; height: clamp(352px,26vw,378px); padding: 18px; box-sizing: border-box; border-radius: 15px; border: 1px solid rgba(143,248,255,0.22); background: rgba(3,20,58,0.62); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 30px 70px rgba(4,20,58,0.52); }
   .fx-stack__deck { position: absolute; left: 18px; right: 18px; top: 18px; height: 184px; }
   .fx-inv { position: absolute; left: 0; right: 0; display: flex; align-items: center; gap: 11px; padding: 13px 15px; border-radius: 13px; background: #ffffff; box-shadow: 0 16px 38px rgba(4,20,58,0.46); font-size: 12.5px; color: #0a1838; }
   .fx-inv i { flex: none; font-size: 14px; color: var(--c-tech-blue); }

@@ -298,7 +298,7 @@
   .dc-sl__grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(32px,5vw,64px); align-items: center; }
   .dc-sl h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
   .dc-sl p { margin: 16px 0 0; font-size: 1.0625rem; line-height: 1.62; color: var(--color-text-muted); max-width: 52ch; }
-  .dc-sl__frame { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--color-border); box-shadow: 0 26px 60px rgba(5,41,117,0.16); background: #0b1f4a; aspect-ratio: 800 / 473; }
+  .dc-sl__frame { position: relative; border-radius: 15px; overflow: hidden; border: 1px solid var(--color-border); box-shadow: 0 26px 60px rgba(5,41,117,0.16); background: #0b1f4a; aspect-ratio: 800 / 473; }
   .dc-sl__frame img, .dc-sl__frame iframe { display: block; width: 100%; height: 100%; border: 0; object-fit: cover; }
   .dc-sl__play { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: rgba(4,20,60,0.34); border: 0; cursor: pointer; font-family: inherit; color: #fff; transition: background 220ms; }
   .dc-sl__play:hover { background: rgba(4,20,60,0.18); }
@@ -314,7 +314,13 @@
   .dc-ti p { margin: 18px 0 0; font-size: 1.0625rem; line-height: 1.65; color: #3a4a6b; max-width: 54ch; }
   /* portrait crop — the asset is 981x1200, so the frame follows it instead of
      letterboxing a landscape box. */
-  .dc-ti__media { border-radius: 18px; overflow: hidden; box-shadow: 0 26px 60px rgba(2,12,40,0.16); aspect-ratio: 4 / 5; max-width: 380px; margin: 0 auto; }
+  /* ⚠️ 15px. House rule, Andreas 2026-09-02: "border radius på billeder skal
+     være 15px". Every frame whose visible edge IS a photograph carries exactly
+     this value — no per-component taste. 22px read "for voldsomt" on the
+     factoring portrait, and the site had five different values (16/18/20/22).
+     Mock-UI chrome inside a photo frame keeps its own radius; a card whose top
+     region happens to be a photo keeps the CARD's radius. */
+  .dc-ti__media { border-radius: 15px; overflow: hidden; box-shadow: 0 26px 60px rgba(2,12,40,0.16); aspect-ratio: 4 / 5; max-width: 380px; margin: 0 auto; }
   .dc-ti__media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 
   /* ---------- youtube playlist (light, big player + legible chapter rail) ---------- */
@@ -365,7 +371,7 @@
   .dc-pz__note i { color: #93a2bf; }
   /* the asset is 2500x1667, so the frame is 3:2 and nothing gets cropped off
      the lockup. No border here — it is a full-bleed key visual, not a photo. */
-  .dc-pz__media { border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 2;
+  .dc-pz__media { border-radius: 15px; overflow: hidden; aspect-ratio: 3 / 2;
     box-shadow: 0 26px 60px rgba(5,41,117,0.20); }
   .dc-pz__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
 

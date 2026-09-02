@@ -46,7 +46,13 @@
   .st-jump a i { font-size: 12px; color: var(--c-performance-purple, #983eae); }
 
   /* Featured story card */
-  .st-feat { position: relative; border-radius: 20px; overflow: hidden; background: var(--c-tech-blue, #052975); box-shadow: 0 34px 80px rgba(3,15,48,0.28); min-height: 430px; display: flex; flex-direction: column; justify-content: flex-end; animation: stIn .8s cubic-bezier(0.16,1,0.3,1) both; }
+  /* ⚠️ 15px. House rule, Andreas 2026-09-02: "border radius på billeder skal
+     være 15px". Every frame whose visible edge IS a photograph carries exactly
+     this value — no per-component taste. 22px read "for voldsomt" on the
+     factoring portrait, and the site had five different values (16/18/20/22).
+     Mock-UI chrome inside a photo frame keeps its own radius; a card whose top
+     region happens to be a photo keeps the CARD's radius. */
+  .st-feat { position: relative; border-radius: 15px; overflow: hidden; background: var(--c-tech-blue, #052975); box-shadow: 0 34px 80px rgba(3,15,48,0.28); min-height: 430px; display: flex; flex-direction: column; justify-content: flex-end; animation: stIn .8s cubic-bezier(0.16,1,0.3,1) both; }
   .st-feat__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 34%; }
   .st-feat__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,20,64,0.08) 8%, rgba(4,20,64,0.42) 38%, rgba(3,14,48,0.82) 66%, rgba(3,14,48,0.96) 100%); }
   .st-feat__body { position: relative; padding: clamp(22px, 2.6vw, 32px); color: #fff; }
@@ -135,7 +141,7 @@
   /* min-width:0 — without it the grid item refuses to shrink to its minmax(0,1.08fr)
      track and the third card hangs 30px past the wrap. */
   .st-rail { min-width: 0; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: clamp(10px,1.2vw,16px); }
-  .st-rail__card { position: relative; display: block; border-radius: 18px; overflow: hidden; background: #0a1838;
+  .st-rail__card { position: relative; display: block; border-radius: 15px; overflow: hidden; background: #0a1838;
     aspect-ratio: 3 / 4.4; box-shadow: 0 22px 52px rgba(3,15,48,0.20);
     animation: stRise .8s cubic-bezier(0.16,1,0.3,1) both, stDrift 7s ease-in-out infinite; }
   .st-rail__card:nth-child(2) { animation-delay: .12s, .9s; }
