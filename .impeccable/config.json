@@ -1,0 +1,13 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "0 10px 30px rgba(5,41,117,0.10)",
+        "createdAt": "2026-09-25T11:05:26.215Z"
+      }
+    ]
+  }
+}
