@@ -156,6 +156,31 @@
        and keep winning, and an element that sets `nowrap` must still win.
        Enforced by tools/check_widows.py. */
     h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
+
+    /* ---------- feature-module rows ----------
+       These three boxes carried their layout as inline styles, which no media
+       query can reach without !important. Moved into classes so the phone
+       layout is an ordinary rule; only the per-row chip colours stay inline,
+       because they are bindings.
+
+       ⚠️ On a phone the old single flex row gave the text column about 90px:
+       "Add-on module" is ~136px of chip, the icon 40px, the gaps 32px, and
+       what is left of 390px is a column two words wide. Below 620px the row
+       becomes a grid and the chip drops under the text instead. */
+    .pr-mod { display: grid; grid-template-columns: 40px 1fr auto; align-items: center;
+      gap: 16px; padding: 18px 28px; border-bottom: 1px solid #eef1f6; }
+    .pr-mod__ico { width: 40px; height: 40px; border-radius: 10px; background: #def5ff;
+      color: #052975; display: inline-flex; align-items: center; justify-content: center; }
+    .pr-mod__txt { display: flex; flex-direction: column; min-width: 0; }
+    .pr-mod__txt strong { font-size: 15px; font-weight: 600; color: #0a1838; }
+    .pr-mod__txt span { font-size: 13px; color: #6b7894; line-height: 1.45; }
+    .pr-mod__chip { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; border-radius: 999px; padding: 6px 13px; white-space: nowrap; }
+    @media (max-width: 620px) {
+      .pr-mod { grid-template-columns: 40px 1fr; align-items: start; gap: 10px 16px;
+        padding: 18px 20px; }
+      .pr-mod__chip { grid-column: 2; justify-self: start; }
+    }
   </style>
 </helmet>
 
@@ -375,13 +400,13 @@
     </div>
     <div data-reveal style="background: #fff; border: 1px solid #dde3ee; border-radius: 24px; box-shadow: 0 8px 24px rgba(5,41,117,0.10); overflow: hidden;">
       <sc-for list="{{ modules }}" as="m" hint-placeholder-count="4">
-        <div style="display: flex; align-items: center; gap: 16px; padding: 18px 28px; border-bottom: 1px solid #eef1f6;">
-          <span style="width: 40px; height: 40px; border-radius: 10px; background: #def5ff; color: #052975; display: inline-flex; align-items: center; justify-content: center; flex: none;"><i class="{{ m.icon }}" style="font-size: 18px;"></i></span>
-          <div style="display: flex; flex-direction: column; flex: 1; min-width: 0;">
-            <strong style="font-size: 15px; font-weight: 600; color: #0a1838;">{{ m.name }}</strong>
-            <span style="font-size: 13px; color: #6b7894; line-height: 1.45;">{{ m.desc }}</span>
+        <div class="pr-mod">
+          <span class="pr-mod__ico"><i class="{{ m.icon }}" style="font-size: 18px;"></i></span>
+          <div class="pr-mod__txt">
+            <strong>{{ m.name }}</strong>
+            <span>{{ m.desc }}</span>
           </div>
-          <span style="flex: none; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 999px; padding: 6px 13px; background: {{ m.chipBg }}; color: {{ m.chipFg }};">{{ m.chip }}</span>
+          <span class="pr-mod__chip" style="background: {{ m.chipBg }}; color: {{ m.chipFg }};">{{ m.chip }}</span>
         </div>
       </sc-for>
       <p style="font-size: 12.5px; color: #6b7894; margin: 0; padding: 16px 28px; background: #f6f8fb;">Example overview — see the price sheet for {{ tabName }} for the complete module list and rates.</p>

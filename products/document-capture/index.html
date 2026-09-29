@@ -385,13 +385,29 @@
     .dc-hero__grid { grid-template-columns: 1fr; }
     .dc-mock { justify-self: center; }
     .dc-features { grid-template-columns: 1fr 1fr; }
-    .dc-stats__grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
-    .dc-steps { grid-template-columns: 1fr 1fr 1fr; gap: 28px 16px; }
+    /* ⚠️ minmax(0,1fr), not 1fr. `1fr` is minmax(auto,1fr), so a stat whose
+       headline is an unbreakable word grows its own track: on OPplus
+       "Advanced" at 38px is wider than half a phone, and the two columns came
+       out 132px and 198px with the divider visibly off-centre. */
+    .dc-stats__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
+    /* Six half-tracks, each step spanning two of them. The rendered step width
+       is identical to a plain 3-column grid — with a uniform column gap g,
+       2t+g == (W-2g)/3 — but a partial last row can now be nudged by one
+       half-track, (W+g)/6, which is exactly half a step plus half a gap. With
+       five steps a plain 3-col grid left row two hugging the left edge and a
+       step-sized hole on the right; a plain 2-col grid left step 5 alone. */
+    .dc-steps { grid-template-columns: repeat(6, 1fr); gap: 28px 16px; }
+    .dc-steps > * { grid-column: span 2; }
     .dc-steps::before { display: none; }
   }
   @media (max-width: 560px) {
     .dc-features { grid-template-columns: 1fr; }
-    .dc-steps { grid-template-columns: 1fr 1fr; }
+    .dc-steps { grid-template-columns: repeat(4, 1fr); }
+    .dc-steps > :last-child:nth-child(odd) { grid-column: 2 / span 2; }
+  }
+  @media (min-width: 561px) and (max-width: 900px) {
+    .dc-steps > :nth-last-child(2):nth-child(3n+1) { grid-column: 2 / span 2; }
+    .dc-steps > :last-child:nth-child(3n+1) { grid-column: 3 / span 2; }
   }
   @media (prefers-reduced-motion: reduce) {
     .dc-mock, .dc-row { animation: none !important; opacity: 1 !important; }
