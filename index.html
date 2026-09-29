@@ -342,7 +342,123 @@
        and keep winning, and an element that sets `nowrap` must still win.
        Enforced by tools/check_widows.py. */
     h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
-  </style>
+  
+  /* ---------- touch targets ----------
+     44px is the touch guideline (WCAG 2.5.5, Apple HIG). The site already
+     cleared the 24px AA floor everywhere, so this is the step from "passes"
+     to "comfortable with a thumb".
+
+     Nothing here changes what anything LOOKS like. Every target is an
+     out-of-flow ::after overlay, centred on its control and floored at 44x44,
+     so a 19px text link and an 8px carousel dot both get a full target while
+     the page geometry stays byte-identical. Replaced elements are the one
+     exception: an <input> or <select> cannot have a ::after, so those few take
+     a min-height and are listed separately at the bottom.
+
+     Two host groups, and the split is not cosmetic. An absolutely positioned
+     overlay needs a positioned host, so STATIC hosts are given
+     `position: relative`. The eleven controls in the second group already
+     declare their own — the floating dev switches are `fixed; z-index: 60`,
+     the carousel arrows `absolute; z-index: 30` — and writing ours over
+     theirs dropped `.sol-switch` behind `.sol-hero-grid`. They anchor the
+     overlay perfectly well as they are, so we touch neither property.
+
+     ⚠️ Four things that were tried first and are wrong:
+
+     • `padding-block: 14px; margin-block: -14px` on the control. Flow-neutral
+       for a flex or grid child, whose outer box is the margin box — but not
+       for a block-level link in a plain <li>: the first child's negative top
+       margin collapses THROUGH the list, and the article table of contents came
+       out 28px short with everything below it pulled up.
+     • `min-height: 44px` on controls with a visible face. It grows them, which
+       moved ten of ten sampled pages, and it does nothing for the other axis —
+       `.dc-yt__nav` ended up 40 wide and 44 tall, still a fail.
+     • `inset: -14px 0` on the overlay. Vertical only, so the 29px "Blog"
+       breadcrumb and the 8px quote dot on why-continia both still failed.
+     • `position: relative; z-index: 1` on every host — see above.
+
+     ⚠️ Never key any of this to a `scp<n>` class. Those are generated at
+     runtime, in document order (`"scp" + (n++).toString(36)` in support.js), so
+     adding one scoped style earlier on the page renumbers every later one.
+     Where a component had no class of its own, it was given one
+     (`.sol-filter`, `.sol-partnerlink`) or anchored on `data-screen-label`,
+     which is authored.
+
+     ⚠️ Keyed on `pointer: coarse`, not on a width. A 34px target is fine
+     under a mouse and too small under a thumb, and it is the pointing device
+     that decides — a touch laptop at 1440px wants the big targets too. Note
+     that this makes the rule INERT under plain CDP viewport emulation; see
+     tools/cdp.py. Enforced by tools/check_tap.py --all. */
+  @media (pointer: coarse) {
+    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
+        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
+        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
+        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
+        .st-seelink, .co-role__go, .fo-back,
+        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
+        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
+        .cnt-popup a, .cnt-popup button,
+        section[data-screen-label="Testimonials"] button,
+        section[data-screen-label="Partner quote"] button,
+        section[data-screen-label="Price estimator"] button,
+        section[data-screen-label="Price sheets"] button,
+        section[data-screen-label="Price sheets"] a,
+        section[data-screen-label="Module overview"] button,
+        section[data-screen-label="FAQ"] button) {
+      /* Anchor for the overlay, and a stacking context: a later sibling — the
+         "·" between two breadcrumbs — otherwise paints over the target and eats
+         part of it. Measured: 46px of box, 41px actually hittable. */
+      position: relative;
+      z-index: 1;
+    }
+    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
+        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
+        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
+        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
+        .st-seelink, .co-role__go, .fo-back,
+        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
+        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
+        .cnt-popup a, .cnt-popup button,
+        section[data-screen-label="Testimonials"] button,
+        section[data-screen-label="Partner quote"] button,
+        section[data-screen-label="Price estimator"] button,
+        section[data-screen-label="Price sheets"] button,
+        section[data-screen-label="Price sheets"] a,
+        section[data-screen-label="Module overview"] button,
+        section[data-screen-label="FAQ"] button,
+        .dc-switch, .fx-toggle, .imp-toggle, .rl-heroswitch, .sol-switch,
+        .st-toggle, .uc-toggle, .sol-car__nav)::after {
+      content: '';
+      position: absolute;
+      /* Centred and floored, rather than a fixed negative inset: one rule then
+         covers a 240x19 text link and an 8x8 dot, growing each only on the axis
+         that is short. Hit-testing attributes a pseudo-element to its host, so
+         elementFromPoint still returns the control itself. */
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      width: 100%;
+      height: 100%;
+      min-width: 44px;
+      min-height: 44px;
+    }
+    /* Replaced elements. No ::after exists on these, so they are the only
+       things here that actually change size, and both were already close — a
+       43px select and a 42px search field.
+
+       ⚠️ `.cnt-range` is deliberately NOT in this list. The price-estimator
+       slider has a 6px hit area, which is the worst target on the site, but its
+       6px is the TRACK: the background is painted on the input itself rather
+       than on ::-webkit-slider-runnable-track, so a min-height turns the slider
+       into a 44px slab with a small thumb floating in it. Measured clean,
+       looked broken. Fixing it properly means moving that background onto the
+       track pseudo-element in the design-system bundle, across all 28 copies.
+       Left alone until that is decided. */
+    select, input[type="search"], input[type="text"] {
+      min-height: 44px;
+    }
+  }
+</style>
 </helmet>
 
 <!-- ============ HEADER ============ -->
