@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
 <script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
 <script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<link rel="stylesheet" href="../assets/listing.css">
 <style>
   html { scroll-behavior: smooth; }
   /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
@@ -37,40 +38,6 @@
   .st-eyebrow i { font-size: 17px; }
   .st-sec { padding: clamp(40px, 4.4vw, 64px) 0; }
   .st-sec--tint { background: #f4f8fd; }
-
-  /* ---------- category-page hero ---------- */
-  .ct-hero { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--c-light-blue, #def5ff) 0%, #eef9ff 58%, #ffffff 100%);
-    padding: clamp(26px, 3vw, 38px) 0 clamp(38px, 4.4vw, 58px); }
-  .ct-hero::before { content: ""; position: absolute; right: -6%; top: -42%; width: 520px; height: 520px; border-radius: 50%;
-    background: radial-gradient(circle at 36% 36%, rgba(143,248,255,0.5), transparent 64%); pointer-events: none; }
-  .ct-crumb { position: relative; display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: #52678f; margin-bottom: clamp(20px, 2.4vw, 30px); }
-  .ct-crumb a { color: var(--c-tech-blue, #052975); display: inline-flex; align-items: center; gap: 7px; }
-  .ct-crumb a:hover { color: var(--c-performance-purple, #983eae); }
-  .ct-crumb i { font-size: 11px; }
-  .ct-crumb span[aria-current] { color: #52678f; }
-  .ct-hero__grid { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
-  .ct-hero h1 { margin: 14px 0 0; font-size: clamp(34px, 3.8vw, 54px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; color: var(--c-tech-blue, #052975); }
-  .ct-hero h1 .hl { color: var(--c-performance-purple, #983eae); }
-  .ct-hero p { margin: 16px 0 0; max-width: 44rem; font-size: 17.5px; line-height: 1.6; color: #33436a; }
-  .ct-count { flex: none; display: inline-flex; align-items: baseline; gap: 9px; padding: 12px 20px; border-radius: 14px;
-    background: #fff; border: 1px solid #cfe6f5; box-shadow: 0 8px 22px rgba(5,41,117,0.08); }
-  .ct-count b { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue, #052975); font-variant-numeric: tabular-nums; }
-  .ct-count span { font-size: 13.5px; color: #52678f; }
-
-  /* ---------- filter chips ---------- */
-  .ct-filters { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: clamp(22px, 2.4vw, 32px); }
-  .ct-chip { display: inline-flex; align-items: center; gap: 9px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
-    border-radius: 999px; padding: 9px 17px; transition: transform .18s, border-color .18s, background .18s, color .18s; }
-  .ct-chip:hover { transform: translateY(-2px); }
-  .ct-chip b { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; opacity: 0.72; }
-  .ct-empty { padding: 40px 0; text-align: center; font-size: 15.5px; color: #52678f; }
-
-  /* ---------- back-to-hub band ---------- */
-  .ct-back { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 0 0 clamp(34px,4vw,54px); }
-  .ct-back a { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--c-tech-blue, #052975);
-    background: #fff; border: 1.5px solid #cfe6f5; border-radius: 999px; padding: 11px 20px; transition: transform .2s, border-color .2s, box-shadow .2s; }
-  .ct-back a:hover { transform: translateY(-2px); border-color: var(--c-tech-blue, #052975); box-shadow: 0 10px 24px rgba(5,41,117,0.12); }
-  .ct-back a i { font-size: 12px; color: var(--c-performance-purple, #983eae); }
 
   /* ---------- customer stories ---------- */
   /* ⚠️ 15px. House rule, Andreas 2026-09-02: "border radius på billeder skal
@@ -200,58 +167,7 @@
      that this makes the rule INERT under plain CDP viewport emulation; see
      tools/cdp.py. Enforced by tools/check_tap.py --all. */
   @media (pointer: coarse) {
-    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
-        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
-        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
-        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
-        .st-seelink, .co-role__go, .fo-back,
-        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
-        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
-        .cnt-popup a, .cnt-popup button,
-        section[data-screen-label="Testimonials"] button,
-        section[data-screen-label="Partner quote"] button,
-        section[data-screen-label="Price estimator"] button,
-        section[data-screen-label="Price sheets"] button,
-        section[data-screen-label="Price sheets"] a,
-        section[data-screen-label="Module overview"] button,
-        section[data-screen-label="FAQ"] button) {
-      /* Anchor for the overlay, and a stacking context: a later sibling — the
-         "·" between two breadcrumbs — otherwise paints over the target and eats
-         part of it. Measured: 46px of box, 41px actually hittable. */
-      position: relative;
-      z-index: 1;
-    }
-    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
-        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
-        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
-        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
-        .st-seelink, .co-role__go, .fo-back,
-        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
-        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
-        .cnt-popup a, .cnt-popup button,
-        section[data-screen-label="Testimonials"] button,
-        section[data-screen-label="Partner quote"] button,
-        section[data-screen-label="Price estimator"] button,
-        section[data-screen-label="Price sheets"] button,
-        section[data-screen-label="Price sheets"] a,
-        section[data-screen-label="Module overview"] button,
-        section[data-screen-label="FAQ"] button,
-        .dc-switch, .fx-toggle, .imp-toggle, .rl-heroswitch, .sol-switch,
-        .st-toggle, .uc-toggle, .sol-car__nav)::after {
-      content: '';
-      position: absolute;
-      /* Centred and floored, rather than a fixed negative inset: one rule then
-         covers a 240x19 text link and an 8x8 dot, growing each only on the axis
-         that is short. Hit-testing attributes a pseudo-element to its host, so
-         elementFromPoint still returns the control itself. */
-      top: 50%;
-      left: 50%;
-      translate: -50% -50%;
-      width: 100%;
-      height: 100%;
-      min-width: 44px;
-      min-height: 44px;
-    }
+
     /* Replaced elements. No ::after exists on these, so they are the only
        things here that actually change size, and both were already close — a
        43px select and a 42px search field.
