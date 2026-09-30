@@ -212,3 +212,7 @@ a.dc-fo__btn--all:hover i { transform: translateX(4px); }
         min-height: 44px;
       }
 }
+
+/* ---- added by a later lift ---- */
+@keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes dcScan { 0% { top: -46px; opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { top: 100%; opacity: 0; } }

@@ -37,10 +37,6 @@
      Without it the scrim painted over everything and the whole hero went hazy. */
   .dc-hero__grid { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
 
-  @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
-
-  @keyframes dcScan { 0% { top: -46px; opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-
   /* Placed AFTER every .dc-mock__* base rule on purpose. Sitting above them,
      this block lost `.dc-mock__docHead b` on source order — equal specificity,
      later rule wins, media query or not. */

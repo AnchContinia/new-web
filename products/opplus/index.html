@@ -40,10 +40,6 @@
   .dc-hero__proof { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 30px; font-size: 14.5px; color: rgba(255,255,255,0.8); }
   .dc-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
   .dc-hero__proof i { color: var(--c-innovation-blue); font-size: 16px; }
-  
-  @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
-
-  @keyframes dcScan { 0% { top: -46px; opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
 
   /* Placed AFTER every .dc-mock__* base rule on purpose. Sitting above them,
      this block lost `.dc-mock__docHead b` on source order — equal specificity,
