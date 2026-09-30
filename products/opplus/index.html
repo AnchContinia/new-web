@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
 <script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
 <script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<link rel="stylesheet" href="../assets/product.css">
 <style>
   html { scroll-behavior: smooth; }
   /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
@@ -31,152 +32,50 @@
   a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
   a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
   ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
-  .dc-hero { position: relative; overflow: hidden; background: #052975; color: #fff; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px) clamp(80px,9vw,116px); }
+  
   .dc-hero__grid { position: relative; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px,5vw,72px); align-items: center; }
-  .dc-hero h1 { margin: 0; font-size: clamp(38px,4.4vw,62px); font-weight: 700; line-height: 1.04; letter-spacing: -0.025em; }
+  
   .dc-hero h1 .hl { color: var(--c-innovation-blue); }
-  .dc-hero p { margin: 22px 0 0; max-width: 40rem; font-size: 1.1875rem; line-height: 1.6; color: rgba(255,255,255,0.84); }
-  .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+
   .dc-hero__proof { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 30px; font-size: 14.5px; color: rgba(255,255,255,0.8); }
   .dc-hero__proof span { display: inline-flex; align-items: center; gap: 8px; }
   .dc-hero__proof i { color: var(--c-innovation-blue); font-size: 16px; }
-  .dc-mock { position: relative; box-sizing: border-box; justify-self: end; width: min(460px,100%); background: #fff; color: var(--color-text); border-radius: 18px; box-shadow: 0 40px 90px rgba(3,15,48,0.5); padding: 22px 22px 20px; font-variant-numeric: tabular-nums; animation: dcRise .8s cubic-bezier(0.16,1,0.3,1) both; }
+  
   @keyframes dcRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
-  .dc-mock__bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid #eef1f6; }
-  .dc-mock__dot { width: 10px; height: 10px; border-radius: 50%; background: #dde3ee; }
-  .dc-mock__title { margin-left: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8193b9; }
-  /* pipeline pills. Target the class, not `> * > *`: sc-for only inserts a
-     display:contents wrapper sometimes, so position-based selectors are unreliable. */
-  .dc-mock__flow { display: flex; gap: 5px; margin: 16px 0 0; }
-  .dc-mock__step { flex: 1; min-width: 0; text-align: center; font-size: 9.5px; font-weight: 700; letter-spacing: 0.02em; padding: 6px 3px; border-radius: 7px; background: #f4f7fb; color: #9aa8c4; white-space: nowrap; transition: background 320ms ease, color 320ms ease; }
-  .dc-mock__step.is-done { background: #e4f0ec; color: #3f7a6a; }
-  .dc-mock__step.is-on { background: #052975; color: #8ff8ff; }
 
-  .dc-mock__prog { position: relative; height: 3px; margin: 12px 0 4px; border-radius: 999px; background: #eef1f6; overflow: hidden; }
-  .dc-mock__prog i { position: absolute; inset: 0 auto 0 0; display: block; background: linear-gradient(90deg,#052975,#8ff8ff); border-radius: 999px; transition: width 520ms cubic-bezier(0.16,1,0.3,1); }
-
-  /* record preview + sweeping processing line */
-  .dc-mock__doc { position: relative; margin-top: 14px; border: 1px solid #e7ecf5; border-radius: 11px; background: #fbfcfe; padding: 12px 13px; overflow: hidden; }
-  .dc-mock__docHead { display: flex; align-items: center; gap: 9px; font-size: 11.5px; font-weight: 700; color: #052975; }
-  .dc-mock__docHead i { font-size: 13px; }
-  .dc-mock__docHead b { margin-left: auto; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #e4f0ec; color: #3f7a6a; }
-  .dc-mock__lines { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
-  .dc-mock__lines span { display: block; height: 5px; border-radius: 3px; background: #e7ecf5; }
-  .dc-mock__lines span:nth-child(1) { width: 76%; }
-  .dc-mock__lines span:nth-child(2) { width: 92%; }
-  .dc-mock__lines span:nth-child(3) { width: 61%; }
-  .dc-mock__scan { position: absolute; left: 0; right: 0; height: 46px; pointer-events: none;
-    background: linear-gradient(180deg, transparent, rgba(143,248,255,0.5) 48%, rgba(5,41,117,0.5) 52%, transparent);
-    animation: dcScan 1.5s ease-in-out infinite; }
   @keyframes dcScan { 0% { top: -46px; opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-
-  /* fields, filling in as the pipeline advances */
-  .dc-mock__fields { margin-top: 12px; }
-  .dc-mock__field { display: flex; align-items: center; gap: 10px; padding: 8px 2px; border-top: 1px solid #f1f4f9; font-size: 12.5px; }
-  .dc-mock__field .k { flex: none; width: 84px; color: #8193b9; font-weight: 600; }
-  /* value and dashed placeholder share one slot, so the row height never jumps */
-  .dc-mock__field .slot { position: relative; flex: 1; min-width: 0; }
-  .dc-mock__field .slot .ph { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg,#e4eaf4 0 7px,transparent 7px 12px); transition: opacity 320ms ease; }
-  .dc-mock__field .slot .v { display: block; font-weight: 700; color: #0a1838; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateY(4px); transition: opacity 420ms ease, transform 420ms ease; }
-  .dc-mock__field .g { flex: none; width: 15px; text-align: center; font-size: 12px; color: #5f9e8d; opacity: 0; transition: opacity 420ms ease; }
-  .dc-mock__field.is-filled .slot .v { opacity: 1; transform: none; }
-  .dc-mock__field.is-filled .slot .ph { opacity: 0; }
-  .dc-mock__field.is-filled .g { opacity: 1; }
-
-  .dc-mock__foot { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; color: #52678f; min-height: 17px; }
-  .dc-mock__foot i { color: #5f9e8d; font-size: 13px; }
 
   /* Placed AFTER every .dc-mock__* base rule on purpose. Sitting above them,
      this block lost `.dc-mock__docHead b` on source order — equal specificity,
      later rule wins, media query or not. */
-  @media (max-width: 640px) {
-    .dc-mock__flow { flex-wrap: wrap; }
-    .dc-mock__step { flex: 1 1 calc(50% - 5px); font-size: 11px; padding: 7px 4px; }
-    .dc-mock__docHead b { font-size: 11px; }
-  }
-  .dc-sec { max-width: 1240px; margin: 0 auto; padding: clamp(64px,8vw,104px) clamp(20px,4vw,44px); }
-  .dc-head { max-width: 680px; margin: 0 auto 52px; text-align: center; }
-  .dc-head .eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
-  .dc-head h2 { margin: 14px 0 0; font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); }
-  .dc-head p { margin: 16px 0 0; font-size: 1.125rem; line-height: 1.6; color: var(--color-text-muted); }
-  /* ---------- stats ---------- */
-  .dc-stats { background: #ffffff; }
+
   .dc-stats__grid { max-width: 1240px; margin: 0 auto; padding: clamp(44px,5.5vw,66px) clamp(20px,4vw,44px); display: grid; grid-template-columns: repeat(4,1fr); gap: 0; text-align: center; }
-  .dc-stat { padding: 12px 16px; border-left: 1px solid #e5eaf3; }
-  .dc-stat em { display: block; font-style: normal; font-size: 13px; font-weight: 600; color: #6b7894; margin-bottom: 4px; }
-  .dc-stat b { display: block; font-size: clamp(38px,3.4vw,54px); font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); line-height: 1; font-variant-numeric: tabular-nums; }
-  .dc-stat span { display: block; margin-top: 14px; font-size: 15.5px; font-weight: 500; line-height: 1.45; color: #6b7894; }
-  @media (max-width: 900px) {
-    .dc-stat { border-left: 0; padding: 0 8px; }
-    .dc-stat:nth-child(even) { border-left: 1px solid #e5eaf3; }
-  }
-  .dc-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
-  .dc-feat { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; padding: 30px; transition: transform 250ms, box-shadow 250ms, border-color 250ms; }
-  .dc-feat:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); border-color: #cdd9ef; }
-  .dc-feat__icon { width: 54px; height: 54px; border-radius: 14px; background: var(--c-light-blue); color: var(--c-tech-blue); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-  .dc-feat h3 { margin: 20px 0 0; font-size: 20px; font-weight: 700; color: var(--c-tech-blue); letter-spacing: -0.01em; }
-  .dc-feat p { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--color-text-muted); }
-  .dc-how { background: var(--c-tech-blue); color: #fff; }
-  .dc-how .dc-head h2 { color: #fff; }
-  .dc-how .dc-head .eye { color: var(--c-innovation-blue); }
-  .dc-how .dc-head p { color: rgba(255,255,255,0.78); }
-  .dc-steps { position: relative; display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; max-width: 1080px; margin: 0 auto; }
-  .dc-steps::before { content: ""; position: absolute; top: 27px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, rgba(143,248,255,0.15), rgba(143,248,255,0.55), rgba(143,248,255,0.15)); }
-  .dc-step { position: relative; text-align: center; }
-  .dc-step__num { position: relative; width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; background: #041e58; border: 2px solid rgba(143,248,255,0.45); color: var(--c-innovation-blue); display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1; }
-  .dc-step h4 { margin: 18px 0 0; font-size: 16px; font-weight: 700; color: #fff; }
-  .dc-step p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,0.72); }
+
   .dc-inside__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px,5vw,64px); align-items: center; }
   .dc-inside h2 { font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--c-tech-blue); margin: 12px 0 0; }
-  .dc-inside__list { margin: 24px 0 0; display: flex; flex-direction: column; gap: 14px; }
-  .dc-inside__list span { display: flex; align-items: center; gap: 12px; font-size: 16px; color: var(--color-text); }
-  .dc-inside__list i { color: #5f9e8d; font-size: 18px; }
+
   .dc-inside__card { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; box-shadow: 0 24px 56px rgba(5,41,117,0.12); padding: 24px; }
   .dc-inside__app { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; }
   .dc-inside__app.active { background: var(--c-light-blue); color: var(--c-tech-blue); }
   .dc-inside__app.dim { color: var(--c-slate-500); }
   .dc-inside__app i { font-size: 17px; width: 20px; text-align: center; }
-  .dc-cta { position: relative; overflow: hidden; background: linear-gradient(135deg,#041e58 0%,#052975 45%,#1d5aa8 90%,#8ff8ff 165%); color: #fff; text-align: center; }
-  .dc-cta__inner { max-width: 760px; margin: 0 auto; padding: clamp(72px,9vw,120px) clamp(20px,4vw,44px); }
-  .dc-cta h2 { margin: 0; font-size: clamp(34px,3.6vw,52px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; }
-  .dc-cta p { margin: 20px auto 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.82); }
-  .dc-cta__btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
-  /* ---------- feature-overview banner ---------- */
-  .dc-fo { margin-top: 44px; background: #c6ddd6; border-radius: 20px; padding: 34px clamp(22px,3vw,38px) 32px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; }
-  .dc-fo__eye { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #3f6d5f; }
-  .dc-fo h3 { margin: 9px 0 0; font-size: clamp(21px,2vw,27px); font-weight: 700; letter-spacing: -0.015em; color: var(--c-tech-blue); }
-  .dc-fo p { margin: 10px auto 0; font-size: 15.5px; line-height: 1.55; color: #2f4763; max-width: 54ch; }
-  .dc-fo__btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
-  .dc-fo__btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 17px; border-radius: 999px; border: 1px solid rgba(5,41,117,0.20); background: rgba(255,255,255,0.92); font-size: 14px; font-weight: 600; color: var(--c-tech-blue); text-decoration: none; transition: background 180ms, border-color 180ms, transform 180ms; }
-  .dc-fo__btn:hover { background: #fff; border-color: var(--c-tech-blue); transform: translateY(-2px); }
-  .dc-fo__btn span { font-size: 12px; font-weight: 700; color: #6b7f9c; }
+
   /* plain text link, deliberately not a pill */
   /* `a:not(.cnt-btn){text-decoration:none}` earlier in this sheet ties on specificity,
      so this must also be an a.<class> selector to win on source order. */
   a.dc-fo__btn--all { padding: 9px 6px; border: 0; background: none; font-weight: 700; color: var(--c-tech-blue); text-decoration: none; }
-  .dc-fo__btn--all span { color: inherit; }
+  
   a.dc-fo__btn--all { gap: 9px; }
-  a.dc-fo__btn--all i { transition: transform 180ms; }
-  a.dc-fo__btn--all:hover { background: none; border: 0; transform: none; color: #052975; }
-  a.dc-fo__btn--all:hover i { transform: translateX(4px); }
+
   @media (max-width: 900px) {
     .dc-hero__grid, .dc-inside__grid { grid-template-columns: 1fr; }
-    .dc-mock { justify-self: center; }
-    .dc-features { grid-template-columns: 1fr 1fr; }
+
     /* ⚠️ minmax(0,1fr), not 1fr. `1fr` is minmax(auto,1fr), so a stat whose
        headline is an unbreakable word grows its own track: on OPplus
        "Advanced" at 38px is wider than half a phone, and the two columns came
        out 132px and 198px with the divider visibly off-centre. */
     .dc-stats__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
-    /* Six half-tracks, each step spanning two of them. The rendered step width
-       is identical to a plain 3-column grid — with a uniform column gap g,
-       2t+g == (W-2g)/3 — but a partial last row can now be nudged by one
-       half-track, (W+g)/6, which is exactly half a step plus half a gap. With
-       five steps a plain 3-col grid left row two hugging the left edge and a
-       step-sized hole on the right; a plain 2-col grid left step 5 alone. */
-    .dc-steps { grid-template-columns: repeat(6, 1fr); gap: 28px 16px; }
-    .dc-steps > * { grid-column: span 2; }
-    .dc-steps::before { display: none; }
+
   }
   @media (max-width: 560px) {
     /* "Advanced" is one unbreakable word. With the stat columns forced to equal
@@ -187,15 +86,8 @@
        every other breakpoint uses, before the 2-column layout ends at 560px. */
     .dc-stat b { font-size: clamp(22px, 7.2vw, 38px); }
 
-    .dc-features { grid-template-columns: 1fr; }
-    .dc-steps { grid-template-columns: repeat(4, 1fr); }
-    .dc-steps > :last-child:nth-child(odd) { grid-column: 2 / span 2; }
   }
-  @media (min-width: 561px) and (max-width: 900px) {
-    .dc-steps > :nth-last-child(2):nth-child(3n+1) { grid-column: 2 / span 2; }
-    .dc-steps > :last-child:nth-child(3n+1) { grid-column: 3 / span 2; }
-  }
-  @media (prefers-reduced-motion: reduce) { .dc-mock { animation: none !important; opacity: 1 !important; } .dc-mock__scan { display: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .dc-mock { animation: none !important; opacity: 1 !important; }  }
 
     /* CTA band above the footer — one treatment site-wide; the inline
        padding needs !important to lose here. */
@@ -283,58 +175,7 @@
      that this makes the rule INERT under plain CDP viewport emulation; see
      tools/cdp.py. Enforced by tools/check_tap.py --all. */
   @media (pointer: coarse) {
-    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
-        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
-        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
-        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
-        .st-seelink, .co-role__go, .fo-back,
-        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
-        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
-        .cnt-popup a, .cnt-popup button,
-        section[data-screen-label="Testimonials"] button,
-        section[data-screen-label="Partner quote"] button,
-        section[data-screen-label="Price estimator"] button,
-        section[data-screen-label="Price sheets"] button,
-        section[data-screen-label="Price sheets"] a,
-        section[data-screen-label="Module overview"] button,
-        section[data-screen-label="FAQ"] button) {
-      /* Anchor for the overlay, and a stacking context: a later sibling — the
-         "·" between two breadcrumbs — otherwise paints over the target and eats
-         part of it. Measured: 46px of box, 41px actually hittable. */
-      position: relative;
-      z-index: 1;
-    }
-    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
-        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
-        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
-        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
-        .st-seelink, .co-role__go, .fo-back,
-        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
-        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
-        .cnt-popup a, .cnt-popup button,
-        section[data-screen-label="Testimonials"] button,
-        section[data-screen-label="Partner quote"] button,
-        section[data-screen-label="Price estimator"] button,
-        section[data-screen-label="Price sheets"] button,
-        section[data-screen-label="Price sheets"] a,
-        section[data-screen-label="Module overview"] button,
-        section[data-screen-label="FAQ"] button,
-        .dc-switch, .fx-toggle, .imp-toggle, .rl-heroswitch, .sol-switch,
-        .st-toggle, .uc-toggle, .sol-car__nav)::after {
-      content: '';
-      position: absolute;
-      /* Centred and floored, rather than a fixed negative inset: one rule then
-         covers a 240x19 text link and an 8x8 dot, growing each only on the axis
-         that is short. Hit-testing attributes a pseudo-element to its host, so
-         elementFromPoint still returns the control itself. */
-      top: 50%;
-      left: 50%;
-      translate: -50% -50%;
-      width: 100%;
-      height: 100%;
-      min-width: 44px;
-      min-height: 44px;
-    }
+
     /* Replaced elements. No ::after exists on these, so they are the only
        things here that actually change size, and both were already close — a
        43px select and a 42px search field.
