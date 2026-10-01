@@ -555,11 +555,13 @@
             </div>
           </div>
         </x-import>
-        <!-- The navy stroke used to be a separate absolutely-positioned div at
-             border-radius: 16px. `.cnt-popup` clips its content at 14px, so the
-             stroke's arc was rounder than the clip and the white body poked out
-             past it in both bottom corners. It lives on .cnt-popup itself now —
-             see .sol-hero-grid .cnt-popup in the <style> block. -->
+        <!-- There is deliberately NO navy stroke on this mock. It used to be a
+             separate absolutely-positioned div at border-radius: 16px, and
+             `.cnt-popup` clips its content at 14px, so the stroke's arc was
+             rounder than the clip and the white body poked out past it in both
+             bottom corners. Moving it onto .cnt-popup itself did not survive
+             either; the stroke was removed outright. Don't add one back without
+             matching the bundle's 14px exactly. -->
       </div>
     </div>
   </section>
