@@ -299,12 +299,12 @@
   .nfl-mock__dots { display: flex; gap: 7px; flex: none; }
   .nfl-mock__dots i { width: 9px; height: 9px; border-radius: 999px; background: rgba(255,255,255,0.92); display: block; }
 
-  .nfl-mock__body { display: grid; grid-template-columns: 196px 1fr; height: calc(100% - 48px); }
-  .nfl-mock__side { border-right: 1px solid var(--color-border); padding: 16px 12px; background: #fbfcfe; }
-  .nfl-mock__nav { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 8px; font-size: 12.5px; font-weight: 600; color: var(--c-slate-500); }
-  .nfl-mock__nav i { width: 15px; text-align: center; font-size: 12px; }
+  .nfl-mock__body { display: grid; grid-template-columns: 236px 1fr; height: calc(100% - 60px); }
+  .nfl-mock__side { border-right: 1px solid var(--color-border); padding: 22px 14px; background: #fbfcfe; }
+  .nfl-mock__nav { display: flex; align-items: center; gap: 12px; padding: 12px 13px; border-radius: 9px; font-size: 14.5px; font-weight: 600; color: var(--c-slate-500); }
+  .nfl-mock__nav i { width: 18px; text-align: center; font-size: 15px; }
   .nfl-mock__nav.is-on { background: var(--c-light-blue); color: var(--c-tech-blue); }
-  .nfl-mock__main { padding: 20px 22px; min-width: 0; }
+  .nfl-mock__main { padding: 26px 28px; min-width: 0; }
 
   /* ⚠️ Capped, and not for looks. The float sits over the window's top
      right corner; a stages row that ran the full width put the last
@@ -313,10 +313,10 @@
      four cells clear of the card at every width that shows it — which
      is 1200px and up; see the float's own breakpoint below. 520 left
      only 2px of air at exactly 1200, which is not air. */
-  .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 640px; }
+  .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 820px; }
   /* The walk is slow on purpose: 760ms on the colour, the same ease-out the
      coverflow uses, and a lift that settles rather than snaps. */
-  .nfl-stage { padding: 8px 4px; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf;
+  .nfl-stage { padding: 12px 6px; border-radius: 10px; text-align: center; font-size: 13.5px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf;
     transform: translateY(0) scale(1); box-shadow: 0 0 0 rgba(5,41,117,0);
     transition: background 760ms cubic-bezier(0.22, 1, 0.36, 1), color 760ms cubic-bezier(0.22, 1, 0.36, 1),
                 transform 760ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 760ms cubic-bezier(0.22, 1, 0.36, 1); }
@@ -347,7 +347,7 @@
      come free — no extra timer, and they cannot drift out of step. */
   /* Same 500px cap as the stages it sits under — the bar measures that row,
      so a track running on past the last cell measures nothing. */
-  .nfl-mock__prog { height: 3px; margin-top: 12px; max-width: 640px; border-radius: 999px; background: var(--c-slate-100); overflow: hidden; }
+  .nfl-mock__prog { height: 5px; margin-top: 16px; max-width: 820px; border-radius: 999px; background: var(--c-slate-100); overflow: hidden; }
   /* scaleX, not width: a width transition relayouts the bar on every frame.
      The gradient is painted across the full track and then scaled, so it
      compresses exactly as it did when the element itself was 25% wide. */
@@ -358,8 +358,8 @@
   [data-nfl-step="2"] .nfl-mock__prog i { transform: scaleX(0.75); }
   [data-nfl-step="3"] .nfl-mock__prog i { transform: scaleX(1); }
 
-  .nfl-mock__rows { margin-top: 14px; }
-  .nfl-mock__row { display: grid; grid-template-columns: 1fr 104px 116px; gap: 10px; align-items: center; padding: 11px 8px; margin: 0 -8px; border-radius: 8px; border-top: 1px solid var(--c-slate-100); font-size: 13px; transition: background 900ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .nfl-mock__rows { margin-top: 18px; }
+  .nfl-mock__row { display: grid; grid-template-columns: 1fr 132px 140px; gap: 14px; align-items: center; padding: 15px 10px; margin: 0 -10px; border-radius: 9px; border-top: 1px solid var(--c-slate-100); font-size: 15px; transition: background 900ms cubic-bezier(0.22, 1, 0.36, 1); }
   .nfl-mock__row:first-child { border-top: 0; }
   /* The list is newest-first, so the stages run up it: Imported is the last
      row, Posted the first. */
@@ -369,13 +369,13 @@
   [data-nfl-step="3"] .nfl-mock__row:nth-child(1) { background: var(--c-light-blue); }
   .nfl-mock__vendor { font-weight: 600; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .nfl-mock__amt { text-align: right; color: var(--c-slate-700); font-variant-numeric: tabular-nums; }
-  .nfl-chip { justify-self: end; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .nfl-chip { justify-self: end; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; padding: 5px 11px; border-radius: 999px; white-space: nowrap; }
   .nfl-chip--neutral { background: var(--c-slate-100); color: #3a4a6b; }
   .nfl-chip--info { background: var(--c-light-blue); color: var(--c-tech-blue); }
   .nfl-chip--warn { background: var(--c-light-yellow); color: var(--color-warning-fg); }
   .nfl-chip--ok { background: #cfe2dd; color: var(--color-success-fg); }
 
-  .nfl-mock__foot { display: flex; align-items: center; gap: 9px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--c-slate-100); font-size: 12.5px; color: var(--c-slate-500); }
+  .nfl-mock__foot { display: flex; align-items: center; gap: 11px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--c-slate-100); font-size: 14.5px; color: var(--c-slate-500); }
   .nfl-mock__foot i { color: var(--c-performance-purple); }
 
   /* The card that floats over the window's right edge, the way payhawk.com
@@ -678,6 +678,9 @@
     .nfl-mock__long { display: none; }
     .nfl-mock__logo svg { height: 17px; }
     .nfl-mock__main { padding: 16px 16px; }
+    .nfl-mock__row { font-size: 13px; padding: 11px 8px; }
+    .nfl-stage { font-size: 11px; padding: 8px 4px; }
+    .nfl-chip { font-size: 10.5px; padding: 4px 9px; }
     .nfl-hero__stage { min-height: 210px; }
 
     /* ⚠️ Every one of these is bought for the window. The headline takes five
@@ -767,12 +770,13 @@
       </div>
       <div class="nfl-mock__body">
         <aside class="nfl-mock__side">
-          <span class="nfl-mock__nav is-on"><i class="fa-light fa-inbox"></i>Document journal</span>
+          <span class="nfl-mock__nav is-on"><i class="fa-kit fa-document-capture-solution-dc-icon"></i>Document journal</span>
           <span class="nfl-mock__nav"><i class="fa-light fa-file-invoice"></i>Purchase invoices</span>
           <span class="nfl-mock__nav"><i class="fa-light fa-circle-check"></i>Approvals</span>
-          <span class="nfl-mock__nav"><i class="fa-light fa-building-columns"></i>Payments and bank</span>
-          <span class="nfl-mock__nav"><i class="fa-light fa-paper-plane"></i>Document Output</span>
-          <span class="nfl-mock__nav"><i class="fa-light fa-chart-simple"></i>Reports</span>
+          <span class="nfl-mock__nav"><i class="fa-kit fa-expense-management-solution-em-icon"></i>Expenses</span>
+          <span class="nfl-mock__nav"><i class="fa-kit fa-banking-solution-cb-icon"></i>Payments and bank</span>
+          <span class="nfl-mock__nav"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i>Document Output</span>
+          <span class="nfl-mock__nav"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i>Finance reports</span>
         </aside>
         <div class="nfl-mock__main">
           <div class="nfl-mock__stages" data-nfl-stages>
@@ -803,8 +807,18 @@
               <span class="nfl-mock__amt">&euro; 612.75</span>
               <span class="nfl-chip nfl-chip--neutral">Imported</span>
             </div>
+            <div class="nfl-mock__row">
+              <span class="nfl-mock__vendor">Trey Research</span>
+              <span class="nfl-mock__amt">&euro; 2,340.00</span>
+              <span class="nfl-chip nfl-chip--ok">Posted</span>
+            </div>
+            <div class="nfl-mock__row">
+              <span class="nfl-mock__vendor">Wide World Importers</span>
+              <span class="nfl-mock__amt">&euro; 7,105.25</span>
+              <span class="nfl-chip nfl-chip--info">Recognized</span>
+            </div>
           </div>
-          <div class="nfl-mock__foot"><i class="fa-light fa-wand-magic-sparkles"></i>4 of 5 invoices posted without a manual touch</div>
+          <div class="nfl-mock__foot"><i class="fa-light fa-wand-magic-sparkles"></i>6 of 7 invoices posted without a manual touch</div>
         </div>
       </div>
     </div>
