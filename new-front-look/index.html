@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<!-- data-nfl-pillar and data-nfl-step live on <html> because it is the one
+     element outside the dc runtime's render tree; see the script at the
+     bottom. The first pillar opens from the markup, so the page is correct
+     with scripting off and matches the aria-expanded="true" on button 1. -->
+<html data-nfl-pillar="1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New front look — Continia</title>
+<link rel="icon" href="../favicon.svg?v=1" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png?v=1" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png?v=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/colors.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/typography.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/styles.css">
+<script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
+<script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
+<style>
+  /* ======================================================================
+     NEW FRONT LOOK — an alternative front page, kept alongside the real one.
+
+     The layout is Payhawk's front page, section for section, in their order:
+     hero, proof marquee, product grid, trust row, the problem, the three
+     pillars, AI, payments, controls, stories, CTA. The content is Continia's
+     own and the copy is written here, not lifted.
+
+     ⚠️ This page does NOT replace site/index.html. It is reached only from
+     the pill at the bottom right of the front page, and it carries a pill
+     back. Both are marked as prototype switches, same family as the ones on
+     the products page.
+
+     ⚠️ Every number on this page is one the site already states. Where
+     Continia has no figure, the slot says so in plain sight rather than
+     carrying something invented — search this file for "TODO" and you have
+     the full list of what is missing.
+
+     Prefix: .nfl
+     ====================================================================== */
+
+  /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+     overflow-y to auto, which made BODY the scroller: window.scrollY stuck at 0,
+     window never fired `scroll`, and the sticky header unstuck after ~840px.
+     `clip` clips the same way without creating a scroll box. */
+  html { overflow-x: hidden; max-width: 100%; }
+  body { overflow-x: clip; max-width: 100%; }
+  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
+  a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
+  ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
+
+  /* ⚠️ `balance`, never `pretty`. Measured over all 44 pages: desktop 200 → 6
+     widows with balance, 36 with pretty; mobile 266 → 17; tablet 204 → 14. */
+  h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
+
+  /* ---------- shared section furniture ---------------------------------- */
+
+  .nfl-sec { box-sizing: border-box; max-width: 1240px; margin: 0 auto; padding: clamp(64px, 8vw, 112px) clamp(20px, 4vw, 44px); }
+  .nfl-sec *, .nfl-sec *::before, .nfl-sec *::after { box-sizing: border-box; }
+  /* The trust row is a thin band between two tall sections, so it gets
+     about half the vertical padding. This is a class and not an inline
+     style on the one element: an inline style outranks every media
+     query, and the stories grid already lost a whole breakpoint that
+     way (see the comment above it). Nothing narrows this padding today,
+     but the next person to try would have no warning. */
+  .nfl-sec--tight { padding-block: clamp(36px, 4vw, 52px); }
+  .nfl-band { position: relative; overflow: hidden; }
+
+  .nfl-head { max-width: 760px; margin: 0 auto 56px; text-align: center; }
+  .nfl-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
+  .nfl-band--dark .nfl-eyebrow { color: var(--c-innovation-blue); }
+  .nfl-h2 { margin: 14px 0 0; font-size: min(var(--fs-h1), 7vw); font-weight: 700; line-height: 1.12; letter-spacing: -0.02em; color: var(--c-tech-blue); }
+  .nfl-band--dark .nfl-h2 { color: #ffffff; }
+  .nfl-lead { margin: 16px 0 0; font-size: var(--fs-lead); line-height: var(--lh-body); color: var(--color-text-muted); }
+  .nfl-band--dark .nfl-lead { color: rgba(255,255,255,0.76); }
+
+  /* The one accent the page allows itself: a single italic word in a headline.
+     ⚠️ Two of these on one screen and it stops reading as emphasis, so the
+     hero has one and the CTA band has one — nothing in between. */
+  .nfl-em { font-style: italic; color: var(--c-innovation-blue); }
+  .nfl-band--dark .nfl-em { color: var(--c-innovation-blue); }
+
+  /* A number the site actually publishes. Anything that is NOT one of these
+     is a .nfl-todo instead — see the note at the top of this file. */
+  .nfl-fig { font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); font-variant-numeric: tabular-nums; }
+  .nfl-band--dark .nfl-fig { color: var(--c-innovation-blue); }
+
+  /* ⚠️ Deliberately ugly. A missing figure has to be impossible to mistake for
+     a real one in a screenshot, so it is dashed, amber and says what it wants.
+     Delete the rule and the markup together once the numbers arrive. */
+  .nfl-todo { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border: 1.5px dashed var(--color-warning); border-radius: 8px; background: var(--c-light-yellow); color: var(--color-warning-fg); font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; font-style: normal; text-align: left; }
+  .nfl-todo::before { content: "\f071"; font-family: "Font Awesome 7 Pro"; font-weight: 300; font-size: 12px; }
+
+  /* ---------- 1. hero ---------------------------------------------------- */
+
+  /* ⚠️ No eyebrow pill above the h1. Payhawk opens with one ("The AI-native
+     spend platform") and the house rule forbids it: a theme pill over an h1
+     reads as a second, smaller headline and the real one loses the entrance.
+     The same words live under the headline instead, as a caption. */
+  .nfl-hero { position: relative; overflow: hidden; background: linear-gradient(222deg, #0a317f 0%, #052975 42%, #041e58 100%); }
+  .nfl-hero__inner { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: clamp(84px, 9vw, 140px) clamp(20px, 4vw, 44px) clamp(72px, 7vw, 104px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 5vw, 72px); align-items: center; }
+  .nfl-hero__inner > * { min-width: 0; }
+
+  .nfl-hero h1 { margin: 0; font-size: min(clamp(40px, 3.4vw + 1rem, 62px), 10.5vw); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; color: #ffffff; }
+  .nfl-hero__lead { margin: 22px 0 0; max-width: 46ch; font-size: var(--fs-lead); line-height: var(--lh-body); color: rgba(255,255,255,0.80); }
+  .nfl-hero__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .nfl-hero__note { margin: 26px 0 0; font-size: 14px; color: rgba(255,255,255,0.64); }
+  .nfl-hero__note b { color: var(--c-innovation-blue); font-weight: 700; }
+
+  /* The hero mock. ⚠️ 18px, not the house photo radius of 15px — the visible
+     edge is a window's chrome, not a photograph. */
+  .nfl-mock { background: #ffffff; border-radius: 18px; box-shadow: 0 40px 90px rgba(2,12,40,0.42); overflow: hidden; }
+  .nfl-mock__bar { display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--color-border); background: var(--c-slate-50); }
+  .nfl-mock__dots { display: flex; gap: 6px; flex: none; }
+  .nfl-mock__dots i { width: 9px; height: 9px; border-radius: 999px; background: #c8d3e6; display: block; }
+  .nfl-mock__title { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7b8bab; }
+  .nfl-mock__body { padding: 20px 20px 22px; }
+
+  .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .nfl-stage { padding: 7px 4px; border-radius: 8px; text-align: center; font-size: 10.5px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf; transition: background 300ms ease, color 300ms ease; }
+
+  /* ⚠️ The walking stage is painted from ONE attribute on <html>, not by the
+     script writing classes onto these four cells, and that is the whole
+     reason it works. The dc runtime renders this page client-side and swaps
+     the subtree out once, early: a first version set `is-on` on the cell it
+     found, the runtime then replaced that cell with a fresh one carrying the
+     markup's original class, and the mock sat on frame one for the life of
+     the page with nothing in the console. <html> is outside the render tree,
+     so what is written there survives. House rule, learned again.
+
+     Reading order matters: `is-done` first, the current step after, so the
+     cell that is both only takes the later rule. */
+  [data-nfl-step="1"] .nfl-stage:nth-child(-n+1),
+  [data-nfl-step="2"] .nfl-stage:nth-child(-n+2),
+  [data-nfl-step="3"] .nfl-stage:nth-child(-n+3) { background: #e4f0ec; color: #2f6455; }
+
+  [data-nfl-step="0"] .nfl-stage:nth-child(1),
+  [data-nfl-step="1"] .nfl-stage:nth-child(2),
+  [data-nfl-step="2"] .nfl-stage:nth-child(3),
+  [data-nfl-step="3"] .nfl-stage:nth-child(4) { background: var(--c-tech-blue); color: var(--c-innovation-blue); }
+
+  .nfl-mock__rows { margin-top: 16px; }
+  .nfl-mock__row { display: grid; grid-template-columns: 1fr 96px 108px; gap: 10px; align-items: center; padding: 11px 2px; border-top: 1px solid var(--c-slate-100); font-size: 13px; }
+  .nfl-mock__row:first-child { border-top: 0; }
+  .nfl-mock__vendor { font-weight: 600; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nfl-mock__amt { text-align: right; color: var(--c-slate-700); font-variant-numeric: tabular-nums; }
+  .nfl-chip { justify-self: end; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .nfl-chip--neutral { background: var(--c-slate-100); color: #3a4a6b; }
+  .nfl-chip--info { background: var(--c-light-blue); color: var(--c-tech-blue); }
+  .nfl-chip--warn { background: var(--c-light-yellow); color: var(--color-warning-fg); }
+  .nfl-chip--ok { background: #cfe2dd; color: var(--color-success-fg); }
+
+  .nfl-mock__foot { display: flex; align-items: center; gap: 9px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--c-slate-100); font-size: 12.5px; color: var(--c-slate-500); }
+  .nfl-mock__foot i { color: var(--c-performance-purple); }
+
+  /* ---------- 2. proof marquee ------------------------------------------ */
+
+  .nfl-proof { background: var(--c-slate-50); border-block: 1px solid var(--color-border); padding: 30px 0; }
+  .nfl-proof__rail { display: flex; width: max-content; gap: 14px; animation: nfl-marquee 54s linear infinite; }
+  .nfl-proof__rail:hover { animation-play-state: paused; }
+  @keyframes nfl-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ⚠️ The rail holds the same cards twice and travels exactly -50%, so the
+     seam lands where the first copy ended and the loop is invisible. Add a
+     card to one copy and you must add it to the other, or the belt jumps. */
+  .nfl-proof__card { flex: none; width: 310px; padding: 18px 22px; border-radius: 15px; background: #ffffff; border: 1px solid var(--color-border); }
+  .nfl-proof__who { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-slate-500); }
+  .nfl-proof__what { margin: 9px 0 0; font-size: 15.5px; font-weight: 600; line-height: 1.45; color: var(--c-ink); }
+  .nfl-proof__what .nfl-fig { font-size: 19px; }
+
+  /* ---------- 3. what Continia does ------------------------------------- */
+
+  .nfl-grid5 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .nfl-card { display: flex; flex-direction: column; background: var(--color-surface-card); border: 1px solid var(--color-border); border-radius: 18px; padding: 30px; transition: transform 250ms, box-shadow 250ms, border-color 250ms; }
+  .nfl-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); border-color: #cdd9ef; }
+  .nfl-card__icon { width: 54px; height: 54px; border-radius: 15px; background: var(--c-light-blue); color: var(--c-tech-blue); display: flex; align-items: center; justify-content: center; font-size: 24px; flex: none; }
+  .nfl-card__title { margin: 20px 0 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-tech-blue); }
+  .nfl-card__text { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--color-text-muted); }
+  .nfl-more { margin-top: 20px; display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: var(--c-tech-blue); }
+  .nfl-more i { font-size: 13px; transition: transform 180ms; }
+  .nfl-more:hover i { transform: translateX(4px); }
+
+  /* ---------- 4. trust row ----------------------------------------------- */
+
+  .nfl-trust { border-top: 1px solid var(--color-border); }
+  .nfl-trust__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .nfl-trust__cell { padding: 10px 26px; border-left: 1px solid var(--color-border); }
+  .nfl-trust__cell:first-child { border-left: 0; padding-left: 0; }
+  .nfl-trust__k { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-slate-500); }
+  .nfl-trust__v { margin-top: 8px; font-size: 16px; font-weight: 700; line-height: 1.4; color: var(--c-tech-blue); }
+  .nfl-trust__s { margin-top: 5px; font-size: 13.5px; line-height: 1.5; color: var(--color-text-muted); }
+
+  /* ---------- 5. the old way --------------------------------------------- */
+
+  .nfl-old { background: var(--c-slate-50); }
+  .nfl-old__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .nfl-old__grid > * { min-width: 0; }
+  .nfl-old h2 { margin: 0; font-size: min(var(--fs-h1), 7.4vw); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: var(--c-tech-blue); }
+  .nfl-old__line { margin: 22px 0 0; font-size: 20px; font-weight: 700; color: var(--c-performance-purple); }
+
+  /* The fragmented stack, drawn rather than photographed: six tiles that do
+     not line up, with the gaps left visible. Nothing here animates — it is a
+     diagram, and a moving diagram is read as a loading state. */
+  .nfl-frag { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .nfl-frag__t { grid-column: span 2; background: #ffffff; border: 1px solid var(--color-border); border-radius: 14px; padding: 18px 16px; }
+  .nfl-frag__t:nth-child(1) { margin-top: 26px; }
+  .nfl-frag__t:nth-child(3) { margin-top: 34px; }
+  .nfl-frag__t:nth-child(4) { margin-top: -10px; }
+  .nfl-frag__t:nth-child(6) { margin-top: 18px; }
+  .nfl-frag__t i { font-size: 18px; color: var(--c-slate-300); }
+  .nfl-frag__t b { display: block; margin-top: 10px; font-size: 13.5px; font-weight: 700; color: var(--c-slate-700); }
+  .nfl-frag__t span { display: block; margin-top: 4px; font-size: 12px; line-height: 1.45; color: var(--c-slate-500); }
+
+  /* ---------- 6. the three pillars --------------------------------------- */
+
+  .nfl-pillars { background: var(--c-tech-blue); }
+  .nfl-acc { max-width: 860px; margin: 0 auto; }
+  .nfl-acc__item { border-top: 1px solid rgba(255,255,255,0.20); }
+  .nfl-acc__item:last-child { border-bottom: 1px solid rgba(255,255,255,0.20); }
+
+  /* ⚠️ One DOM in both states. The panel is always in the markup and always
+     readable by a screen reader's search; `hidden` is what closes it, so an
+     open and a closed pillar are the same nodes and nothing is rebuilt on a
+     click. Swapping markup here would also lose the button's focus. */
+  .nfl-acc__btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px 2px; background: none; border: 0; cursor: pointer; font-family: inherit; text-align: left; color: #ffffff; }
+  .nfl-acc__btn b { font-size: clamp(19px, 1.5vw, 24px); font-weight: 700; letter-spacing: -0.01em; }
+  .nfl-acc__sign { flex: none; width: 34px; height: 34px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.45); color: var(--c-innovation-blue); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; transition: background 200ms, border-color 200ms; }
+  .nfl-acc__btn:hover .nfl-acc__sign { background: rgba(255,255,255,0.12); border-color: #ffffff; }
+  .nfl-acc__panel { padding: 0 60px 28px 2px; font-size: 16.5px; line-height: var(--lh-body); color: rgba(255,255,255,0.76); }
+  .nfl-acc__panel p { margin: 0; }
+
+  /* ⚠️ What opens a panel is this rule, and the open one is named by ONE
+     attribute on <html>. Two traps are behind that.
+
+     First, a `hidden` attribute does not survive: the dc runtime parses the
+     markup and drops VALUELESS boolean attributes, so `hidden` never reached
+     the DOM, all three panels rendered open, and nothing errored — the same
+     family as the `style` attribute that never reaches an <x-import>.
+
+     Second, state written onto nodes INSIDE the render tree is not safe
+     either: the runtime swaps the subtree once, early, and restores the
+     markup's own attributes with it. <html> is outside that tree.
+
+     The default is closed, so the page is correct on first paint even if the
+     script never runs, and the first pillar is opened by the attribute the
+     markup already carries. */
+  .nfl-acc__panel { display: none; }
+  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__panel,
+  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__panel,
+  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__panel { display: block; }
+
+  /* Both signs ship in the markup and CSS picks one — the house rule that a
+     control must be the same DOM in both its states. Swapping the icon's
+     class from script would be wiped by the same render pass. */
+  .nfl-acc__minus { display: none; }
+  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__plus,
+  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__plus,
+  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__plus { display: none; }
+  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__minus,
+  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__minus,
+  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__minus { display: inline-block; }
+
+  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__sign,
+  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__sign,
+  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__sign { background: var(--c-innovation-blue); border-color: var(--c-innovation-blue); color: var(--c-tech-blue); }
+  .nfl-acc__btn:focus-visible, .nfl-more:focus-visible, .nfl-switch:focus-visible { outline: 3px solid var(--c-innovation-blue); outline-offset: 3px; }
+
+  /* ⚠️ Written as `a.nfl-more`, not `.nfl-more`. The host's reset carries
+     `a:not(.cnt-btn) { color: … }`, which is one class plus one pseudo-class
+     and ties this on specificity; an element-qualified selector wins the tie
+     and loses nothing where the reset is absent. */
+  .nfl-band--dark a.nfl-more, .nfl-band--dark .nfl-more { color: var(--c-innovation-blue); }
+  .nfl-band--dark a.nfl-more:hover { color: #ffffff; }
+  .nfl-cta .nfl-eyebrow { color: var(--c-innovation-blue); }
+
+  /* ---------- 7. AI, 8. payments — the shared two-column feature band ----- */
+
+  .nfl-feat { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+  .nfl-feat > * { min-width: 0; }
+  .nfl-feat__list { display: grid; gap: 26px; }
+  .nfl-feat__item { padding-left: 20px; border-left: 2px solid var(--c-light-blue); }
+  .nfl-band--dark .nfl-feat__item { border-left-color: rgba(143,248,255,0.40); }
+  .nfl-feat__item b { display: block; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-tech-blue); }
+  .nfl-band--dark .nfl-feat__item b { color: #ffffff; }
+  .nfl-feat__item p { margin: 8px 0 0; font-size: 15.5px; line-height: 1.6; color: var(--color-text-muted); }
+  .nfl-band--dark .nfl-feat__item p { color: rgba(255,255,255,0.74); }
+
+  .nfl-numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
+  .nfl-numbers > div { padding: 18px 16px; border-radius: 15px; background: var(--c-slate-50); }
+  .nfl-band--dark .nfl-numbers > div { background: rgba(255,255,255,0.07); }
+  .nfl-numbers .nfl-fig { display: block; font-size: clamp(28px, 2.4vw, 38px); line-height: 1; }
+
+  /* ⚠️ A class, not `.nfl-numbers span`. The bare element selector weighed
+     0,2,1 and swallowed both of its own siblings: the figure (0,2,0) lost its
+     cyan on the dark bands and came out white, and .nfl-todo (0,1,0) lost its
+     amber and printed white-on-yellow, which is unreadable. A caption is a
+     caption — give it a name and the collision cannot come back. */
+  .nfl-numbers__cap { display: block; margin-top: 9px; font-size: 13px; line-height: 1.45; color: var(--color-text-muted); }
+  .nfl-band--dark .nfl-numbers__cap { color: rgba(255,255,255,0.70); }
+
+  .nfl-pay { background: var(--color-bg-brand-deep); }
+
+  /* ---------- 9. controls ------------------------------------------------ */
+
+  .nfl-grid4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+
+  /* ---------- 10. stories ------------------------------------------------ */
+
+  .nfl-stories { background: var(--c-slate-50); }
+  .nfl-story { display: flex; flex-direction: column; background: #ffffff; border: 1px solid var(--color-border); border-radius: 18px; overflow: hidden; transition: transform 250ms, box-shadow 250ms; }
+  .nfl-story:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); }
+
+  /* ⚠️ 15px on the picture, 18px on the card around it — the house radius for
+     a frame whose visible edge IS the picture. The image is cropped by the
+     card's own overflow, so the corners it shows are the card's; the inner
+     radius exists for the moment the photo has not arrived. */
+  /* ⚠️ `height: auto` is load-bearing, not tidiness. The <img> carries
+     width/height attributes so the box is reserved before the file arrives,
+     and the UA stylesheet maps those to real `width`/`height` declarations.
+     `width: 100%` overrode the first; nothing overrode the second, so every
+     card rendered its photo at the file's own 3000px and the section came out
+     ~4000px tall. `aspect-ratio` does NOT win against an explicit height. */
+  .nfl-story__shot { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 15px 15px 0 0; background: var(--c-slate-100); }
+  .nfl-story__body { padding: 24px 26px 28px; display: flex; flex-direction: column; flex: 1; }
+  .nfl-story__tag { font-size: 11.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-performance-purple); }
+  .nfl-story__title { margin: 11px 0 0; font-size: 19px; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; color: var(--c-tech-blue); }
+  .nfl-story__body .nfl-more { margin-top: auto; padding-top: 20px; }
+
+  .nfl-stories__foot { margin-top: 44px; text-align: center; }
+
+  /* ---------- 11. CTA band ----------------------------------------------- */
+
+  /* The same treatment as every other page's CTA, repeated here because this
+     page is not inside the selector those pages share. */
+  .nfl-cta { position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%); }
+  .nfl-cta__mark { position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; min-width: 120%; object-fit: cover; opacity: 0.08; pointer-events: none; }
+  .nfl-cta__inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: clamp(78px, 8vw, 110px) 32px; text-align: center; }
+  .nfl-cta__title { margin: 0; font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; color: #ffffff; }
+  .nfl-cta__lead { margin: 18px auto 0; max-width: 56ch; font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); }
+  .nfl-cta__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+
+  /* ⚠️ Sized by HEIGHT below 1100px. The band turns portrait on a phone and
+     `width: 120%` then leaves the top and bottom bare; `min-width` plus
+     `object-fit: cover` keeps it covering the band's width at the same time.
+     1100px is the site's one tablet/desktop line — the header shares it. */
+  @media (max-width: 1100px) {
+    .nfl-cta__mark { width: auto; height: 115%; min-width: 120%; bottom: -18%; }
+  }
+
+  /* ---------- the two prototype pills ------------------------------------ */
+
+  /* Bottom RIGHT, because the front page's own switches sit bottom left and
+     the two must never overlap on a phone. */
+  .nfl-switch { position: fixed; right: 20px; bottom: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid var(--color-border); box-shadow: 0 8px 24px rgba(5,41,117,0.16); font-family: inherit; font-size: 13px; font-weight: 600; color: var(--c-tech-blue); cursor: pointer; transition: transform 200ms, border-color 200ms; }
+  .nfl-switch:hover { transform: translateY(-2px); border-color: var(--c-tech-blue); }
+  .nfl-switch i { font-size: 13px; }
+
+  /* ---------- touch ------------------------------------------------------ */
+
+  /* ⚠️ An ::after overlay, never `min-height`. Growing the pill moves the
+     thing beside it; a pseudo-element changes nothing in the flow and
+     hit-testing still attributes the tap to its host. House pattern for
+     every control under 44px. */
+  @media (pointer: coarse) {
+    .nfl-switch, .nfl-acc__sign { position: relative; }
+    .nfl-switch::after, .nfl-acc__sign::after { content: ""; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; transform: translate(-50%, -50%); }
+  }
+
+  /* ---------- narrower ---------------------------------------------------- */
+
+  @media (max-width: 1100px) {
+    .nfl-grid5 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 980px) {
+    .nfl-hero__inner { grid-template-columns: 1fr; }
+    .nfl-feat, .nfl-old__grid { grid-template-columns: 1fr; }
+    .nfl-trust__grid { grid-template-columns: repeat(2, 1fr); gap: 26px 0; }
+    .nfl-trust__cell:nth-child(odd) { border-left: 0; padding-left: 0; }
+  }
+
+  @media (max-width: 760px) {
+    .nfl-grid5, .nfl-grid4 { grid-template-columns: 1fr; }
+    .nfl-acc__panel { padding-right: 2px; }
+    .nfl-numbers { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    /* Four stage labels across 350px gave each 74px and "For approval"
+       wrapped onto its own line; two per row, and the amount column goes —
+       vendor and status are what the mock is actually saying. */
+    .nfl-mock__stages { grid-template-columns: 1fr 1fr; }
+    .nfl-mock__row { grid-template-columns: 1fr 108px; }
+    .nfl-mock__amt { display: none; }
+    .nfl-trust__grid { grid-template-columns: 1fr; }
+    .nfl-trust__cell { border-left: 0; padding-left: 0; }
+    .nfl-frag { grid-template-columns: repeat(4, 1fr); }
+    .nfl-frag__t { margin-top: 0 !important; }
+    .nfl-proof__card { width: 268px; }
+    /* ⚠️ The full label makes the pill 340px wide at 390 — it covered most of
+       the column and sat permanently over the body text. Two words come out
+       on the narrow end. The whole label stays in the DOM and CSS hides the
+       middle of it, so the link reads the same to a screen reader in both
+       states, and nothing reflows when the width changes. */
+    .nfl-switch { right: 14px; bottom: 14px; }
+    .nfl-switch__long { display: none; }
+  }
+
+  /* ---------- reduced motion --------------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .nfl-proof__rail { animation: none; }
+    .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign { transition: none; }
+    .nfl-card:hover, .nfl-story:hover, .nfl-switch:hover { transform: none; }
+    .nfl-more:hover i { transform: none; }
+  }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" hint-size="100%,66px"></x-import>
+
+<!-- ============ 1. HERO ============ -->
+<section class="nfl-hero" data-screen-label="Hero">
+  <div class="nfl-hero__inner">
+    <div>
+      <h1>Give your finance team back the hours it <span class="nfl-em">never</span> should have spent.</h1>
+      <p class="nfl-hero__lead">Invoices, expenses, payments and e&#8209;documents — captured, coded, approved and posted automatically. All of it 100% inside the Business Central your team already knows.</p>
+      <div class="nfl-hero__actions">
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="190px,52px">Get a free trial</x-import>
+        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../company/find-a-partner/" hint-size="180px,52px">Talk to a partner</x-import>
+      </div>
+      <p class="nfl-hero__note"><b>21,000+</b> companies automate their finance work with Continia.</p>
+    </div>
+
+    <!-- The mock is decoration: every word in it is repeated in the copy
+         beside it, so a screen reader that skips it loses nothing. -->
+    <div class="nfl-mock" aria-hidden="true">
+      <div class="nfl-mock__bar">
+        <span class="nfl-mock__dots"><i></i><i></i><i></i></span>
+        <span class="nfl-mock__title">Accounts Payable &middot; Business Central</span>
+      </div>
+      <div class="nfl-mock__body">
+        <div class="nfl-mock__stages" data-nfl-stages>
+          <span class="nfl-stage">Imported</span>
+          <span class="nfl-stage">Recognized</span>
+          <span class="nfl-stage">Approved</span>
+          <span class="nfl-stage">Posted</span>
+        </div>
+        <div class="nfl-mock__rows">
+          <div class="nfl-mock__row">
+            <span class="nfl-mock__vendor">Northwind Traders</span>
+            <span class="nfl-mock__amt">&euro; 4,820.00</span>
+            <span class="nfl-chip nfl-chip--ok">Posted</span>
+          </div>
+          <div class="nfl-mock__row">
+            <span class="nfl-mock__vendor">Adatum Corporation</span>
+            <span class="nfl-mock__amt">&euro; 1,145.50</span>
+            <span class="nfl-chip nfl-chip--warn">For approval</span>
+          </div>
+          <div class="nfl-mock__row">
+            <span class="nfl-mock__vendor">Contoso Supplies</span>
+            <span class="nfl-mock__amt">&euro; 9,390.00</span>
+            <span class="nfl-chip nfl-chip--info">Recognized</span>
+          </div>
+          <div class="nfl-mock__row">
+            <span class="nfl-mock__vendor">Fabrikam Logistics</span>
+            <span class="nfl-mock__amt">&euro; 612.75</span>
+            <span class="nfl-chip nfl-chip--neutral">Imported</span>
+          </div>
+        </div>
+        <div class="nfl-mock__foot"><i class="fa-light fa-wand-magic-sparkles"></i>4 of 5 invoices posted without a manual touch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. PROOF MARQUEE ============ -->
+<!-- ⚠️ Both halves of the rail hold the SAME eight cards, in the same order.
+     The animation travels -50%, so the seam is invisible only while that
+     holds. Edit one half and you must edit the other. -->
+<section class="nfl-proof" data-screen-label="Proof" aria-label="Results customers report">
+  <div class="nfl-proof__rail">
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Calypso Group</div><p class="nfl-proof__what">Hasn't chased a missing invoice in over a year</p></div>
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Nordwind Logistics</div><p class="nfl-proof__what">Cut manual data entry by <span class="nfl-fig">90%</span></p></div>
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Fjord &amp; Co.</div><p class="nfl-proof__what">Closes <span class="nfl-fig">two days</span> earlier</p></div>
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">21,000+</span> customers</p></div>
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">1,500+</span> local partners</p></div>
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what">Delivered in <span class="nfl-fig">45+</span> countries</p></div>
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">30+</span> years of finance automation</p></div>
+    <div class="nfl-proof__card"><div class="nfl-proof__who">Named customers</div><p class="nfl-proof__what"><span class="nfl-todo">TODO: no published result figures for Bestseller, BMW, Dunlop, Marley &amp; Martha, Moccamaster or Sagrada Fam&iacute;lia</span></p></div>
+
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Calypso Group</div><p class="nfl-proof__what">Hasn't chased a missing invoice in over a year</p></div>
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Nordwind Logistics</div><p class="nfl-proof__what">Cut manual data entry by <span class="nfl-fig">90%</span></p></div>
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Fjord &amp; Co.</div><p class="nfl-proof__what">Closes <span class="nfl-fig">two days</span> earlier</p></div>
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">21,000+</span> customers</p></div>
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">1,500+</span> local partners</p></div>
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what">Delivered in <span class="nfl-fig">45+</span> countries</p></div>
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">30+</span> years of finance automation</p></div>
+    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Named customers</div><p class="nfl-proof__what"><span class="nfl-todo">TODO: no published result figures for Bestseller, BMW, Dunlop, Marley &amp; Martha, Moccamaster or Sagrada Fam&iacute;lia</span></p></div>
+  </div>
+</section>
+
+<!-- ============ 3. WHAT CONTINIA DOES ============ -->
+<section class="nfl-band" data-screen-label="Solutions">
+  <div class="nfl-sec">
+    <div class="nfl-head">
+      <span class="nfl-eyebrow">What Continia does</span>
+      <h2 class="nfl-h2">One platform. Every part of the finance day.</h2>
+      <p class="nfl-lead">Five scalable add&#8209;on solutions, built inside Business Central — so there is nothing extra to host, integrate or learn.</p>
+    </div>
+    <div class="nfl-grid5">
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></span>
+        <h3 class="nfl-card__title">Document Capture</h3>
+        <p class="nfl-card__text">Invoices imported, recognized, approved and posted automatically — your whole Accounts Payable, without leaving Business Central.</p>
+        <a class="nfl-more" href="../products/document-capture/">Learn more<i class="fa-light fa-arrow-right"></i></a>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></span>
+        <h3 class="nfl-card__title">Expense Management</h3>
+        <p class="nfl-card__text">Snap the receipt and it is done: coding, approval and reimbursement happen on their own, on web and on mobile.</p>
+        <a class="nfl-more" href="../products/expense-management/">Learn more<i class="fa-light fa-arrow-right"></i></a>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></span>
+        <h3 class="nfl-card__title">Continia Banking</h3>
+        <p class="nfl-card__text">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
+        <a class="nfl-more" href="../products/continia-banking/">Learn more<i class="fa-light fa-arrow-right"></i></a>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></span>
+        <h3 class="nfl-card__title">Continia Finance</h3>
+        <p class="nfl-card__text">Smart modules that take the weight off core accounting: general ledger, fixed assets, open entries and treasury.</p>
+        <a class="nfl-more" href="../products/continia-finance/">Learn more<i class="fa-light fa-arrow-right"></i></a>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></span>
+        <h3 class="nfl-card__title">Document Output</h3>
+        <p class="nfl-card__text">Invoices, reminders and e&#8209;documents sent in the right format every time — email, PEPPOL or print.</p>
+        <a class="nfl-more" href="../products/document-output/">Learn more<i class="fa-light fa-arrow-right"></i></a>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-light fa-grid-2"></i></span>
+        <h3 class="nfl-card__title">See them together</h3>
+        <p class="nfl-card__text">The five solutions share one interface, one data model and one setup. The products page shows how they overlap.</p>
+        <a class="nfl-more" href="../products/">All solutions<i class="fa-light fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. TRUST ROW ============ -->
+<section class="nfl-trust" data-screen-label="Trust">
+  <div class="nfl-sec nfl-sec--tight">
+    <div class="nfl-trust__grid">
+      <div class="nfl-trust__cell">
+        <div class="nfl-trust__k">Built inside</div>
+        <div class="nfl-trust__v">100% inside Business Central</div>
+        <div class="nfl-trust__s">No separate portal, no extra host, no integration to maintain.</div>
+      </div>
+      <div class="nfl-trust__cell">
+        <div class="nfl-trust__k">Available on</div>
+        <div class="nfl-trust__v">Microsoft AppSource</div>
+        <div class="nfl-trust__s">Install a free trial straight from the marketplace.</div>
+      </div>
+      <div class="nfl-trust__cell">
+        <div class="nfl-trust__k">Delivered by</div>
+        <div class="nfl-trust__v"><span class="nfl-fig">1,500+</span> local partners</div>
+        <div class="nfl-trust__s">Business Central specialists in <span class="nfl-fig">45+</span> countries.</div>
+      </div>
+      <div class="nfl-trust__cell">
+        <div class="nfl-trust__k">Connected</div>
+        <div class="nfl-trust__v">Microsoft&#8209;approved Connectivity App</div>
+        <div class="nfl-trust__s">One of the first, linking Business Central straight to the bank.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. THE OLD WAY ============ -->
+<section class="nfl-old" data-screen-label="The old way">
+  <div class="nfl-sec">
+    <div class="nfl-old__grid">
+      <div>
+        <h2>Invoices in a shared inbox. Numbers keyed twice. Spreadsheets filling the gaps.</h2>
+        <p class="nfl-old__line">It doesn't have to work this way.</p>
+        <p class="nfl-lead">Most finance stacks grew one tool at a time, and every seam between them became somebody's manual job. Continia closes the seams instead of adding another tool across them.</p>
+      </div>
+      <div class="nfl-frag" aria-hidden="true">
+        <div class="nfl-frag__t"><i class="fa-light fa-inbox"></i><b>Shared inbox</b><span>PDFs arrive, somebody sorts them</span></div>
+        <div class="nfl-frag__t"><i class="fa-light fa-keyboard"></i><b>Manual keying</b><span>The same numbers, a second time</span></div>
+        <div class="nfl-frag__t"><i class="fa-light fa-table"></i><b>Spreadsheets</b><span>Tracking what the system doesn't</span></div>
+        <div class="nfl-frag__t"><i class="fa-light fa-envelope"></i><b>Approvals by email</b><span>Chased, forwarded, lost</span></div>
+        <div class="nfl-frag__t"><i class="fa-light fa-building-columns"></i><b>Bank portal</b><span>A second login, a second file</span></div>
+        <div class="nfl-frag__t"><i class="fa-light fa-magnifying-glass"></i><b>Month&#8209;end hunt</b><span>Where did this one go?</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. THE THREE PILLARS ============ -->
+<section class="nfl-pillars nfl-band nfl-band--dark" data-screen-label="Platform">
+  <div class="nfl-sec">
+    <div class="nfl-head">
+      <span class="nfl-eyebrow">The Continia platform</span>
+      <h2 class="nfl-h2">One platform. Finance that gets its time back.</h2>
+      <p class="nfl-lead">Three things carry the whole thing. Open one to see what it means in practice.</p>
+    </div>
+    <div class="nfl-acc" data-nfl-acc>
+      <div class="nfl-acc__item">
+        <button class="nfl-acc__btn" type="button" aria-expanded="true" aria-controls="nfl-p1">
+          <b>Built inside Business Central</b>
+          <span class="nfl-acc__sign" aria-hidden="true"><i class="fa-light fa-plus nfl-acc__plus"></i><i class="fa-light fa-minus nfl-acc__minus"></i></span>
+        </button>
+        <div class="nfl-acc__panel" id="nfl-p1">
+          <p>Continia is not a portal your team logs into. It is pages, actions and fields inside the Business Central they already use, reading the same vendors, dimensions and approval hierarchy. There is nothing to host, nothing to integrate and nothing new to learn — which is why implementation is measured in days rather than months.</p>
+        </div>
+      </div>
+      <div class="nfl-acc__item">
+        <button class="nfl-acc__btn" type="button" aria-expanded="false" aria-controls="nfl-p2">
+          <b>Recognition that does the typing</b>
+          <span class="nfl-acc__sign" aria-hidden="true"><i class="fa-light fa-plus nfl-acc__plus"></i><i class="fa-light fa-minus nfl-acc__minus"></i></span>
+        </button>
+        <div class="nfl-acc__panel" id="nfl-p2">
+          <p>Document Capture reads the invoice — vendor, number, amount, lines, order match — and fills the document out. Your team is left with the part that needs a person: the decision. Customers report up to <span class="nfl-fig">90%</span> less manual data entry once it is running.</p>
+        </div>
+      </div>
+      <div class="nfl-acc__item">
+        <button class="nfl-acc__btn" type="button" aria-expanded="false" aria-controls="nfl-p3">
+          <b>Your partner, your setup</b>
+          <span class="nfl-acc__sign" aria-hidden="true"><i class="fa-light fa-plus nfl-acc__plus"></i><i class="fa-light fa-minus nfl-acc__minus"></i></span>
+        </button>
+        <div class="nfl-acc__panel" id="nfl-p3">
+          <p>Continia is delivered by <span class="nfl-fig">1,500+</span> local Business Central specialists in <span class="nfl-fig">45+</span> countries — the same partner who knows your chart of accounts, your approval rules and your auditors. You get software from one company and a setup from someone down the road.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. RECOGNITION ============ -->
+<section class="nfl-band" data-screen-label="Recognition">
+  <div class="nfl-sec">
+    <div class="nfl-feat">
+      <div>
+        <span class="nfl-eyebrow">Recognition</span>
+        <h2 class="nfl-h2">The software reads the document. Your team keeps the decision.</h2>
+        <p class="nfl-lead">Capture is where the hours go, and it is the part a person adds least to. Continia takes the typing and hands back the judgement call.</p>
+        <div class="nfl-numbers">
+          <div><span class="nfl-fig">90%</span><span class="nfl-numbers__cap">less manual data entry, reported by customers running Document Capture</span></div>
+          <div><span class="nfl-todo">TODO: hours saved per employee</span></div>
+          <div><span class="nfl-todo">TODO: faster month&#8209;end close</span></div>
+        </div>
+      </div>
+      <div class="nfl-feat__list">
+        <div class="nfl-feat__item">
+          <b>Every field, filled before you look</b>
+          <p>Vendor, invoice number, dates, amounts, VAT and the individual lines are read off the document and written onto the Business Central record.</p>
+        </div>
+        <div class="nfl-feat__item">
+          <b>Matched against the order, not against your memory</b>
+          <p>Three&#8209;way matching compares invoice, order and receipt and tells you where they disagree — before the document reaches an approver.</p>
+        </div>
+        <div class="nfl-feat__item">
+          <b>It learns the documents you actually get</b>
+          <p>Templates are per&#8209;vendor, so the second invoice from a supplier is recognized better than the first, and the hundredth needs nobody at all.</p>
+        </div>
+        <div class="nfl-feat__item">
+          <a class="nfl-more" href="../products/document-capture/">Explore Document Capture<i class="fa-light fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. PAYMENTS AND BANK ============ -->
+<section class="nfl-pay nfl-band nfl-band--dark" data-screen-label="Payments">
+  <div class="nfl-sec">
+    <div class="nfl-feat">
+      <div>
+        <span class="nfl-eyebrow">Payments and bank</span>
+        <h2 class="nfl-h2">Pay, reconcile and send — without a second login.</h2>
+        <p class="nfl-lead">The bank file, the portal and the manual match are three separate jobs today. Continia Banking and Document Output make them one.</p>
+        <div class="nfl-numbers">
+          <div><span class="nfl-fig">45+</span><span class="nfl-numbers__cap">countries where Continia is delivered locally</span></div>
+          <div><span class="nfl-todo">TODO: number of connected banks</span></div>
+          <div><span class="nfl-todo">TODO: share of lines auto&#8209;reconciled</span></div>
+        </div>
+      </div>
+      <div class="nfl-feat__list">
+        <div class="nfl-feat__item">
+          <b>Talk to the bank from Business Central</b>
+          <p>One of the first Microsoft&#8209;approved Connectivity Apps: payments go out and statements come back through the ERP, not through a portal and a file.</p>
+        </div>
+        <div class="nfl-feat__item">
+          <b>Reconciliation that has already happened</b>
+          <p>Statement lines are matched against open entries as they arrive, so what reaches a person is the handful that genuinely need a look.</p>
+        </div>
+        <div class="nfl-feat__item">
+          <b>Documents out in the format each receiver wants</b>
+          <p>Invoices, reminders and e&#8209;documents leave as email, PEPPOL or print — chosen per customer, applied without anyone deciding each time.</p>
+        </div>
+        <div class="nfl-feat__item">
+          <a class="nfl-more" href="../products/continia-banking/">Explore Continia Banking<i class="fa-light fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. CONTROL ============ -->
+<section class="nfl-band" data-screen-label="Control">
+  <div class="nfl-sec">
+    <div class="nfl-head">
+      <span class="nfl-eyebrow">Control</span>
+      <h2 class="nfl-h2">Everything runs exactly as you set it up.</h2>
+      <p class="nfl-lead">Automation only helps if the rules are yours. Continia enforces the ones you already wrote, in the system that already holds them.</p>
+    </div>
+    <div class="nfl-grid4">
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-light fa-sitemap"></i></span>
+        <h3 class="nfl-card__title">Approval flows that enforce themselves</h3>
+        <p class="nfl-card__text">Limits, hierarchies and substitutes live in the setup, not in somebody's head. A document cannot skip a step because the month is busy.</p>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-light fa-clock-rotate-left"></i></span>
+        <h3 class="nfl-card__title">An audit trail you didn't have to assemble</h3>
+        <p class="nfl-card__text">Who approved what, when, and against which version of the document — attached to the entry, where the auditor is already looking.</p>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-light fa-buildings"></i></span>
+        <h3 class="nfl-card__title">One setup across every company</h3>
+        <p class="nfl-card__text">Run several legal entities in one Business Central and the same rules, templates and approvers apply to all of them.</p>
+      </div>
+      <div class="nfl-card">
+        <span class="nfl-card__icon"><i class="fa-light fa-lock"></i></span>
+        <h3 class="nfl-card__title">Your data stays where it already is</h3>
+        <p class="nfl-card__text">Nothing moves to a separate product database. The records Continia writes are Business Central records, under your own tenant and your own permissions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. STORIES ============ -->
+<section class="nfl-stories" data-screen-label="Stories">
+  <div class="nfl-sec">
+    <div class="nfl-head">
+      <span class="nfl-eyebrow">Customer stories</span>
+      <h2 class="nfl-h2">Real finance teams. Real hours back.</h2>
+    </div>
+    <!-- ⚠️ No inline grid-template-columns here. It used to carry
+         style="grid-template-columns:repeat(3,1fr)", which is what
+         .nfl-grid5 already declares — so it looked harmless, but an
+         inline style outranks every media query, and the stories grid
+         stayed three-up all the way down. At 390 that left each title
+         48px wide and nine lines tall. -->
+    <div class="nfl-grid5">
+      <a class="nfl-story" href="../stories/customer-stories/calypso-group/">
+        <img class="nfl-story__shot" src="../assets/images/collaboration.jpg" alt="" loading="lazy" decoding="async" width="5333" height="3000">
+        <div class="nfl-story__body">
+          <span class="nfl-story__tag">Calypso Group</span>
+          <h3 class="nfl-story__title">Hasn't chased a missing invoice in over a year</h3>
+          <span class="nfl-more">Read full story<i class="fa-light fa-arrow-right"></i></span>
+        </div>
+      </a>
+      <a class="nfl-story" href="../stories/customer-stories/fjord-and-co/">
+        <img class="nfl-story__shot" src="../assets/images/office.jpg" alt="" loading="lazy" decoding="async" width="5333" height="3000">
+        <div class="nfl-story__body">
+          <span class="nfl-story__tag">Fjord &amp; Co.</span>
+          <h3 class="nfl-story__title">Closes two days earlier — after an afternoon of setup</h3>
+          <span class="nfl-more">Read full story<i class="fa-light fa-arrow-right"></i></span>
+        </div>
+      </a>
+      <a class="nfl-story" href="../stories/customer-stories/nordwind-logistics/">
+        <img class="nfl-story__shot" src="../assets/images/team-at-work.jpg" alt="" loading="lazy" decoding="async" width="1600" height="900">
+        <div class="nfl-story__body">
+          <span class="nfl-story__tag">Nordwind Logistics</span>
+          <h3 class="nfl-story__title">Cut manual data entry by 90%</h3>
+          <span class="nfl-more">Read full story<i class="fa-light fa-arrow-right"></i></span>
+        </div>
+      </a>
+    </div>
+    <div class="nfl-stories__foot">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="../stories/customer-stories/" hint-size="170px,52px">See all stories</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. CTA BAND ============ -->
+<section class="nfl-cta" data-screen-label="Final CTA">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" class="nfl-cta__mark">
+  <div class="nfl-cta__inner">
+    <span class="nfl-eyebrow">Get started</span>
+    <h2 class="nfl-cta__title">Your finance month could look different by the <span class="nfl-em">next</span> one.</h2>
+    <p class="nfl-cta__lead">Install from AppSource, set it up with your partner, and let the tedious half of the work run itself.</p>
+    <div class="nfl-cta__actions">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="190px,52px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../company/find-a-partner/" hint-size="180px,52px">Talk to a partner</x-import>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+
+<!-- Back to the real front page. Same pill as the one that leads here. -->
+<a class="nfl-switch" href="../"><i class="fa-light fa-arrow-left"></i>Back to <span class="nfl-switch__long">the current </span>front page</a>
+</x-dc>
+
+<script>
+/* ======================================================================
+   Two behaviours, both plain DOM, and both of them write their state to
+   exactly one attribute on <html>. That is not a style — it is the only
+   thing that works here, and it took two dead features to learn why.
+
+   ⚠️ Trap 1: the dc runtime renders this page CLIENT-SIDE. At the moment
+   this script runs the only thing in <body> is <x-dc>; none of the markup
+   above exists. A first version queried its nodes here, got null for both,
+   and died with nothing in the console.
+
+   ⚠️ Trap 2 — the expensive one: waiting for the nodes is not enough either.
+   The runtime builds the tree, then swaps it once more a few frames later.
+   A second version polled on rAF, found the stage cells, painted `is-on`
+   onto the first one and attached an IntersectionObserver to it — and the
+   runtime then replaced every one of those nodes with fresh ones carrying
+   the markup's original class. The loop went on running against a detached
+   subtree. The mock sat on frame one for the life of the page, again
+   silently. Probing for it is what misleads: set a class by hand AFTER the
+   swap and it survives indefinitely, so the subtree looks perfectly stable.
+
+   <html> is outside the render tree. An attribute written there survives
+   any number of render passes, CSS does the painting, and no node is ever
+   held across a frame. Hence `data-nfl-step` and `data-nfl-pillar`.
+   ====================================================================== */
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ---- the three pillars ---------------------------------------------- */
+  /* The listener sits on `document` and re-matches the target every time, so
+     it works however late the buttons appear and survives them being
+     replaced. Clicking the open pillar closes it: the attribute goes away
+     and CSS falls back to all-closed. */
+  document.addEventListener("click", function (e) {
+    var btn = e.target && e.target.closest && e.target.closest(".nfl-acc__btn");
+    if (!btn) return;
+    var item = btn.closest(".nfl-acc__item");
+    var acc = btn.closest("[data-nfl-acc]");
+    if (!item || !acc) return;
+
+    var n = [].indexOf.call(acc.children, item) + 1;
+    var open = root.getAttribute("data-nfl-pillar") === String(n);
+    if (open) root.removeAttribute("data-nfl-pillar");
+    else root.setAttribute("data-nfl-pillar", n);
+
+    /* Screen readers read the buttons, not <html>, so they still need the
+       state spelled out. These writes are cosmetic to the painting — if a
+       render pass wipes them, the panels stay correct. */
+    [].forEach.call(acc.querySelectorAll(".nfl-acc__btn"), function (b, i) {
+      b.setAttribute("aria-expanded", (!open && i === n - 1) ? "true" : "false");
+    });
+  });
+
+  /* ---- the hero mock's four stages ------------------------------------ */
+  /* COUNT is 4 because the CSS enumerates four steps; the two are one unit.
+     The loop rests 3s at each end and runs only while the mock is on screen.
+     Visibility is re-measured from a fresh query each beat instead of an
+     IntersectionObserver on a held node — one getBoundingClientRect per
+     beat, and it cannot go deaf when the runtime swaps the subtree. */
+  var COUNT = 4, BEAT = 1100, REST = 3000, step = 0;
+
+  if (reduce && reduce.matches) {
+    root.setAttribute("data-nfl-step", COUNT - 1);
+    return;
+  }
+
+  function onScreen() {
+    var el = document.querySelector("[data-nfl-stages]");
+    if (!el) return false;
+    var r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < (window.innerHeight || 0);
+  }
+
+  root.setAttribute("data-nfl-step", 0);
+  (function tick() {
+    if (!onScreen()) { setTimeout(tick, 400); return; }
+    root.setAttribute("data-nfl-step", step);
+    var last = step === COUNT - 1;
+    var wait = (last || step === 0) ? REST : BEAT;
+    step = last ? 0 : step + 1;
+    setTimeout(tick, wait);
+  })();
+})();
+</script>
+</body>
+</html>

@@ -428,6 +428,34 @@
     body.cnt-footer-in-view .imp-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
     @media (prefers-reduced-motion: reduce) { .imp-toggle { transition: none; } }
 
+    /* Third fixed pill, bottom RIGHT: the way into new-front-look/, the
+       alternative front page. Right, not left, because the two toggles above
+       already stack bottom-left and on a 390px phone a third pill on that side
+       would sit on top of them.
+
+       ⚠️ It shares .imp-toggle's hide-over-the-footer behaviour on purpose —
+       both pills sat on the footer's legal bar before that rule existed, and a
+       new pill in a new corner would have landed on it again. The class goes
+       on <body>, which the dc runtime never re-renders, so it survives a
+       render pass; an inline style on a node inside the tree would not. */
+    .nfl-toggle { position: fixed; bottom: 20px; right: 20px; left: auto; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+      padding: 11px 18px; border-radius: 999px; background: #052975; border: 1.5px solid #052975; box-shadow: 0 8px 24px rgba(5,41,117,0.26);
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #8ff8ff; text-decoration: none;
+      transition: transform 200ms, background 200ms, opacity 220ms var(--ease-standard, ease-out); }
+    .nfl-toggle:hover { background: #0a317f; border-color: #0a317f; color: #8ff8ff; transform: translateY(-2px); }
+    .nfl-toggle:focus-visible { outline: 3px solid #8ff8ff; outline-offset: 3px; }
+    body.cnt-footer-in-view .nfl-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
+    @media (prefers-reduced-motion: reduce) { .nfl-toggle { transition: none; } .nfl-toggle:hover { transform: none; } }
+    @media (max-width: 640px) { .nfl-toggle { right: 14px; bottom: 14px; } }
+
+    /* ⚠️ An ::after overlay, never `min-height`. The pill is 44px tall already
+       at its own padding, but the two beside it are not and the house pattern
+       is one rule for all three. */
+    @media (pointer: coarse) {
+      .nfl-toggle { position: fixed; }
+      .nfl-toggle::after { content: ""; position: absolute; left: 50%; top: 50%; width: 100%; height: 44px; transform: translate(-50%, -50%); }
+    }
+
 
     /* >>> module: home-hero -------------------------------------------
        Owned by Continia.Umbraco.HomeHero. Synced by tools/sync_css.py.
@@ -1078,6 +1106,10 @@
     </div>
   </div>
 </section>
+
+<!-- Prototype switch: the alternative front page. Lives at new-front-look/
+     and does not replace this one. -->
+<a class="nfl-toggle" href="new-front-look/" title="Open the alternative front page"><i class="fa-light fa-wand-magic-sparkles" style="font-size:13px;"></i>New front look</a>
 
 <!-- ============ FOOTER ============ -->
 <div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
