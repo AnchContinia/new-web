@@ -269,7 +269,10 @@
     from { opacity: 0; transform: translateX(26px) translateY(16px) scale(0.965); }
     to   { opacity: 1; transform: translateX(0) translateY(0) scale(1); }
   }
-  .nfl-mock { position: absolute; inset: 0; background: #ffffff; border-radius: 18px; box-shadow: 0 40px 90px rgba(2,12,40,0.42); overflow: hidden; }
+  /* The 3px rim has to read against BOTH sides of itself: navy hero on the
+     outside, white body on the inside. White would vanish into the body and
+     navy into the background, so it is the innovation blue the rings use. */
+  .nfl-mock { position: absolute; inset: 0; background: #ffffff; border: 3px solid rgba(143,248,255,0.55); border-radius: 18px; box-shadow: 0 40px 90px rgba(2,12,40,0.42); overflow: hidden; }
   /* The window's title bar is the house chrome from the design system's
      PopupWindow: a solid Tech Blue band with the white logo, a hairline
      divider and three white dots. `.nfl-mock__title` carries the `margin-left:
@@ -299,7 +302,12 @@
      is 1200px and up; see the float's own breakpoint below. 520 left
      only 2px of air at exactly 1200, which is not air. */
   .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 500px; }
-  .nfl-stage { padding: 8px 4px; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf; transition: background 300ms ease, color 300ms ease; }
+  /* The walk is slow on purpose: 760ms on the colour, the same ease-out the
+     coverflow uses, and a lift that settles rather than snaps. */
+  .nfl-stage { padding: 8px 4px; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf;
+    transform: translateY(0) scale(1); box-shadow: 0 0 0 rgba(5,41,117,0);
+    transition: background 760ms cubic-bezier(0.22, 1, 0.36, 1), color 760ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 760ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 760ms cubic-bezier(0.22, 1, 0.36, 1); }
 
   /* ⚠️ The walking stage is painted from ONE attribute on <html>, not by the
      script writing classes onto these four cells, and that is the whole
@@ -319,7 +327,8 @@
   [data-nfl-step="0"] .nfl-stage:nth-child(1),
   [data-nfl-step="1"] .nfl-stage:nth-child(2),
   [data-nfl-step="2"] .nfl-stage:nth-child(3),
-  [data-nfl-step="3"] .nfl-stage:nth-child(4) { background: var(--c-tech-blue); color: var(--c-innovation-blue); }
+  [data-nfl-step="3"] .nfl-stage:nth-child(4) { background: var(--c-tech-blue); color: var(--c-innovation-blue);
+    transform: translateY(-2px) scale(1.045); box-shadow: 0 8px 18px rgba(5,41,117,0.26); }
 
   /* Same attribute, two more readings of it: a bar that fills as the document
      walks, and the one row in the list that the current stage is about. Both
@@ -327,13 +336,13 @@
   /* Same 500px cap as the stages it sits under — the bar measures that row,
      so a track running on past the last cell measures nothing. */
   .nfl-mock__prog { height: 3px; margin-top: 12px; max-width: 500px; border-radius: 999px; background: var(--c-slate-100); overflow: hidden; }
-  .nfl-mock__prog i { display: block; height: 100%; width: 25%; border-radius: inherit; background: linear-gradient(90deg, var(--c-tech-blue), var(--c-innovation-blue)); transition: width 560ms ease; }
+  .nfl-mock__prog i { display: block; height: 100%; width: 25%; border-radius: inherit; background: linear-gradient(90deg, var(--c-tech-blue), var(--c-innovation-blue)); transition: width 1200ms cubic-bezier(0.33, 1, 0.68, 1); }
   [data-nfl-step="1"] .nfl-mock__prog i { width: 50%; }
   [data-nfl-step="2"] .nfl-mock__prog i { width: 75%; }
   [data-nfl-step="3"] .nfl-mock__prog i { width: 100%; }
 
   .nfl-mock__rows { margin-top: 14px; }
-  .nfl-mock__row { display: grid; grid-template-columns: 1fr 104px 116px; gap: 10px; align-items: center; padding: 11px 8px; margin: 0 -8px; border-radius: 8px; border-top: 1px solid var(--c-slate-100); font-size: 13px; transition: background 400ms ease; }
+  .nfl-mock__row { display: grid; grid-template-columns: 1fr 104px 116px; gap: 10px; align-items: center; padding: 11px 8px; margin: 0 -8px; border-radius: 8px; border-top: 1px solid var(--c-slate-100); font-size: 13px; transition: background 900ms cubic-bezier(0.22, 1, 0.36, 1); }
   .nfl-mock__row:first-child { border-top: 0; }
   /* The list is newest-first, so the stages run up it: Imported is the last
      row, Posted the first. */
@@ -712,6 +721,7 @@
     .nfl-proof__rail { animation: none; }
     .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign,
     .nfl-mock__prog i, .nfl-mock__row { transition: none; }
+    .nfl-stage { transform: none; box-shadow: none; }
     .nfl-card:hover, .nfl-story:hover, .nfl-switch:hover { transform: none; }
     .nfl-more:hover i { transform: none; }
   }
@@ -1249,7 +1259,7 @@
      Visibility is re-measured from a fresh query each beat instead of an
      IntersectionObserver on a held node — one getBoundingClientRect per
      beat, and it cannot go deaf when the runtime swaps the subtree. */
-  var COUNT = 4, BEAT = 1100, REST = 3000, step = 0;
+  var COUNT = 4, BEAT = 1900, REST = 3000, step = 0;
 
   if (reduce && reduce.matches) {
     root.setAttribute("data-nfl-step", COUNT - 1);
