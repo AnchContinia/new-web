@@ -183,9 +183,23 @@
 
   /* Two enormous thin circles bleeding off opposite corners. They read as
      light rather than as shapes, and they give the flat navy somewhere to go. */
-  .nfl-hero__ring { position: absolute; z-index: 1; border-radius: 50%; pointer-events: none; }
-  .nfl-hero__ring--a { width: 1180px; height: 1180px; left: -480px; top: -560px; border: 1px solid rgba(143,248,255,0.11); }
-  .nfl-hero__ring--b { width: 1520px; height: 1520px; right: -620px; bottom: -940px; border: 1px solid rgba(143,248,255,0.07); }
+  /* The rings are SVG rather than a bordered box so they can be DRAWN: a dash
+     the length of the whole circle, pulled into place by its own offset. The
+     viewBox matches the pixel size 1:1, so `stroke-width` is literally pixels.
+     Ring b's visible arc is its upper left, which a dash starting at 3 o'clock
+     would reach only at the very end — rotating the circle 180deg starts the
+     stroke where the eye actually is. */
+  .nfl-hero__ring { position: absolute; z-index: 1; pointer-events: none; overflow: visible; }
+  .nfl-hero__ring circle { fill: none; stroke: var(--nfl-ring); stroke-width: 1.5; stroke-linecap: round;
+    stroke-dasharray: var(--nfl-ring-len); stroke-dashoffset: var(--nfl-ring-len);
+    animation: nflDraw 2600ms cubic-bezier(0.22, 1, 0.36, 1) 320ms forwards; }
+  .nfl-hero__ring--a { width: 1180px; height: 1180px; left: -480px; top: -560px;
+    --nfl-ring: rgba(143,248,255,0.34); --nfl-ring-len: 3700.8; }
+  .nfl-hero__ring--b { width: 1520px; height: 1520px; right: -620px; bottom: -940px;
+    --nfl-ring: rgba(143,248,255,0.24); --nfl-ring-len: 4768.9; }
+  .nfl-hero__ring--b circle { transform-box: fill-box; transform-origin: 50% 50%; transform: rotate(180deg); animation-delay: 620ms; }
+
+  @keyframes nflDraw { to { stroke-dashoffset: 0; } }
 
   .nfl-hero__inner { position: relative; z-index: 2; flex: none; width: 100%; max-width: 1000px; margin: 0 auto; text-align: center; padding: clamp(56px, 7vh, 104px) clamp(20px, 4vw, 44px) 0; }
   .nfl-hero h1 { margin: 0; font-size: min(clamp(44px, 3.1vw + 2.1rem, 86px), 11.2vw); font-weight: 700; line-height: 1.03; letter-spacing: -0.035em; color: #ffffff; }
@@ -681,6 +695,7 @@
        with no way to sit still. */
     .nfl-hero__frame, .nfl-float { animation: none; }
     .nfl-smoke__c { animation: none; }
+    .nfl-hero__ring circle { animation: none; stroke-dashoffset: 0; }
     .nfl-hero__vid { display: none; }
     .nfl-proof__rail { animation: none; }
     .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign,
@@ -702,8 +717,8 @@
     <source src="../assets/video/brand-clouds.webm" type="video/webm">
     <source src="../assets/video/brand-clouds.mp4" type="video/mp4">
   </video>
-  <span class="nfl-hero__ring nfl-hero__ring--a" aria-hidden="true"></span>
-  <span class="nfl-hero__ring nfl-hero__ring--b" aria-hidden="true"></span>
+  <svg class="nfl-hero__ring nfl-hero__ring--a" viewBox="0 0 1180 1180" aria-hidden="true" focusable="false"><circle cx="590" cy="590" r="589"></circle></svg>
+  <svg class="nfl-hero__ring nfl-hero__ring--b" viewBox="0 0 1520 1520" aria-hidden="true" focusable="false"><circle cx="760" cy="760" r="759"></circle></svg>
 
   <div class="nfl-hero__inner">
     <h1>Give your finance team back the hours it <span class="nfl-em nfl-smoke"><span class="nfl-smoke__sr">never</span><span class="nfl-smoke__c" aria-hidden="true">n</span><span class="nfl-smoke__c" aria-hidden="true">e</span><span class="nfl-smoke__c" aria-hidden="true">v</span><span class="nfl-smoke__c" aria-hidden="true">e</span><span class="nfl-smoke__c" aria-hidden="true">r</span></span> should have spent.</h1>
