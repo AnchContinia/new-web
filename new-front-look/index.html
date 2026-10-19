@@ -198,6 +198,11 @@
   [data-nfl-hero="out"] .nfl-hero__ring circle { animation-play-state: paused; }
   .nfl-hero__ring--a { width: 1180px; height: 1180px; left: -480px; top: -560px;
     --nfl-ring: rgba(143,248,255,0.34); --nfl-ring-len: 3700.8; --nfl-ring-gone: -3700.8; }
+  /* A dash starts at 3 o'clock. Ring a's 3 o'clock is (699, 93) — on screen,
+     so the stroke appeared out of nothing near the top of the hero. Rotated to
+     12 o'clock it starts at (110, -496), above the fold, and enters from
+     outside the frame like ring b already did. */
+  .nfl-hero__ring--a circle { transform-box: fill-box; transform-origin: 50% 50%; transform: rotate(-90deg); }
   .nfl-hero__ring--b { width: 1520px; height: 1520px; right: -620px; bottom: -940px;
     --nfl-ring: rgba(143,248,255,0.24); --nfl-ring-len: 4768.9; --nfl-ring-gone: -4768.9; }
   .nfl-hero__ring--b circle { transform-box: fill-box; transform-origin: 50% 50%; transform: rotate(180deg); animation-delay: 1400ms; }
@@ -276,13 +281,6 @@
     to   { opacity: 1; transform: translateX(-50%) translateY(0) rotateX(0deg) rotate(0deg) scale(1); }
   }
 
-  /* The card follows half a second later, from behind the window's right
-     edge, so the two reads as one gesture in two beats rather than as two
-     things starting at once. */
-  @keyframes nflFloatIn {
-    from { opacity: 0; transform: translateX(26px) translateY(16px) scale(0.965); }
-    to   { opacity: 1; transform: translateX(0) translateY(0) scale(1); }
-  }
   /* The 3px rim has to read against BOTH sides of itself: navy hero on the
      outside, white body on the inside. White would vanish into the body and
      navy into the background, so it is the innovation blue the rings use. */
@@ -385,14 +383,6 @@
      breaks the window's outline is what makes the window read as a window
      and not as a screenshot. It is therefore a SIBLING of .nfl-mock, because
      .nfl-mock clips its own children. */
-  .nfl-float { position: absolute; z-index: 4; top: 34px; right: 24px; width: 310px; will-change: transform, opacity; animation: nflFloatIn 820ms cubic-bezier(0.16, 1, 0.3, 1) 620ms both; padding: 16px 18px 15px; border-radius: 14px; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border: 2px solid var(--c-tech-blue); box-shadow: 0 26px 60px rgba(2,12,40,0.34); }
-  .nfl-float__head { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-performance-purple); }
-  .nfl-float__grid { margin: 13px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 11px 14px; }
-  .nfl-float__grid div { min-width: 0; }
-  .nfl-float__grid dt { font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #9fb0cc; }
-  .nfl-float__grid dd { margin: 3px 0 0; font-size: 13px; font-weight: 600; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .nfl-float__foot { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--c-slate-100); display: flex; }
-  .nfl-float__foot .nfl-chip { justify-self: start; }
 
   /* ---------- 2. proof marquee ------------------------------------------ */
 
@@ -646,15 +636,6 @@
     .nfl-grid5 { grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* ⚠️ 1200, not 980. The card is pinned 24px in from the window's right
-     edge and the stages row is capped at 520px from its left, so the two
-     clear each other only while the window is near its full 1120px. Under
-     that the card walks left across the row and covers the last stage — the
-     end of the one animation in the hero. It is decoration; it goes first. */
-  @media (max-width: 1199px) {
-    .nfl-float { display: none; }
-  }
-
   @media (max-width: 980px) {
     /* A 196px nav column against a 540px window leaves the invoice list
        nothing, so the window's own sidebar goes too. */
@@ -733,7 +714,7 @@
        frame keeps its static `translateX(-50%)` because that rule is the
        declaration, not a keyframe. The clip goes entirely — it is motion
        with no way to sit still. */
-    .nfl-hero__frame, .nfl-float { animation: none; }
+    .nfl-hero__frame { animation: none; }
     .nfl-smoke__c { animation: none; }
     .nfl-hero__ring circle { animation: none; stroke-dashoffset: 0; }
     .nfl-hero__vid { display: none; }
@@ -828,16 +809,6 @@
       </div>
     </div>
 
-    <div class="nfl-float" aria-hidden="true">
-      <div class="nfl-float__head"><i class="fa-light fa-wand-magic-sparkles"></i>Read from the PDF</div>
-      <dl class="nfl-float__grid">
-        <div><dt>Vendor</dt><dd>Fabrikam Logistics</dd></div>
-        <div><dt>Invoice no.</dt><dd>FL&#8209;2026&#8209;00418</dd></div>
-        <div><dt>Amount</dt><dd>&euro; 612.75</dd></div>
-        <div><dt>Due</dt><dd>14 Nov 2026</dd></div>
-      </dl>
-      <div class="nfl-float__foot"><span class="nfl-chip nfl-chip--ok">Matched to order 106042</span></div>
-    </div>
     </div>
   </div>
 </section>
