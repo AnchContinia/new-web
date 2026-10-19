@@ -132,20 +132,29 @@
      There the hero takes its natural height and the window gets a fixed
      slice instead. */
   .nfl-hero { position: relative; overflow: hidden; isolation: isolate; background: #041e58; display: flex; flex-direction: column; }
-  .nfl-hero::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background:
-      radial-gradient(1200px 760px at 50% -10%, #0e3d94 0%, rgba(14,61,148,0) 64%),
-      radial-gradient(900px 640px at 88% 112%, rgba(29,90,168,0.55) 0%, rgba(29,90,168,0) 62%),
-      linear-gradient(200deg, #0a317f 0%, #052975 46%, #041e58 100%); }
+  /* The brand clouds clip, the same file the current front page runs, here as
+     the hero's ground rather than as a white-washed band. It is 1920x1080 and
+     already blue and violet, so a navy scrim over it reads as depth instead
+     of as a video playing behind text.
 
-  /* Continia's own fifth-element mark, blown up far past its usual size and
-     turned almost all the way down. It is the brand's shape rather than a
-     generic glow, which is the whole reason to carry the file in. */
-  .nfl-hero__mark { position: absolute; z-index: 0; left: 50%; top: 46%; width: min(1560px, 132%); transform: translate(-50%, -50%); opacity: 0.05; pointer-events: none; }
+     It replaces a blown-up fifth-element mark that used to sit here. At 5% on
+     navy the mark had stopped reading as the brand shape and had become a
+     pale hourglass standing in the middle of the headline. */
+  .nfl-hero__vid { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+  /* ⚠️ Measured, not guessed. The clip's brightest frame is about #8aa8d0;
+     under this scrim's lightest point that lands near rgb(42,69,122), and
+     white on it is 9.4:1. The scrim is heaviest at the top, where the
+     headline is, and lets go towards the bottom so the clouds are actually
+     visible behind the window. */
+  .nfl-hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(1200px 760px at 50% -10%, rgba(14,61,148,0.58) 0%, rgba(14,61,148,0) 64%),
+      linear-gradient(185deg, rgba(4,30,88,0.90) 0%, rgba(5,41,117,0.84) 42%, rgba(4,30,88,0.62) 100%); }
 
   /* Two enormous thin circles bleeding off opposite corners. They read as
      light rather than as shapes, and they give the flat navy somewhere to go. */
-  .nfl-hero__ring { position: absolute; z-index: 0; border-radius: 50%; pointer-events: none; }
+  .nfl-hero__ring { position: absolute; z-index: 1; border-radius: 50%; pointer-events: none; }
   .nfl-hero__ring--a { width: 1180px; height: 1180px; left: -480px; top: -560px; border: 1px solid rgba(143,248,255,0.11); }
   .nfl-hero__ring--b { width: 1520px; height: 1520px; right: -620px; bottom: -940px; border: 1px solid rgba(143,248,255,0.07); }
 
@@ -161,7 +170,7 @@
      collapsing on a short one, and `overflow: hidden` is what performs the
      cut. The window itself is absolutely positioned at the top of it, so its
      own height never feeds back into the section's. */
-  .nfl-hero__stage { position: relative; z-index: 2; flex: 1 1 auto; min-height: clamp(150px, 22vh, 260px); margin-top: clamp(40px, 5.5vh, 76px); overflow: hidden; }
+  .nfl-hero__stage { position: relative; z-index: 2; flex: 1 1 auto; min-height: clamp(150px, 22vh, 260px); margin-top: clamp(40px, 5.5vh, 76px); overflow: hidden; perspective: 1700px; }
   /* The cut itself, softened. A hard edge works on payhawk.com because their
      window is dark on dark; a white window ending in a straight line on navy
      reads as a rendering fault, so it dissolves instead. */
@@ -174,7 +183,38 @@
      against IT rather than against the stage, so "24px in from the window's
      right edge" stays true at every width instead of drifting off-screen the
      moment the viewport is narrower than the window's maximum. */
-  .nfl-hero__frame { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: min(1120px, calc(100% - 2 * clamp(20px, 4vw, 44px))); height: 620px; }
+  .nfl-hero__frame { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: min(1120px, calc(100% - 2 * clamp(20px, 4vw, 44px))); height: 620px;
+    transform-origin: 50% 100%; will-change: transform, opacity;
+    animation: nflFrameIn 1100ms cubic-bezier(0.16, 1, 0.3, 1) 140ms both; }
+
+  /* The window arrives: up from under the fold, tilted back on its own
+     bottom edge and turned a degree and a half off square, then settles
+     level. The easing is the one the rest of the site rises on —
+     cubic-bezier(0.16,1,0.3,1), the same curve as the impact cards.
+
+     ⚠️ It cannot reach the type, and not by luck: the frame lives inside
+     .nfl-hero__stage, which clips. Whatever the tilt throws above the
+     stage's top edge is cut off there, so the headline is untouchable by
+     construction rather than by picking a safe distance.
+
+     ⚠️ Every keyframe repeats `translateX(-50%)`. A transform list replaces
+     the whole property, so leaving the centring out of the keyframe would
+     have snapped the window half its own width to the right for the length
+     of the animation. And the end state is spelled out in full rather than
+     written `transform: none`, which is a keyframe that silently does
+     nothing here. */
+  @keyframes nflFrameIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(92px) rotateX(14deg) rotate(-1.6deg) scale(0.95); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0) rotateX(0deg) rotate(0deg) scale(1); }
+  }
+
+  /* The card follows half a second later, from behind the window's right
+     edge, so the two reads as one gesture in two beats rather than as two
+     things starting at once. */
+  @keyframes nflFloatIn {
+    from { opacity: 0; transform: translateX(26px) translateY(16px) scale(0.965); }
+    to   { opacity: 1; transform: translateX(0) translateY(0) scale(1); }
+  }
   .nfl-mock { position: absolute; inset: 0; background: #ffffff; border-radius: 18px; box-shadow: 0 40px 90px rgba(2,12,40,0.42); overflow: hidden; }
   .nfl-mock__bar { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--color-border); background: var(--c-slate-50); }
   .nfl-mock__dots { display: flex; gap: 6px; flex: none; }
@@ -255,7 +295,7 @@
      breaks the window's outline is what makes the window read as a window
      and not as a screenshot. It is therefore a SIBLING of .nfl-mock, because
      .nfl-mock clips its own children. */
-  .nfl-float { position: absolute; z-index: 4; top: 34px; right: 24px; width: 310px; padding: 16px 18px 15px; border-radius: 14px; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 26px 60px rgba(2,12,40,0.34); }
+  .nfl-float { position: absolute; z-index: 4; top: 34px; right: 24px; width: 310px; will-change: transform, opacity; animation: nflFloatIn 820ms cubic-bezier(0.16, 1, 0.3, 1) 620ms both; padding: 16px 18px 15px; border-radius: 14px; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 26px 60px rgba(2,12,40,0.34); }
   .nfl-float__head { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-performance-purple); }
   .nfl-float__grid { margin: 13px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 11px 14px; }
   .nfl-float__grid div { min-width: 0; }
@@ -530,8 +570,19 @@
        nothing, so the window's own sidebar goes too. */
     .nfl-mock__side { display: none; }
     .nfl-mock__body { grid-template-columns: 1fr; }
-    .nfl-hero__frame { height: 540px; }
     .nfl-hero__stage { min-height: 230px; }
+
+    /* ⚠️ The window sizes itself here instead of being told 540px. Without
+       the sidebar its content is about 340px tall, so a fixed 540 left two
+       hundred pixels of empty white below the last row — the crop needs the
+       window to be taller than its slot, not taller than its content.
+       `height: auto` alone cannot do it while .nfl-mock is `inset: 0`: an
+       absolutely positioned child contributes nothing to its parent's
+       height, so the frame would collapse to zero. The window goes back into
+       normal flow and the frame measures it. On a phone the result is still
+       taller than the 210px slot, so it is still cut and still fades. */
+    .nfl-hero__frame { height: auto; }
+    .nfl-mock { position: relative; inset: auto; }
     .nfl-feat, .nfl-old__grid { grid-template-columns: 1fr; }
     .nfl-trust__grid { grid-template-columns: repeat(2, 1fr); gap: 26px 0; }
     .nfl-trust__cell:nth-child(odd) { border-left: 0; padding-left: 0; }
@@ -552,7 +603,6 @@
     .nfl-mock__amt { display: none; }
     .nfl-mock__env { display: none; }
     .nfl-mock__main { padding: 16px 16px; }
-    .nfl-hero__frame { height: 480px; }
     .nfl-hero__stage { min-height: 210px; }
 
     /* ⚠️ Every one of these is bought for the window. The headline takes five
@@ -585,6 +635,12 @@
   /* ---------- reduced motion --------------------------------------------- */
 
   @media (prefers-reduced-motion: reduce) {
+    /* The window and the card drop their entrance and are simply there; the
+       frame keeps its static `translateX(-50%)` because that rule is the
+       declaration, not a keyframe. The clip goes entirely — it is motion
+       with no way to sit still. */
+    .nfl-hero__frame, .nfl-float { animation: none; }
+    .nfl-hero__vid { display: none; }
     .nfl-proof__rail { animation: none; }
     .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign,
     .nfl-mock__prog i, .nfl-mock__row { transition: none; }
@@ -601,7 +657,10 @@
   <!-- Decoration only, all of it. The mark is Continia's own fifth element,
        the rings are light. None of it carries meaning, so none of it is
        announced. -->
-  <img class="nfl-hero__mark" src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <video class="nfl-hero__vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="../assets/video/brand-clouds.webm" type="video/webm">
+    <source src="../assets/video/brand-clouds.mp4" type="video/mp4">
+  </video>
   <span class="nfl-hero__ring nfl-hero__ring--a" aria-hidden="true"></span>
   <span class="nfl-hero__ring nfl-hero__ring--b" aria-hidden="true"></span>
 
@@ -1077,6 +1136,42 @@
       b.setAttribute("aria-expanded", (!open && i === n - 1) ? "true" : "false");
     });
   });
+
+  /* ---- the clouds clip ------------------------------------------------ */
+  /* Two things have to be true for this clip to keep playing, and each one
+     has already broken it once on this site.
+
+     ⚠️ The runtime drops the bare `loop` attribute. `autoplay`, `muted` and
+     `playsinline` survive; `loop` does not, so the clip froze on its last
+     frame after 21 seconds with nothing in the console. It has to be set as
+     a property. The same is true of `muted`, which Safari insists on as a
+     property before it will autoplay anything.
+
+     ⚠️ And setting those properties once is not enough, because the runtime
+     replaces the element a few frames in and the fresh one arrives with the
+     markup's attributes again. So: a capture-phase `ended` listener on
+     `document`, which re-finds the element every time it fires and therefore
+     cannot go stale, plus a short burst of calls over the first few seconds
+     to get playback started on whichever element is current. */
+  document.addEventListener("ended", function (e) {
+    var v = e.target;
+    if (!v || !v.classList || !v.classList.contains("nfl-hero__vid")) return;
+    v.currentTime = 0;
+    var pr = v.play();
+    if (pr && pr.catch) pr.catch(function () {});
+  }, true);
+
+  (function kick(n) {
+    var v = document.querySelector(".nfl-hero__vid");
+    if (v) {
+      v.loop = true;
+      v.muted = true;
+      v.setAttribute("muted", "");
+      var pr = v.play();
+      if (pr && pr.catch) pr.catch(function () {});
+    }
+    if (n > 0) setTimeout(function () { kick(n - 1); }, 400);
+  })(12);
 
   /* ---- the hero mock's four stages ------------------------------------ */
   /* COUNT is 4 because the CSS enumerates four steps; the two are one unit.
