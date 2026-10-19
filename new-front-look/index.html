@@ -64,6 +64,15 @@
 
   .nfl-sec { box-sizing: border-box; max-width: 1240px; margin: 0 auto; padding: clamp(64px, 8vw, 112px) clamp(20px, 4vw, 44px); }
   .nfl-sec *, .nfl-sec *::before, .nfl-sec *::after { box-sizing: border-box; }
+
+  /* ⚠️ The hero is NOT a .nfl-sec — it lays itself out — so it was outside
+     that reset and defaulted to content-box. Its inner column is `width:100%`
+     plus a 20px side padding, which at 390 made it 430px wide inside a 390px
+     viewport; the hero's own `overflow: hidden` then quietly ate 20px off the
+     right of every headline. No horizontal scrollbar, nothing in any checker,
+     just a page that is slightly too narrow for its own text. The reset has
+     to name both roots. */
+  .nfl-hero, .nfl-hero *, .nfl-hero *::before, .nfl-hero *::after { box-sizing: border-box; }
   /* The trust row is a thin band between two tall sections, so it gets
      about half the vertical padding. This is a class and not an inline
      style on the one element: an inline style outranks every media
@@ -104,27 +113,91 @@
      spend platform") and the house rule forbids it: a theme pill over an h1
      reads as a second, smaller headline and the real one loses the entrance.
      The same words live under the headline instead, as a caption. */
-  .nfl-hero { position: relative; overflow: hidden; background: linear-gradient(222deg, #0a317f 0%, #052975 42%, #041e58 100%); }
-  .nfl-hero__inner { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: clamp(84px, 9vw, 140px) clamp(20px, 4vw, 44px) clamp(72px, 7vw, 104px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 5vw, 72px); align-items: center; }
-  .nfl-hero__inner > * { min-width: 0; }
+  /* The hero is the whole first screen: one centred column of type, and
+     under it a Business Central window that is deliberately taller than the
+     space left for it, so the fold cuts it off mid-record. That crop is the
+     point — it says the product carries on past the edge of the page.
 
-  .nfl-hero h1 { margin: 0; font-size: min(clamp(40px, 3.4vw + 1rem, 62px), 10.5vw); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; color: #ffffff; }
-  .nfl-hero__lead { margin: 22px 0 0; max-width: 46ch; font-size: var(--fs-lead); line-height: var(--lh-body); color: rgba(255,255,255,0.80); }
-  .nfl-hero__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
-  .nfl-hero__note { margin: 26px 0 0; font-size: 14px; color: rgba(255,255,255,0.64); }
+     ⚠️ `100svh`, not `100vh`. On a phone `vh` is measured against the LARGEST
+     viewport, the one you only get after the browser chrome retracts, so a
+     `100vh` hero is about 90px taller than the screen on first paint and the
+     window is pushed out of sight exactly when the first impression is made.
+     `svh` is the smallest viewport and is the only one that is true on load.
+     The `vh` line above it is the fallback for browsers without `svh`.
+
+     ⚠️ The full-screen hero stops at 768, the narrow edge of a tablet in
+     portrait. Below that the headline alone runs to four or five lines and
+     the copy is already taller than a phone screen, so pinning the section
+     to the viewport would squeeze the window down to a sliver of title bar.
+     There the hero takes its natural height and the window gets a fixed
+     slice instead. */
+  .nfl-hero { position: relative; overflow: hidden; isolation: isolate; background: #041e58; display: flex; flex-direction: column; }
+  .nfl-hero::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(1200px 760px at 50% -10%, #0e3d94 0%, rgba(14,61,148,0) 64%),
+      radial-gradient(900px 640px at 88% 112%, rgba(29,90,168,0.55) 0%, rgba(29,90,168,0) 62%),
+      linear-gradient(200deg, #0a317f 0%, #052975 46%, #041e58 100%); }
+
+  /* Continia's own fifth-element mark, blown up far past its usual size and
+     turned almost all the way down. It is the brand's shape rather than a
+     generic glow, which is the whole reason to carry the file in. */
+  .nfl-hero__mark { position: absolute; z-index: 0; left: 50%; top: 46%; width: min(1560px, 132%); transform: translate(-50%, -50%); opacity: 0.05; pointer-events: none; }
+
+  /* Two enormous thin circles bleeding off opposite corners. They read as
+     light rather than as shapes, and they give the flat navy somewhere to go. */
+  .nfl-hero__ring { position: absolute; z-index: 0; border-radius: 50%; pointer-events: none; }
+  .nfl-hero__ring--a { width: 1180px; height: 1180px; left: -480px; top: -560px; border: 1px solid rgba(143,248,255,0.11); }
+  .nfl-hero__ring--b { width: 1520px; height: 1520px; right: -620px; bottom: -940px; border: 1px solid rgba(143,248,255,0.07); }
+
+  .nfl-hero__inner { position: relative; z-index: 2; flex: none; width: 100%; max-width: 1000px; margin: 0 auto; text-align: center; padding: clamp(56px, 7vh, 104px) clamp(20px, 4vw, 44px) 0; }
+  .nfl-hero h1 { margin: 0; font-size: min(clamp(44px, 3.1vw + 2.1rem, 86px), 11.2vw); font-weight: 700; line-height: 1.03; letter-spacing: -0.035em; color: #ffffff; }
+  .nfl-hero__lead { margin: 24px auto 0; max-width: 58ch; font-size: clamp(17px, 0.5vw + 15px, 21px); line-height: var(--lh-body); color: rgba(255,255,255,0.80); }
+  .nfl-hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 36px; }
+  .nfl-hero__note { margin: 24px 0 0; font-size: 14px; color: rgba(255,255,255,0.64); }
   .nfl-hero__note b { color: var(--c-innovation-blue); font-weight: 700; }
 
-  /* The hero mock. ⚠️ 18px, not the house photo radius of 15px — the visible
-     edge is a window's chrome, not a photograph. */
-  .nfl-mock { background: #ffffff; border-radius: 18px; box-shadow: 0 40px 90px rgba(2,12,40,0.42); overflow: hidden; }
-  .nfl-mock__bar { display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--color-border); background: var(--c-slate-50); }
+  /* The slice of window the fold leaves room for. `flex: 1 1 auto` lets it
+     swallow whatever is left over on a tall screen, `min-height` stops it
+     collapsing on a short one, and `overflow: hidden` is what performs the
+     cut. The window itself is absolutely positioned at the top of it, so its
+     own height never feeds back into the section's. */
+  .nfl-hero__stage { position: relative; z-index: 2; flex: 1 1 auto; min-height: clamp(150px, 22vh, 260px); margin-top: clamp(40px, 5.5vh, 76px); overflow: hidden; }
+  /* The cut itself, softened. A hard edge works on payhawk.com because their
+     window is dark on dark; a white window ending in a straight line on navy
+     reads as a rendering fault, so it dissolves instead. */
+  .nfl-hero__stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 110px; z-index: 3; pointer-events: none;
+    background: linear-gradient(to bottom, rgba(4,30,88,0) 0%, rgba(4,30,88,0.72) 52%, #041e58 96%); }
+
+  /* ⚠️ 18px, not the house photo radius of 15px — the visible edge is a
+     window's chrome, not a photograph. */
+  /* The frame is the window's box and nothing else. The float is positioned
+     against IT rather than against the stage, so "24px in from the window's
+     right edge" stays true at every width instead of drifting off-screen the
+     moment the viewport is narrower than the window's maximum. */
+  .nfl-hero__frame { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: min(1120px, calc(100% - 2 * clamp(20px, 4vw, 44px))); height: 620px; }
+  .nfl-mock { position: absolute; inset: 0; background: #ffffff; border-radius: 18px; box-shadow: 0 40px 90px rgba(2,12,40,0.42); overflow: hidden; }
+  .nfl-mock__bar { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--color-border); background: var(--c-slate-50); }
   .nfl-mock__dots { display: flex; gap: 6px; flex: none; }
   .nfl-mock__dots i { width: 9px; height: 9px; border-radius: 999px; background: #c8d3e6; display: block; }
   .nfl-mock__title { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7b8bab; }
-  .nfl-mock__body { padding: 20px 20px 22px; }
+  .nfl-mock__env { margin-left: auto; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: #9fb0cc; border: 1px solid var(--color-border); border-radius: 999px; padding: 3px 10px; }
 
-  .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
-  .nfl-stage { padding: 7px 4px; border-radius: 8px; text-align: center; font-size: 10.5px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf; transition: background 300ms ease, color 300ms ease; }
+  .nfl-mock__body { display: grid; grid-template-columns: 196px 1fr; height: calc(100% - 48px); }
+  .nfl-mock__side { border-right: 1px solid var(--color-border); padding: 16px 12px; background: #fbfcfe; }
+  .nfl-mock__nav { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 8px; font-size: 12.5px; font-weight: 600; color: var(--c-slate-500); }
+  .nfl-mock__nav i { width: 15px; text-align: center; font-size: 12px; }
+  .nfl-mock__nav.is-on { background: var(--c-light-blue); color: var(--c-tech-blue); }
+  .nfl-mock__main { padding: 20px 22px; min-width: 0; }
+
+  /* ⚠️ Capped, and not for looks. The float sits over the window's top
+     right corner; a stages row that ran the full width put the last
+     cell, `Posted`, underneath it — so the walk ended out of sight and
+     the one animated thing in the hero looked broken. 560px keeps the
+     four cells clear of the card at every width that shows it — which
+     is 1200px and up; see the float's own breakpoint below. 520 left
+     only 2px of air at exactly 1200, which is not air. */
+  .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 500px; }
+  .nfl-stage { padding: 8px 4px; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf; transition: background 300ms ease, color 300ms ease; }
 
   /* ⚠️ The walking stage is painted from ONE attribute on <html>, not by the
      script writing classes onto these four cells, and that is the whole
@@ -146,9 +219,26 @@
   [data-nfl-step="2"] .nfl-stage:nth-child(3),
   [data-nfl-step="3"] .nfl-stage:nth-child(4) { background: var(--c-tech-blue); color: var(--c-innovation-blue); }
 
-  .nfl-mock__rows { margin-top: 16px; }
-  .nfl-mock__row { display: grid; grid-template-columns: 1fr 96px 108px; gap: 10px; align-items: center; padding: 11px 2px; border-top: 1px solid var(--c-slate-100); font-size: 13px; }
+  /* Same attribute, two more readings of it: a bar that fills as the document
+     walks, and the one row in the list that the current stage is about. Both
+     come free — no extra timer, and they cannot drift out of step. */
+  /* Same 500px cap as the stages it sits under — the bar measures that row,
+     so a track running on past the last cell measures nothing. */
+  .nfl-mock__prog { height: 3px; margin-top: 12px; max-width: 500px; border-radius: 999px; background: var(--c-slate-100); overflow: hidden; }
+  .nfl-mock__prog i { display: block; height: 100%; width: 25%; border-radius: inherit; background: linear-gradient(90deg, var(--c-tech-blue), var(--c-innovation-blue)); transition: width 560ms ease; }
+  [data-nfl-step="1"] .nfl-mock__prog i { width: 50%; }
+  [data-nfl-step="2"] .nfl-mock__prog i { width: 75%; }
+  [data-nfl-step="3"] .nfl-mock__prog i { width: 100%; }
+
+  .nfl-mock__rows { margin-top: 14px; }
+  .nfl-mock__row { display: grid; grid-template-columns: 1fr 104px 116px; gap: 10px; align-items: center; padding: 11px 8px; margin: 0 -8px; border-radius: 8px; border-top: 1px solid var(--c-slate-100); font-size: 13px; transition: background 400ms ease; }
   .nfl-mock__row:first-child { border-top: 0; }
+  /* The list is newest-first, so the stages run up it: Imported is the last
+     row, Posted the first. */
+  [data-nfl-step="0"] .nfl-mock__row:nth-child(4),
+  [data-nfl-step="1"] .nfl-mock__row:nth-child(3),
+  [data-nfl-step="2"] .nfl-mock__row:nth-child(2),
+  [data-nfl-step="3"] .nfl-mock__row:nth-child(1) { background: var(--c-light-blue); }
   .nfl-mock__vendor { font-weight: 600; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .nfl-mock__amt { text-align: right; color: var(--c-slate-700); font-variant-numeric: tabular-nums; }
   .nfl-chip { justify-self: end; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
@@ -159,6 +249,20 @@
 
   .nfl-mock__foot { display: flex; align-items: center; gap: 9px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--c-slate-100); font-size: 12.5px; color: var(--c-slate-500); }
   .nfl-mock__foot i { color: var(--c-performance-purple); }
+
+  /* The card that floats over the window's right edge, the way payhawk.com
+     floats its agent panel over theirs. It overlaps on purpose: a panel that
+     breaks the window's outline is what makes the window read as a window
+     and not as a screenshot. It is therefore a SIBLING of .nfl-mock, because
+     .nfl-mock clips its own children. */
+  .nfl-float { position: absolute; z-index: 4; top: 34px; right: 24px; width: 310px; padding: 16px 18px 15px; border-radius: 14px; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 26px 60px rgba(2,12,40,0.34); }
+  .nfl-float__head { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-performance-purple); }
+  .nfl-float__grid { margin: 13px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 11px 14px; }
+  .nfl-float__grid div { min-width: 0; }
+  .nfl-float__grid dt { font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #9fb0cc; }
+  .nfl-float__grid dd { margin: 3px 0 0; font-size: 13px; font-weight: 600; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nfl-float__foot { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--c-slate-100); display: flex; }
+  .nfl-float__foot .nfl-chip { justify-self: start; }
 
   /* ---------- 2. proof marquee ------------------------------------------ */
 
@@ -358,7 +462,11 @@
 
   /* Bottom RIGHT, because the front page's own switches sit bottom left and
      the two must never overlap on a phone. */
-  .nfl-switch { position: fixed; right: 20px; bottom: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid var(--color-border); box-shadow: 0 8px 24px rgba(5,41,117,0.16); font-family: inherit; font-size: 13px; font-weight: 600; color: var(--c-tech-blue); cursor: pointer; transition: transform 200ms, border-color 200ms; }
+  /* ⚠️ Bottom LEFT, where the front page's pill is bottom right. They are
+     a pair and the asymmetry is deliberate: the hero's floating card
+     occupies the bottom right of the first screen, and a pill parked on
+     top of it hid the invoice it was reading. Nothing sits bottom left. */
+  .nfl-switch { position: fixed; left: 20px; bottom: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid var(--color-border); box-shadow: 0 8px 24px rgba(5,41,117,0.16); font-family: inherit; font-size: 13px; font-weight: 600; color: var(--c-tech-blue); cursor: pointer; transition: transform 200ms, border-color 200ms; }
   .nfl-switch:hover { transform: translateY(-2px); border-color: var(--c-tech-blue); }
   .nfl-switch i { font-size: 13px; }
 
@@ -373,14 +481,57 @@
     .nfl-switch::after, .nfl-acc__sign::after { content: ""; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; transform: translate(-50%, -50%); }
   }
 
+  /* ---------- wider ------------------------------------------------------- */
+
+  /* The hero owns the whole first screen, down to a portrait tablet. See the
+     note on .nfl-hero for why it stops at 768. The `vh` line is the fallback
+     for browsers without `svh`. */
+  /* ⚠️ Minus the header, and the header is not one number. The design
+     system's SiteHeader sits in the flow ABOVE the hero, so a plain
+     `100svh` hero is a whole header taller than the first screen — which
+     puts the window's cut, the one piece of the composition that has to
+     land on the fold, 64px below it where nobody sees it. Measured on the
+     live header: 64px over the site's 1100px line, 72px under it, where it
+     switches to the burger layout. */
+  @media (min-width: 768px) {
+    .nfl-hero { --nfl-head: 72px; min-height: calc(100vh - var(--nfl-head)); min-height: calc(100svh - var(--nfl-head)); }
+  }
+  @media (min-width: 1101px) {
+    .nfl-hero { --nfl-head: 64px; }
+  }
+  /* The backstop. `min-height` alone only sets a floor — on a 768px-tall
+     laptop the type plus the window's minimum slice still added up to more
+     than one screen, and the cut went back below the fold. `max-height` with
+     the same figure holds the section to exactly one screen and the hero's
+     own `overflow: hidden` takes the difference out of the window, which is
+     the one part of it that is supposed to be cut. Guarded on height so a
+     genuinely short window crops nothing and just scrolls. */
+  @media (min-width: 768px) and (min-height: 620px) {
+    .nfl-hero { max-height: calc(100vh - var(--nfl-head)); max-height: calc(100svh - var(--nfl-head)); }
+  }
+
   /* ---------- narrower ---------------------------------------------------- */
 
   @media (max-width: 1100px) {
     .nfl-grid5 { grid-template-columns: repeat(2, 1fr); }
   }
 
+  /* ⚠️ 1200, not 980. The card is pinned 24px in from the window's right
+     edge and the stages row is capped at 520px from its left, so the two
+     clear each other only while the window is near its full 1120px. Under
+     that the card walks left across the row and covers the last stage — the
+     end of the one animation in the hero. It is decoration; it goes first. */
+  @media (max-width: 1199px) {
+    .nfl-float { display: none; }
+  }
+
   @media (max-width: 980px) {
-    .nfl-hero__inner { grid-template-columns: 1fr; }
+    /* A 196px nav column against a 540px window leaves the invoice list
+       nothing, so the window's own sidebar goes too. */
+    .nfl-mock__side { display: none; }
+    .nfl-mock__body { grid-template-columns: 1fr; }
+    .nfl-hero__frame { height: 540px; }
+    .nfl-hero__stage { min-height: 230px; }
     .nfl-feat, .nfl-old__grid { grid-template-columns: 1fr; }
     .nfl-trust__grid { grid-template-columns: repeat(2, 1fr); gap: 26px 0; }
     .nfl-trust__cell:nth-child(odd) { border-left: 0; padding-left: 0; }
@@ -399,6 +550,24 @@
     .nfl-mock__stages { grid-template-columns: 1fr 1fr; }
     .nfl-mock__row { grid-template-columns: 1fr 108px; }
     .nfl-mock__amt { display: none; }
+    .nfl-mock__env { display: none; }
+    .nfl-mock__main { padding: 16px 16px; }
+    .nfl-hero__frame { height: 480px; }
+    .nfl-hero__stage { min-height: 210px; }
+
+    /* ⚠️ Every one of these is bought for the window. The headline takes five
+       lines at this width instead of three, which pushed the window's top
+       edge to 763 on a 844px screen: 81px of visible chrome, and the walking
+       stages — the only thing moving on the page — sat entirely below the
+       fold. Shaving the vertical rhythm down the column buys back about 80px
+       and puts the stages back on the first screen. Nothing here is a looks
+       decision; if the headline is ever shortened, these can go. */
+    .nfl-hero__inner { padding-top: 36px; }
+    .nfl-hero h1 { font-size: min(clamp(40px, 3.1vw + 2.1rem, 86px), 10.4vw); }
+    .nfl-hero__lead { margin-top: 18px; }
+    .nfl-hero__actions { margin-top: 26px; }
+    .nfl-hero__note { margin-top: 18px; }
+    .nfl-hero__stage { margin-top: 28px; }
     .nfl-trust__grid { grid-template-columns: 1fr; }
     .nfl-trust__cell { border-left: 0; padding-left: 0; }
     .nfl-frag { grid-template-columns: repeat(4, 1fr); }
@@ -409,7 +578,7 @@
        on the narrow end. The whole label stays in the DOM and CSS hides the
        middle of it, so the link reads the same to a screen reader in both
        states, and nothing reflows when the width changes. */
-    .nfl-switch { right: 14px; bottom: 14px; }
+    .nfl-switch { left: 14px; bottom: 14px; }
     .nfl-switch__long { display: none; }
   }
 
@@ -417,7 +586,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .nfl-proof__rail { animation: none; }
-    .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign { transition: none; }
+    .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign,
+    .nfl-mock__prog i, .nfl-mock__row { transition: none; }
     .nfl-card:hover, .nfl-story:hover, .nfl-switch:hover { transform: none; }
     .nfl-more:hover i { transform: none; }
   }
@@ -428,55 +598,88 @@
 
 <!-- ============ 1. HERO ============ -->
 <section class="nfl-hero" data-screen-label="Hero">
-  <div class="nfl-hero__inner">
-    <div>
-      <h1>Give your finance team back the hours it <span class="nfl-em">never</span> should have spent.</h1>
-      <p class="nfl-hero__lead">Invoices, expenses, payments and e&#8209;documents — captured, coded, approved and posted automatically. All of it 100% inside the Business Central your team already knows.</p>
-      <div class="nfl-hero__actions">
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="190px,52px">Get a free trial</x-import>
-        <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../company/find-a-partner/" hint-size="180px,52px">Talk to a partner</x-import>
-      </div>
-      <p class="nfl-hero__note"><b>21,000+</b> companies automate their finance work with Continia.</p>
-    </div>
+  <!-- Decoration only, all of it. The mark is Continia's own fifth element,
+       the rings are light. None of it carries meaning, so none of it is
+       announced. -->
+  <img class="nfl-hero__mark" src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true">
+  <span class="nfl-hero__ring nfl-hero__ring--a" aria-hidden="true"></span>
+  <span class="nfl-hero__ring nfl-hero__ring--b" aria-hidden="true"></span>
 
-    <!-- The mock is decoration: every word in it is repeated in the copy
-         beside it, so a screen reader that skips it loses nothing. -->
+  <div class="nfl-hero__inner">
+    <h1>Give your finance team back the hours it <span class="nfl-em">never</span> should have spent.</h1>
+    <p class="nfl-hero__lead">Invoices, expenses, payments and e&#8209;documents — captured, coded, approved and posted automatically. All of it 100% inside the Business Central your team already knows.</p>
+    <div class="nfl-hero__actions">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="190px,52px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../company/find-a-partner/" hint-size="180px,52px">Talk to a partner</x-import>
+    </div>
+    <p class="nfl-hero__note"><b>21,000+</b> companies automate their finance work with Continia.</p>
+  </div>
+
+  <!-- The window, and the card floating over it. Decoration: every word in
+       here is said again in the copy above or in the sections below, so a
+       screen reader that skips the whole stage loses nothing. -->
+  <div class="nfl-hero__stage">
+    <div class="nfl-hero__frame">
     <div class="nfl-mock" aria-hidden="true">
       <div class="nfl-mock__bar">
         <span class="nfl-mock__dots"><i></i><i></i><i></i></span>
-        <span class="nfl-mock__title">Accounts Payable &middot; Business Central</span>
+        <span class="nfl-mock__title">Continia Document Capture &middot; Business Central</span>
+        <span class="nfl-mock__env">CRONUS DK</span>
       </div>
       <div class="nfl-mock__body">
-        <div class="nfl-mock__stages" data-nfl-stages>
-          <span class="nfl-stage">Imported</span>
-          <span class="nfl-stage">Recognized</span>
-          <span class="nfl-stage">Approved</span>
-          <span class="nfl-stage">Posted</span>
+        <aside class="nfl-mock__side">
+          <span class="nfl-mock__nav is-on"><i class="fa-light fa-inbox"></i>Document journal</span>
+          <span class="nfl-mock__nav"><i class="fa-light fa-file-invoice"></i>Purchase invoices</span>
+          <span class="nfl-mock__nav"><i class="fa-light fa-circle-check"></i>Approvals</span>
+          <span class="nfl-mock__nav"><i class="fa-light fa-building-columns"></i>Payments and bank</span>
+          <span class="nfl-mock__nav"><i class="fa-light fa-paper-plane"></i>Document Output</span>
+          <span class="nfl-mock__nav"><i class="fa-light fa-chart-simple"></i>Reports</span>
+        </aside>
+        <div class="nfl-mock__main">
+          <div class="nfl-mock__stages" data-nfl-stages>
+            <span class="nfl-stage">Imported</span>
+            <span class="nfl-stage">Recognized</span>
+            <span class="nfl-stage">Approved</span>
+            <span class="nfl-stage">Posted</span>
+          </div>
+          <div class="nfl-mock__prog"><i></i></div>
+          <div class="nfl-mock__rows">
+            <div class="nfl-mock__row">
+              <span class="nfl-mock__vendor">Northwind Traders</span>
+              <span class="nfl-mock__amt">&euro; 4,820.00</span>
+              <span class="nfl-chip nfl-chip--ok">Posted</span>
+            </div>
+            <div class="nfl-mock__row">
+              <span class="nfl-mock__vendor">Adatum Corporation</span>
+              <span class="nfl-mock__amt">&euro; 1,145.50</span>
+              <span class="nfl-chip nfl-chip--warn">For approval</span>
+            </div>
+            <div class="nfl-mock__row">
+              <span class="nfl-mock__vendor">Contoso Supplies</span>
+              <span class="nfl-mock__amt">&euro; 9,390.00</span>
+              <span class="nfl-chip nfl-chip--info">Recognized</span>
+            </div>
+            <div class="nfl-mock__row">
+              <span class="nfl-mock__vendor">Fabrikam Logistics</span>
+              <span class="nfl-mock__amt">&euro; 612.75</span>
+              <span class="nfl-chip nfl-chip--neutral">Imported</span>
+            </div>
+          </div>
+          <div class="nfl-mock__foot"><i class="fa-light fa-wand-magic-sparkles"></i>4 of 5 invoices posted without a manual touch</div>
         </div>
-        <div class="nfl-mock__rows">
-          <div class="nfl-mock__row">
-            <span class="nfl-mock__vendor">Northwind Traders</span>
-            <span class="nfl-mock__amt">&euro; 4,820.00</span>
-            <span class="nfl-chip nfl-chip--ok">Posted</span>
-          </div>
-          <div class="nfl-mock__row">
-            <span class="nfl-mock__vendor">Adatum Corporation</span>
-            <span class="nfl-mock__amt">&euro; 1,145.50</span>
-            <span class="nfl-chip nfl-chip--warn">For approval</span>
-          </div>
-          <div class="nfl-mock__row">
-            <span class="nfl-mock__vendor">Contoso Supplies</span>
-            <span class="nfl-mock__amt">&euro; 9,390.00</span>
-            <span class="nfl-chip nfl-chip--info">Recognized</span>
-          </div>
-          <div class="nfl-mock__row">
-            <span class="nfl-mock__vendor">Fabrikam Logistics</span>
-            <span class="nfl-mock__amt">&euro; 612.75</span>
-            <span class="nfl-chip nfl-chip--neutral">Imported</span>
-          </div>
-        </div>
-        <div class="nfl-mock__foot"><i class="fa-light fa-wand-magic-sparkles"></i>4 of 5 invoices posted without a manual touch</div>
       </div>
+    </div>
+
+    <div class="nfl-float" aria-hidden="true">
+      <div class="nfl-float__head"><i class="fa-light fa-wand-magic-sparkles"></i>Read from the PDF</div>
+      <dl class="nfl-float__grid">
+        <div><dt>Vendor</dt><dd>Fabrikam Logistics</dd></div>
+        <div><dt>Invoice no.</dt><dd>FL&#8209;2026&#8209;00418</dd></div>
+        <div><dt>Amount</dt><dd>&euro; 612.75</dd></div>
+        <div><dt>Due</dt><dd>14 Nov 2026</dd></div>
+      </dl>
+      <div class="nfl-float__foot"><span class="nfl-chip nfl-chip--ok">Matched to order 106042</span></div>
+    </div>
     </div>
   </div>
 </section>
@@ -811,7 +1014,12 @@
 <div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
 
 <!-- Back to the real front page. Same pill as the one that leads here. -->
-<a class="nfl-switch" href="../"><i class="fa-light fa-arrow-left"></i>Back to <span class="nfl-switch__long">the current </span>front page</a>
+<!-- ⚠️ The whole label is ONE span. .nfl-switch is an inline-flex with a
+     9px gap, so every bare text node beside the inner span counted as its
+     own flex item and the gap was inserted between the words: the pill
+     read "Back to  the current  front page". One item, normal inline flow
+     inside it, and the gap does only what it is for — the icon. -->
+<a class="nfl-switch" href="../"><i class="fa-light fa-arrow-left"></i><span>Back to <span class="nfl-switch__long">the current </span>front page</span></a>
 </x-dc>
 
 <script>

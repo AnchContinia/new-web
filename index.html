@@ -438,11 +438,18 @@
        new pill in a new corner would have landed on it again. The class goes
        on <body>, which the dc runtime never re-renders, so it survives a
        render pass; an inline style on a node inside the tree would not. */
-    .nfl-toggle { position: fixed; bottom: 20px; right: 20px; left: auto; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+    /* ⚠️ `a.nfl-toggle`, not `.nfl-toggle`, and the element half is the whole
+       point. The bundle styles every link with `a:not(.cnt-btn)`, which is
+       0,1,1 — a bare class is 0,1,0 and loses. The pill rendered navy text on
+       its own navy ground and was simply unreadable, with nothing to see in
+       the markup. Adding the element name makes it 0,1,1 and it wins on
+       source order. Same trap as the one in css-silent-failure-traps: identical
+       CSS is not enough to lift a declaration. */
+    a.nfl-toggle { position: fixed; bottom: 20px; right: 20px; left: auto; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
       padding: 11px 18px; border-radius: 999px; background: #052975; border: 1.5px solid #052975; box-shadow: 0 8px 24px rgba(5,41,117,0.26);
-      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #8ff8ff; text-decoration: none;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none;
       transition: transform 200ms, background 200ms, opacity 220ms var(--ease-standard, ease-out); }
-    .nfl-toggle:hover { background: #0a317f; border-color: #0a317f; color: #8ff8ff; transform: translateY(-2px); }
+    a.nfl-toggle:hover { background: #0a317f; border-color: #0a317f; color: #ffffff; transform: translateY(-2px); }
     .nfl-toggle:focus-visible { outline: 3px solid #8ff8ff; outline-offset: 3px; }
     body.cnt-footer-in-view .nfl-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
     @media (prefers-reduced-motion: reduce) { .nfl-toggle { transition: none; } .nfl-toggle:hover { transform: none; } }
