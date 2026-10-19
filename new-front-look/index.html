@@ -240,14 +240,14 @@
      nearly transparent for most of its height and goes solid in the last few
      pixels. A linear ramp reads as a hard dark band across the window; these
      stops approximate an ease-in instead. */
-  .nfl-hero__stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: clamp(120px, 16vh, 170px); z-index: 3; pointer-events: none;
+  .nfl-hero__stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: clamp(150px, 20vh, 210px); z-index: 3; pointer-events: none;
     background: linear-gradient(to bottom,
       rgba(var(--nfl-navy-rgb),0) 0%,
-      rgba(var(--nfl-navy-rgb),0.05) 32%,
-      rgba(var(--nfl-navy-rgb),0.16) 52%,
-      rgba(var(--nfl-navy-rgb),0.36) 68%,
-      rgba(var(--nfl-navy-rgb),0.62) 82%,
-      rgba(var(--nfl-navy-rgb),0.86) 92%,
+      rgba(var(--nfl-navy-rgb),0.09) 28%,
+      rgba(var(--nfl-navy-rgb),0.26) 48%,
+      rgba(var(--nfl-navy-rgb),0.50) 66%,
+      rgba(var(--nfl-navy-rgb),0.76) 80%,
+      rgba(var(--nfl-navy-rgb),0.93) 91%,
       var(--nfl-navy) 100%); }
 
   /* ⚠️ 18px, not the house photo radius of 15px — the visible edge is a
@@ -256,7 +256,7 @@
      against IT rather than against the stage, so "24px in from the window's
      right edge" stays true at every width instead of drifting off-screen the
      moment the viewport is narrower than the window's maximum. */
-  .nfl-hero__frame { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: min(1120px, calc(100% - 2 * clamp(20px, 4vw, 44px))); height: 620px;
+  .nfl-hero__frame { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: min(1240px, calc(100% - 2 * clamp(20px, 4vw, 44px))); height: 780px;
     transform-origin: 50% 100%; will-change: transform, opacity;
     animation: nflFrameIn 1100ms cubic-bezier(0.16, 1, 0.3, 1) 140ms both; }
 
@@ -313,7 +313,7 @@
      four cells clear of the card at every width that shows it — which
      is 1200px and up; see the float's own breakpoint below. 520 left
      only 2px of air at exactly 1200, which is not air. */
-  .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 500px; }
+  .nfl-mock__stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 640px; }
   /* The walk is slow on purpose: 760ms on the colour, the same ease-out the
      coverflow uses, and a lift that settles rather than snaps. */
   .nfl-stage { padding: 8px 4px; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 700; background: var(--c-slate-100); color: #93a2bf;
@@ -347,7 +347,7 @@
      come free — no extra timer, and they cannot drift out of step. */
   /* Same 500px cap as the stages it sits under — the bar measures that row,
      so a track running on past the last cell measures nothing. */
-  .nfl-mock__prog { height: 3px; margin-top: 12px; max-width: 500px; border-radius: 999px; background: var(--c-slate-100); overflow: hidden; }
+  .nfl-mock__prog { height: 3px; margin-top: 12px; max-width: 640px; border-radius: 999px; background: var(--c-slate-100); overflow: hidden; }
   /* scaleX, not width: a width transition relayouts the bar on every frame.
      The gradient is painted across the full track and then scaled, so it
      compresses exactly as it did when the element itself was 25% wide. */
