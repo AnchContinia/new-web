@@ -270,11 +270,19 @@
     to   { opacity: 1; transform: translateX(0) translateY(0) scale(1); }
   }
   .nfl-mock { position: absolute; inset: 0; background: #ffffff; border-radius: 18px; box-shadow: 0 40px 90px rgba(2,12,40,0.42); overflow: hidden; }
-  .nfl-mock__bar { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--color-border); background: var(--c-slate-50); }
-  .nfl-mock__dots { display: flex; gap: 6px; flex: none; }
-  .nfl-mock__dots i { width: 9px; height: 9px; border-radius: 999px; background: #c8d3e6; display: block; }
-  .nfl-mock__title { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7b8bab; }
-  .nfl-mock__env { margin-left: auto; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: #9fb0cc; border: 1px solid var(--color-border); border-radius: 999px; padding: 3px 10px; }
+  /* The window's title bar is the house chrome from the design system's
+     PopupWindow: a solid Tech Blue band with the white logo, a hairline
+     divider and three white dots. `.nfl-mock__title` carries the `margin-left:
+     auto` for everything after it, so the right-hand group stays put when the
+     environment chip is hidden on a phone. */
+  .nfl-mock__bar { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--c-tech-blue); }
+  .nfl-mock__logo { display: inline-flex; flex: none; }
+  .nfl-mock__logo svg { display: block; height: 20px; width: auto; }
+  .nfl-mock__div { width: 1px; height: 15px; flex: none; background: rgba(255,255,255,0.30); }
+  .nfl-mock__title { margin-right: auto; font-size: 12px; font-weight: 500; letter-spacing: 0.01em; color: rgba(255,255,255,0.90); }
+  .nfl-mock__env { flex: none; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: rgba(255,255,255,0.70); border: 1px solid rgba(255,255,255,0.26); border-radius: 999px; padding: 3px 10px; }
+  .nfl-mock__dots { display: flex; gap: 7px; flex: none; }
+  .nfl-mock__dots i { width: 9px; height: 9px; border-radius: 999px; background: rgba(255,255,255,0.92); display: block; }
 
   .nfl-mock__body { display: grid; grid-template-columns: 196px 1fr; height: calc(100% - 48px); }
   .nfl-mock__side { border-right: 1px solid var(--color-border); padding: 16px 12px; background: #fbfcfe; }
@@ -656,6 +664,10 @@
     .nfl-mock__row { grid-template-columns: 1fr 108px; }
     .nfl-mock__amt { display: none; }
     .nfl-mock__env { display: none; }
+    /* The product name wraps to four lines in a 350px bar, so the phone keeps
+       only the environment the window is in. */
+    .nfl-mock__long { display: none; }
+    .nfl-mock__logo svg { height: 17px; }
     .nfl-mock__main { padding: 16px 16px; }
     .nfl-hero__stage { min-height: 210px; }
 
@@ -737,9 +749,11 @@
     <div class="nfl-hero__frame">
     <div class="nfl-mock" aria-hidden="true">
       <div class="nfl-mock__bar">
-        <span class="nfl-mock__dots"><i></i><i></i><i></i></span>
-        <span class="nfl-mock__title">Continia Document Capture &middot; Business Central</span>
+        <span class="nfl-mock__logo"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.Logo" color="white" height="20" hint-size="136px,20px"></x-import></span>
+        <span class="nfl-mock__div"></span>
+        <span class="nfl-mock__title"><span class="nfl-mock__long">Continia Document Capture &middot; </span>Business Central</span>
         <span class="nfl-mock__env">CRONUS DK</span>
+        <span class="nfl-mock__dots"><i></i><i></i><i></i></span>
       </div>
       <div class="nfl-mock__body">
         <aside class="nfl-mock__side">
