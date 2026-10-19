@@ -94,6 +94,31 @@
      ⚠️ Two of these on one screen and it stops reading as emphasis, so the
      hero has one and the CTA band has one — nothing in between. */
   .nfl-em { font-style: italic; color: var(--c-innovation-blue); }
+
+  /* "Smoke type": the word condenses out of the background instead of sliding
+     in. Each letter starts large, soft and offset, loses its blur on the way
+     to its real position, and the stagger makes the word gather left to right.
+     The letters are real markup — the x-dc runtime replaces the rendered
+     subtree once, so nothing may be split by script — and a visually hidden
+     copy of the word carries it for screen readers.
+     ⚠️ No `transform: none` in the keyframe: it is dropped silently. The end
+     state spells the identity transform out. */
+  .nfl-smoke { position: relative; white-space: nowrap; }
+  .nfl-smoke__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .nfl-smoke__c { display: inline-block; will-change: filter, opacity, transform;
+    animation: nflSmoke 1500ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .nfl-smoke__c:nth-child(2) { animation-delay: 300ms; }
+  .nfl-smoke__c:nth-child(3) { animation-delay: 400ms; }
+  .nfl-smoke__c:nth-child(4) { animation-delay: 500ms; }
+  .nfl-smoke__c:nth-child(5) { animation-delay: 600ms; }
+  .nfl-smoke__c:nth-child(6) { animation-delay: 700ms; }
+
+  @keyframes nflSmoke {
+    0%   { opacity: 0; filter: blur(18px); transform: translate3d(-0.16em, 0.26em, 0) scale(1.22) rotate(-3.5deg); }
+    38%  { opacity: 0.5; filter: blur(8px); }
+    72%  { opacity: 0.94; filter: blur(2px); }
+    100% { opacity: 1; filter: blur(0px); transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  }
   .nfl-band--dark .nfl-em { color: var(--c-innovation-blue); }
 
   /* A number the site actually publishes. Anything that is NOT one of these
@@ -131,7 +156,11 @@
      to the viewport would squeeze the window down to a sliver of title bar.
      There the hero takes its natural height and the window gets a fixed
      slice instead. */
-  .nfl-hero { position: relative; overflow: hidden; isolation: isolate; background: #041e58; display: flex; flex-direction: column; }
+  /* --nfl-navy is the hero's one navy. The scrim, the rings and the fade at
+     the bottom of the window all derive from it, so lightening the hero is a
+     single edit rather than five that have to agree. */
+  .nfl-hero { --nfl-navy: #0a3576; --nfl-navy-rgb: 10, 53, 118;
+    position: relative; overflow: hidden; isolation: isolate; background: var(--nfl-navy); display: flex; flex-direction: column; }
   /* The brand clouds clip, the same file the current front page runs, here as
      the hero's ground rather than as a white-washed band. It is 1920x1080 and
      already blue and violet, so a navy scrim over it reads as depth instead
@@ -149,8 +178,8 @@
      visible behind the window. */
   .nfl-hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-      radial-gradient(1200px 760px at 50% -10%, rgba(14,61,148,0.58) 0%, rgba(14,61,148,0) 64%),
-      linear-gradient(185deg, rgba(4,30,88,0.90) 0%, rgba(5,41,117,0.84) 42%, rgba(4,30,88,0.62) 100%); }
+      radial-gradient(1200px 760px at 50% -10%, rgba(32,96,196,0.50) 0%, rgba(32,96,196,0) 64%),
+      linear-gradient(185deg, rgba(var(--nfl-navy-rgb),0.76) 0%, rgba(13,62,146,0.68) 42%, rgba(var(--nfl-navy-rgb),0.44) 100%); }
 
   /* Two enormous thin circles bleeding off opposite corners. They read as
      light rather than as shapes, and they give the flat navy somewhere to go. */
@@ -180,13 +209,13 @@
      stops approximate an ease-in instead. */
   .nfl-hero__stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: clamp(120px, 16vh, 170px); z-index: 3; pointer-events: none;
     background: linear-gradient(to bottom,
-      rgba(4,30,88,0) 0%,
-      rgba(4,30,88,0.05) 32%,
-      rgba(4,30,88,0.16) 52%,
-      rgba(4,30,88,0.36) 68%,
-      rgba(4,30,88,0.62) 82%,
-      rgba(4,30,88,0.86) 92%,
-      #041e58 100%); }
+      rgba(var(--nfl-navy-rgb),0) 0%,
+      rgba(var(--nfl-navy-rgb),0.05) 32%,
+      rgba(var(--nfl-navy-rgb),0.16) 52%,
+      rgba(var(--nfl-navy-rgb),0.36) 68%,
+      rgba(var(--nfl-navy-rgb),0.62) 82%,
+      rgba(var(--nfl-navy-rgb),0.86) 92%,
+      var(--nfl-navy) 100%); }
 
   /* ⚠️ 18px, not the house photo radius of 15px — the visible edge is a
      window's chrome, not a photograph. */
@@ -651,6 +680,7 @@
        declaration, not a keyframe. The clip goes entirely — it is motion
        with no way to sit still. */
     .nfl-hero__frame, .nfl-float { animation: none; }
+    .nfl-smoke__c { animation: none; }
     .nfl-hero__vid { display: none; }
     .nfl-proof__rail { animation: none; }
     .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign,
@@ -676,7 +706,7 @@
   <span class="nfl-hero__ring nfl-hero__ring--b" aria-hidden="true"></span>
 
   <div class="nfl-hero__inner">
-    <h1>Give your finance team back the hours it <span class="nfl-em">never</span> should have spent.</h1>
+    <h1>Give your finance team back the hours it <span class="nfl-em nfl-smoke"><span class="nfl-smoke__sr">never</span><span class="nfl-smoke__c" aria-hidden="true">n</span><span class="nfl-smoke__c" aria-hidden="true">e</span><span class="nfl-smoke__c" aria-hidden="true">v</span><span class="nfl-smoke__c" aria-hidden="true">e</span><span class="nfl-smoke__c" aria-hidden="true">r</span></span> should have spent.</h1>
     <p class="nfl-hero__lead">Invoices, expenses, payments and e&#8209;documents — captured, coded, approved and posted automatically. All of it 100% inside the Business Central your team already knows.</p>
     <div class="nfl-hero__actions">
       <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="190px,52px">Get a free trial</x-import>
