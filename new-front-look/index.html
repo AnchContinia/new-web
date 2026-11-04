@@ -893,16 +893,6 @@
   }
   .nfl-band--dark .nfl-em { color: var(--c-innovation-blue); }
 
-  /* A number the site actually publishes. Anything that is NOT one of these
-     is a .nfl-todo instead — see the note at the top of this file. */
-  .nfl-fig { font-weight: 700; letter-spacing: -0.02em; color: var(--c-tech-blue); font-variant-numeric: tabular-nums; }
-  .nfl-band--dark .nfl-fig { color: var(--c-innovation-blue); }
-
-  /* ⚠️ Deliberately ugly. A missing figure has to be impossible to mistake for
-     a real one in a screenshot, so it is dashed, amber and says what it wants.
-     Delete the rule and the markup together once the numbers arrive. */
-  .nfl-todo { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border: 1.5px dashed var(--color-warning); border-radius: 8px; background: var(--c-light-yellow); color: var(--color-warning-fg); font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; font-style: normal; text-align: left; }
-  .nfl-todo::before { content: "\f071"; font-family: "Font Awesome 7 Pro"; font-weight: 300; font-size: 12px; }
   /* ---------- 1. hero ---------------------------------------------------- */
 
   /* ⚠️ No eyebrow pill above the h1. Payhawk opens with one ("The AI-native
@@ -1155,20 +1145,6 @@
      and not as a screenshot. It is therefore a SIBLING of .nfl-mock, because
      .nfl-mock clips its own children. */
 
-  /* ---------- 2. proof marquee ------------------------------------------ */
-
-  .nfl-proof { background: var(--c-slate-50); border-block: 1px solid var(--color-border); padding: 30px 0; }
-  .nfl-proof__rail { display: flex; width: max-content; gap: 14px; animation: nfl-marquee 54s linear infinite; }
-  .nfl-proof__rail:hover { animation-play-state: paused; }
-  @keyframes nfl-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  /* ⚠️ The rail holds the same cards twice and travels exactly -50%, so the
-     seam lands where the first copy ended and the loop is invisible. Add a
-     card to one copy and you must add it to the other, or the belt jumps. */
-  .nfl-proof__card { flex: none; width: 310px; padding: 18px 22px; border-radius: 15px; background: #ffffff; border: 1px solid var(--color-border); }
-  .nfl-proof__who { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-slate-500); }
-  .nfl-proof__what { margin: 9px 0 0; font-size: 15.5px; font-weight: 600; line-height: 1.45; color: var(--c-ink); }
-  .nfl-proof__what .nfl-fig { font-size: 19px; }
   /* ---------- the two prototype pills ------------------------------------ */
 
   /* Bottom RIGHT, because the front page's own switches sit bottom left and
@@ -1268,7 +1244,6 @@
     .nfl-hero__actions { margin-top: 26px; }
     .nfl-hero__note { margin-top: 18px; }
     .nfl-hero__stage { margin-top: 28px; }
-    .nfl-proof__card { width: 268px; }
     /* ⚠️ The full label makes the pill 340px wide at 390 — it covered most of
        the column. The whole label stays in the DOM and CSS hides the middle
        of it, so the link reads the same to a screen reader in both states. */
@@ -1287,7 +1262,6 @@
     .nfl-smoke__c { animation: none; }
     .nfl-hero__ring circle { animation: none; stroke-dashoffset: 0; }
     .nfl-hero__vid { display: none; }
-    .nfl-proof__rail { animation: none; }
     .nfl-switch, .nfl-stage, .nfl-mock__prog i, .nfl-mock__row { transition: none; }
     .nfl-stage { transform: none; box-shadow: none; }
     .nfl-switch:hover { transform: none; }
@@ -1408,31 +1382,7 @@
   </div>
 </section>
 
-<!-- ============ 2. PROOF MARQUEE ============ -->
-<!-- ⚠️ Both halves of the rail hold the SAME eight cards, in the same order.
-     The animation travels -50%, so the seam is invisible only while that
-     holds. Edit one half and you must edit the other. -->
-<section class="nfl-proof" data-screen-label="Proof" aria-label="Results customers report">
-  <div class="nfl-proof__rail">
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Calypso Group</div><p class="nfl-proof__what">Hasn't chased a missing invoice in over a year</p></div>
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Nordwind Logistics</div><p class="nfl-proof__what">Cut manual data entry by <span class="nfl-fig">90%</span></p></div>
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Fjord &amp; Co.</div><p class="nfl-proof__what">Closes <span class="nfl-fig">two days</span> earlier</p></div>
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">21,000+</span> customers</p></div>
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">1,500+</span> local partners</p></div>
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what">Delivered in <span class="nfl-fig">45+</span> countries</p></div>
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">30+</span> years of finance automation</p></div>
-    <div class="nfl-proof__card"><div class="nfl-proof__who">Named customers</div><p class="nfl-proof__what"><span class="nfl-todo">TODO: no published result figures for Bestseller, BMW, Dunlop, Marley &amp; Martha, Moccamaster or Sagrada Fam&iacute;lia</span></p></div>
 
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Calypso Group</div><p class="nfl-proof__what">Hasn't chased a missing invoice in over a year</p></div>
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Nordwind Logistics</div><p class="nfl-proof__what">Cut manual data entry by <span class="nfl-fig">90%</span></p></div>
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Fjord &amp; Co.</div><p class="nfl-proof__what">Closes <span class="nfl-fig">two days</span> earlier</p></div>
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">21,000+</span> customers</p></div>
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">1,500+</span> local partners</p></div>
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what">Delivered in <span class="nfl-fig">45+</span> countries</p></div>
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Continia worldwide</div><p class="nfl-proof__what"><span class="nfl-fig">30+</span> years of finance automation</p></div>
-    <div class="nfl-proof__card" aria-hidden="true"><div class="nfl-proof__who">Named customers</div><p class="nfl-proof__what"><span class="nfl-todo">TODO: no published result figures for Bestseller, BMW, Dunlop, Marley &amp; Martha, Moccamaster or Sagrada Fam&iacute;lia</span></p></div>
-  </div>
-</section>
 
 <!-- ============ TRUST MARQUEE ============ -->
 <section data-screen-label="Trusted by" class="tby">
