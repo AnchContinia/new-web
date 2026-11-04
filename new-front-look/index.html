@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<!-- data-nfl-pillar and data-nfl-step live on <html> because it is the one
-     element outside the dc runtime's render tree; see the script at the
-     bottom. The first pillar opens from the markup, so the page is correct
-     with scripting off and matches the aria-expanded="true" on button 1. -->
-<html data-nfl-pillar="1">
+<!-- The alternative front page. The header is this page's own: the hero
+     from the new look, plus the proof band directly under it. Everything
+     below that band is the real front page, 1:1 — same markup, same CSS,
+     same script — so a change there has to be made in site/index.html and
+     mirrored here. -->
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,46 +25,834 @@
 <script src="https://kit.fontawesome.com/c11880975e.js" crossorigin="anonymous"></script>
 <script src="_ds/contina-3-0-front-end-814650ee-2a72-4f6d-8e32-c05a21c81842/_ds_bundle.js"></script>
 <style>
-  /* ======================================================================
-     NEW FRONT LOOK — an alternative front page, kept alongside the real one.
+    html { scroll-behavior: smooth; }
+    /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
+       overflow-y to auto, which made BODY the scroller: window.scrollY was stuck
+       at 0, window never fired `scroll`, and the sticky header unstuck after
+       ~840px because .sc-host is only viewport-tall. `clip` clips the same way
+       without creating a scroll box. Keep hidden on <html> — it propagates to
+       the viewport, which is what actually kills sideways scroll. */
+    html { overflow-x: hidden; max-width: 100%; }
+    body { overflow-x: clip; max-width: 100%; }
+    body { margin: 0; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; color: #0a1838; background: #ffffff; -webkit-font-smoothing: antialiased; }
+    a:not(.cnt-btn) { color: #052975; }
+    a:not(.cnt-btn):hover { color: #0a317f; }
+    @keyframes cnt-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    #blog image-slot { display: block; width: 100%; height: 100%; }
+    .cnt-btn.cnt-btn--innovation { --_bg: #8ff8ff; --_fg: #052975; }
+    .cnt-btn.cnt-btn--innovation:hover { --_bg: #c6fbff; }
+    .cnt-btn.cnt-btn--white { --_bg: #ffffff; --_fg: #052975; }
+    .cnt-btn.cnt-btn--white:hover { --_bg: #def5ff; }
+    .cnt-btn.cnt-btn--ghostdark { --_bg: transparent; --_fg: #ffffff; --_bd: rgba(255,255,255,0.55); }
+    .cnt-btn.cnt-btn--ghostdark:hover { --_bg: rgba(255,255,255,0.12); --_bd: #ffffff; --_fg: #8ff8ff; }
+    /* Trust marquee: stack the label above the logos so the marquee gets full width */
+        /* >>> module: cta-band --------------------------------------------
+           Owned by Continia.Umbraco.CtaBand. Synced by tools/sync_css.py —
+           edit here, run the sync, never edit the module's copy.
 
-     The layout is Payhawk's front page, section for section, in their order:
-     hero, proof marquee, product grid, trust row, the problem, the three
-     pillars, AI, payments, controls, stories, CTA. The content is Continia's
-     own and the copy is written here, not lifted.
+           ⚠️ The generic rules further down still target this section through
+           `section[data-screen-label$="CTA"]`, because that selector also
+           reaches the CTA band on the other 43 pages, which are not converted.
+           They carry !important and keep winning here. Every value below
+           repeats them exactly, so nothing changes on this page — but the
+           module needs its own copy, since neither the attribute selector nor
+           those pages exist in Umbraco. */
+        .cta { position: relative; overflow: hidden;
+          background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%); }
+        .cta__mark { position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%);
+          width: 120%; opacity: 0.08; pointer-events: none; }
+        .cta__inner { position: relative; max-width: 820px; margin: 0 auto;
+          padding: 110px 32px; text-align: center; }
+        .cta__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.15em;
+          text-transform: uppercase; color: #8ff8ff; }
+        .cta__title { margin: 14px 0 0; font-size: clamp(32px, 22px + 1.6vw, 44px);
+          font-weight: 700; letter-spacing: -0.02em; color: #ffffff; text-wrap: balance; }
+        .cta__lead { margin: 18px auto 0; max-width: 56ch; font-size: 18px;
+          line-height: 1.6; color: rgba(255,255,255,0.82); }
+        .cta__actions { display: flex; gap: 14px; justify-content: center;
+          flex-wrap: wrap; margin-top: 34px; }
 
-     ⚠️ This page does NOT replace site/index.html. It is reached only from
-     the pill at the bottom right of the front page, and it carries a pill
-     back. Both are marked as prototype switches, same family as the ones on
-     the products page.
+        /* The watermark's crop. Sized by HEIGHT below 1100px: the band turns
+           portrait on a phone (aspect 0.74 at 390px) and `width: 120%` then
+           covered only 0.56x of it, so the artwork's top edge peeked in at the
+           bottom as a stray rectangle. `min-width` floors the box at the old
+           120% and `object-fit: cover` crops into it rather than stretching.
+           Verified 390 -> 1100. See the note by the generic rule for why
+           Andreas's Photoshop crop is 115%. */
+        @media (max-width: 1100px) {
+          .cta__mark { width: auto; height: 115%; min-width: 120%; object-fit: cover; }
+        }
+        @media (max-width: 640px) {
+          .cta__inner { padding: 72px 20px; }
+        }
+            /* The page-wide widow rule, scoped to this section and repeated here on
+       purpose. The document already sets `text-wrap: balance` on every heading
+       and paragraph, so this changes nothing in the prototype — but the module
+       ships as a NuGet package into a site that has no such rule, and without
+       it the headings there wrap one word to a line and stop matching what was
+       signed off. Measured over all 44 pages, `balance` beats `pretty` by a
+       wide margin: desktop 200 -> 6 widows, mobile 266 -> 17, tablet
+       204 -> 14, where `pretty` only reached 36 on desktop.
+       Both halves are :where(), so the whole selector weighs 0,0,0 — weaker
+       than a bare `h1`, so the host's own typography always wins the tie and
+       anything explicit still beats it. Enforced by tools/check_widows.py. */
+    :where(.cta) :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption) { text-wrap: balance; }
+    /* <<< */
 
-     ⚠️ Every number on this page is one the site already states. Where
-     Continia has no figure, the slot says so in plain sight rather than
-     carrying something invented — search this file for "TODO" and you have
-     the full list of what is missing.
+        /* >>> module: trusted-by ------------------------------------------
+           Owned by Continia.Umbraco.TrustedBy. Synced by tools/sync_css.py.
 
-     Prefix: .nfl
-     ====================================================================== */
+           ⚠️ Same arrangement as the CTA band: the generic
+           `section[data-screen-label="Trusted by"]` rules below still win here
+           with !important, and the values are repeated exactly. */
+        .tby { background: #052975; }
+        .tby__inner { max-width: 1240px; margin: 0 auto; padding: 30px 32px;
+          display: flex; align-items: center; gap: 36px; }
+        .tby__label { flex: none; font-size: 16px; font-weight: 600;
+          color: rgba(255,255,255,0.72); white-space: nowrap; }
+        .tby__count { color: #8ff8ff; font-weight: 700; }
+        /* The mask fades the strip out at both ends so logos enter and leave
+           instead of being cut. -webkit- first: Safari still needs it. */
+        .tby__track { flex: 1; overflow: hidden;
+          -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+        /* The strip holds the logo set TWICE and travels -50%, so the second
+           copy is exactly where the first started when the loop restarts —
+           that is what makes it seamless. Halving the list breaks the loop. */
+        .tby__strip { display: flex; align-items: center; gap: 64px; width: max-content;
+          animation: tby-marquee 38s linear infinite; }
+        .tby__logo { height: auto; width: auto; max-height: 30px; max-width: 160px;
+          object-fit: contain; opacity: 0.82; flex: none; }
+        @keyframes tby-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-  /* BODY must not become a scroll container. `overflow-x: hidden` here coerced
-     overflow-y to auto, which made BODY the scroller: window.scrollY stuck at 0,
-     window never fired `scroll`, and the sticky header unstuck after ~840px.
-     `clip` clips the same way without creating a scroll box. */
-  html { overflow-x: hidden; max-width: 100%; }
-  body { overflow-x: clip; max-width: 100%; }
-  body { margin: 0; background: #ffffff; font-family: "Alliance No.2", "Helvetica Neue", Arial, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-  a:not(.cnt-btn) { color: var(--color-text-link); text-decoration: none; }
-  a:not(.cnt-btn):hover { color: var(--color-primary-hover); }
-  ::selection { background: var(--c-innovation-blue); color: var(--c-tech-blue); }
+        /* Below 820 the label sits above the logos so the marquee gets the
+           full width; at 16px on one line it ate half the row. */
+        @media (max-width: 820px) {
+          .tby__inner { flex-direction: column; align-items: center; padding: 22px 20px; gap: 14px; }
+          .tby__label { text-align: center; white-space: normal; font-size: 14.5px; }
+          .tby__track { width: 100%; }
+        }
+        /* In the prototype support.js pauses this by id. The module ships no
+           script, so the stylesheet has to carry the same promise. */
+        @media (prefers-reduced-motion: reduce) {
+          .tby__strip { animation: none; }
+        }
+            /* The page-wide widow rule, scoped to this section and repeated here on
+       purpose. The document already sets `text-wrap: balance` on every heading
+       and paragraph, so this changes nothing in the prototype — but the module
+       ships as a NuGet package into a site that has no such rule, and without
+       it the headings there wrap one word to a line and stop matching what was
+       signed off. Measured over all 44 pages, `balance` beats `pretty` by a
+       wide margin: desktop 200 -> 6 widows, mobile 266 -> 17, tablet
+       204 -> 14, where `pretty` only reached 36 on desktop.
+       Both halves are :where(), so the whole selector weighs 0,0,0 — weaker
+       than a bare `h1`, so the host's own typography always wins the tie and
+       anything explicit still beats it. Enforced by tools/check_widows.py. */
+    :where(.tby) :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption) { text-wrap: balance; }
+    /* <<< */
 
-  /* ⚠️ `balance`, never `pretty`. Measured over all 44 pages: desktop 200 → 6
-     widows with balance, 36 with pretty; mobile 266 → 17; tablet 204 → 14. */
-  h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
+        /* >>> module: how-it-works ----------------------------------------
+           Owned by Continia.Umbraco.HowItWorks. Kept byte-identical to that
+           module's wwwroot/continia/how-it-works/continia-how-it-works.css,
+   synced by
+           tools/sync_css.py; edit here, run the sync, never edit the copy.
 
-  /* ---------- shared section furniture ---------------------------------- */
+           These declarations were inline `style=` attributes until the module
+           was built. They were lifted verbatim — every computed value is
+           unchanged, proven by tools/check_section.py — because a module may
+           not ship its styling inside markup (CONVENTIONS.md section 5) and
+           because an inline declaration is invisible to the CSS sync, so a
+           responsive tweak made here could never reach Umbraco. */
+        .hiw { background: #ffffff; }
+        .hiw__inner { max-width: 1240px; margin: 0 auto; padding: 104px 32px; }
+        .hiw__head { text-align: center; max-width: 600px; margin: 0 auto; }
+        .hiw__eyebrow { font-size: 14.5px; font-weight: 700; letter-spacing: 0.15em;
+          text-transform: uppercase; color: #052975; }
+        .hiw__title { margin: 14px 0 0; font-size: clamp(28px, 3.2vw, 46px); font-weight: 700;
+          line-height: 1.1; letter-spacing: -0.015em; color: #052975; white-space: nowrap; }
+        .hiw__lead { margin: 16px auto 0; font-size: 17px; line-height: 1.6; color: #0a1838; }
+        .hiw__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px; }
 
-  .nfl-sec { box-sizing: border-box; max-width: 1240px; margin: 0 auto; padding: clamp(64px, 8vw, 112px) clamp(20px, 4vw, 44px); }
-  .nfl-sec *, .nfl-sec *::before, .nfl-sec *::after { box-sizing: border-box; }
+        .hiw-card { background: #f6f8fb; border: 1px solid #eef1f6; border-radius: 24px;
+          padding: 32px; transition: box-shadow 250ms, transform 250ms; }
+        /* Was a `style-hover` attribute, which is a design-compiler feature with
+           no equivalent in Razor. A real :hover rule is what the module ships,
+           so the prototype uses one too and the two cannot drift. */
+        .hiw-card:hover { box-shadow: 0 18px 48px rgba(5,41,117,0.14); transform: translateY(-4px); }
+        .hiw-card__badge { display: inline-block; padding: 5px 14px; border-radius: 999px;
+          background: #052975; color: #8ff8ff; font-size: 11px; font-weight: 700;
+          letter-spacing: 0.1em; text-transform: uppercase; }
+        .hiw-card__title { margin: 18px 0 0; font-size: 21px; font-weight: 700; color: #052975; }
+        .hiw-card__body { margin: 10px 0 0; font-size: 14.5px; line-height: 1.6; color: #3a4a6b; }
+
+        /* Three visuals, one base. The base holds what they share; each variant
+           adds only what makes it itself, so the stat card gets no border and
+           no shadow simply by not asking for them. */
+        .hiw-card__visual { margin-top: 24px; border-radius: 16px; padding: 20px; display: flex; }
+        .hiw-app, .hiw-check { background: #ffffff; border: 1px solid #dde3ee;
+          box-shadow: 0 2px 8px rgba(5,41,117,0.08); }
+        .hiw-app { align-items: center; gap: 16px; }
+        .hiw-app__logo { width: 40px; height: 40px; }
+        .hiw-app__meta { flex: 1; }
+        .hiw-app__name { font-size: 13.5px; font-weight: 700; color: #0a1838; }
+        .hiw-app__src { font-size: 11.5px; color: #6b7894; }
+        .hiw-app__get { padding: 7px 16px; border-radius: 999px; background: #052975;
+          color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; }
+
+        .hiw-check { flex-direction: column; gap: 12px; }
+        .hiw-check__row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #0a1838; }
+        .hiw-check__row--todo { color: #6b7894; }
+        .hiw-check__ico { color: #5f9e8d; }
+        .hiw-check__row--todo .hiw-check__ico { color: #aab4c8; }
+
+        .hiw-stat { background: #052975; align-items: center; gap: 16px; }
+        .hiw-stat__num { font-size: 38px; font-weight: 700; color: #8ff8ff; line-height: 1; }
+        .hiw-stat__txt { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.8); }
+        /* The section's responsive behaviour, scoped to .hiw.
+
+           ⚠️ This is a DUPLICATE of what the page's generic rules already do to
+           this section: `.cnt-3col` collapses the grid at 980, `#how > div` and
+           `.cnt-3col > div` cut the padding at 640, `#how h2` lets the headline
+           wrap. Every value below is the same, so nothing changes here — the
+           generic rules carry !important and keep winning.
+
+           It is duplicated because the generic rules cannot travel. In Umbraco
+           there is no `#how` and no `.cnt-3col`; a module that relied on them
+           would render three columns on a phone. The module must state its own
+           responsive behaviour, and this block is that statement, kept here so
+           the prototype and the module stay one file. Change a breakpoint here
+           and it reaches Umbraco through tools/sync_css.py. */
+        @media (max-width: 980px) {
+          .hiw__grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+          .hiw__inner { padding: 60px 20px; }
+          .hiw-card { padding: 24px; }
+          .hiw__title { white-space: normal; }
+        }
+            /* The page-wide widow rule, scoped to this section and repeated here on
+       purpose. The document already sets `text-wrap: balance` on every heading
+       and paragraph, so this changes nothing in the prototype — but the module
+       ships as a NuGet package into a site that has no such rule, and without
+       it the headings there wrap one word to a line and stop matching what was
+       signed off. Measured over all 44 pages, `balance` beats `pretty` by a
+       wide margin: desktop 200 -> 6 widows, mobile 266 -> 17, tablet
+       204 -> 14, where `pretty` only reached 36 on desktop.
+       Both halves are :where(), so the whole selector weighs 0,0,0 — weaker
+       than a bare `h1`, so the host's own typography always wins the tie and
+       anything explicit still beats it. Enforced by tools/check_widows.py. */
+    :where(.hiw) :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption) { text-wrap: balance; }
+    /* <<< */
+
+    @media (max-width: 820px) {
+      section[data-screen-label="Trusted by"] > div { flex-direction: column !important; align-items: center !important; padding: 22px 20px !important; gap: 14px !important; }
+      section[data-screen-label="Trusted by"] > div > span { text-align: center !important; }
+      section[data-screen-label="Trusted by"] > div > span { white-space: normal !important; font-size: 14.5px !important; }
+      section[data-screen-label="Trusted by"] > div > div { width: 100% !important; }
+    }
+    @media (max-width: 980px) {
+      .cnt-bento, .cnt-3col, .cnt-2col, .cnt-4col { grid-template-columns: 1fr !important; }
+      .cnt-nav { display: none !important; }
+      .cnt-partner-link { display: none !important; }
+      .cnt-bento-wide { grid-column: auto !important; }
+    }
+    /* ---------- Mobile (<=640px) ---------- */
+    @media (max-width: 640px) {
+      /* Tighter section gutters + vertical rhythm */
+      #impacts > div, #solutions > div, #how > div { padding: 60px 20px !important; }
+      section[data-screen-label$="CTA"] > div { padding: 72px 20px !important; }
+
+      /* Hero type scales down and wraps naturally */
+      .hero-h1 { font-size: clamp(24px, 6.6vw, 32px) !important; letter-spacing: -0.02em !important; margin-top: 16px !important; }
+      /* keep the <br> so it reads as two clean lines (hiding it collapsed "time.But") */
+      .hero-sub { font-size: 15.5px !important; margin-top: 18px !important; }
+
+      /* Hero CTAs stack full-width for big tap targets */
+
+      /* Proof points stack, left-aligned */
+
+      /* BC mockup is hidden on phones: at 390px it rendered ~595px tall, got
+         clipped by the trust band, and needed sideways scrolling to read. The
+         hero carries its own bottom padding here because the mockup's -26px
+         bottom margin was what used to close the gap to the band. */
+      .hero-mock { display: none !important; }
+      .mock-body { padding: 12px !important; }
+      .mock-steps { gap: 5px !important; }
+      .mock-steps > div { font-size: 9.5px !important; min-width: 0 !important; padding: 7px 3px !important; }
+      .mock-steps > div i { display: none; }
+
+      /* Impact: kill the 340px min-width that forced horizontal scroll */
+      #cnt-statband [style*="min-width:340px"] { min-width: 0 !important; font-size: 52px !important; }
+
+      /* Cards a touch tighter */
+      .cnt-bento > div, .cnt-3col > div { padding: 24px !important; }
+      .sol-new__inner { padding: 60px 20px !important; }
+
+      /* How it works: allow the desktop one-line headline to wrap on mobile */
+      #how h2 { white-space: normal !important; }
+
+      /* (the carousel's mobile rules live after the base ones further down —
+         placed here they lost on source order) */
+    }
+
+    /* ---------- Solutions: glassmorphism + video bg (new) ---------- */
+    .sol-new { position: relative; overflow: hidden; background: #041e58; }
+    .sol-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .sol-vid-ovl { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(1000px 460px at 82% -8%, rgba(143,248,255,0.16), transparent 60%),
+        linear-gradient(180deg, rgba(4,30,88,0.42) 0%, rgba(5,41,117,0.22) 48%, rgba(4,24,72,0.50) 100%); }
+    .sol-new__inner { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; padding: 74px 32px 134px; }
+    .sol-g { background: linear-gradient(0deg, rgba(5,41,117,0.10), rgba(5,41,117,0.10)), rgba(143,248,255,0.10); border: 2px solid rgba(196,251,255,0.85); border-radius: 18px; padding: 32px;
+      transition: transform 250ms, border-color 250ms; }
+    .sol-g:hover { transform: translateY(-4px); border-color: rgba(214,251,255,1); }
+    .sol-g__icon { flex: none; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; background: rgba(143,248,255,0.16); color: #8ff8ff; border: 1px solid rgba(143,248,255,0.28); }
+    .sol-g__title { font-size: 19px; font-weight: 700; color: #ffffff; }
+    .sol-g__sub { font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,0.74); }
+    .sol-g__panel { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; }
+
+    /* >>> module: impact-split ----------------------------------------
+       Owned by Continia.Umbraco.ImpactSplit. Synced by tools/sync_css.py.
+
+       This section was already class-based, so nothing moved out of markup;
+       only the section's own wrapper did. What the sentinels add is ownership:
+       everything between them ships to Umbraco, and .imp-toggle below them
+       does NOT — that is the prototype's view switcher, not part of the design.
+
+       ⚠️ The section also has a CLASSIC view behind `sc-if`, built from inline
+       styles. It is a prototype alternative that has never been the live one,
+       so the module ports the split view only. Delete the classic markup and
+       this block is unaffected. */
+    .imp { background: #ffffff; }
+    .imp__inner { max-width: 1240px; margin: 0 auto; padding: 104px 32px; }
+    @media (max-width: 640px) {
+      .imp__inner { padding: 60px 20px; }
+    }
+    /* ---------- Impact: 50/50 split — two photos (left) orbiting/swapping ---------- */
+    .imp-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px,4.6vw,76px); align-items: center; }
+    .imp-left h2 { margin: 0; font-size: clamp(32px,3.2vw,46px); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; color: #052975; }
+    .imp-left > p { margin: 20px 0 0; font-size: 17px; line-height: 1.65; color: #0a1838; max-width: 34rem; }
+    .imp-stats { margin-top: clamp(26px,3vw,40px); }
+    .imp-stat { display: grid; grid-template-columns: minmax(175px,48%) 1fr; gap: 6px 18px; align-items: center; padding: 20px 0; border-top: 1px solid #dde3ee; }
+    .imp-stat:last-child { border-bottom: 1px solid #dde3ee; }
+    .imp-stat__num { font-size: clamp(40px,4vw,62px); font-weight: 700; line-height: 0.95; letter-spacing: -0.025em; color: #052975; font-variant-numeric: tabular-nums; }
+    .imp-stat__txt b { display: block; font-size: 15.5px; font-weight: 700; color: #0a1838; }
+    .imp-stat__txt span { display: block; margin-top: 5px; font-size: 13.5px; line-height: 1.5; color: #0a1838; }
+
+    .imp-media { order: -1; position: relative; width: 100%; max-width: 500px; margin: 0 auto; aspect-ratio: 1 / 1; }
+    .imp-sq { position: absolute; top: 0; left: 0; width: 64%; aspect-ratio: 1 / 1; will-change: transform; }
+    .imp-sq--a { animation: impSwapA 20s cubic-bezier(0.45,0,0.55,1) infinite; }
+    .imp-sq--b { animation: impSwapB 20s cubic-bezier(0.45,0,0.55,1) infinite; }
+    /* ⚠️ 15px. House rule, Andreas 2026-09-02: "border radius på billeder skal
+         være 15px". Every frame whose visible edge IS a photograph carries exactly
+         this value — no per-component taste. 22px read "for voldsomt" on the
+         factoring portrait, and the site had five different values (16/18/20/22).
+         Mock-UI chrome inside a photo frame keeps its own radius; a card whose top
+         region happens to be a photo keeps the CARD's radius. */
+    .imp-card { width: 100%; height: 100%; border-radius: 15px; overflow: hidden; border: 2px solid var(--c-tech-blue,#052975); box-shadow: 0 12px 30px rgba(3,15,48,0.14), 0 3px 10px rgba(3,15,48,0.08); animation: impRise 0.9s cubic-bezier(0.16,1,0.3,1) both; will-change: transform, opacity; }
+    .imp-sq--a .imp-card { animation-delay: 0.08s; }
+    .imp-sq--b .imp-card { animation-delay: 0.22s; }
+    .imp-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* third view: same layout, no tech-blue outline. The border was doing the
+       edge definition, so the shadow picks it up. */
+    .imp-split--bare .imp-card { border: 0; box-shadow: 0 18px 44px rgba(3,15,48,0.18), 0 4px 14px rgba(3,15,48,0.10); }
+    /* intro: fly up from below into place */
+    @keyframes impRise { from { opacity: 0; transform: translateY(74px); } to { opacity: 1; transform: none; } }
+    /* two squares orbit clockwise, swapping which one is in front every 10s (20s loop) — no fade */
+    @keyframes impSwapA {
+      0%    { transform: translate(0,0);      z-index: 1; }
+      40%   { transform: translate(0,0);      z-index: 1; }
+      41%   { transform: translate(0,0);      z-index: 2; }
+      45%   { transform: translate(56%,0);    z-index: 2; }
+      50%   { transform: translate(56%,56%);  z-index: 2; }
+      90%   { transform: translate(56%,56%);  z-index: 2; }
+      91%   { transform: translate(56%,56%);  z-index: 1; }
+      95%   { transform: translate(0,56%);    z-index: 1; }
+      100%  { transform: translate(0,0);      z-index: 1; }
+    }
+    @keyframes impSwapB {
+      0%    { transform: translate(56%,56%);  z-index: 2; }
+      40%   { transform: translate(56%,56%);  z-index: 2; }
+      41%   { transform: translate(56%,56%);  z-index: 1; }
+      45%   { transform: translate(0,56%);    z-index: 1; }
+      50%   { transform: translate(0,0);      z-index: 1; }
+      90%   { transform: translate(0,0);      z-index: 1; }
+      91%   { transform: translate(0,0);      z-index: 2; }
+      95%   { transform: translate(56%,0);    z-index: 2; }
+      100%  { transform: translate(56%,56%);  z-index: 2; }
+    }
+    @media (max-width: 860px) {
+      .imp-split { grid-template-columns: 1fr; gap: 44px; }
+      .imp-media { order: 0; max-width: 400px; }
+    }
+    @media (max-width: 560px) {
+      .imp-stat { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; }
+      .imp-stat__num { font-size: 48px; }
+    }
+    /* The stat rows breathe wider and tighten their internal gap on a phone,
+       where each row has stacked to one column and the number sits directly
+       above its label. Was `#cnt-statband > div { ... !important }` outside
+       this block: an id can only ever exist once on a page, so the rule could
+       not follow the section into a CMS that may place it twice. Class-keyed
+       and placed AFTER the 560px block, it wins there on source order instead
+       of on !important — same computed result at every width. */
+    @media (max-width: 640px) {
+      .imp-stat { padding: 26px 0; gap: 4px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .imp-sq--a, .imp-sq--b { animation: none; }
+      .imp-card { animation: none; opacity: 1; }
+      .imp-sq--a { transform: translate(0,0); z-index: 1; }
+      .imp-sq--b { transform: translate(56%,56%); z-index: 2; }
+    }
+        /* The page-wide widow rule, scoped to this section and repeated here on
+       purpose. The document already sets `text-wrap: balance` on every heading
+       and paragraph, so this changes nothing in the prototype — but the module
+       ships as a NuGet package into a site that has no such rule, and without
+       it the headings there wrap one word to a line and stop matching what was
+       signed off. Measured over all 44 pages, `balance` beats `pretty` by a
+       wide margin: desktop 200 -> 6 widows, mobile 266 -> 17, tablet
+       204 -> 14, where `pretty` only reached 36 on desktop.
+       Both halves are :where(), so the whole selector weighs 0,0,0 — weaker
+       than a bare `h1`, so the host's own typography always wins the tie and
+       anything explicit still beats it. Enforced by tools/check_widows.py. */
+    :where(.imp) :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption) { text-wrap: balance; }
+    /* <<< */
+
+    /* Impact/section view toggle (fixed, bottom-left) */
+    .imp-toggle { position: fixed; bottom: 20px; left: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+      padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid #dde3ee; box-shadow: 0 8px 24px rgba(5,41,117,0.16);
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #052975; cursor: pointer;
+      transition: transform 200ms, border-color 200ms, opacity 220ms var(--ease-standard, ease-out); }
+    .imp-toggle:hover { border-color: #052975; transform: translateY(-2px); }
+    /* second fixed toggle, stacked above the impact one */
+    .hero-toggle { bottom: 74px; }
+    /* Both toggles sat on top of the footer legal bar at the bottom of the page.
+       An IntersectionObserver flags the legal bar on <body> — a node the dc
+       runtime never re-renders, so the class survives a render pass. */
+    body.cnt-footer-in-view .imp-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
+    @media (prefers-reduced-motion: reduce) { .imp-toggle { transition: none; } }
+
+    /* Third fixed pill, bottom RIGHT: the way into new-front-look/, the
+       alternative front page. Right, not left, because the two toggles above
+       already stack bottom-left and on a 390px phone a third pill on that side
+       would sit on top of them.
+
+       ⚠️ It shares .imp-toggle's hide-over-the-footer behaviour on purpose —
+       both pills sat on the footer's legal bar before that rule existed, and a
+       new pill in a new corner would have landed on it again. The class goes
+       on <body>, which the dc runtime never re-renders, so it survives a
+       render pass; an inline style on a node inside the tree would not. */
+    /* ⚠️ `a.nfl-toggle`, not `.nfl-toggle`, and the element half is the whole
+       point. The bundle styles every link with `a:not(.cnt-btn)`, which is
+       0,1,1 — a bare class is 0,1,0 and loses. The pill rendered navy text on
+       its own navy ground and was simply unreadable, with nothing to see in
+       the markup. Adding the element name makes it 0,1,1 and it wins on
+       source order. Same trap as the one in css-silent-failure-traps: identical
+       CSS is not enough to lift a declaration. */
+    a.nfl-toggle { position: fixed; bottom: 20px; right: 20px; left: auto; z-index: 60; display: inline-flex; align-items: center; gap: 9px;
+      padding: 11px 18px; border-radius: 999px; background: #052975; border: 1.5px solid #052975; box-shadow: 0 8px 24px rgba(5,41,117,0.26);
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none;
+      transition: transform 200ms, background 200ms, opacity 220ms var(--ease-standard, ease-out); }
+    a.nfl-toggle:hover { background: #0a317f; border-color: #0a317f; color: #ffffff; transform: translateY(-2px); }
+    .nfl-toggle:focus-visible { outline: 3px solid #8ff8ff; outline-offset: 3px; }
+    body.cnt-footer-in-view .nfl-toggle { opacity: 0; pointer-events: none; transform: translateY(14px); }
+    @media (prefers-reduced-motion: reduce) { .nfl-toggle { transition: none; } .nfl-toggle:hover { transform: none; } }
+    @media (max-width: 640px) { .nfl-toggle { right: 14px; bottom: 14px; } }
+
+    /* ⚠️ An ::after overlay, never `min-height`. The pill is 44px tall already
+       at its own padding, but the two beside it are not and the house pattern
+       is one rule for all three. */
+    @media (pointer: coarse) {
+      .nfl-toggle { position: fixed; }
+      .nfl-toggle::after { content: ""; position: absolute; left: 50%; top: 50%; width: 100%; height: 44px; transform: translate(-50%, -50%); }
+    }
+
+
+    /* >>> module: home-hero -------------------------------------------
+       Owned by Continia.Umbraco.HomeHero. Synced by tools/sync_css.py.
+
+       The hero's rules used to be in four places — inline on the markup, a
+       block for the video background, a block for the dark variant, and a run
+       inside the shared 640px media query. They are gathered here because a
+       module has to be one file, and because a rule that lives outside the
+       sentinels does not travel: it would work in the prototype and be missing
+       in Umbraco, which is the failure this whole arrangement exists to stop.
+
+       ⚠️ Three `style=` attributes survive in the markup and must: the side-nav
+       item, the flow step and the row chip take `background` and `color` from
+       component STATE, which changes on every tick. Those are data, not
+       styling. The module's script writes the same two properties. *//* the shared 640px block also carries `.hero-wrap` padding — see below. */
+    .hero { position: relative; overflow: hidden;
+      background: linear-gradient(180deg, #ffffff 0%, #def5ff 130%); }
+    .hero-wrap { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto;
+      padding: 58px 32px 0; text-align: center; }
+    .hero-eyebrow { display: inline-flex; align-items: center; font-size: 14.5px;
+      font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #052975; }
+    .hero-h1 { margin: 22px auto 0; max-width: 980px; font-size: clamp(38px, 4.6vw, 68px);
+      font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; color: #052975; }
+    .hero-h1__accent { color: #983eae; }
+    .hero-sub { margin: 24px auto 0; max-width: 600px; font-size: 18px;
+      line-height: 1.65; color: #0a1838; }
+    .hero-cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+    .hero-proof { display: flex; justify-content: center; flex-wrap: wrap; gap: 34px;
+      margin-top: 30px; font-size: 16px; font-weight: 700; color: #052975; }
+    .hero-proof__item { display: inline-flex; align-items: center; gap: 9px; }
+    .hero-proof i { color: #052975; font-size: 20px; }
+    .hero-mock { max-width: 960px; margin: 30px auto -26px; }
+
+    /* ---------- the Business Central mock ---------- */
+    .mock { display: flex; background: #ffffff; text-align: left; }
+    .mock-nav { flex: none; width: 200px; border-right: 1px solid #eef1f6;
+      padding: 16px 10px; display: flex; flex-direction: column; gap: 2px; }
+    .mock-nav__item { display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+      border-radius: 9px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+    .mock-nav__ico { font-size: 14px; width: 18px; text-align: center; }
+
+    /* The mock's left rail goes away on a tablet, where the window is too
+       narrow to carry a 200px sidebar next to the document list.
+
+       ⚠️ In the prototype this already happens, but by ACCIDENT: the markup is
+       <div class="cnt-nav mock-nav">, and `.cnt-nav` is the design system's
+       SITE HEADER nav, which the bundle hides with `display: none !important`
+       below 980px — the same breakpoint that brings in the burger. The mock
+       inherits a rule that was never written for it. The module has no bundle
+       and no site header, so it has to say this itself; stating it here keeps
+       the two identical and makes the breakpoint a decision instead of a
+       side effect. Andreas: if the rail should stay on a tablet, this rule and
+       the `cnt-nav` class on line ~832 are the two places to change. */
+    @media (max-width: 980px) {
+      .mock-nav { display: none; }
+    }
+    .mock-body { flex: 1; min-width: 0; padding: 16px 18px 24px; }
+    .mock-steps { display: flex; gap: 8px; margin-bottom: 12px; }
+    .mock-step { flex: 1; display: flex; align-items: center; justify-content: center;
+      gap: 7px; padding: 8px 4px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+      white-space: nowrap; transition: background 400ms, color 400ms; }
+    .mock-row { display: flex; align-items: center; gap: 12px; padding: 11px 8px;
+      border-top: 1px solid #eef1f6; }
+    .mock-row__ico { color: #052975; font-size: 16px; width: 20px; text-align: center; }
+    .mock-row__meta { flex: 1; min-width: 0; }
+    .mock-row__doc { font-weight: 600; font-size: 13.5px; color: #0a1838; }
+    .mock-row__vendor { font-size: 12px; color: #6b7894; }
+    .mock-row__amt { font-size: 13px; font-weight: 600; color: #0a1838; }
+    .mock-row__chip { min-width: 98px; text-align: center; padding: 5px 10px;
+      border-radius: 999px; font-size: 11px; font-weight: 700;
+      transition: background 400ms, color 400ms; }
+    .mock-foot { display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 8px 4px; border-top: 1px solid #eef1f6; font-size: 12.5px; color: #6b7894; }
+    .mock-foot__num { color: #052975; }
+    .mock-foot__ok { color: #5f9e8d; font-weight: 700; display: inline-flex;
+      align-items: center; gap: 6px; }
+
+    /* ---------- video background ---------- */
+    /* The scrim keeps the navy headline legible over the clip: the darkest frame
+       measures luma 37/255, and 0.74 white on top of that lands around #c6c6c6,
+       so #052975 still clears 7:1. */
+    .hero-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .hero-vid__scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.74) 42%, rgba(222,245,255,0.88) 100%); }
+    /* Release R1 runs a DARK overlay instead of the clouds' white one — tech blue
+       washed over near-black, with a slightly heavier pool behind the copy. The
+       whole hero flips to white type via .hero-dark below. */
+    .hero-vid__scrim--r1 {
+      background:
+        radial-gradient(78% 62% at 50% 34%, rgba(5,41,117,0.52), rgba(5,41,117,0) 72%),
+        linear-gradient(180deg, rgba(2,9,26,0.80) 0%, rgba(4,26,74,0.68) 34%, rgba(3,16,48,0.74) 62%, rgba(2,9,26,0.86) 100%);
+    }
+    @media (prefers-reduced-motion: reduce) { .hero-vid { display: none; } }
+
+    /* ---------- dark hero ----------
+       ⚠️ The !important here is now historical: these colours used to sit
+       inline on the shared copy, and inline beats any selector. The copy is
+       class-based since the module was built, so a plain rule would win on
+       source order alone. It is left in place because it still costs nothing
+       and because removing it is a separate change with its own proof. */
+    .hero-dark .hero-eyebrow { color: #8ff8ff !important; }
+    .hero-dark .hero-h1 { color: #ffffff !important; text-shadow: 0 2px 28px rgba(2,9,26,0.55); }
+    .hero-dark .hero-h1 span { color: #8ff8ff !important; }
+    .hero-dark .hero-sub { color: rgba(255,255,255,0.88) !important; text-shadow: 0 1px 16px rgba(2,9,26,0.6); }
+    .hero-dark .hero-proof { color: #ffffff !important; text-shadow: 0 1px 14px rgba(2,9,26,0.6); }
+    .hero-dark .hero-proof i { color: #8ff8ff !important; }
+    /* the design-system buttons are driven by custom properties, so retint those
+       rather than fighting the component's own rules */
+    .hero-dark .hero-cta .cnt-btn--secondary { --_bg: rgba(255,255,255,0.10); --_fg: #ffffff; --_bd: rgba(255,255,255,0.62); }
+    .hero-dark .hero-cta .cnt-btn--secondary:hover { --_bg: rgba(255,255,255,0.20); --_fg: #8ff8ff; --_bd: #ffffff; }
+    .hero-dark .hero-cta .cnt-btn--purple { box-shadow: 0 12px 34px rgba(2,9,26,0.5); }
+
+    /* ---------- phones ----------
+       Restated scoped, at the same values as the generic 640px block, which
+       still wins here with !important. The mock is hidden outright: at 390px it
+       rendered ~595px tall, was clipped by the trust band, and needed sideways
+       scrolling to read. The hero carries its own bottom padding instead,
+       because the mock's -26px bottom margin was what closed the gap. */
+    @media (max-width: 640px) {
+      .hero-wrap { padding: 56px 20px 54px; }
+      .hero-h1 { font-size: clamp(24px, 6.6vw, 32px); letter-spacing: -0.02em; margin-top: 16px; }
+      .hero-sub { font-size: 15.5px; margin-top: 18px; }
+      .hero-cta { flex-direction: column; align-items: stretch; gap: 12px; margin-top: 28px; }
+      .hero-cta .cnt-btn { width: 100%; box-sizing: border-box; justify-content: center; }
+      .hero-proof { flex-direction: column; align-items: flex-start; gap: 12px; text-align: left; margin-top: 26px; }
+      .hero-mock { display: none; }
+      .mock-body { padding: 12px; }
+      .mock-steps { gap: 5px; }
+      .mock-step { font-size: 9.5px; min-width: 0; padding: 7px 3px; }
+      .mock-step i { display: none; }
+    }
+        /* The page-wide widow rule, scoped to this section and repeated here on
+       purpose. The document already sets `text-wrap: balance` on every heading
+       and paragraph, so this changes nothing in the prototype — but the module
+       ships as a NuGet package into a site that has no such rule, and without
+       it the headings there wrap one word to a line and stop matching what was
+       signed off. Measured over all 44 pages, `balance` beats `pretty` by a
+       wide margin: desktop 200 -> 6 widows, mobile 266 -> 17, tablet
+       204 -> 14, where `pretty` only reached 36 on desktop.
+       Both halves are :where(), so the whole selector weighs 0,0,0 — weaker
+       than a bare `h1`, so the host's own typography always wins the tie and
+       anything explicit still beats it. Enforced by tools/check_widows.py. */
+    :where(.hero) :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption) { text-wrap: balance; }
+    /* <<< */
+
+    /* ---------- Solutions: 3D coverflow carousel (view 3) ---------- */
+    .sol-car { position: relative; margin-top: clamp(0px,0.6vw,6px); }
+    /* `pan-y` lets the browser keep vertical scrolling while horizontal drags
+       reach our pointer handlers as swipes. Without it a sideways drag on the
+       card is swallowed as a scroll attempt and never becomes a gesture. */
+    .sol-car__stage { position: relative; height: clamp(422px,48vw,458px); perspective: 1700px; touch-action: pan-y; }
+    .sol-car__track { position: absolute; inset: 0; transform-style: preserve-3d; }
+    .sol-car__card { box-sizing: border-box; min-height: 400px; padding: 34px 36px; border-radius: 22px; color: #fff;
+      display: flex; flex-direction: column;
+      background: linear-gradient(0deg, rgba(5,41,117,0.14), rgba(5,41,117,0.14)), rgba(95, 158, 141, 0.32);
+      border: 2px solid rgba(196,251,255,0.85);
+      -webkit-backdrop-filter: blur(8px) saturate(135%); backdrop-filter: blur(8px) saturate(135%);
+      box-shadow: 0 40px 90px rgba(3,15,48,0.48); }
+    .sol-car__title { margin-top: 20px; font-size: 26px; font-weight: 700; color: #fff; }
+    .sol-car__desc { margin: 14px 0 0; font-size: 16.5px; line-height: 1.62; color: rgba(255,255,255,0.85); }
+    .sol-car__card .sol-g__icon { width: 56px; height: 56px; font-size: 26px; border-radius: 15px; }
+    .sol-car__more { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; color: #8ff8ff !important; cursor: pointer; text-decoration: none; transition: gap 200ms; }
+    .sol-car__more i { font-size: 16px; color: #8ff8ff !important; }
+    .sol-car__more:hover { gap: 15px; }
+    .sol-car__pills { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+    .sol-car__pill { font-size: 12px; font-weight: 600; color: #ffffff; background: transparent; border: 1.5px solid #8ff8ff; border-radius: 999px; padding: 5px 12px; }
+    .sol-car__nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 30; width: 52px; height: 52px;
+      border-radius: 999px; background: #ffffff; border: none; color: #052975; font-size: 18px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(3,15,48,0.35);
+      transition: transform 200ms, background 200ms; }
+    .sol-car__nav:hover { transform: translateY(-50%) scale(1.09); background: #def5ff; }
+    .sol-car__nav--prev { left: clamp(2px,3vw,32px); }
+    .sol-car__nav--next { right: clamp(2px,3vw,32px); }
+    /* margin-top was 10px when the dots were bare 9px circles. They now carry
+       8px of padding as hit area, so the row is 16px taller and the dot centres
+       have to come back up by the same amount to sit where they did. */
+    .sol-car__dots { display: flex; justify-content: center; gap: 0; margin-top: 2px; }
+    /* Solutions carousel on mobile: nav arrows drop into a bottom control bar so
+       they don't cover the card — [<]  • • • • •  [>]. Placed after the base
+       rules on purpose; inside the earlier @media block the width/height here
+       tied on specificity and lost on source order, leaving 52px arrows. */
+    @media (max-width: 640px) {
+      /* the active card is ~437px tall inside a 422px stage, so it bleeds ~7px
+         past each end — these clearances are measured from the card, not the stage */
+      /* 96, was 88. The nav and dots hang off the bottom of .sol-car, so this
+         padding sets their clearance from the card — and the stage now sizes
+         itself to the TALLEST card, which adds slack of its own when the active
+         one is shorter. Together they land the gap at 43-60px across 320-430px,
+         against the 23px (and, at 320px, an 11px overlap) it used to be. */
+      .sol-car { margin-top: 34px; padding-bottom: 96px; }
+      .sol-car__nav { top: auto; bottom: 14px; transform: none; width: 44px; height: 44px; }
+      .sol-car__nav:hover { transform: scale(1.06); background: #def5ff; }
+      .sol-car__nav--prev { left: 18px; right: auto; }
+      .sol-car__nav--next { right: 18px; left: auto; }
+      /* 24px lines the dots up with the centre of the 44px arrows, now that each
+         dot sits inside a 25px box (was 32px against a bare 9px dot) */
+      .sol-car__dots { position: absolute; bottom: 24px; left: 0; right: 0; margin-top: 0; }
+    }
+    /* ⚠️ The stage is a fixed height but the CARD is not: the description wraps
+       more as the card narrows, so it grows from 437px at 370px wide to 471,
+       497, 533 and 560 as the viewport shrinks to 318 — five thresholds, none
+       of them round numbers. It bled out of the 422px stage, and since the
+       clearance below is measured from the CARD it silently collapsed: 51px at
+       375+, 20px at 360, and at 320 the card actually OVERLAPPED the arrows by
+       11px. A ladder of media queries chasing text-wrap thresholds is brittle,
+       so the dc-script measures the tallest card and publishes it here.
+       Must sit after the base .sol-car__stage rule — a media query adds no
+       specificity and would lose on source order up there (trap 18). */
+    @media (max-width: 640px) {
+      .sol-car__stage { height: var(--car-stage-h, 422px); }
+    }
+    /* The dot stays 9px; the button becomes 25x25. `background-clip: content-box`
+       paints only the content box, so the padding is invisible hit area rather
+       than a 25px blob — they were 9x9 targets, which is below any guideline. */
+    .sol-car__dot { box-sizing: content-box; width: 9px; height: 9px; padding: 8px; border: none;
+      border-radius: 999px; cursor: pointer; background: rgba(255,255,255,0.35);
+      background-clip: content-box; transition: background 200ms, transform 200ms; }
+    /* ⚠️ `background-color`, NOT the `background` shorthand. The shorthand resets
+       background-clip to its initial border-box, so the active dot painted its
+       whole 25px hit area as a cyan blob while the inactive ones stayed 9px. */
+    .sol-car__dot.on { background-color: #8ff8ff; transform: scale(1.2); }
+
+    @media (prefers-reduced-motion: reduce) { .sol-vid { display: none; } .sol-car__card { transition: none !important; } }
+  
+    /* Prototype-only view switchers, off on phones (fixed — these were the ones landing on top of the footer links and the logo marquee). */
+    @media (max-width: 640px) {
+      .imp-toggle, .hero-toggle { display: none !important; }
+    }
+      /* CTA watermark, phones and tablets. Desktop keeps width-sizing: its band is
+       wide (aspect 2.72), so `width: 120%` covers 2.04x the band and the copy sits
+       over the middle of the artwork. Below 821px the band turns portrait (0.74 at
+       390px) and the same 120% collapsed coverage to 0.56x — only the artwork's top
+       edge peeked in at the bottom, reading as a stray rectangle. Sizing by HEIGHT
+       instead resolves against the same containing block at any width. 115% is
+       Andreas's Photoshop crop: the zoom at which the mark's two vertical strokes
+       are still inside the frame, which is what gives the band its structure.
+       ⚠️ `!important` is load-bearing — the value it overrides is inline on the
+       <img>, and inline beats any media query without it (trap 17). */
+    @media (max-width: 1100px) {
+      /* ⚠️ `height: 115%` alone stops covering the band's WIDTH above ~950px:
+         the image is 1.596 x 1.15 x bandHeight wide, so at 1024 it came out
+         947px inside a 1024px band and left a gap down both sides. `min-width`
+         floors the box at the old 120%, and `object-fit: cover` then crops the
+         artwork into it instead of stretching — so coverage stays exactly 1.15
+         and the band is always full-bleed. Verified 390 -> 1100. */
+      section[data-screen-label$="CTA"] > img {
+        width: auto !important; height: 115% !important;
+        min-width: 120% !important; object-fit: cover !important;
+      }
+    }
+      /* ---------- no widows ("horeunger") ----------
+       Never leave a single word alone on the last line. `balance` beats
+       `pretty` here by a wide margin — measured across all 44 pages it takes
+       desktop 200 -> 6 widows, mobile 266 -> 17, tablet 204 -> 14, where
+       `pretty` only reached 36 on desktop. Chrome ignores `balance` past about
+       6 lines, so long article prose is left alone; short ledes, headings and
+       card copy are what it fixes. Deliberately NOT !important — the 47 inline
+       `balance` and 19 inline `pretty` already on the site were set on purpose
+       and keep winning, and an element that sets `nowrap` must still win.
+       Enforced by tools/check_widows.py. */
+    h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, dd, dt { text-wrap: balance; }
+  
+  /* ---------- touch targets ----------
+     44px is the touch guideline (WCAG 2.5.5, Apple HIG). The site already
+     cleared the 24px AA floor everywhere, so this is the step from "passes"
+     to "comfortable with a thumb".
+
+     Nothing here changes what anything LOOKS like. Every target is an
+     out-of-flow ::after overlay, centred on its control and floored at 44x44,
+     so a 19px text link and an 8px carousel dot both get a full target while
+     the page geometry stays byte-identical. Replaced elements are the one
+     exception: an <input> or <select> cannot have a ::after, so those few take
+     a min-height and are listed separately at the bottom.
+
+     Two host groups, and the split is not cosmetic. An absolutely positioned
+     overlay needs a positioned host, so STATIC hosts are given
+     `position: relative`. The eleven controls in the second group already
+     declare their own — the floating dev switches are `fixed; z-index: 60`,
+     the carousel arrows `absolute; z-index: 30` — and writing ours over
+     theirs dropped `.sol-switch` behind `.sol-hero-grid`. They anchor the
+     overlay perfectly well as they are, so we touch neither property.
+
+     ⚠️ Four things that were tried first and are wrong:
+
+     • `padding-block: 14px; margin-block: -14px` on the control. Flow-neutral
+       for a flex or grid child, whose outer box is the margin box — but not
+       for a block-level link in a plain <li>: the first child's negative top
+       margin collapses THROUGH the list, and the article table of contents came
+       out 28px short with everything below it pulled up.
+     • `min-height: 44px` on controls with a visible face. It grows them, which
+       moved ten of ten sampled pages, and it does nothing for the other axis —
+       `.dc-yt__nav` ended up 40 wide and 44 tall, still a fail.
+     • `inset: -14px 0` on the overlay. Vertical only, so the 29px "Blog"
+       breadcrumb and the 8px quote dot on why-continia both still failed.
+     • `position: relative; z-index: 1` on every host — see above.
+
+     ⚠️ Never key any of this to a `scp<n>` class. Those are generated at
+     runtime, in document order (`"scp" + (n++).toString(36)` in support.js), so
+     adding one scoped style earlier on the page renumbers every later one.
+     Where a component had no class of its own, it was given one
+     (`.sol-filter`, `.sol-partnerlink`) or anchored on `data-screen-label`,
+     which is authored.
+
+     ⚠️ Keyed on `pointer: coarse`, not on a width. A 34px target is fine
+     under a mouse and too small under a thumb, and it is the pointing device
+     that decides — a touch laptop at 1440px wants the big targets too. Note
+     that this makes the rule INERT under plain CDP viewport emulation; see
+     tools/cdp.py. Enforced by tools/check_tap.py --all. */
+  @media (pointer: coarse) {
+    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
+        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
+        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
+        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
+        .st-seelink, .co-role__go, .fo-back,
+        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
+        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
+        .cnt-popup a, .cnt-popup button,
+        section[data-screen-label="Testimonials"] button,
+        section[data-screen-label="Partner quote"] button,
+        section[data-screen-label="Price estimator"] button,
+        section[data-screen-label="Price sheets"] button,
+        section[data-screen-label="Price sheets"] a,
+        section[data-screen-label="Module overview"] button,
+        section[data-screen-label="FAQ"] button) {
+      /* Anchor for the overlay, and a stacking context: a later sibling — the
+         "·" between two breadcrumbs — otherwise paints over the target and eats
+         part of it. Measured: 46px of box, 41px actually hittable. */
+      position: relative;
+      z-index: 1;
+    }
+    :is(.cnt-siteheader__logo, .cnt-btn, .co-chip, .ct-chip, .dc-fo__btn,
+        .pr-rel__cta, .dc-yt__nav, .dc-link, .dc-inside__app,
+        .sol-car__dot, .sol-car__more, .sol-card__feat, .sol-switch button,
+        .sol-filter, .sol-partnerlink, .bi-switch, .testi-toggle,
+        .st-seelink, .co-role__go, .fo-back,
+        nav.co-crumb a, nav.dt-crumb a, nav.ct-crumb a, nav.fo-nav a,
+        .dt-toc a, .st-toc a, .st-jump a, .cnt-card a,
+        .cnt-popup a, .cnt-popup button,
+        section[data-screen-label="Testimonials"] button,
+        section[data-screen-label="Partner quote"] button,
+        section[data-screen-label="Price estimator"] button,
+        section[data-screen-label="Price sheets"] button,
+        section[data-screen-label="Price sheets"] a,
+        section[data-screen-label="Module overview"] button,
+        section[data-screen-label="FAQ"] button,
+        .dc-switch, .fx-toggle, .imp-toggle, .rl-heroswitch, .sol-switch,
+        .st-toggle, .uc-toggle, .sol-car__nav)::after {
+      content: '';
+      position: absolute;
+      /* Centred and floored, rather than a fixed negative inset: one rule then
+         covers a 240x19 text link and an 8x8 dot, growing each only on the axis
+         that is short. Hit-testing attributes a pseudo-element to its host, so
+         elementFromPoint still returns the control itself. */
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      width: 100%;
+      height: 100%;
+      min-width: 44px;
+      min-height: 44px;
+    }
+    /* Replaced elements. No ::after exists on these, so they are the only
+       things here that actually change size, and both were already close — a
+       43px select and a 42px search field.
+
+       ⚠️ `.cnt-range` is deliberately NOT in this list. The price-estimator
+       slider has a 6px hit area, which is the worst target on the site, but its
+       6px is the TRACK: the background is painted on the input itself rather
+       than on ::-webkit-slider-runnable-track, so a min-height turns the slider
+       into a 44px slab with a small thumb floating in it. Measured clean,
+       looked broken. Fixing it properly means moving that background onto the
+       track pseudo-element in the design-system bundle, across all 28 copies.
+       Left alone until that is decided. */
+    select, input[type="search"], input[type="text"] {
+      min-height: 44px;
+    }
+  }
+
+    /* ==================================================================
+       The new look's hero and proof band. Everything above this point is
+       site/index.html's stylesheet, copied verbatim; everything below is
+       the .nfl-* hero. Only the rules the two kept sections need are
+       here — the other nine sections of the prototype are gone.
+       ================================================================== */
 
   /* ⚠️ The hero is NOT a .nfl-sec — it lays itself out — so it was outside
      that reset and defaulted to content-box. Its inner column is `width:100%`
@@ -73,23 +862,6 @@
      just a page that is slightly too narrow for its own text. The reset has
      to name both roots. */
   .nfl-hero, .nfl-hero *, .nfl-hero *::before, .nfl-hero *::after { box-sizing: border-box; }
-  /* The trust row is a thin band between two tall sections, so it gets
-     about half the vertical padding. This is a class and not an inline
-     style on the one element: an inline style outranks every media
-     query, and the stories grid already lost a whole breakpoint that
-     way (see the comment above it). Nothing narrows this padding today,
-     but the next person to try would have no warning. */
-  .nfl-sec--tight { padding-block: clamp(36px, 4vw, 52px); }
-  .nfl-band { position: relative; overflow: hidden; }
-
-  .nfl-head { max-width: 760px; margin: 0 auto 56px; text-align: center; }
-  .nfl-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-tech-blue); }
-  .nfl-band--dark .nfl-eyebrow { color: var(--c-innovation-blue); }
-  .nfl-h2 { margin: 14px 0 0; font-size: min(var(--fs-h1), 7vw); font-weight: 700; line-height: 1.12; letter-spacing: -0.02em; color: var(--c-tech-blue); }
-  .nfl-band--dark .nfl-h2 { color: #ffffff; }
-  .nfl-lead { margin: 16px 0 0; font-size: var(--fs-lead); line-height: var(--lh-body); color: var(--color-text-muted); }
-  .nfl-band--dark .nfl-lead { color: rgba(255,255,255,0.76); }
-
   /* The one accent the page allows itself: a single italic word in a headline.
      ⚠️ Two of these on one screen and it stops reading as emphasis, so the
      hero has one and the CTA band has one — nothing in between. */
@@ -131,7 +903,6 @@
      Delete the rule and the markup together once the numbers arrive. */
   .nfl-todo { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border: 1.5px dashed var(--color-warning); border-radius: 8px; background: var(--c-light-yellow); color: var(--color-warning-fg); font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; font-style: normal; text-align: left; }
   .nfl-todo::before { content: "\f071"; font-family: "Font Awesome 7 Pro"; font-weight: 300; font-size: 12px; }
-
   /* ---------- 1. hero ---------------------------------------------------- */
 
   /* ⚠️ No eyebrow pill above the h1. Payhawk opens with one ("The AI-native
@@ -398,186 +1169,6 @@
   .nfl-proof__who { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-slate-500); }
   .nfl-proof__what { margin: 9px 0 0; font-size: 15.5px; font-weight: 600; line-height: 1.45; color: var(--c-ink); }
   .nfl-proof__what .nfl-fig { font-size: 19px; }
-
-  /* ---------- 3. what Continia does ------------------------------------- */
-
-  .nfl-grid5 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  .nfl-card { display: flex; flex-direction: column; background: var(--color-surface-card); border: 1px solid var(--color-border); border-radius: 18px; padding: 30px; transition: transform 250ms, box-shadow 250ms, border-color 250ms; }
-  .nfl-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); border-color: #cdd9ef; }
-  .nfl-card__icon { width: 54px; height: 54px; border-radius: 15px; background: var(--c-light-blue); color: var(--c-tech-blue); display: flex; align-items: center; justify-content: center; font-size: 24px; flex: none; }
-  .nfl-card__title { margin: 20px 0 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-tech-blue); }
-  .nfl-card__text { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--color-text-muted); }
-  .nfl-more { margin-top: 20px; display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: var(--c-tech-blue); }
-  .nfl-more i { font-size: 13px; transition: transform 180ms; }
-  .nfl-more:hover i { transform: translateX(4px); }
-
-  /* ---------- 4. trust row ----------------------------------------------- */
-
-  .nfl-trust { border-top: 1px solid var(--color-border); }
-  .nfl-trust__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
-  .nfl-trust__cell { padding: 10px 26px; border-left: 1px solid var(--color-border); }
-  .nfl-trust__cell:first-child { border-left: 0; padding-left: 0; }
-  .nfl-trust__k { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-slate-500); }
-  .nfl-trust__v { margin-top: 8px; font-size: 16px; font-weight: 700; line-height: 1.4; color: var(--c-tech-blue); }
-  .nfl-trust__s { margin-top: 5px; font-size: 13.5px; line-height: 1.5; color: var(--color-text-muted); }
-
-  /* ---------- 5. the old way --------------------------------------------- */
-
-  .nfl-old { background: var(--c-slate-50); }
-  .nfl-old__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
-  .nfl-old__grid > * { min-width: 0; }
-  .nfl-old h2 { margin: 0; font-size: min(var(--fs-h1), 7.4vw); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: var(--c-tech-blue); }
-  .nfl-old__line { margin: 22px 0 0; font-size: 20px; font-weight: 700; color: var(--c-performance-purple); }
-
-  /* The fragmented stack, drawn rather than photographed: six tiles that do
-     not line up, with the gaps left visible. Nothing here animates — it is a
-     diagram, and a moving diagram is read as a loading state. */
-  .nfl-frag { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-  .nfl-frag__t { grid-column: span 2; background: #ffffff; border: 1px solid var(--color-border); border-radius: 14px; padding: 18px 16px; }
-  .nfl-frag__t:nth-child(1) { margin-top: 26px; }
-  .nfl-frag__t:nth-child(3) { margin-top: 34px; }
-  .nfl-frag__t:nth-child(4) { margin-top: -10px; }
-  .nfl-frag__t:nth-child(6) { margin-top: 18px; }
-  .nfl-frag__t i { font-size: 18px; color: var(--c-slate-300); }
-  .nfl-frag__t b { display: block; margin-top: 10px; font-size: 13.5px; font-weight: 700; color: var(--c-slate-700); }
-  .nfl-frag__t span { display: block; margin-top: 4px; font-size: 12px; line-height: 1.45; color: var(--c-slate-500); }
-
-  /* ---------- 6. the three pillars --------------------------------------- */
-
-  .nfl-pillars { background: var(--c-tech-blue); }
-  .nfl-acc { max-width: 860px; margin: 0 auto; }
-  .nfl-acc__item { border-top: 1px solid rgba(255,255,255,0.20); }
-  .nfl-acc__item:last-child { border-bottom: 1px solid rgba(255,255,255,0.20); }
-
-  /* ⚠️ One DOM in both states. The panel is always in the markup and always
-     readable by a screen reader's search; `hidden` is what closes it, so an
-     open and a closed pillar are the same nodes and nothing is rebuilt on a
-     click. Swapping markup here would also lose the button's focus. */
-  .nfl-acc__btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px 2px; background: none; border: 0; cursor: pointer; font-family: inherit; text-align: left; color: #ffffff; }
-  .nfl-acc__btn b { font-size: clamp(19px, 1.5vw, 24px); font-weight: 700; letter-spacing: -0.01em; }
-  .nfl-acc__sign { flex: none; width: 34px; height: 34px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.45); color: var(--c-innovation-blue); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; transition: background 200ms, border-color 200ms; }
-  .nfl-acc__btn:hover .nfl-acc__sign { background: rgba(255,255,255,0.12); border-color: #ffffff; }
-  .nfl-acc__panel { padding: 0 60px 28px 2px; font-size: 16.5px; line-height: var(--lh-body); color: rgba(255,255,255,0.76); }
-  .nfl-acc__panel p { margin: 0; }
-
-  /* ⚠️ What opens a panel is this rule, and the open one is named by ONE
-     attribute on <html>. Two traps are behind that.
-
-     First, a `hidden` attribute does not survive: the dc runtime parses the
-     markup and drops VALUELESS boolean attributes, so `hidden` never reached
-     the DOM, all three panels rendered open, and nothing errored — the same
-     family as the `style` attribute that never reaches an <x-import>.
-
-     Second, state written onto nodes INSIDE the render tree is not safe
-     either: the runtime swaps the subtree once, early, and restores the
-     markup's own attributes with it. <html> is outside that tree.
-
-     The default is closed, so the page is correct on first paint even if the
-     script never runs, and the first pillar is opened by the attribute the
-     markup already carries. */
-  .nfl-acc__panel { display: none; }
-  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__panel,
-  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__panel,
-  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__panel { display: block; }
-
-  /* Both signs ship in the markup and CSS picks one — the house rule that a
-     control must be the same DOM in both its states. Swapping the icon's
-     class from script would be wiped by the same render pass. */
-  .nfl-acc__minus { display: none; }
-  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__plus,
-  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__plus,
-  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__plus { display: none; }
-  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__minus,
-  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__minus,
-  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__minus { display: inline-block; }
-
-  [data-nfl-pillar="1"] .nfl-acc__item:nth-child(1) .nfl-acc__sign,
-  [data-nfl-pillar="2"] .nfl-acc__item:nth-child(2) .nfl-acc__sign,
-  [data-nfl-pillar="3"] .nfl-acc__item:nth-child(3) .nfl-acc__sign { background: var(--c-innovation-blue); border-color: var(--c-innovation-blue); color: var(--c-tech-blue); }
-  .nfl-acc__btn:focus-visible, .nfl-more:focus-visible, .nfl-switch:focus-visible { outline: 3px solid var(--c-innovation-blue); outline-offset: 3px; }
-
-  /* ⚠️ Written as `a.nfl-more`, not `.nfl-more`. The host's reset carries
-     `a:not(.cnt-btn) { color: … }`, which is one class plus one pseudo-class
-     and ties this on specificity; an element-qualified selector wins the tie
-     and loses nothing where the reset is absent. */
-  .nfl-band--dark a.nfl-more, .nfl-band--dark .nfl-more { color: var(--c-innovation-blue); }
-  .nfl-band--dark a.nfl-more:hover { color: #ffffff; }
-  .nfl-cta .nfl-eyebrow { color: var(--c-innovation-blue); }
-
-  /* ---------- 7. AI, 8. payments — the shared two-column feature band ----- */
-
-  .nfl-feat { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
-  .nfl-feat > * { min-width: 0; }
-  .nfl-feat__list { display: grid; gap: 26px; }
-  .nfl-feat__item { padding-left: 20px; border-left: 2px solid var(--c-light-blue); }
-  .nfl-band--dark .nfl-feat__item { border-left-color: rgba(143,248,255,0.40); }
-  .nfl-feat__item b { display: block; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-tech-blue); }
-  .nfl-band--dark .nfl-feat__item b { color: #ffffff; }
-  .nfl-feat__item p { margin: 8px 0 0; font-size: 15.5px; line-height: 1.6; color: var(--color-text-muted); }
-  .nfl-band--dark .nfl-feat__item p { color: rgba(255,255,255,0.74); }
-
-  .nfl-numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
-  .nfl-numbers > div { padding: 18px 16px; border-radius: 15px; background: var(--c-slate-50); }
-  .nfl-band--dark .nfl-numbers > div { background: rgba(255,255,255,0.07); }
-  .nfl-numbers .nfl-fig { display: block; font-size: clamp(28px, 2.4vw, 38px); line-height: 1; }
-
-  /* ⚠️ A class, not `.nfl-numbers span`. The bare element selector weighed
-     0,2,1 and swallowed both of its own siblings: the figure (0,2,0) lost its
-     cyan on the dark bands and came out white, and .nfl-todo (0,1,0) lost its
-     amber and printed white-on-yellow, which is unreadable. A caption is a
-     caption — give it a name and the collision cannot come back. */
-  .nfl-numbers__cap { display: block; margin-top: 9px; font-size: 13px; line-height: 1.45; color: var(--color-text-muted); }
-  .nfl-band--dark .nfl-numbers__cap { color: rgba(255,255,255,0.70); }
-
-  .nfl-pay { background: var(--color-bg-brand-deep); }
-
-  /* ---------- 9. controls ------------------------------------------------ */
-
-  .nfl-grid4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
-
-  /* ---------- 10. stories ------------------------------------------------ */
-
-  .nfl-stories { background: var(--c-slate-50); }
-  .nfl-story { display: flex; flex-direction: column; background: #ffffff; border: 1px solid var(--color-border); border-radius: 18px; overflow: hidden; transition: transform 250ms, box-shadow 250ms; }
-  .nfl-story:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(5,41,117,0.12); }
-
-  /* ⚠️ 15px on the picture, 18px on the card around it — the house radius for
-     a frame whose visible edge IS the picture. The image is cropped by the
-     card's own overflow, so the corners it shows are the card's; the inner
-     radius exists for the moment the photo has not arrived. */
-  /* ⚠️ `height: auto` is load-bearing, not tidiness. The <img> carries
-     width/height attributes so the box is reserved before the file arrives,
-     and the UA stylesheet maps those to real `width`/`height` declarations.
-     `width: 100%` overrode the first; nothing overrode the second, so every
-     card rendered its photo at the file's own 3000px and the section came out
-     ~4000px tall. `aspect-ratio` does NOT win against an explicit height. */
-  .nfl-story__shot { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 15px 15px 0 0; background: var(--c-slate-100); }
-  .nfl-story__body { padding: 24px 26px 28px; display: flex; flex-direction: column; flex: 1; }
-  .nfl-story__tag { font-size: 11.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-performance-purple); }
-  .nfl-story__title { margin: 11px 0 0; font-size: 19px; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; color: var(--c-tech-blue); }
-  .nfl-story__body .nfl-more { margin-top: auto; padding-top: 20px; }
-
-  .nfl-stories__foot { margin-top: 44px; text-align: center; }
-
-  /* ---------- 11. CTA band ----------------------------------------------- */
-
-  /* The same treatment as every other page's CTA, repeated here because this
-     page is not inside the selector those pages share. */
-  .nfl-cta { position: relative; overflow: hidden; background: linear-gradient(135deg, #041e58 0%, #052975 45%, #1d5aa8 90%, #8ff8ff 160%); }
-  .nfl-cta__mark { position: absolute; left: 50%; bottom: -40%; transform: translateX(-50%); width: 120%; min-width: 120%; object-fit: cover; opacity: 0.08; pointer-events: none; }
-  .nfl-cta__inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: clamp(78px, 8vw, 110px) 32px; text-align: center; }
-  .nfl-cta__title { margin: 0; font-size: clamp(32px, 22px + 1.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; color: #ffffff; }
-  .nfl-cta__lead { margin: 18px auto 0; max-width: 56ch; font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); }
-  .nfl-cta__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
-
-  /* ⚠️ Sized by HEIGHT below 1100px. The band turns portrait on a phone and
-     `width: 120%` then leaves the top and bottom bare; `min-width` plus
-     `object-fit: cover` keeps it covering the band's width at the same time.
-     1100px is the site's one tablet/desktop line — the header shares it. */
-  @media (max-width: 1100px) {
-    .nfl-cta__mark { width: auto; height: 115%; min-width: 120%; bottom: -18%; }
-  }
-
   /* ---------- the two prototype pills ------------------------------------ */
 
   /* Bottom RIGHT, because the front page's own switches sit bottom left and
@@ -589,7 +1180,6 @@
   .nfl-switch { position: fixed; left: 20px; bottom: 20px; z-index: 60; display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: #ffffff; border: 1.5px solid var(--color-border); box-shadow: 0 8px 24px rgba(5,41,117,0.16); font-family: inherit; font-size: 13px; font-weight: 600; color: var(--c-tech-blue); cursor: pointer; transition: transform 200ms, border-color 200ms; }
   .nfl-switch:hover { transform: translateY(-2px); border-color: var(--c-tech-blue); }
   .nfl-switch i { font-size: 13px; }
-
   /* ---------- touch ------------------------------------------------------ */
 
   /* ⚠️ An ::after overlay, never `min-height`. Growing the pill moves the
@@ -632,12 +1222,8 @@
 
   /* ---------- narrower ---------------------------------------------------- */
 
-  @media (max-width: 1100px) {
-    .nfl-grid5 { grid-template-columns: repeat(2, 1fr); }
-  }
-
   @media (max-width: 980px) {
-    /* A 196px nav column against a 540px window leaves the invoice list
+    /* A 236px nav column against a 540px window leaves the invoice list
        nothing, so the window's own sidebar goes too. */
     .nfl-mock__side { display: none; }
     .nfl-mock__body { grid-template-columns: 1fr; }
@@ -650,19 +1236,9 @@
        `height: auto` alone cannot do it while .nfl-mock is `inset: 0`: an
        absolutely positioned child contributes nothing to its parent's
        height, so the frame would collapse to zero. The window goes back into
-       normal flow and the frame measures it. On a phone the result is still
-       taller than the 210px slot, so it is still cut and still fades. */
+       normal flow and the frame measures it. */
     .nfl-hero__frame { height: auto; }
     .nfl-mock { position: relative; inset: auto; }
-    .nfl-feat, .nfl-old__grid { grid-template-columns: 1fr; }
-    .nfl-trust__grid { grid-template-columns: repeat(2, 1fr); gap: 26px 0; }
-    .nfl-trust__cell:nth-child(odd) { border-left: 0; padding-left: 0; }
-  }
-
-  @media (max-width: 760px) {
-    .nfl-grid5, .nfl-grid4 { grid-template-columns: 1fr; }
-    .nfl-acc__panel { padding-right: 2px; }
-    .nfl-numbers { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 640px) {
@@ -683,29 +1259,19 @@
     .nfl-chip { font-size: 10.5px; padding: 4px 9px; }
     .nfl-hero__stage { min-height: 210px; }
 
-    /* ⚠️ Every one of these is bought for the window. The headline takes five
-       lines at this width instead of three, which pushed the window's top
-       edge to 763 on a 844px screen: 81px of visible chrome, and the walking
-       stages — the only thing moving on the page — sat entirely below the
-       fold. Shaving the vertical rhythm down the column buys back about 80px
-       and puts the stages back on the first screen. Nothing here is a looks
-       decision; if the headline is ever shortened, these can go. */
+    /* ⚠️ Every one of these is bought for the window — see the note in
+       site/new-front-look's history: the headline takes five lines at this
+       width and the walking stages fell below the fold without them. */
     .nfl-hero__inner { padding-top: 36px; }
     .nfl-hero h1 { font-size: min(clamp(34px, 2.6vw + 1.9rem, 76px), 8.6vw); }
     .nfl-hero__lead { margin-top: 18px; }
     .nfl-hero__actions { margin-top: 26px; }
     .nfl-hero__note { margin-top: 18px; }
     .nfl-hero__stage { margin-top: 28px; }
-    .nfl-trust__grid { grid-template-columns: 1fr; }
-    .nfl-trust__cell { border-left: 0; padding-left: 0; }
-    .nfl-frag { grid-template-columns: repeat(4, 1fr); }
-    .nfl-frag__t { margin-top: 0 !important; }
     .nfl-proof__card { width: 268px; }
     /* ⚠️ The full label makes the pill 340px wide at 390 — it covered most of
-       the column and sat permanently over the body text. Two words come out
-       on the narrow end. The whole label stays in the DOM and CSS hides the
-       middle of it, so the link reads the same to a screen reader in both
-       states, and nothing reflows when the width changes. */
+       the column. The whole label stays in the DOM and CSS hides the middle
+       of it, so the link reads the same to a screen reader in both states. */
     .nfl-switch { left: 14px; bottom: 14px; }
     .nfl-switch__long { display: none; }
   }
@@ -713,24 +1279,39 @@
   /* ---------- reduced motion --------------------------------------------- */
 
   @media (prefers-reduced-motion: reduce) {
-    /* The window and the card drop their entrance and are simply there; the
-       frame keeps its static `translateX(-50%)` because that rule is the
-       declaration, not a keyframe. The clip goes entirely — it is motion
-       with no way to sit still. */
+    /* The window drops its entrance and is simply there; the frame keeps its
+       static `translateX(-50%)` because that rule is the declaration, not a
+       keyframe. The clip goes entirely — it is motion with no way to sit
+       still. */
     .nfl-hero__frame { animation: none; }
     .nfl-smoke__c { animation: none; }
     .nfl-hero__ring circle { animation: none; stroke-dashoffset: 0; }
     .nfl-hero__vid { display: none; }
     .nfl-proof__rail { animation: none; }
-    .nfl-card, .nfl-story, .nfl-more i, .nfl-switch, .nfl-stage, .nfl-acc__sign,
-    .nfl-mock__prog i, .nfl-mock__row { transition: none; }
+    .nfl-switch, .nfl-stage, .nfl-mock__prog i, .nfl-mock__row { transition: none; }
     .nfl-stage { transform: none; box-shadow: none; }
-    .nfl-card:hover, .nfl-story:hover, .nfl-switch:hover { transform: none; }
-    .nfl-more:hover i { transform: none; }
+    .nfl-switch:hover { transform: none; }
   }
+  /* ---------- the back pill, inside the real front page's furniture ------- */
+
+  /* ⚠️ `a.nfl-switch`, not `.nfl-switch`. This page now carries index.html's
+     stylesheet, and its `a:not(.cnt-btn)` is (0,1,1) — it beats a bare class,
+     so the pill came out underlined and link-blue. The element half is the fix.
+     ⚠️ And it moves to the RIGHT. Bottom left is where the front page's own
+     hero/impact dev toggles sit, and those came along with everything else
+     below the band; the pill was parked straight on top of them. */
+  a.nfl-switch { left: auto; right: 20px; color: var(--c-tech-blue); text-decoration: none;
+    transition: transform 200ms, border-color 200ms, opacity 200ms, color 200ms; }
+  a.nfl-switch:hover { color: var(--c-tech-blue); border-color: var(--c-tech-blue); }
+  a.nfl-switch:focus-visible { outline: 3px solid #8ff8ff; outline-offset: 3px; }
+  /* Same fade as the front page's pill: the footer's legal bar ends up right
+     under it otherwise. The class is written on <body> by the dc script. */
+  body.cnt-footer-in-view a.nfl-switch { opacity: 0; pointer-events: none; transform: translateY(14px); }
+  @media (max-width: 640px) { a.nfl-switch { left: auto; right: 14px; } }
 </style>
 </helmet>
 
+<!-- ============ HEADER ============ -->
 <x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteHeader" hint-size="100%,66px"></x-import>
 
 <!-- ============ 1. HERO ============ -->
@@ -853,308 +1434,207 @@
   </div>
 </section>
 
-<!-- ============ 3. WHAT CONTINIA DOES ============ -->
-<section class="nfl-band" data-screen-label="Solutions">
-  <div class="nfl-sec">
-    <div class="nfl-head">
-      <span class="nfl-eyebrow">What Continia does</span>
-      <h2 class="nfl-h2">One platform. Every part of the finance day.</h2>
-      <p class="nfl-lead">Five scalable add&#8209;on solutions, built inside Business Central — so there is nothing extra to host, integrate or learn.</p>
-    </div>
-    <div class="nfl-grid5">
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></span>
-        <h3 class="nfl-card__title">Document Capture</h3>
-        <p class="nfl-card__text">Invoices imported, recognized, approved and posted automatically — your whole Accounts Payable, without leaving Business Central.</p>
-        <a class="nfl-more" href="../products/document-capture/">Learn more<i class="fa-light fa-arrow-right"></i></a>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></span>
-        <h3 class="nfl-card__title">Expense Management</h3>
-        <p class="nfl-card__text">Snap the receipt and it is done: coding, approval and reimbursement happen on their own, on web and on mobile.</p>
-        <a class="nfl-more" href="../products/expense-management/">Learn more<i class="fa-light fa-arrow-right"></i></a>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></span>
-        <h3 class="nfl-card__title">Continia Banking</h3>
-        <p class="nfl-card__text">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
-        <a class="nfl-more" href="../products/continia-banking/">Learn more<i class="fa-light fa-arrow-right"></i></a>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></span>
-        <h3 class="nfl-card__title">Continia Finance</h3>
-        <p class="nfl-card__text">Smart modules that take the weight off core accounting: general ledger, fixed assets, open entries and treasury.</p>
-        <a class="nfl-more" href="../products/continia-finance/">Learn more<i class="fa-light fa-arrow-right"></i></a>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></span>
-        <h3 class="nfl-card__title">Document Output</h3>
-        <p class="nfl-card__text">Invoices, reminders and e&#8209;documents sent in the right format every time — email, PEPPOL or print.</p>
-        <a class="nfl-more" href="../products/document-output/">Learn more<i class="fa-light fa-arrow-right"></i></a>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-light fa-grid-2"></i></span>
-        <h3 class="nfl-card__title">See them together</h3>
-        <p class="nfl-card__text">The five solutions share one interface, one data model and one setup. The products page shows how they overlap.</p>
-        <a class="nfl-more" href="../products/">All solutions<i class="fa-light fa-arrow-right"></i></a>
+<!-- ============ TRUST MARQUEE ============ -->
+<section data-screen-label="Trusted by" class="tby">
+  <div class="tby__inner">
+    <span class="tby__label">Trusted by <span class="tby__count">21,000+</span> companies:</span>
+    <div class="tby__track">
+      <!-- The id stays: support.js pauses this element for prefers-reduced-motion.
+           The module has no script, so its CSS carries the same rule instead. -->
+      <div id="cnt-marquee" class="tby__strip">
+        <sc-for list="{{ trustLoop }}" as="brand" hint-placeholder-count="10">
+          <!-- No loading="lazy" here. The marquee is ~2000px wide, so on a phone
+               most of these sit far outside the viewport HORIZONTALLY and the
+               browser never fetches them — they scrolled into view blank. The
+               other three trust-banner pages already load them eagerly. -->
+          <img src="{{ brand }}" alt="" class="tby__logo" />
+        </sc-for>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 4. TRUST ROW ============ -->
-<section class="nfl-trust" data-screen-label="Trust">
-  <div class="nfl-sec nfl-sec--tight">
-    <div class="nfl-trust__grid">
-      <div class="nfl-trust__cell">
-        <div class="nfl-trust__k">Built inside</div>
-        <div class="nfl-trust__v">100% inside Business Central</div>
-        <div class="nfl-trust__s">No separate portal, no extra host, no integration to maintain.</div>
+<!-- ============ IMPACT (giant count-up numbers) ============ -->
+<section id="impacts" data-screen-label="Impact" class="imp">
+  <div class="imp__inner">
+<!-- ===== NEW + NO-OUTLINE: 50/50 split with two overlapping, swapping photos.
+         Both views share this markup; only {{ impactSplitCls }} differs. ===== -->
+<sc-if value="{{ impactSplit }}" hint-placeholder-val="{{ true }}">
+    <div class="imp-split {{ impactSplitCls }}">
+      <div class="imp-left" data-reveal="true">
+        <h2>Real results.<br>Real time saved.</h2>
+        <p>See how finance teams around the world are transforming the way they work. From faster invoice handling to fewer errors — time gets back to where it matters.</p>
+        <div class="imp-stats" id="cnt-statband">
+          <div class="imp-stat"><div class="imp-stat__num">{{ statCust }}</div><div class="imp-stat__txt"><b>Customers worldwide</b><span>Every invoice captured and every expense approved — real work done by real finance teams.</span></div></div>
+          <div class="imp-stat"><div class="imp-stat__num">{{ statManual }}</div><div class="imp-stat__txt"><b>Less manual data entry</b><span>Eliminate manual tasks by up to 90% with automation built inside Business Central.</span></div></div>
+          <div class="imp-stat"><div class="imp-stat__num">{{ statPartners }}</div><div class="imp-stat__txt"><b>Partners worldwide</b><span>Delivered through local Business Central specialists in 45+ countries.</span></div></div>
+        </div>
       </div>
-      <div class="nfl-trust__cell">
-        <div class="nfl-trust__k">Available on</div>
-        <div class="nfl-trust__v">Microsoft AppSource</div>
-        <div class="nfl-trust__s">Install a free trial straight from the marketplace.</div>
-      </div>
-      <div class="nfl-trust__cell">
-        <div class="nfl-trust__k">Delivered by</div>
-        <div class="nfl-trust__v"><span class="nfl-fig">1,500+</span> local partners</div>
-        <div class="nfl-trust__s">Business Central specialists in <span class="nfl-fig">45+</span> countries.</div>
-      </div>
-      <div class="nfl-trust__cell">
-        <div class="nfl-trust__k">Connected</div>
-        <div class="nfl-trust__v">Microsoft&#8209;approved Connectivity App</div>
-        <div class="nfl-trust__s">One of the first, linking Business Central straight to the bank.</div>
+      <div class="imp-media">
+        <div class="imp-sq imp-sq--a"><div class="imp-card"><img src="../assets/images/moni-square.png" alt="Finance professional at work"></div></div>
+        <div class="imp-sq imp-sq--b"><div class="imp-card"><img src="../assets/images/diana-square.png" alt="Finance professional at work"></div></div>
       </div>
     </div>
-  </div>
-</section>
+</sc-if>
 
-<!-- ============ 5. THE OLD WAY ============ -->
-<section class="nfl-old" data-screen-label="The old way">
-  <div class="nfl-sec">
-    <div class="nfl-old__grid">
+<!-- ===== CLASSIC: original full-width count-up rows ===== -->
+<sc-if value="{{ impactOld }}" hint-placeholder-val="{{ false }}">
+    <div data-reveal="true" class="cnt-2col" style="display:grid;grid-template-columns:clamp(340px,30vw,420px) 1fr;gap:12px 64px;align-items:end">
       <div>
-        <h2>Invoices in a shared inbox. Numbers keyed twice. Spreadsheets filling the gaps.</h2>
-        <p class="nfl-old__line">It doesn't have to work this way.</p>
-        <p class="nfl-lead">Most finance stacks grew one tool at a time, and every seam between them became somebody's manual job. Continia closes the seams instead of adding another tool across them.</p>
+        <h2 style="margin:0;font-size:clamp(32px,3.2vw,46px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;color:#052975">Real results.<br>Real time saved.</h2>
       </div>
-      <div class="nfl-frag" aria-hidden="true">
-        <div class="nfl-frag__t"><i class="fa-light fa-inbox"></i><b>Shared inbox</b><span>PDFs arrive, somebody sorts them</span></div>
-        <div class="nfl-frag__t"><i class="fa-light fa-keyboard"></i><b>Manual keying</b><span>The same numbers, a second time</span></div>
-        <div class="nfl-frag__t"><i class="fa-light fa-table"></i><b>Spreadsheets</b><span>Tracking what the system doesn't</span></div>
-        <div class="nfl-frag__t"><i class="fa-light fa-envelope"></i><b>Approvals by email</b><span>Chased, forwarded, lost</span></div>
-        <div class="nfl-frag__t"><i class="fa-light fa-building-columns"></i><b>Bank portal</b><span>A second login, a second file</span></div>
-        <div class="nfl-frag__t"><i class="fa-light fa-magnifying-glass"></i><b>Month&#8209;end hunt</b><span>Where did this one go?</span></div>
+      <p style="margin:0;font-size:17px;line-height:1.65;color:#0a1838">See how finance teams around the world are transforming the way they work. From faster invoice handling to fewer errors — time gets back to where it matters.</p>
+    </div>
+    <div id="cnt-statband" style="margin-top:48px">
+      <div data-reveal="true" class="cnt-2col" style="display:grid;grid-template-columns:clamp(340px,30vw,420px) 1fr;gap:12px 64px;align-items:center;padding:38px 0;border-top:1px solid #dde3ee">
+        <div style="font-size:clamp(64px,7vw,110px);font-weight:700;line-height:0.95;letter-spacing:-0.03em;color:#052975;font-variant-numeric:tabular-nums;min-width:340px">{{ statCust }}</div>
+        <div><div style="font-size:18px;font-weight:700;color:#0a1838">Customers worldwide</div><div style="margin-top:6px;font-size:15px;line-height:1.6;color:#0a1838;max-width:440px">Every invoice captured and every expense approved — our numbers reflect real work done by real finance teams.</div></div>
+      </div>
+      <div data-reveal="true" class="cnt-2col" style="display:grid;grid-template-columns:clamp(340px,30vw,420px) 1fr;gap:12px 64px;align-items:center;padding:38px 0;border-top:1px solid #dde3ee">
+        <div style="font-size:clamp(64px,7vw,110px);font-weight:700;line-height:0.95;letter-spacing:-0.03em;color:#052975;font-variant-numeric:tabular-nums;min-width:340px">{{ statManual }}</div>
+        <div><div style="font-size:18px;font-weight:700;color:#0a1838">Less manual data entry</div><div style="margin-top:6px;font-size:15px;line-height:1.6;color:#0a1838;max-width:440px">Eliminate manual tasks by up to 90% with automation built inside Business Central.</div></div>
+      </div>
+      <div data-reveal="true" class="cnt-2col" style="display:grid;grid-template-columns:clamp(340px,30vw,420px) 1fr;gap:12px 64px;align-items:center;padding:38px 0;border-top:1px solid #dde3ee;border-bottom:1px solid #dde3ee">
+        <div style="font-size:clamp(64px,7vw,110px);font-weight:700;line-height:0.95;letter-spacing:-0.03em;color:#052975;font-variant-numeric:tabular-nums;min-width:340px">{{ statPartners }}</div>
+        <div><div style="font-size:18px;font-weight:700;color:#0a1838">Partners worldwide</div><div style="margin-top:6px;font-size:15px;line-height:1.6;color:#0a1838;max-width:440px">Delivered to the international market through local Business Central specialists in 45+ countries.</div></div>
+      </div>
+    </div>
+</sc-if>
+  </div>
+</section>
+
+<!-- Impact section view toggle (New 50/50 ⇄ Classic) -->
+<button onClick="{{ toggleImpact }}" class="imp-toggle" title="Switch the impact section layout"><i class="fa-light fa-arrows-rotate" style="font-size:13px;"></i>{{ impactToggleLabel }}</button>
+
+<!-- ============ SOLUTIONS BENTO ============ -->
+<section id="solutions" data-screen-label="Solutions" style="position:relative;overflow:hidden">
+
+<!-- ===== CAROUSEL: 3D coverflow of the five solutions ===== -->
+<sc-if value="{{ solCarousel }}" hint-placeholder-val="{{ false }}">
+<div class="sol-new">
+  <video class="sol-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="../assets/video/brand-clouds.webm" type="video/webm">
+    <source src="../assets/video/brand-clouds.mp4" type="video/mp4">
+  </video>
+  <div class="sol-vid-ovl" aria-hidden="true"></div>
+  <div class="sol-new__inner">
+    <div style="text-align:center;margin:0 auto">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#8ff8ff">Our products</span>
+      <h2 style="margin:14px 0 0;font-size:min(clamp(32px,3.2vw,48px),7vw);font-weight:700;line-height:1.12;letter-spacing:-0.015em;color:#ffffff">Solutions designed for<br>your <span style="color:#8ff8ff">Business Central.</span></h2>
+      <p style="max-width:660px;margin:14px auto 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,0.74)">Five scalable add-on solutions — 100% built inside, so your team<br>keeps the interface they already know.</p>
+    </div>
+    <div class="sol-car">
+      <button onClick="{{ carPrev }}" class="sol-car__nav sol-car__nav--prev" aria-label="Previous solution"><i class="fa-light fa-arrow-left"></i></button>
+      <div class="sol-car__stage">
+        <div class="sol-car__track">
+          <div class="sol-car__card" style="{{ carStyle0 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-document-capture-solution-dc-icon"></i></div>
+            <div class="sol-car__title">Document Capture</div>
+            <p class="sol-car__desc">Automate your entire Accounts Payable — invoices imported, recognized, approved and posted automatically, without leaving Business Central.</p>
+            <a href="../products/document-capture/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+            <div class="sol-car__pills"><span class="sol-car__pill">AP automation</span><span class="sol-car__pill">Invoice capture</span><span class="sol-car__pill">Approval flows</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle1 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-expense-management-solution-em-icon"></i></div>
+            <div class="sol-car__title">Expense Management</div>
+            <p class="sol-car__desc">Snap a photo of the receipt — approval, coding and reimbursement happen automatically, on web and mobile.</p>
+            <a href="../products/expense-management/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+            <div class="sol-car__pills"><span class="sol-car__pill">Expense automation</span><span class="sol-car__pill">Mobile receipts</span><span class="sol-car__pill">Reimbursement</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle2 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-banking-solution-cb-icon"></i></div>
+            <div class="sol-car__title">Continia Banking</div>
+            <p class="sol-car__desc">Direct bank communication, payment approval and automatic reconciliation — straight from Business Central.</p>
+            <a href="../products/continia-banking/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+            <div class="sol-car__pills"><span class="sol-car__pill">Payment automation</span><span class="sol-car__pill">Bank reconciliation</span><span class="sol-car__pill">Payment approval</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle3 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-finance-solution-cf-add-modules--stack-icon"></i></div>
+            <div class="sol-car__title">Continia Finance</div>
+            <p class="sol-car__desc">Smart modules that ease the burden of core accounting — general ledger, fixed assets, open entries and treasury.</p>
+            <a href="../products/continia-finance/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+            <div class="sol-car__pills"><span class="sol-car__pill">General ledger</span><span class="sol-car__pill">Fixed assets</span><span class="sol-car__pill">Treasury</span></div>
+          </div>
+          <div class="sol-car__card" style="{{ carStyle4 }}">
+            <div class="sol-g__icon"><i class="fa-kit fa-document-output-solution-do-icon-file-export"></i></div>
+            <div class="sol-car__title">Document Output</div>
+            <p class="sol-car__desc">Send invoices, reminders and e-documents in the right format — email, PEPPOL or print — every time.</p>
+            <a href="../products/document-output/" class="sol-car__more">See more<i class="fa-light fa-arrow-right"></i></a>
+            <div class="sol-car__pills"><span class="sol-car__pill">E-invoicing</span><span class="sol-car__pill">PEPPOL</span><span class="sol-car__pill">Document delivery</span></div>
+          </div>
+        </div>
+      </div>
+      <button onClick="{{ carNext }}" class="sol-car__nav sol-car__nav--next" aria-label="Next solution"><i class="fa-light fa-arrow-right"></i></button>
+      <div class="sol-car__dots">
+        <sc-for list="{{ carDots }}" as="d" hint-placeholder-count="5">
+          <button class="{{ d.cls }}" onClick="{{ d.pick }}" aria-label="Go to solution"></button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</section>
+
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how" data-screen-label="How it works" class="hiw">
+  <div class="hiw__inner">
+    <div data-reveal="true" class="hiw__head">
+      <span class="hiw__eyebrow">How it works</span>
+      <h2 class="hiw__title">Get started in 3 simple steps.</h2>
+      <p class="hiw__lead">From AppSource to automated — most teams are live<br>within weeks, not months.</p>
+    </div>
+    <!-- cnt-3col is NOT decoration: four media queries in this page's style block
+         hang off it (grid collapse, padding, card padding). It stays. -->
+    <div data-reveal="true" class="cnt-3col hiw__grid">
+      <div class="hiw-card">
+        <span class="hiw-card__badge">Step 1</span>
+        <h3 class="hiw-card__title">Install from AppSource</h3>
+        <p class="hiw-card__body">Get any Continia solution directly from Microsoft AppSource — no external systems.</p>
+        <div class="hiw-card__visual hiw-app">
+          <img src="../assets/logos/continia-logomark-techblue.svg" alt="" class="hiw-app__logo">
+          <div class="hiw-app__meta"><div class="hiw-app__name">Continia Document Capture</div><div class="hiw-app__src">Microsoft AppSource</div></div>
+          <span class="hiw-app__get">GET</span>
+        </div>
+      </div>
+      <div class="hiw-card">
+        <span class="hiw-card__badge">Step 2</span>
+        <h3 class="hiw-card__title">Set up with your partner</h3>
+        <p class="hiw-card__body">Assisted setup and your local Continia partner get you configured in days.</p>
+        <div class="hiw-card__visual hiw-check">
+          <div class="hiw-check__row"><i class="fa-light fa-circle-check hiw-check__ico"></i> Connect document sources</div>
+          <div class="hiw-check__row"><i class="fa-light fa-circle-check hiw-check__ico"></i> Define approval flows</div>
+          <div class="hiw-check__row hiw-check__row--todo"><i class="fa-light fa-circle hiw-check__ico"></i> Invite your team</div>
+        </div>
+      </div>
+      <div class="hiw-card">
+        <span class="hiw-card__badge">Step 3</span>
+        <h3 class="hiw-card__title">Let time work for you</h3>
+        <p class="hiw-card__body">Documents flow through capture, approval and posting — automatically.</p>
+        <div class="hiw-card__visual hiw-stat">
+          <div class="hiw-stat__num">90%</div>
+          <div class="hiw-stat__txt">of manual tasks eliminated —<br>every single day</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 6. THE THREE PILLARS ============ -->
-<section class="nfl-pillars nfl-band nfl-band--dark" data-screen-label="Platform">
-  <div class="nfl-sec">
-    <div class="nfl-head">
-      <span class="nfl-eyebrow">The Continia platform</span>
-      <h2 class="nfl-h2">One platform. Finance that gets its time back.</h2>
-      <p class="nfl-lead">Three things carry the whole thing. Open one to see what it means in practice.</p>
-    </div>
-    <div class="nfl-acc" data-nfl-acc>
-      <div class="nfl-acc__item">
-        <button class="nfl-acc__btn" type="button" aria-expanded="true" aria-controls="nfl-p1">
-          <b>Built inside Business Central</b>
-          <span class="nfl-acc__sign" aria-hidden="true"><i class="fa-light fa-plus nfl-acc__plus"></i><i class="fa-light fa-minus nfl-acc__minus"></i></span>
-        </button>
-        <div class="nfl-acc__panel" id="nfl-p1">
-          <p>Continia is not a portal your team logs into. It is pages, actions and fields inside the Business Central they already use, reading the same vendors, dimensions and approval hierarchy. There is nothing to host, nothing to integrate and nothing new to learn — which is why implementation is measured in days rather than months.</p>
-        </div>
-      </div>
-      <div class="nfl-acc__item">
-        <button class="nfl-acc__btn" type="button" aria-expanded="false" aria-controls="nfl-p2">
-          <b>Recognition that does the typing</b>
-          <span class="nfl-acc__sign" aria-hidden="true"><i class="fa-light fa-plus nfl-acc__plus"></i><i class="fa-light fa-minus nfl-acc__minus"></i></span>
-        </button>
-        <div class="nfl-acc__panel" id="nfl-p2">
-          <p>Document Capture reads the invoice — vendor, number, amount, lines, order match — and fills the document out. Your team is left with the part that needs a person: the decision. Customers report up to <span class="nfl-fig">90%</span> less manual data entry once it is running.</p>
-        </div>
-      </div>
-      <div class="nfl-acc__item">
-        <button class="nfl-acc__btn" type="button" aria-expanded="false" aria-controls="nfl-p3">
-          <b>Your partner, your setup</b>
-          <span class="nfl-acc__sign" aria-hidden="true"><i class="fa-light fa-plus nfl-acc__plus"></i><i class="fa-light fa-minus nfl-acc__minus"></i></span>
-        </button>
-        <div class="nfl-acc__panel" id="nfl-p3">
-          <p>Continia is delivered by <span class="nfl-fig">1,500+</span> local Business Central specialists in <span class="nfl-fig">45+</span> countries — the same partner who knows your chart of accounts, your approval rules and your auditors. You get software from one company and a setup from someone down the road.</p>
-        </div>
-      </div>
+<!-- ============ FINAL CTA ============ -->
+<section id="cta" data-screen-label="Final CTA" class="cta">
+  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" class="cta__mark">
+  <div data-reveal="true" class="cta__inner">
+    <span class="cta__eyebrow">Get started</span>
+    <h2 class="cta__title">It's about time to future&#8209;proof your finance operations</h2>
+    <p class="cta__lead">Get all your tools in one place and work faster — without leaving Business Central.</p>
+    <div class="cta__actions">
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" class-name="cnt-btn--innovation" dc-props="{{ arrowBtn }}" hint-size="170px,48px">Get a free trial</x-import>
+      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" class-name="cnt-btn--ghostdark" href="#footer" hint-size="180px,48px">Talk to a partner</x-import>
     </div>
   </div>
 </section>
-
-<!-- ============ 7. RECOGNITION ============ -->
-<section class="nfl-band" data-screen-label="Recognition">
-  <div class="nfl-sec">
-    <div class="nfl-feat">
-      <div>
-        <span class="nfl-eyebrow">Recognition</span>
-        <h2 class="nfl-h2">The software reads the document. Your team keeps the decision.</h2>
-        <p class="nfl-lead">Capture is where the hours go, and it is the part a person adds least to. Continia takes the typing and hands back the judgement call.</p>
-        <div class="nfl-numbers">
-          <div><span class="nfl-fig">90%</span><span class="nfl-numbers__cap">less manual data entry, reported by customers running Document Capture</span></div>
-          <div><span class="nfl-todo">TODO: hours saved per employee</span></div>
-          <div><span class="nfl-todo">TODO: faster month&#8209;end close</span></div>
-        </div>
-      </div>
-      <div class="nfl-feat__list">
-        <div class="nfl-feat__item">
-          <b>Every field, filled before you look</b>
-          <p>Vendor, invoice number, dates, amounts, VAT and the individual lines are read off the document and written onto the Business Central record.</p>
-        </div>
-        <div class="nfl-feat__item">
-          <b>Matched against the order, not against your memory</b>
-          <p>Three&#8209;way matching compares invoice, order and receipt and tells you where they disagree — before the document reaches an approver.</p>
-        </div>
-        <div class="nfl-feat__item">
-          <b>It learns the documents you actually get</b>
-          <p>Templates are per&#8209;vendor, so the second invoice from a supplier is recognized better than the first, and the hundredth needs nobody at all.</p>
-        </div>
-        <div class="nfl-feat__item">
-          <a class="nfl-more" href="../products/document-capture/">Explore Document Capture<i class="fa-light fa-arrow-right"></i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 8. PAYMENTS AND BANK ============ -->
-<section class="nfl-pay nfl-band nfl-band--dark" data-screen-label="Payments">
-  <div class="nfl-sec">
-    <div class="nfl-feat">
-      <div>
-        <span class="nfl-eyebrow">Payments and bank</span>
-        <h2 class="nfl-h2">Pay, reconcile and send — without a second login.</h2>
-        <p class="nfl-lead">The bank file, the portal and the manual match are three separate jobs today. Continia Banking and Document Output make them one.</p>
-        <div class="nfl-numbers">
-          <div><span class="nfl-fig">45+</span><span class="nfl-numbers__cap">countries where Continia is delivered locally</span></div>
-          <div><span class="nfl-todo">TODO: number of connected banks</span></div>
-          <div><span class="nfl-todo">TODO: share of lines auto&#8209;reconciled</span></div>
-        </div>
-      </div>
-      <div class="nfl-feat__list">
-        <div class="nfl-feat__item">
-          <b>Talk to the bank from Business Central</b>
-          <p>One of the first Microsoft&#8209;approved Connectivity Apps: payments go out and statements come back through the ERP, not through a portal and a file.</p>
-        </div>
-        <div class="nfl-feat__item">
-          <b>Reconciliation that has already happened</b>
-          <p>Statement lines are matched against open entries as they arrive, so what reaches a person is the handful that genuinely need a look.</p>
-        </div>
-        <div class="nfl-feat__item">
-          <b>Documents out in the format each receiver wants</b>
-          <p>Invoices, reminders and e&#8209;documents leave as email, PEPPOL or print — chosen per customer, applied without anyone deciding each time.</p>
-        </div>
-        <div class="nfl-feat__item">
-          <a class="nfl-more" href="../products/continia-banking/">Explore Continia Banking<i class="fa-light fa-arrow-right"></i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 9. CONTROL ============ -->
-<section class="nfl-band" data-screen-label="Control">
-  <div class="nfl-sec">
-    <div class="nfl-head">
-      <span class="nfl-eyebrow">Control</span>
-      <h2 class="nfl-h2">Everything runs exactly as you set it up.</h2>
-      <p class="nfl-lead">Automation only helps if the rules are yours. Continia enforces the ones you already wrote, in the system that already holds them.</p>
-    </div>
-    <div class="nfl-grid4">
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-light fa-sitemap"></i></span>
-        <h3 class="nfl-card__title">Approval flows that enforce themselves</h3>
-        <p class="nfl-card__text">Limits, hierarchies and substitutes live in the setup, not in somebody's head. A document cannot skip a step because the month is busy.</p>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-light fa-clock-rotate-left"></i></span>
-        <h3 class="nfl-card__title">An audit trail you didn't have to assemble</h3>
-        <p class="nfl-card__text">Who approved what, when, and against which version of the document — attached to the entry, where the auditor is already looking.</p>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-light fa-buildings"></i></span>
-        <h3 class="nfl-card__title">One setup across every company</h3>
-        <p class="nfl-card__text">Run several legal entities in one Business Central and the same rules, templates and approvers apply to all of them.</p>
-      </div>
-      <div class="nfl-card">
-        <span class="nfl-card__icon"><i class="fa-light fa-lock"></i></span>
-        <h3 class="nfl-card__title">Your data stays where it already is</h3>
-        <p class="nfl-card__text">Nothing moves to a separate product database. The records Continia writes are Business Central records, under your own tenant and your own permissions.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 10. STORIES ============ -->
-<section class="nfl-stories" data-screen-label="Stories">
-  <div class="nfl-sec">
-    <div class="nfl-head">
-      <span class="nfl-eyebrow">Customer stories</span>
-      <h2 class="nfl-h2">Real finance teams. Real hours back.</h2>
-    </div>
-    <!-- ⚠️ No inline grid-template-columns here. It used to carry
-         style="grid-template-columns:repeat(3,1fr)", which is what
-         .nfl-grid5 already declares — so it looked harmless, but an
-         inline style outranks every media query, and the stories grid
-         stayed three-up all the way down. At 390 that left each title
-         48px wide and nine lines tall. -->
-    <div class="nfl-grid5">
-      <a class="nfl-story" href="../stories/customer-stories/calypso-group/">
-        <img class="nfl-story__shot" src="../assets/images/collaboration.jpg" alt="" loading="lazy" decoding="async" width="5333" height="3000">
-        <div class="nfl-story__body">
-          <span class="nfl-story__tag">Calypso Group</span>
-          <h3 class="nfl-story__title">Hasn't chased a missing invoice in over a year</h3>
-          <span class="nfl-more">Read full story<i class="fa-light fa-arrow-right"></i></span>
-        </div>
-      </a>
-      <a class="nfl-story" href="../stories/customer-stories/fjord-and-co/">
-        <img class="nfl-story__shot" src="../assets/images/office.jpg" alt="" loading="lazy" decoding="async" width="5333" height="3000">
-        <div class="nfl-story__body">
-          <span class="nfl-story__tag">Fjord &amp; Co.</span>
-          <h3 class="nfl-story__title">Closes two days earlier — after an afternoon of setup</h3>
-          <span class="nfl-more">Read full story<i class="fa-light fa-arrow-right"></i></span>
-        </div>
-      </a>
-      <a class="nfl-story" href="../stories/customer-stories/nordwind-logistics/">
-        <img class="nfl-story__shot" src="../assets/images/team-at-work.jpg" alt="" loading="lazy" decoding="async" width="1600" height="900">
-        <div class="nfl-story__body">
-          <span class="nfl-story__tag">Nordwind Logistics</span>
-          <h3 class="nfl-story__title">Cut manual data entry by 90%</h3>
-          <span class="nfl-more">Read full story<i class="fa-light fa-arrow-right"></i></span>
-        </div>
-      </a>
-    </div>
-    <div class="nfl-stories__foot">
-      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="secondary" href="../stories/customer-stories/" hint-size="170px,52px">See all stories</x-import>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 11. CTA BAND ============ -->
-<section class="nfl-cta" data-screen-label="Final CTA">
-  <img src="../assets/brand/fifth-element-inline-innovation.svg" alt="" aria-hidden="true" class="nfl-cta__mark">
-  <div class="nfl-cta__inner">
-    <span class="nfl-eyebrow">Get started</span>
-    <h2 class="nfl-cta__title">Your finance month could look different by the <span class="nfl-em">next</span> one.</h2>
-    <p class="nfl-cta__lead">Install from AppSource, set it up with your partner, and let the tedious half of the work run itself.</p>
-    <div class="nfl-cta__actions">
-      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="innovation" href="https://appsource.microsoft.com/en-us/marketplace/apps?search=continia" hint-size="190px,52px">Get a free trial</x-import>
-      <x-import component-from-global-scope="ContiniaDesignSystem_354b58.Button" size="lg" variant="ghost-dark" href="../company/find-a-partner/" hint-size="180px,52px">Talk to a partner</x-import>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
 
 <!-- Back to the real front page. Same pill as the one that leads here. -->
 <!-- ⚠️ The whole label is ONE span. .nfl-switch is an inline-flex with a
@@ -1163,8 +1643,405 @@
      read "Back to  the current  front page". One item, normal inline flow
      inside it, and the gap does only what it is for — the icon. -->
 <a class="nfl-switch" href="../"><i class="fa-light fa-arrow-left"></i><span>Back to <span class="nfl-switch__long">the current </span>front page</span></a>
-</x-dc>
 
+<!-- ============ FOOTER ============ -->
+<div id="footer"><x-import component-from-global-scope="ContiniaDesignSystem_354b58.SiteFooter" hint-size="100%,420px"></x-import></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;motion&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;Play animations: hero document flow, scroll reveals, stat count-up and logo marquee&quot; },
+  &quot;flowSpeed&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 1.5, &quot;min&quot;: 0.5, &quot;max&quot;: 2.5, &quot;step&quot;: 0.25, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Behavior&quot;, &quot;description&quot;: &quot;Speed of the animated document flow in the hero&quot; }
+}">
+const CHIP = {
+  neutral: { bg: "#eef1f6", fg: "#3a4a6b" },
+  info: { bg: "#def5ff", fg: "#052975" },
+  warning: { bg: "#fff7e3", fg: "#8a6516" },
+  success: { bg: "#cfe2dd", fg: "#2f6455" },
+};
+
+const FLOW_STAGES = [
+  { name: "Imported", icon: "fa-light fa-file-import", kind: "neutral" },
+  { name: "Recognized", icon: "fa-light fa-wand-magic-sparkles", kind: "info" },
+  { name: "For approval", icon: "fa-light fa-user-check", kind: "warning" },
+  { name: "Posted", icon: "fa-light fa-circle-check", kind: "success" },
+];
+
+const FLOW_DOCS = [
+  { icon: "fa-light fa-file-invoice", doc: "Invoice 100482", vendor: "Northwind Traders", amt: "€ 4,820.00" },
+  { icon: "fa-light fa-file-invoice", doc: "Invoice 100483", vendor: "Fabrikam Inc.", amt: "€ 1,240.50" },
+  { icon: "fa-light fa-file-lines", doc: "Credit memo 5521", vendor: "Contoso Ltd.", amt: "€ 612.00" },
+  { icon: "fa-light fa-file-invoice", doc: "Invoice 100484", vendor: "Adatum Corp.", amt: "€ 9,310.75" },
+  { icon: "fa-light fa-file-invoice", doc: "Invoice 100485", vendor: "Tailspin Toys", amt: "€ 2,054.20" },
+];
+
+const SIDE_NAV = [
+  { icon: "fa-kit fa-document-capture-solution-dc-icon", name: "Document Capture", active: true },
+  { icon: "fa-kit fa-expense-management-solution-em-icon", name: "Expenses", active: false },
+  { icon: "fa-kit fa-banking-solution-cb-icon", name: "Banking", active: false },
+  { icon: "fa-kit fa-finance-solution-cf-add-modules--stack-icon", name: "Finance", active: false },
+  { icon: "fa-kit fa-document-output-solution-do-icon-file-export", name: "Document Output", active: false },
+];
+
+const TRUST = ["../assets/images/company-logos/bmw.png", "../assets/images/company-logos/bestseller.png", "../assets/images/company-logos/dunlop.png", "../assets/images/company-logos/moccamaster.png", "../assets/images/company-logos/marley-martha.png", "../assets/images/company-logos/sagrada-familia.png"];
+const STAT_TARGETS = { cust: 21000, manual: 90, partners: 1500 };
+const EM_PHASES = [
+  { p: "25%", s: "Receipt captured" },
+  { p: "55%", s: "Coded automatically" },
+  { p: "80%", s: "Approved by manager" },
+  { p: "100%", s: "Reimbursed" },
+];
+
+class Component extends DCLogic {
+  state = { tick: 0, stats: { cust: 0, manual: 0, partners: 0 }, solView: 3, carIndex: 0, impactView: "bare", heroView: 0 };   // 0 = clouds, 1 = release R1, 2 = plain
+  _statsStarted = false;
+  _seenHeroView = -1;   // seeded off-range on purpose: the first update arms autoplay
+  _seenSolView = 3;
+  _seenImpactView = "bare";   // must match the initial state or the first update re-arms the count-up
+
+  get motion() { return this.props.motion ?? true; }
+
+  componentDidMount() {
+    this._applyMotion();
+    this._setupReveals();
+    this._setupStats();
+    this._playSolVideo();
+    // (The header shadow used to be hand-rolled here against #cnt-header — an id
+    // that does not exist — and off window.scrollY, which was pinned at 0. The
+    // bundle's own SiteHeader `--scrolled` modifier does it now that BODY is no
+    // longer the scroll container.)
+    // Recompute the carousel's 3D transforms (which depend on viewport width) on resize
+    this._onResize = () => { this.setState({}); this._syncCarStage(); };
+    window.addEventListener("resize", this._onResize, { passive: true });
+    this._setupSwipe();
+    this._syncCarStage();
+    if (this.state.heroView !== 2) this._playHeroVideo();
+    this._watchFooter();
+  }
+
+  // Size the carousel stage to its tallest card. The cards are absolutely
+  // positioned, so the stage cannot grow with them on its own, and the card
+  // grows unpredictably as its description rewraps on narrow phones.
+  // ⚠️ offsetHeight, NOT getBoundingClientRect().height — every inactive card
+  // carries a scale() and rotateY(), and a bounding rect measures the
+  // transformed box. offsetHeight is the layout height and ignores transforms.
+  // ⚠️ The value goes on documentElement, which is outside the dc render tree
+  // and therefore survives a re-render; an inline height set on the stage
+  // itself would be wiped by the next renderVals() pass (same reasoning as the
+  // `cnt-footer-in-view` body class).
+  _syncCarStage() {
+    const measure = () => {
+      const cards = [...document.querySelectorAll(".sol-car__card")];
+      if (!cards.length) return;
+      const tallest = Math.max(...cards.map((el) => el.offsetHeight));
+      document.documentElement.style.setProperty("--car-stage-h", Math.ceil(tallest + 10) + "px");
+    };
+    requestAnimationFrame(measure);
+    // ⚠️ Measure again once the webfont has swapped in. Alliance No.2 loads
+    // after first paint, the descriptions rewrap taller when it does, and a
+    // single rAF pass locked in the fallback font's shorter layout — at 430px
+    // that left the stage 20px SHORTER than the card it was meant to fit.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => requestAnimationFrame(measure)).catch(() => {});
+    }
+  }
+
+  // Swipe the solutions carousel on touch. ⚠️ Listeners go on `document` with
+  // capture and re-match the target, NOT on .sol-car__stage: every card carries
+  // a {{ carStyle }} binding, so the runtime replaces nodes in that subtree on
+  // each render and a reference held from componentDidMount goes deaf (trap 6b).
+  _setupSwipe() {
+    const CN = 5, THRESH = 45;
+    let x0 = null, y0 = null, pid = null;
+    this._swDown = (e) => {
+      const inStage = e.target && e.target.closest && e.target.closest(".sol-car__stage");
+      if (!inStage) return;
+      x0 = e.clientX; y0 = e.clientY; pid = e.pointerId;
+    };
+    this._swUp = (e) => {
+      if (x0 === null || e.pointerId !== pid) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0;
+      x0 = null; pid = null;
+      // A tap must still reach "See more", and a vertical drag is a page scroll.
+      if (Math.abs(dx) < THRESH || Math.abs(dx) <= Math.abs(dy)) return;
+      this.setState((st) => ({ carIndex: (st.carIndex + (dx < 0 ? 1 : CN - 1)) % CN }));
+    };
+    this._swCancel = () => { x0 = null; pid = null; };
+    document.addEventListener("pointerdown", this._swDown, { passive: true, capture: true });
+    document.addEventListener("pointerup", this._swUp, { passive: true, capture: true });
+    document.addEventListener("pointercancel", this._swCancel, { passive: true, capture: true });
+  }
+
+  // Fade the fixed bottom-left toggles out once the footer legal bar reaches the
+  // viewport — they used to sit right on top of it. The flag goes on <body>
+  // rather than on the buttons because <body> is outside the dc render tree and
+  // therefore survives a re-render; a class set on the button itself would be
+  // wiped by the next renderVals() pass.
+  _watchFooter() {
+    // Re-queries the legal bar on every (rAF-throttled) scroll rather than
+    // holding a node reference: an IntersectionObserver attached at mount goes
+    // deaf the moment the runtime re-renders the footer and swaps the node out.
+    // Measuring the rect and listening on document in the CAPTURE phase is the
+    // same pattern the reading-progress bar uses, for the same reason.
+    let queued = false;
+    this._onFootScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const bar = document.querySelector(".cnt-sitefooter__bottom");
+        if (!bar) return;
+        const r = bar.getBoundingClientRect();
+        document.body.classList.toggle("cnt-footer-in-view", r.top < window.innerHeight && r.bottom > 0);
+      });
+    };
+    document.addEventListener("scroll", this._onFootScroll, { passive: true, capture: true });
+    window.addEventListener("resize", this._onFootScroll, { passive: true });
+    this._onFootScroll();
+  }
+
+  // Muted autoplay needs the property set, not just the attribute, or Safari
+  // refuses; mirrors _playSolVideo for the solutions carousel clip.
+  _playHeroVideo() {
+    requestAnimationFrame(() => {
+      const v = document.querySelector(".hero-vid");
+      if (!v) return;
+      // ⚠️ The runtime drops the bare `loop` attribute entirely (autoplay/muted/
+      // playsinline survive, loop does not), so the clip froze on its last frame
+      // after ~21 s. Set it as a property.
+      v.loop = true;
+      v.muted = true;
+      v.setAttribute("muted", "");
+      const pr = v.play();
+      if (pr && pr.catch) pr.catch(() => {});
+    });
+  }
+
+  // ⚠️ The runtime calls `this.logic.componentDidUpdate(prevProps)` — there is NO
+  // prevState argument (see support.js). Every "did this piece of state change?"
+  // check therefore has to diff against a field we keep ourselves; the three
+  // `prevState &&` guards that used to live here never once fired.
+  componentDidUpdate(prevProps) {
+    if (prevProps.motion !== this.props.motion || prevProps.flowSpeed !== this.props.flowSpeed) {
+      this._applyMotion();
+    }
+    if (this._seenHeroView !== this.state.heroView) {
+      this._seenHeroView = this.state.heroView;
+      if (this.state.heroView !== 2) this._playHeroVideo();
+    }
+    // Re-arm autoplay whenever a video-backed view (New = 1, Carousel = 3, Window = 4) is shown again
+    if (this._seenSolView !== this.state.solView) {
+      this._seenSolView = this.state.solView;
+      const v = this.state.solView;
+      if (v === 1 || v === 3 || v === 4) this._playSolVideo();
+    }
+    // When the impact layout is toggled, re-arm the count-up observer on the newly-rendered stat band
+    if (this._seenImpactView !== this.state.impactView) {
+      this._seenImpactView = this.state.impactView;
+      if (!this._statsStarted) {
+        if (this._statIo) this._statIo.disconnect();
+        this._setupStats();
+      }
+    }
+  }
+
+  // Muted autoplay is allowed in every modern browser; the <source> order
+  // (webm → mp4) lets each browser pick the format it supports — Chrome/Firefox
+  // take the smaller webm, Safari falls back to the h.264 mp4. We still set the
+  // muted property and call play() explicitly so autoplay never gets blocked.
+  _playSolVideo() {
+    requestAnimationFrame(() => {
+      const v = document.querySelector(".sol-vid");
+      if (!v) return;
+      v.loop = true;   // same dropped-attribute problem as .hero-vid
+      v.muted = true;
+      v.setAttribute("muted", "");
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {});
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._flow);
+    if (this._onResize) window.removeEventListener("resize", this._onResize);
+    if (this._io) this._io.disconnect();
+    if (this._statIo) this._statIo.disconnect();
+    if (this._onFootScroll) {
+      document.removeEventListener("scroll", this._onFootScroll, { capture: true });
+      window.removeEventListener("resize", this._onFootScroll);
+    }
+    if (this._swDown) {
+      document.removeEventListener("pointerdown", this._swDown, { capture: true });
+      document.removeEventListener("pointerup", this._swUp, { capture: true });
+      document.removeEventListener("pointercancel", this._swCancel, { capture: true });
+    }
+    document.body.classList.remove("cnt-footer-in-view");
+  }
+
+  _applyMotion() {
+    clearInterval(this._flow);
+    const marquee = document.getElementById("cnt-marquee");
+    if (this.motion) {
+      if (marquee) marquee.style.animationPlayState = "running";
+      const speed = this.props.flowSpeed ?? 1.5;
+      this._flow = setInterval(() => {
+        this.setState((s) => ({ tick: (s.tick + 1) % 12 }));
+      }, Math.round(1100 / speed));
+    } else {
+      if (marquee) marquee.style.animationPlayState = "paused";
+      this.setState({ tick: 5, stats: { ...STAT_TARGETS } });
+      this._statsStarted = true;
+      document.querySelectorAll("[data-reveal]").forEach((el) => {
+        el.style.opacity = "1"; el.style.transform = "none";
+      });
+    }
+  }
+
+  _setupReveals() {
+    if (!this.motion) return;
+    const els = Array.from(document.querySelectorAll("[data-reveal]"));
+    els.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight - 80) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+      }
+    });
+    this._io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          el.style.transition = "opacity 650ms cubic-bezier(0.16,1,0.3,1), transform 650ms cubic-bezier(0.16,1,0.3,1)";
+          el.style.opacity = "1";
+          el.style.transform = "none";
+          this._io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach((el) => this._io.observe(el));
+  }
+
+  _setupStats() {
+    const band = document.getElementById("cnt-statband");
+    if (!band) return;
+    this._statIo = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting && !this._statsStarted) {
+          this._statsStarted = true;
+          this._countUp();
+          this._statIo.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    this._statIo.observe(band);
+  }
+
+  _countUp() {
+    const dur = 1600;
+    const t0 = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / dur);
+      const ease = 1 - Math.pow(1 - t, 3);
+      this.setState({
+        stats: {
+          cust: Math.round(STAT_TARGETS.cust * ease),
+          manual: Math.round(STAT_TARGETS.manual * ease),
+          partners: Math.round(STAT_TARGETS.partners * ease),
+        },
+      });
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  renderVals() {
+    const { tick, stats } = this.state;
+    const fmt = (n) => n.toLocaleString("en-US");
+
+    const flowRows = FLOW_DOCS.map((d, i) => {
+      const stage = Math.max(0, Math.min(3, tick - i));
+      const st = FLOW_STAGES[stage];
+      const chip = CHIP[st.kind];
+      return { ...d, chip: st.name, chipBg: chip.bg, chipFg: chip.fg, stage };
+    });
+    const activeStages = new Set(flowRows.map((r) => r.stage));
+    const flowSteps = FLOW_STAGES.map((s, i) => ({
+      name: s.name, icon: s.icon,
+      bg: activeStages.has(i) ? "#052975" : "#eef1f6",
+      fg: activeStages.has(i) ? "#8ff8ff" : "#6b7894",
+    }));
+    const postedCount = flowRows.filter((r) => r.stage === 3).length;
+
+    const sideNav = SIDE_NAV.map((n) => ({
+      ...n,
+      bg: n.active ? "#def5ff" : "transparent",
+      fg: n.active ? "#052975" : "#6b7894",
+    }));
+
+    // Bento: Document Capture mini rows reuse the first 3 flow rows
+    const bentoDcRows = flowRows.slice(0, 3).map((r) => ({
+      icon: r.icon, a: r.doc, b: r.vendor, c: r.amt,
+      chip: r.chip, chipBg: r.chipBg, chipFg: r.chipFg,
+    }));
+
+    // Expense card phase cycles with the tick
+    const em = EM_PHASES[tick % EM_PHASES.length];
+
+    const icon = (cls) => React.createElement("i", { className: cls });
+
+    // ----- Our Solutions view toggle (1 = New glass, 2 = Classic, 3 = Carousel) -----
+    const CV = this.state.solView, CI = this.state.carIndex, CN = 5;
+    const vw = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1200;
+    const spread = Math.min(258, vw * 0.24);
+    const cardW = Math.min(400, Math.max(260, vw * 0.86));
+    // 3D coverflow transform for card `idx` relative to the active index
+    const carStyleFor = (idx) => {
+      let off = ((idx - CI) % CN + CN) % CN;
+      if (off > CN / 2) off -= CN;
+      const a = Math.abs(off);
+      const x = off * spread, z = -a * 170, ry = off * -34, sc = 1 - a * 0.14;
+      const op = a >= 3 ? 0 : 1 - a * 0.32, zi = 10 - a;
+      return "position:absolute; top:50%; left:50%; width:" + cardW + "px; margin-left:" + (-cardW / 2) +
+        "px; transform: translateY(-50%) translateX(" + x + "px) translateZ(" + z + "px) rotateY(" + ry +
+        "deg) scale(" + sc + "); opacity:" + op + "; z-index:" + zi +
+        "; transition: transform 620ms cubic-bezier(0.22,1,0.36,1), opacity 620ms; pointer-events:" +
+        (off === 0 ? "auto" : "none") + ";";
+    };
+    const carDots = [0, 1, 2, 3, 4].map((i) => ({
+      cls: i === CI ? "sol-car__dot on" : "sol-car__dot",
+      pick: () => this.setState({ carIndex: i }),
+    }));
+
+    return {
+      flowRows, flowSteps, postedCount, sideNav, bentoDcRows,
+      emProgress: em.p, emStatus: em.s,
+      trustLoop: [...TRUST, ...TRUST],
+      statCust: fmt(stats.cust) + "+",
+      statManual: stats.manual + "%",
+      statPartners: fmt(stats.partners) + "+",
+      year: new Date().getFullYear(),
+      arrowBtn: { iconRight: icon("fa-light fa-arrow-right") },
+      // "new" and "bare" render the same markup; only the modifier class differs
+      impactSplit: this.state.impactView !== "old",
+      impactSplitCls: this.state.impactView === "bare" ? "imp-split--bare" : "",
+      impactOld: this.state.impactView === "old",
+      toggleImpact: () => this.setState((s) => ({
+        impactView: s.impactView === "bare" ? "new" : s.impactView === "new" ? "old" : "bare",
+      })),
+      impactToggleLabel: "Impact · " + ({ bare: "No outline", new: "Outlined", old: "Classic" })[this.state.impactView],
+      heroCls: this.state.heroView === 1 ? "hero-dark" : "",
+      heroClouds: this.state.heroView === 0,
+      heroRelease: this.state.heroView === 1,
+      toggleHeroVid: () => this.setState((st) => ({ heroView: (st.heroView + 1) % 3 })),
+      heroVidLabel: "Hero · " + ["Clouds", "Release R1", "Plain"][this.state.heroView],
+      solCarousel: true,
+      carPrev: () => this.setState((s) => ({ carIndex: (s.carIndex + CN - 1) % CN })),
+      carNext: () => this.setState((s) => ({ carIndex: (s.carIndex + 1) % CN })),
+      carStyle0: carStyleFor(0), carStyle1: carStyleFor(1), carStyle2: carStyleFor(2),
+      carStyle3: carStyleFor(3), carStyle4: carStyleFor(4),
+      carDots,
+    };
+  }
+}
+</script>
 <script>
 /* ======================================================================
    Two behaviours, both plain DOM, and both of them write their state to
@@ -1195,32 +2072,6 @@
 
   var root = document.documentElement;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  /* ---- the three pillars ---------------------------------------------- */
-  /* The listener sits on `document` and re-matches the target every time, so
-     it works however late the buttons appear and survives them being
-     replaced. Clicking the open pillar closes it: the attribute goes away
-     and CSS falls back to all-closed. */
-  document.addEventListener("click", function (e) {
-    var btn = e.target && e.target.closest && e.target.closest(".nfl-acc__btn");
-    if (!btn) return;
-    var item = btn.closest(".nfl-acc__item");
-    var acc = btn.closest("[data-nfl-acc]");
-    if (!item || !acc) return;
-
-    var n = [].indexOf.call(acc.children, item) + 1;
-    var open = root.getAttribute("data-nfl-pillar") === String(n);
-    if (open) root.removeAttribute("data-nfl-pillar");
-    else root.setAttribute("data-nfl-pillar", n);
-
-    /* Screen readers read the buttons, not <html>, so they still need the
-       state spelled out. These writes are cosmetic to the painting — if a
-       render pass wipes them, the panels stay correct. */
-    [].forEach.call(acc.querySelectorAll(".nfl-acc__btn"), function (b, i) {
-      b.setAttribute("aria-expanded", (!open && i === n - 1) ? "true" : "false");
-    });
-  });
-
   /* ---- the clouds clip ------------------------------------------------ */
   /* Two things have to be true for this clip to keep playing, and each one
      has already broken it once on this site.
