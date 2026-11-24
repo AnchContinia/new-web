@@ -1720,12 +1720,12 @@ const CSS = `
    block would be 34px taller and every page that measures the header (the new
    front page locks its hero to one screen minus the header) would be wrong.
    As a sibling it scrolls away and the header still sticks at its own height. */
-.cnt-topbar { background: var(--c-light-blue); border-bottom: 1px solid rgba(5,41,117,0.10); font-family: var(--font-sans); }
+.cnt-topbar { background: var(--c-tech-blue); border-bottom: 0; font-family: var(--font-sans); }
 .cnt-topbar__inner { max-width: var(--layout-content-max, 1360px); margin: 0 auto; padding: 0 var(--layout-page-pad, 28px); display: flex; justify-content: flex-end; align-items: center; }
 .cnt-topbar__item { position: relative; display: inline-flex; align-items: center; }
-.cnt-topbar__item + .cnt-topbar__item::before { content: ""; flex: none; width: 1px; height: 13px; background: rgba(5,41,117,0.22); }
-.cnt-topbar__link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; background: none; border: 0; font-family: inherit; font-size: 13px; font-weight: var(--fw-semibold); color: var(--c-tech-blue); text-decoration: none; white-space: nowrap; cursor: pointer; transition: color var(--dur-base) var(--ease-standard); }
-.cnt-topbar__link:hover { color: var(--color-primary-hover, #0a317f); }
+.cnt-topbar__item + .cnt-topbar__item::before { content: ""; flex: none; width: 1px; height: 13px; background: rgba(255,255,255,0.28); }
+.cnt-topbar__link, .cnt-topbar .cnt-topbar__link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; background: none; border: 0; font-family: inherit; font-size: 13px; font-weight: var(--fw-semibold); color: #ffffff; text-decoration: none; white-space: nowrap; cursor: pointer; transition: color var(--dur-base) var(--ease-standard); }
+.cnt-topbar__link:hover, .cnt-topbar .cnt-topbar__link:hover { color: var(--c-innovation-blue, #8ff8ff); }
 .cnt-topbar__link i { font-size: 10px; opacity: 0.6; transition: transform 180ms var(--ease-standard); }
 .cnt-topbar__item:hover .cnt-topbar__link i, .cnt-topbar__item:focus-within .cnt-topbar__link i { transform: rotate(180deg); }
 .cnt-topbar__menu { position: absolute; top: 100%; right: 6px; min-width: 206px; background: #fff; border: 1px solid var(--color-border); border-radius: 12px; box-shadow: 0 18px 44px rgba(5,41,117,0.16); padding: 6px; display: grid; gap: 2px; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 180ms var(--ease-standard), transform 180ms var(--ease-standard); z-index: 70; }
