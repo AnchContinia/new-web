@@ -1182,8 +1182,11 @@
   @media (min-width: 768px) {
     .nfl-hero { --nfl-head: 72px; min-height: calc(100vh - var(--nfl-head)); min-height: calc(100svh - var(--nfl-head)); }
   }
+  /* 64px header + the 36px utility bar above it. The bar is a sibling of the
+     sticky header and only exists over 1100, so the whole correction lives in
+     this one breakpoint — below it the bar is display:none and 72 still holds. */
   @media (min-width: 1101px) {
-    .nfl-hero { --nfl-head: 64px; }
+    .nfl-hero { --nfl-head: 100px; }
   }
   /* The backstop. `min-height` alone only sets a floor — on a 768px-tall
      laptop the type plus the window's minimum slice still added up to more

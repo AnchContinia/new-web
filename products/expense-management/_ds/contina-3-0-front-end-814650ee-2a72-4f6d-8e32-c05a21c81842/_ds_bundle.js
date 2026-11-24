@@ -1287,21 +1287,23 @@ const CONTINIA_LINKS = {
   trial: "https://appsource.microsoft.com/en-us/marketplace/apps?search=continia",
   nav: [{
     label: "Products",
-    href: "../",
-    menu: true
+    href: "../../products/",
+    menu: "solutions"
   }, {
     label: "Solutions",
     href: "../../solutions/",
-    menu: false
+    menu: "useCases"
   }, {
-    label: "Stories",
-    href: "../../stories/"
+    label: "Insights & Stories",
+    href: "../../stories/",
+    menu: "insights"
   }, {
     label: "Pricing",
     href: "../../pricing/"
   }, {
-    label: "Why Continia?",
-    href: "../../why-continia/"
+    label: "About us",
+    href: "../../company/about-us/",
+    menu: "about"
   }],
   // opticalScale: per-icon optical-size correction for fa-kit icons (see readme "Iconography")
   solutions: [{
@@ -1356,6 +1358,121 @@ const CONTINIA_LINKS = {
   }, {
     label: "Find a partner",
     href: "../../company/find-a-partner/"
+  }],
+  useCases: [{
+    label: "Modernize your purchase-to-pay process",
+    href: "../../solutions/modernize-your-purchase-to-pay-process/",
+    icon: "fa-light fa-arrows-spin"
+  }, {
+    label: "Simplify payments and accelerate your cash flow",
+    href: "../../solutions/simplify-payments-and-accelerate-your-cash-flow/",
+    icon: "fa-light fa-money-bill-transfer"
+  }, {
+    label: "Enhance your cash flow with streamlined factoring",
+    href: "../../solutions/enhance-your-cash-flow-with-streamlined-factoring/",
+    icon: "fa-light fa-chart-line-up"
+  }, {
+    label: "BUILT INSIDE: How Continia makes your life easier",
+    href: "../../solutions/built-inside-how-continia-makes-your-life-easier/",
+    icon: "fa-light fa-puzzle-piece"
+  }],
+  insights: [{
+    label: "Customer stories",
+    href: "../../stories/customer-stories/",
+    icon: "fa-light fa-quote-left"
+  }, {
+    label: "Blog",
+    href: "../../stories/blog/",
+    icon: "fa-light fa-pen-nib"
+  }, {
+    label: "News",
+    href: "../../stories/news/",
+    icon: "fa-light fa-newspaper"
+  }],
+  about: [{
+    label: "About us",
+    href: "../../company/about-us/",
+    icon: "fa-light fa-building"
+  }, {
+    label: "Why Continia?",
+    href: "../../why-continia/",
+    icon: "fa-light fa-circle-question"
+  }, {
+    label: "Meet the team",
+    href: "../../company/meet-the-team/",
+    icon: "fa-light fa-users"
+  }, {
+    label: "Working at Continia",
+    href: "../../company/working-at-continia/",
+    icon: "fa-light fa-heart"
+  }, {
+    label: "Career",
+    href: "../../company/career/",
+    icon: "fa-light fa-briefcase"
+  }, {
+    label: "Contact",
+    href: "../../company/contact/",
+    icon: "fa-light fa-envelope"
+  }],
+  // The utility bar above the header. Items without an href own a menu; the
+  // header renders those as a button, because an <a href="#"> that only ever
+  // opens a hover menu is a dead link to anything that is not a mouse.
+  topbar: [{
+    label: "Find a partner",
+    href: "../../company/find-a-partner/"
+  }, {
+    label: "Resources",
+    menu: "topResources"
+  }, {
+    label: "Partner login",
+    href: "https://partnerzone.continia.com/"
+  }, {
+    label: "Continia Learn",
+    href: "https://learn.continia.com/"
+  }, {
+    label: "English",
+    menu: "languages",
+    // Six languages flattened into the burger panel made it 14 links long and
+    // buried the nav. The switcher is a desktop affordance here.
+    mobile: false
+  }],
+  topResources: [{
+    label: "Blog",
+    href: "../../stories/blog/"
+  }, {
+    label: "News",
+    href: "../../stories/news/"
+  }, {
+    label: "Customer stories",
+    href: "../../stories/customer-stories/"
+  }, {
+    label: "Webinars",
+    href: "https://webinar.continia.com/"
+  }, {
+    label: "Docs",
+    href: "https://docs.continia.com/en-us/"
+  }, {
+    label: "Learn",
+    href: "https://learn.continia.com/"
+  }],
+  languages: [{
+    label: "English",
+    href: BASE + "/"
+  }, {
+    label: "Dansk",
+    href: BASE + "/da/forside/"
+  }, {
+    label: "Deutsch",
+    href: BASE + "/de/home/"
+  }, {
+    label: "Espa\u00f1ol",
+    href: BASE + "/es/home/"
+  }, {
+    label: "Fran\u00e7ais",
+    href: BASE + "/fr/home/"
+  }, {
+    label: "Nederlands",
+    href: BASE + "/nl/home/"
   }],
   resources: [{
     label: "Use cases",
@@ -1597,6 +1714,28 @@ const CSS = `
   .cnt-siteheader__inner { padding: 11px 16px; gap: 10px; }
   .cnt-siteheader__logo svg { height: 26px; }
 }
+
+/* ---- the utility bar above the header -------------------------------------
+   It is a SIBLING of the sticky header, not part of it: inside it, the sticky
+   block would be 34px taller and every page that measures the header (the new
+   front page locks its hero to one screen minus the header) would be wrong.
+   As a sibling it scrolls away and the header still sticks at its own height. */
+.cnt-topbar { background: var(--c-light-blue); border-bottom: 1px solid rgba(5,41,117,0.10); font-family: var(--font-sans); }
+.cnt-topbar__inner { max-width: var(--layout-content-max, 1360px); margin: 0 auto; padding: 0 var(--layout-page-pad, 28px); display: flex; justify-content: flex-end; align-items: center; }
+.cnt-topbar__item { position: relative; display: inline-flex; align-items: center; }
+.cnt-topbar__item + .cnt-topbar__item::before { content: ""; flex: none; width: 1px; height: 13px; background: rgba(5,41,117,0.22); }
+.cnt-topbar__link { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; background: none; border: 0; font-family: inherit; font-size: 13px; font-weight: var(--fw-semibold); color: var(--c-tech-blue); text-decoration: none; white-space: nowrap; cursor: pointer; transition: color var(--dur-base) var(--ease-standard); }
+.cnt-topbar__link:hover { color: var(--color-primary-hover, #0a317f); }
+.cnt-topbar__link i { font-size: 10px; opacity: 0.6; transition: transform 180ms var(--ease-standard); }
+.cnt-topbar__item:hover .cnt-topbar__link i, .cnt-topbar__item:focus-within .cnt-topbar__link i { transform: rotate(180deg); }
+.cnt-topbar__menu { position: absolute; top: 100%; right: 6px; min-width: 206px; background: #fff; border: 1px solid var(--color-border); border-radius: 12px; box-shadow: 0 18px 44px rgba(5,41,117,0.16); padding: 6px; display: grid; gap: 2px; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 180ms var(--ease-standard), transform 180ms var(--ease-standard); z-index: 70; }
+.cnt-topbar__item:hover .cnt-topbar__menu, .cnt-topbar__item:focus-within .cnt-topbar__menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.cnt-topbar__menuitem { padding: 9px 12px; border-radius: 9px; font-size: 13.5px; font-weight: var(--fw-semibold); color: var(--color-text); text-decoration: none; white-space: nowrap; transition: background 150ms, color 150ms; }
+.cnt-topbar__menuitem:hover { background: var(--c-light-blue); color: var(--c-tech-blue); }
+/* Below the site's one tablet line the bar's links move into the burger panel,
+   where they already fit — a second row of 11 links does not. */
+@media (max-width: 1100px) { .cnt-topbar { display: none; } }
+.cnt-siteheader__mtop { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--color-border); display: grid; gap: 2px; }
 `;
 let _i = false;
 function useStyle() {
@@ -1619,7 +1758,9 @@ function SiteHeader({
 }) {
   useStyle();
   const [open, setOpen] = React.useState(false);
-  const [submenuOpen, setSubmenuOpen] = React.useState(false);
+  // Keyed by label, because every nav item can own a menu now — one shared
+  // boolean opened all of them at once.
+  const [openMenu, setOpenMenu] = React.useState(null);
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
     if (!sticky) return;
@@ -1630,26 +1771,55 @@ function SiteHeader({
     });
     return () => window.removeEventListener("scroll", on);
   }, [sticky]);
-  const findPartner = links.company.find(c => c.label === "Find a partner");
   const ctaLink = ctaHref ?? (onCta ? undefined : links.trial);
+  // l.menu names a list on the link map ("solutions", "about", ...). It used to
+  // be a boolean that could only ever mean links.solutions.
+  const menuFor = l => (l.menu && links[l.menu] && links[l.menu].length) ? links[l.menu] : null;
+  const dropItems = items => items.map(s => /*#__PURE__*/React.createElement("a", { key: s.label, className: "cnt-siteheader__dropitem", href: s.href, role: "menuitem" }, s.icon && /*#__PURE__*/React.createElement("i", { className: s.icon }), /*#__PURE__*/React.createElement("span", null, s.label)));
   const navLink = (l, extra = "") => {
+    const items = menuFor(l);
     const _a = /*#__PURE__*/React.createElement("a", {
       key: l.label,
       className: ["cnt-siteheader__link", l.label === activeItem ? "cnt-siteheader__link--active" : "", extra].filter(Boolean).join(" "),
       href: l.href,
       "aria-current": l.label === activeItem ? "page" : undefined
-    }, l.label, l.menu && /*#__PURE__*/React.createElement("i", {
+    }, l.label, items && /*#__PURE__*/React.createElement("i", {
       className: "fa-light fa-chevron-down"
     }));
-    if (!(l.menu && links.solutions && links.solutions.length)) return _a;
-    return /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__navitem", key: l.label }, _a, /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__dropdown", role: "menu" }, links.solutions.map(s => /*#__PURE__*/React.createElement("a", { key: s.label, className: "cnt-siteheader__dropitem", href: s.href, role: "menuitem" }, s.icon && /*#__PURE__*/React.createElement("i", { className: s.icon }), /*#__PURE__*/React.createElement("span", null, s.label)))));
+    if (!items) return _a;
+    return /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__navitem", key: l.label }, _a, /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__dropdown", role: "menu" }, dropItems(items)));
   };
-  const dropItems = () => links.solutions.map(s => /*#__PURE__*/React.createElement("a", { key: s.label, className: "cnt-siteheader__dropitem", href: s.href, role: "menuitem" }, s.icon && /*#__PURE__*/React.createElement("i", { className: s.icon }), /*#__PURE__*/React.createElement("span", null, s.label)));
-  const mobileNavItem = (l) => {
-    if (!(l.menu && links.solutions && links.solutions.length)) return /*#__PURE__*/React.createElement("a", { key: l.label, className: ["cnt-siteheader__link", l.label === activeItem ? "cnt-siteheader__link--active" : ""].filter(Boolean).join(" "), href: l.href, "aria-current": l.label === activeItem ? "page" : undefined }, l.label);
-    return /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__macc" + (submenuOpen ? " open" : ""), key: l.label }, /*#__PURE__*/React.createElement("button", { type: "button", className: "cnt-siteheader__link cnt-siteheader__macc-btn", "aria-expanded": submenuOpen, onClick: () => setSubmenuOpen(v => !v) }, l.label, /*#__PURE__*/React.createElement("i", { className: "fa-light fa-chevron-down" })), submenuOpen && /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__dropdown", role: "menu" }, dropItems()));
+  const mobileNavItem = l => {
+    const items = menuFor(l);
+    if (!items) return /*#__PURE__*/React.createElement("a", { key: l.label, className: ["cnt-siteheader__link", l.label === activeItem ? "cnt-siteheader__link--active" : ""].filter(Boolean).join(" "), href: l.href, "aria-current": l.label === activeItem ? "page" : undefined }, l.label);
+    const isOpen = openMenu === l.label;
+    return /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__macc" + (isOpen ? " open" : ""), key: l.label }, /*#__PURE__*/React.createElement("button", { type: "button", className: "cnt-siteheader__link cnt-siteheader__macc-btn", "aria-expanded": isOpen, onClick: () => setOpenMenu(v => v === l.label ? null : l.label) }, l.label, /*#__PURE__*/React.createElement("i", { className: "fa-light fa-chevron-down" })), isOpen && /*#__PURE__*/React.createElement("div", { className: "cnt-siteheader__dropdown", role: "menu" }, dropItems(items)));
   };
-  return /*#__PURE__*/React.createElement("header", _extends({
+  const topItem = t => {
+    const items = (t.menu && links[t.menu] && links[t.menu].length) ? links[t.menu] : null;
+    const head = t.href
+      ? /*#__PURE__*/React.createElement("a", { className: "cnt-topbar__link", href: t.href }, t.label, items && /*#__PURE__*/React.createElement("i", { className: "fa-light fa-chevron-down" }))
+      : /*#__PURE__*/React.createElement("button", { type: "button", className: "cnt-topbar__link", "aria-haspopup": "true" }, t.label, items && /*#__PURE__*/React.createElement("i", { className: "fa-light fa-chevron-down" }));
+    return /*#__PURE__*/React.createElement("div", { className: "cnt-topbar__item", key: t.label }, head, items && /*#__PURE__*/React.createElement("div", { className: "cnt-topbar__menu", role: "menu" }, items.map(s => /*#__PURE__*/React.createElement("a", { key: s.label, className: "cnt-topbar__menuitem", href: s.href, role: "menuitem" }, s.label))));
+  };
+  // The bar's own links, flattened, for the burger panel: a nested accordion
+  // inside an accordion is more structure than six links are worth.
+  const mobileTop = () => {
+    const out = [];
+    (links.topbar || []).forEach(t => {
+      if (t.mobile === false) return;
+      if (t.href) out.push({ label: t.label, href: t.href });
+      else if (links[t.menu]) links[t.menu].forEach(s => out.push(s));
+    });
+    return out.map(s => /*#__PURE__*/React.createElement("a", { key: s.label + s.href, className: "cnt-siteheader__link", href: s.href }, s.label));
+  };
+  const bar = links.topbar && links.topbar.length ? /*#__PURE__*/React.createElement("div", {
+    className: "cnt-topbar"
+  }, /*#__PURE__*/React.createElement("nav", {
+    className: "cnt-topbar__inner",
+    "aria-label": "Utility"
+  }, links.topbar.map(t => topItem(t)))) : null;
+  const header = /*#__PURE__*/React.createElement("header", _extends({
     className: ["cnt-siteheader", sticky ? "" : "cnt-siteheader--static", scrolled ? "cnt-siteheader--scrolled" : "", className].filter(Boolean).join(" ")
   }, props), /*#__PURE__*/React.createElement("div", {
     className: "cnt-siteheader__inner"
@@ -1664,12 +1834,7 @@ function SiteHeader({
     "aria-label": "Primary"
   }, links.nav.map(l => navLink(l))), /*#__PURE__*/React.createElement("div", {
     className: "cnt-siteheader__actions"
-  }, findPartner && /*#__PURE__*/React.createElement("a", {
-    className: "cnt-siteheader__link cnt-siteheader__find",
-    href: findPartner.href
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "fa-light fa-location-dot"
-  }), " Find a partner"), /*#__PURE__*/React.createElement(__ds_scope.Button, {
+  }, /*#__PURE__*/React.createElement(__ds_scope.Button, {
     size: "sm",
     variant: "purple",
     onClick: onCta,
@@ -1677,15 +1842,15 @@ function SiteHeader({
   }, ctaLabel), /*#__PURE__*/React.createElement("button", {
     className: "cnt-siteheader__burger",
     "aria-label": "Menu",
-    onClick: () => { setSubmenuOpen(false); setOpen(o => !o); }
+    onClick: () => { setOpenMenu(null); setOpen(o => !o); }
   }, /*#__PURE__*/React.createElement("i", {
     className: "fa-light fa-" + (open ? "xmark" : "bars")
   })))), open && /*#__PURE__*/React.createElement("div", {
     className: "cnt-siteheader__mobile"
-  }, links.nav.map(l => mobileNavItem(l)), findPartner && /*#__PURE__*/React.createElement("a", {
-    className: "cnt-siteheader__link",
-    href: findPartner.href
-  }, "Find a partner")));
+  }, links.nav.map(l => mobileNavItem(l)), /*#__PURE__*/React.createElement("div", {
+    className: "cnt-siteheader__mtop"
+  }, mobileTop())));
+  return bar ? /*#__PURE__*/React.createElement(React.Fragment, null, bar, header) : header;
 }
 Object.assign(__ds_scope, { SiteHeader });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/SiteHeader.jsx", error: String((e && e.message) || e) }); }
